@@ -1,0 +1,28 @@
+name: Validar PHP
+on: [push, pull_request]
+jobs:
+  php:
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: temporary-test-password
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -ptemporary-test-password"
+          --health-interval=10s --health-timeout=5s --health-retries=10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: pdo_mysql, mbstring, curl
+      - run: php bin/check.php
+      - run: php tests/unit.php
+      - run: php tests/integration.php
+        env:
+          TEST_DB_HOST: 127.0.0.1
+          TEST_DB_USER: root
+          TEST_DB_PASSWORD: temporary-test-password

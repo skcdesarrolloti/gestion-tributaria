@@ -1,0 +1,14 @@
+/.env
+/config/local.php
+/vendor/
+/node_modules/
+/storage/logs/*
+!/storage/logs/.gitkeep
+/storage/rate-limits/*
+!/storage/rate-limits/.gitkeep
+/database/private/*
+!/database/private/.gitkeep
+/dist/
+/.idea/
+/.vscode/
+*.log

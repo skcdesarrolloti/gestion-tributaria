@@ -1,0 +1,9 @@
+/* Solo distribución y accesibilidad. El tema procede de Servicios Comerciales. */
+body { font-family: Poppins, system-ui, sans-serif; }
+.portal-container, .portal-header { width: min(1120px, calc(100% - 2rem)); margin-inline: auto; }
+.portal-header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-block: 1rem; flex-wrap: wrap; }
+.profile-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; }
+:focus-visible { outline: 3px solid #735c00; outline-offset: 3px; }
+input:focus-visible { outline: 2px solid #735c00; }
+button, a { touch-action: manipulation; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; } }
