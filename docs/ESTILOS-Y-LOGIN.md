@@ -21,10 +21,10 @@ Compara visualmente login e inicio antes del commit. Revisa también cambios de 
 
 ## Autenticación
 
-El modelo Funcionario consulta wp_jet_cct_funcionarios en la base de ESTE proyecto, con los mismos campos de acceso: user_others_apss, pass_others_apss y activo = 'Si'. Guarda contraseñas con password_hash y valida con password_verify, como el modo seguro del original. No admite claves de texto plano.
+El modelo Funcionario consulta wp_jet_cct_funcionarios de la base central u350704768_M4FvI mediante auth_database. Valida user_others_apss, pass_others_apss y activo = 'Si' con la misma compatibilidad de contraseñas del sistema comercial. No existe primer administrador ni alta de cuentas locales. Consulta docs/ACCESO-FUNCIONARIOS.md.
 
 Las cookies tienen nombres distintos por proyecto, HttpOnly y SameSite=Lax. Secure debe estar activo en producción HTTPS. La sesión cambia de identificador al entrar, vence tras 30 minutos sin actividad y comprueba que el funcionario siga activo en cada página protegida. El cierre exige POST y token CSRF. El acceso limita a 10 intentos por usuario/IP y 30 por IP en 15 minutos, incluidos los exitosos.
 
-El proyecto no requiere WordPress ni accede a la base comercial. Si se necesitan las mismas cuentas, se debe implementar una migración autorizada de los campos compatibles y hashes; no copiar datos reales al repositorio. El acceso mediante enlaces firmados del sistema comercial no se incluye en esta base: requiere definir una integración y su secreto.
+La base propia conserva los procesos del proyecto; la conexión de autenticación solo lee funcionarios centrales. No se copian cuentas ni se modifican sus claves. Las cookies siguen siendo independientes; los enlaces de acceso firmado del sistema comercial no forman parte de esta integración.
 
 Poppins e iconos se cargan desde Google Fonts; el CSS principal está alojado en el propio proyecto.

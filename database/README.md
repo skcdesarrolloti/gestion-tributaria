@@ -8,7 +8,7 @@ En cada arranque, Migrator toma un bloqueo por base, lee schema_migrations y eje
 
 - 000_create_database.sql: plantilla para crear la base si no existe y el servidor permite CREATE DATABASE.
 - schema_migrations.sql: crea el registro de versiones.
-- migrations/001_funcionarios.sql: crea las cuentas con campos compatibles con el login comercial.
+- migrations/001_funcionarios.sql: migración histórica de la tabla local de cuentas. Se conserva intacta para respetar los checksums; esa tabla ya no se usa para autenticar.
 - checks/001_funcionarios.sql: confirma la presencia de los campos requeridos.
 
 Cada migración contiene **una sentencia SQL**. Su archivo checks del mismo nombre contiene un SELECT que devuelve 1 si el cambio ya quedó aplicado y 0 si falta. Si hay un corte entre el DDL y el registro de versión, el siguiente arranque verifica el resultado y evita repetir un ALTER ya ejecutado. No usar procedimientos, DELIMITER ni varias sentencias por archivo.
@@ -42,4 +42,4 @@ Sube ambos archivos con el código que usa la columna. Al abrir la app se ejecut
 - schema_migrations registra versiones, no reemplaza un respaldo.
 - Esta instalación está pensada para bases nuevas. Una tabla preexistente incompatible necesita una migración de adaptación revisada.
 
-El prefijo wp_ mantiene los nombres del login de referencia; no requiere WordPress. Las cuentas son locales e independientes en cada proyecto.
+Las migraciones solo se ejecutan sobre database. La autenticación consulta la tabla central wp_jet_cct_funcionarios mediante auth_database y no ejecuta DDL ni escrituras allí. No borrar la tabla local histórica ni modificar 001: el login ya la ignora. Ver docs/ACCESO-FUNCIONARIOS.md.

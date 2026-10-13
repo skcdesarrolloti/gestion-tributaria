@@ -1,20 +1,19 @@
-# Pruebas funcionales
+# Verificación funcional del login institucional
 
-Usar una base aislada de pruebas, nunca producción.
+Usar bases aisladas de pruebas, nunca modificar cuentas reales para ejecutar este checklist.
 
-1. Configurar la app con una base vacía y setup_key aleatoria. Abrirla: crea tablas y presenta primer acceso sin phpMyAdmin.
-2. Repetir la apertura: no duplica tablas/versiones ni borra datos.
-3. Enviar instalación sin CSRF: 419. Clave incorrecta: 403. Contraseñas diferentes: 422.
-4. Crear administrador con clave correcta. Reabrir instalador: 404.
-5. Inicio sin sesión redirige al login.
-6. Contraseña incorrecta o usuario inexistente: 401 con el mismo mensaje.
-7. Login sin CSRF: 419. Login válido: cambia sesión y abre inicio.
-8. Perfil muestra datos escapados y no contiene el hash.
-9. Logout por GET: 405. Botón de cierre: termina sesión.
-10. Desactivar la cuenta mediante un script en la base de pruebas: invalida también la sesión abierta.
-11. Superar 10 intentos usuario/IP en 15 minutos: 429 y Retry-After.
-12. Probar migración de columna y reabrir: la crea una vez. Simular DDL aplicado sin registro: su comprobación permite recuperar.
-13. Alterar un SQL aplicado en pruebas: se bloquea el arranque; restaurar el archivo para continuar.
-14. Revisar login/inicio/perfil en móvil y escritorio, navegación con Tab y protección de archivos descrita en docs/DESARROLLO.md.
+1. Abrir login con la tabla local de funcionarios vacía: muestra el acceso normal, sin pedir crear administrador.
+2. Abrir la ruta antigua instalacion: redirige al login; POST a esa ruta no crea cuentas.
+3. Confirmar que database conserva los procesos del proyecto y auth_database consulta la base de funcionarios.
+4. Entrar con user_others_apss/pass_others_apss de un funcionario activo.
+5. Probar clave incorrecta y cuenta inexistente: mismo error genérico.
+6. Probar una cuenta central con hash y otra con el formato heredado permitido: ambas ingresan sin modificar su contraseña.
+7. Una cuenta que solo existe en la tabla local antigua no permite ingresar.
+8. Login y logout sin CSRF: 419. Logout por GET: 405.
+9. Verificar inicio y perfil; no se muestran hashes ni contraseñas.
+10. Desactivar una cuenta de prueba central: invalida también su sesión abierta.
+11. Superar el límite de intentos: 429 y Retry-After.
+12. Verificar que las migraciones solo afectan database y conservan su historial.
+13. Revisar diseño móvil/escritorio y protección de archivos descrita en docs/DESARROLLO.md.
 
-Automatizado sin base: php bin/check.php y php tests/unit.php. La prueba de integración requiere MySQL local; no usar credenciales reales en tests.
+Ejecutar php bin/check.php, php tests/unit.php y php tests/integration.php con MySQL local. Las pruebas de integración preparan los dos orígenes de datos con fixtures sintéticos.

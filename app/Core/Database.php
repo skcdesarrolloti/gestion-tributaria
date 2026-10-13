@@ -10,7 +10,7 @@ final class Database
 {
     private ?PDO $connection = null;
 
-    public function __construct(private array $config) {}
+    public function __construct(private array $config, private bool $allowCreate = true) {}
 
     public function connection(): PDO
     {
@@ -29,7 +29,7 @@ final class Database
         try {
             $this->connection = new PDO($server . ';dbname=' . $c['name'], $c['username'], $c['password'], $options);
         } catch (PDOException $error) {
-            if ((int) ($error->errorInfo[1] ?? 0) !== 1049) { throw $error; }
+            if (!$this->allowCreate || (int) ($error->errorInfo[1] ?? 0) !== 1049) { throw $error; }
             // Si el hosting permite CREATE DATABASE, también se crea la base.
             $db = new PDO($server, $c['username'], $c['password'], $options);
             $sql = file_get_contents(dirname(__DIR__, 2) . '/database/000_create_database.sql');

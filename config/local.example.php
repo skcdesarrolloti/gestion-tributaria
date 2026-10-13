@@ -1,19 +1,28 @@
 <?php
 declare(strict_types=1);
 
-// Copia como local.php. Ese archivo es privado y Git lo ignora.
+// Copia como local.php solo en desarrollo; conserva el archivo privado del servidor.
 return [
-    // Local: ''. Hostinger en subcarpeta: '/gestion-tributaria/public'.
-    'base_path' => '',
-    // false SOLO para pruebas locales por HTTP; true en Hostinger con HTTPS.
+    // En los subdominios actuales: '/public'. En servidor local con -t public: ''.
+    'base_path' => '/public',
     'secure_cookies' => true,
-    // Genera una clave con: php bin/setup-key.php. Pégala aquí y en el primer acceso.
-    'setup_key' => '',
+    // Datos del proyecto: conservar esta conexión existente.
     'database' => [
         'host' => 'localhost',
         'port' => 3306,
         'name' => 'u350704768_tributaria',
-        'username' => 'COMPLETAR_USUARIO_MYSQL',
-        'password' => 'COMPLETAR_CLAVE_MYSQL',
+        'username' => 'USUARIO_MYSQL_DEL_PROYECTO',
+        'password' => 'CLAVE_MYSQL_DEL_PROYECTO',
     ],
+    // Funcionarios existentes: conexión de solo lectura a la base central.
+    // Estas son credenciales MySQL, NO user_others_apss/pass_others_apss.
+    'auth_database' => [
+        'host' => 'localhost',
+        'port' => 3306,
+        'name' => 'u350704768_M4FvI',
+        'username' => 'USUARIO_MYSQL_BASE_CENTRAL',
+        'password' => 'CLAVE_MYSQL_BASE_CENTRAL',
+    ],
+    // Misma compatibilidad de contraseñas que Servicios Comerciales.
+    'auth_allow_legacy_passwords' => true,
 ];

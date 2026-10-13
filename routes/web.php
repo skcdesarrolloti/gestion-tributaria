@@ -6,5 +6,5 @@ $router->add('GET', 'perfil', [$homeController, 'profile']);
 $router->add('GET', 'login', [$authController, 'login']);
 $router->add('POST', 'login', [$authController, 'login']);
 $router->add('POST', 'logout', [$authController, 'logout']);
-$router->add('GET', 'instalacion', [$setupController, 'index']);
-$router->add('POST', 'instalacion', [$setupController, 'index']);
+// Compatibilidad con pestañas antiguas: ya no existe un registro de administradores.
+$router->add('GET', 'instalacion', static fn () => redirect($config, 'login'));

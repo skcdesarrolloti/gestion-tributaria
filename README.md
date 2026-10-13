@@ -3,7 +3,7 @@
 Proyecto MVC en PHP 8.2+, ya publicado en Hostinger y conectado con Git. Continuar el desarrollo sobre esta estructura.
 Base asignada: **u350704768_tributaria**.
 
-**La aplicación crea y actualiza las tablas automáticamente. No hay que entrar a phpMyAdmin ni importar SQL.** Al abrirla por primera vez, un formulario protegido permite crear el administrador.
+**La aplicación crea y actualiza las tablas automáticamente. No hay que entrar a phpMyAdmin ni importar SQL.** El acceso utiliza los funcionarios ya existentes del sistema central; no hay registro de administradores locales.
 
 Incluye login de funcionarios con los estilos de Servicios Comerciales, inicio protegido, perfil, cierre de sesión y migraciones automáticas. Los módulos inmobiliarios/tributarios se desarrollarán cuando se definan sus requisitos.
 
@@ -44,4 +44,4 @@ php bin/check.php
 php tests/unit.php
 ```
 
-No hay cuentas ni contraseñas predeterminadas. Las credenciales de la base y la clave de instalación se guardan en config/local.php, excluido de Git.
+Las credenciales de conexión se guardan en config/local.php, excluido de Git. Conserva database para los datos de este proyecto y agrega auth_database para consultar los funcionarios existentes. Ver [acceso institucional](docs/ACCESO-FUNCIONARIOS.md).

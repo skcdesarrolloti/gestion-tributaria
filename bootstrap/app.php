@@ -36,13 +36,15 @@ header('Referrer-Policy: same-origin');
 
 $database = new App\Core\Database($config['database']);
 (new App\Services\Migrator($database->connection(), dirname(__DIR__) . '/database'))->run();
-$installation = new App\Models\Installation($database);
-$users = new App\Models\Funcionario($database);
-$auth = new App\Services\AuthService($users);
+$authDatabase = new App\Core\Database($config['auth_database'], false);
+$users = new App\Models\Funcionario($authDatabase);
+$authSource = hash('sha256', json_encode([
+    $config['auth_database']['host'], $config['auth_database']['port'], $config['auth_database']['name'],
+]));
+$auth = new App\Services\AuthService($users, $config['auth_allow_legacy_passwords'], $authSource);
 $view = new App\Core\View(dirname(__DIR__) . '/app/Views', $config);
 $limiter = new App\Services\LoginLimiter(($config['storage_path'] ?? dirname(__DIR__) . '/storage') . '/rate-limits');
-$authController = new App\Controllers\AuthController($auth, $view, $limiter, $config, $installation);
-$setupController = new App\Controllers\SetupController($installation, $view, $limiter, $config);
+$authController = new App\Controllers\AuthController($auth, $view, $limiter, $config);
 $homeController = new App\Controllers\HomeController($auth, $view, $config);
 $router = new App\Core\Router();
 require dirname(__DIR__) . '/routes/web.php';

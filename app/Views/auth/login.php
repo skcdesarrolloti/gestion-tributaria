@@ -36,7 +36,7 @@
         <label for="password" class="block font-label-sm text-label-sm text-secondary font-medium">Contraseña</label>
         <div class="relative">
           <span class="material-symbols-outlined absolute left-3 top-2.5 text-secondary text-[18px]">lock</span>
-          <input type="password" id="password" name="password" maxlength="72" autocomplete="current-password" required class="w-full pl-9 pr-3 py-2.5 bg-surface-container-low focus:bg-surface-container-lowest rounded-xl font-body-sm text-body-sm text-on-surface outline-none border border-transparent focus:border-outline-variant transition-all shadow-inner">
+          <input type="password" id="password" name="password" maxlength="4096" autocomplete="current-password" required class="w-full pl-9 pr-3 py-2.5 bg-surface-container-low focus:bg-surface-container-lowest rounded-xl font-body-sm text-body-sm text-on-surface outline-none border border-transparent focus:border-outline-variant transition-all shadow-inner">
         </div>
       </div>
       <button type="submit" class="w-full mt-space-sm py-3 rounded-xl bg-inverse-surface hover:bg-secondary text-on-secondary font-label-md text-label-md font-semibold transition-all shadow-md cursor-pointer">

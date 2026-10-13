@@ -9,7 +9,7 @@ Estas instrucciones aplican a toda la aplicación y a cualquier persona o asiste
 - La base de datos u350704768_tributaria ya existe. Conservar sus datos y la configuración privada del servidor.
 - Publicado no significa validado: comprobar el funcionamiento de cada cambio y no dar por resuelto un error solo porque el código llegó a GitHub.
 - El trabajo actual consiste en corregir errores y desarrollar los módulos que solicite el usuario sobre esta base MVC existente.
-- Ya existen autenticación, perfil, inicio, primer acceso protegido y migraciones automáticas. No reconstruir el proyecto desde cero.
+- Ya existen autenticación, perfil, inicio y migraciones automáticas. No reconstruir el proyecto desde cero.
 
 ## Cómo trabajar con el responsable
 
@@ -32,7 +32,7 @@ El responsable es un ingeniero industrial con experiencia limitada en programaci
 - Leer docs/ESTILOS-Y-LOGIN.md antes de modificar la interfaz. No crear otro tema sin que el usuario lo solicite.
 - El tema compartido está en resources/theme/comerciales.cjs. No editar a mano el CSS generado.
 - Si se agregan clases Tailwind, ejecutar npm ci y npm run build:css localmente e incluir public/assets/css/tailwind.css en el commit.
-- Las sesiones y cuentas son independientes de los otros proyectos. No asumir WordPress, una base compartida o inicio de sesión único.
+- Las sesiones son independientes, pero las cuentas proceden de la base central u350704768_M4FvI, tabla wp_jet_cct_funcionarios. Usar user_others_apss/pass_others_apss y activo = 'Si', como Servicios Comerciales. Leer docs/ACCESO-FUNCIONARIOS.md. No crear cuentas locales, formularios de primer administrador ni SSO.
 
 ## Base de datos automática
 
@@ -40,6 +40,7 @@ El responsable es un ingeniero industrial con experiencia limitada en programaci
 - Para toda tabla, columna, índice o catálogo nuevo, crear la siguiente migración numerada en database/migrations y su comprobación del mismo nombre en database/checks.
 - Leer database/README.md. Cada migración contiene una sentencia SQL; su comprobación devuelve si el cambio ya está aplicado.
 - No modificar scripts ya aplicados ni borrar schema_migrations para ocultar errores. Crear una migración nueva cuando cambie el esquema.
+- Las migraciones solo afectan database, nunca auth_database. La conexión central es de solo lectura y no debe crear bases, tablas o cuentas. Mantener intacta la migración histórica 001 y su tabla local, que el login ya no usa.
 - Solo app/Services/Migrator ejecuta cambios de estructura durante el arranque. No dispersar CREATE o ALTER por controladores y vistas.
 - Probar cambios de datos en una base aislada. No usar las credenciales de producción en las pruebas.
 - La base actual ya está creada: no recrearla, vaciarla ni ejecutar el primer acceso como solución a un error.
@@ -50,7 +51,7 @@ El responsable es un ingeniero industrial con experiencia limitada en programaci
 - La configuración privada existente está en config/local.php, fuera de Git. La aplicación actualmente NO lee .env.
 - No reemplazar la configuración del servidor al corregir código. Usar config/local.example.php solo como referencia para desarrollo local.
 - No copiar secretos, datos de clientes ni credenciales del proyecto de referencia.
-- Usar consultas preparadas, escape HTML con e(), CSRF en operaciones POST y password_hash/password_verify.
+- Usar consultas preparadas, escape HTML con e() y CSRF en operaciones POST. Validar hashes con password_verify y mantener la compatibilidad explícita con las claves heredadas centrales. Nunca escribir ni transformar contraseñas de funcionarios desde estos proyectos.
 - Cada módulo nuevo debe verificar sesión y permisos en el servidor. El rol guardado no constituye por sí solo una política de autorización.
 - No exponer logs, SQL ni datos de conexión mediante rutas públicas o mensajes de error.
 

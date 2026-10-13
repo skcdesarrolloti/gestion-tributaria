@@ -13,14 +13,10 @@ final class AuthController
         private View $view,
         private LoginLimiter $limiter,
         private array $config,
-        private \App\Models\Installation $installation,
     ) {}
 
     public function login(): void
     {
-        if ($this->installation->needed()) {
-            redirect($this->config, 'instalacion');
-        }
         if ($this->auth->user()) {
             redirect($this->config, 'inicio');
         }

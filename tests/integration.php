@@ -38,8 +38,10 @@ $dbConfig = ['host' => getenv('TEST_DB_HOST') ?: '127.0.0.1',
     'username' => getenv('TEST_DB_USER') ?: 'root', 'password' => getenv('TEST_DB_PASSWORD') ?: ''];
 $server = new PDO(sprintf('mysql:host=%s;port=%d;charset=utf8mb4', $dbConfig['host'], $dbConfig['port']),
     $dbConfig['username'], $dbConfig['password'], [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
-$key = bin2hex(random_bytes(32));
-$config = ['database' => $dbConfig, 'secure_cookies' => false, 'setup_key' => $key,
+$authName = $name . '_auth';
+$authConfig = array_replace($dbConfig, ['name' => $authName]);
+$config = ['database' => $dbConfig, 'auth_database' => $authConfig,
+    'auth_allow_legacy_passwords' => true, 'secure_cookies' => false,
     'session_name' => 'test_' . $id, 'storage_path' => $temp];
 $socket = stream_socket_server('tcp://127.0.0.1:0');
 $address = stream_socket_get_name($socket, false);
@@ -58,27 +60,39 @@ try {
         if ($ready) { fclose($ready); break; }
         usleep(100000);
     }
-    [$status, $html] = request($client, $base, 'instalacion');
-    verify($status === 200 && token($html) !== '', 'Base y tablas creadas automáticamente');
+    [$status, $html] = request($client, $base, 'login');
+    verify($status === 200 && token($html) !== '', 'Login directo incluso sin cuentas locales ni conexión de funcionarios');
+    verify(!str_contains($html, 'Crear administrador') && !str_contains($html, 'setup_key'), 'No muestra instalador');
+    [$status, , $headers] = request($client, $base, 'instalacion');
+    verify($status === 303 && str_contains($headers, 'route=login'), 'Enlace antiguo del instalador redirige al login');
+    verify(request($client, $base, 'instalacion', ['username' => 'intruso'])[0] === 405, 'No existe registro de administradores');
+    $missingRejected = false;
+    try { (new App\Core\Database($authConfig, false))->connection(); }
+    catch (PDOException $error) { $missingRejected = (int) $error->errorInfo[1] === 1049; }
+    verify($missingRejected, 'Conexión de funcionarios no crea bases automáticamente');
+    $server->exec('CREATE DATABASE ' . $authName . ' CHARACTER SET utf8mb4');
+    $authDb = (new App\Core\Database($authConfig, false))->connection();
+    // Solo fixtures sintéticos en la base aleatoria de esta prueba.
+    $authDb->exec(file_get_contents($root . '/database/migrations/001_funcionarios.sql'));
+    $insertUser = $authDb->prepare('INSERT INTO wp_jet_cct_funcionarios (nombre, user_others_apss, pass_others_apss) VALUES (?, ?, ?)');
+    $insertUser->execute(['<b>Funcionario central</b>', 'admin', 'Prueba-segura-2026']);
+    $hash = password_hash('Otra-clave-segura', PASSWORD_DEFAULT);
+    $insertUser->execute(['Cuenta con hash', 'hash-user', $hash]);
     $db = new PDO(sprintf('mysql:host=%s;port=%d;dbname=%s;charset=utf8mb4', $dbConfig['host'], $dbConfig['port'], $name),
         $dbConfig['username'], $dbConfig['password'], [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
     verify((int) $db->query('SELECT COUNT(*) FROM schema_migrations')->fetchColumn() === 1, 'Migración registrada una vez');
-    $form = ['_csrf_token' => token($html), 'setup_key' => $key, 'name' => '<b>Administrador</b>',
-        'username' => 'admin', 'password' => 'Prueba-segura-2026', 'confirmation' => 'Prueba-segura-2026'];
-    verify(request($client, $base, 'instalacion', array_replace($form, ['_csrf_token' => '']))[0] === 419, 'Instalación exige CSRF');
-    verify(request($client, $base, 'instalacion', array_replace($form, ['setup_key' => 'incorrecta']))[0] === 403, 'Instalación exige clave privada');
-    verify(request($client, $base, 'instalacion', array_replace($form, ['confirmation' => 'otra']))[0] === 422, 'Valida confirmación de contraseña');
-    verify(request($client, $base, 'instalacion', $form)[0] === 303, 'Primer administrador creado desde web');
-    verify(request($client, $base, 'instalacion')[0] === 404, 'Instalador cerrado después del primer usuario');
+    $localUser = $db->prepare('INSERT INTO wp_jet_cct_funcionarios (nombre, user_others_apss, pass_others_apss) VALUES (?, ?, ?)');
+    $localUser->execute(['Cuenta antigua local', 'local-only', password_hash('Prueba-local-2026', PASSWORD_DEFAULT)]);
     verify(request($client, $base, 'inicio')[0] === 303, 'Inicio exige autenticación');
     [$status, $html] = request($client, $base, 'login');
     $login = ['_csrf_token' => token($html), 'username' => 'admin', 'password' => 'Prueba-segura-2026'];
+    verify(request($client, $base, 'login', array_replace($login, ['username' => 'local-only', 'password' => 'Prueba-local-2026']))[0] === 401, 'Ignora cuentas locales antiguas');
     verify(request($client, $base, 'login', array_replace($login, ['_csrf_token' => '']))[0] === 419, 'Login exige CSRF');
     verify(request($client, $base, 'login', array_replace($login, ['password' => 'errada']))[0] === 401, 'Rechaza contraseña incorrecta');
     [$status, , $headers] = request($client, $base, 'login', $login);
     verify($status === 303 && str_contains(strtolower($headers), 'set-cookie:'), 'Login válido regenera sesión');
     [$status, $html] = request($client, $base, 'perfil');
-    verify($status === 200 && str_contains($html, '&lt;b&gt;Administrador&lt;/b&gt;'), 'Perfil escapa los datos del usuario');
+    verify($status === 200 && str_contains($html, '&lt;b&gt;Funcionario central&lt;/b&gt;'), 'Perfil usa y escapa los datos centrales');
     verify(!str_contains($html, '$2y$'), 'Perfil no expone hash');
     verify(request($client, $base, 'logout')[0] === 405, 'Logout rechaza GET');
     verify(request($client, $base, 'logout', ['_csrf_token' => ''])[0] === 419, 'Logout exige CSRF');
@@ -86,8 +100,17 @@ try {
     verify(request($client, $base, 'perfil')[0] === 303, 'Sesión cerrada no puede entrar');
     [, $html] = request($client, $base, 'login');
     $login['_csrf_token'] = token($html);
+    verify(request($client, $base, 'login', array_replace($login, ['username' => 'hash-user', 'password' => 'Otra-clave-segura']))[0] === 303, 'También acepta contraseñas con hash');
+    [, $html] = request($client, $base, 'perfil');
+    verify(str_contains($html, 'Cuenta con hash'), 'Perfil corresponde a la cuenta central autenticada');
+    request($client, $base, 'logout', ['_csrf_token' => token($html)]);
+    [, $html] = request($client, $base, 'login');
+    $login['_csrf_token'] = token($html);
     verify(request($client, $base, 'login', $login)[0] === 303, 'Puede volver a entrar');
-    $db->exec("UPDATE wp_jet_cct_funcionarios SET activo = 'No'");
+    verify($authDb->query("SELECT pass_others_apss FROM wp_jet_cct_funcionarios WHERE user_others_apss = 'admin'")->fetchColumn() === 'Prueba-segura-2026', 'No transforma la clave central existente');
+    verify($authDb->query("SELECT pass_others_apss FROM wp_jet_cct_funcionarios WHERE user_others_apss = 'hash-user'")->fetchColumn() === $hash, 'No reemplaza el hash central');
+    verify($authDb->query("SHOW TABLES LIKE 'schema_migrations'")->fetchColumn() === false, 'No ejecuta migraciones en la base central');
+    $authDb->exec("UPDATE wp_jet_cct_funcionarios SET activo = 'No'");
     verify(request($client, $base, 'perfil')[0] === 303, 'Desactivar cuenta invalida sesión abierta');
     [, $html] = request($client, $base, 'login');
     $login['_csrf_token'] = token($html);
@@ -117,6 +140,9 @@ try {
     if (is_resource($process)) { proc_terminate($process); proc_close($process); }
     if (is_file($local)) { unlink($local); }
     // Solo el nombre aleatorio generado por ESTA prueba; nunca una base del usuario.
-    if (preg_match('/^mvc_test_[a-f0-9]{12}$/D', $name)) { $server->exec('DROP DATABASE IF EXISTS ' . $name); }
+    if (preg_match('/^mvc_test_[a-f0-9]{12}$/D', $name)) {
+        $server->exec('DROP DATABASE IF EXISTS ' . $name);
+        $server->exec('DROP DATABASE IF EXISTS ' . $authName);
+    }
     echo "Registro temporal de la prueba: $temp/server.log\n";
 }

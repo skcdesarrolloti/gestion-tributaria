@@ -10,26 +10,35 @@ final class AuthService
     // Hash de relleno para ejecutar password_verify incluso si el usuario no existe.
     private const DUMMY_HASH = '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2uheWG/igi.';
 
-    public function __construct(private Funcionario $users) {}
+    public function __construct(
+        private Funcionario $users,
+        private bool $allowLegacyPasswords,
+        private string $sourceId,
+    ) {}
 
     public function attempt(string $login, string $password): bool
     {
-        if ($login === '' || strlen($login) > 100 || $password === '' || strlen($password) > 72) {
+        if ($login === '' || strlen($login) > 100 || $password === '' || strlen($password) > 4096) {
             return false;
         }
         $user = $this->users->findActiveByLogin($login);
-        $valid = password_verify($password, $user['pass_others_apss'] ?? self::DUMMY_HASH);
+        $valid = PasswordVerifier::verify($password, $user['pass_others_apss'] ?? self::DUMMY_HASH, $this->allowLegacyPasswords);
         if (!$user || !$valid) {
             return false;
         }
         session_regenerate_id(true);
-        $_SESSION = ['user_id' => (int) $user['_ID'], 'last_activity' => time()];
+        $_SESSION = ['user_id' => (int) $user['_ID'], 'last_activity' => time(), 'auth_source' => $this->sourceId];
         return true;
     }
 
     public function user(): ?array
     {
         if (empty($_SESSION['user_id'])) {
+            return null;
+        }
+        // Las sesiones antiguas de cuentas locales no autorizan una cuenta central con el mismo ID.
+        if (($_SESSION['auth_source'] ?? '') !== $this->sourceId) {
+            $this->forget();
             return null;
         }
         if (time() - (int) ($_SESSION['last_activity'] ?? 0) > 1800) {
