@@ -15,6 +15,6 @@ Usar una base aislada de pruebas, nunca producción.
 11. Superar 10 intentos usuario/IP en 15 minutos: 429 y Retry-After.
 12. Probar migración de columna y reabrir: la crea una vez. Simular DDL aplicado sin registro: su comprobación permite recuperar.
 13. Alterar un SQL aplicado en pruebas: se bloquea el arranque; restaurar el archivo para continuar.
-14. Revisar login/inicio/perfil en móvil y escritorio, navegación con Tab y bloqueos privados de docs/HOSTINGER.md.
+14. Revisar login/inicio/perfil en móvil y escritorio, navegación con Tab y protección de archivos descrita en docs/DESARROLLO.md.
 
 Automatizado sin base: php bin/check.php y php tests/unit.php. La prueba de integración requiere MySQL local; no usar credenciales reales en tests.

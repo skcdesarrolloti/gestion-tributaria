@@ -1,18 +1,18 @@
 # Gestión Tributaria
 
-Base MVC en PHP 8.2+ para desarrollar con Git y desplegar en Hostinger.
+Proyecto MVC en PHP 8.2+, ya publicado en Hostinger y conectado con Git. Continuar el desarrollo sobre esta estructura.
 Base asignada: **u350704768_tributaria**.
 
 **La aplicación crea y actualiza las tablas automáticamente. No hay que entrar a phpMyAdmin ni importar SQL.** Al abrirla por primera vez, un formulario protegido permite crear el administrador.
 
 Incluye login de funcionarios con los estilos de Servicios Comerciales, inicio protegido, perfil, cierre de sesión y migraciones automáticas. Los módulos inmobiliarios/tributarios se desarrollarán cuando se definan sus requisitos.
 
-## Por dónde empezar
+## Continuar el trabajo
 
-1. [Instalación local](docs/INICIO-RAPIDO.md).
-2. [Despliegue en Hostinger](docs/HOSTINGER.md).
-3. [Reglas permanentes](AGENTS.md).
-4. [Guía MVC](docs/DESARROLLO.md), [migraciones](database/README.md) y [estilos/login](docs/ESTILOS-Y-LOGIN.md).
+1. Lee [AGENTS.md](AGENTS.md): reglas para continuar el proyecto.
+2. Sigue [la guía de desarrollo](docs/DESARROLLO.md) para corregir errores o agregar módulos.
+3. Consulta [migraciones](database/README.md), [estilos/login](docs/ESTILOS-Y-LOGIN.md) y [pruebas](docs/VALIDACION.md).
+4. Si necesitas ejecutar una copia en tu computador, usa [la guía local](docs/INICIO-RAPIDO.md). La configuración de producción ya existe y debe conservarse.
 
 No requiere Composer ni Node en el hosting. El CSS compilado está incluido. Node solo se utiliza localmente al modificar las clases Tailwind.
 

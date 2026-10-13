@@ -1,32 +1,70 @@
-# Instrucciones permanentes — Gestión Tributaria
+# Continuar el desarrollo — Gestión Tributaria
 
-Estas reglas aplican a toda la aplicación y a quien la desarrolle, incluidos asistentes de IA.
+Estas instrucciones aplican a toda la aplicación y a cualquier persona o asistente que trabaje en ella.
 
-## Contexto del responsable
+## Estado del proyecto
 
-El responsable es un ingeniero industrial con experiencia limitada en programación. Explicar en español, con pasos concretos y comandos listos para copiar. Evitar complejidad innecesaria. No dar por conocidos términos técnicos; explicar dónde va cada archivo y cómo comprobar el resultado.
+- El proyecto ya está publicado en Hostinger y conectado a este repositorio mediante Git. No volver a plantear instalación del hosting ni conexión con GitHub como tareas pendientes.
+- Sitio: https://gestion-tributaria.sucasainmobiliaria.com.co/public/.
+- La base de datos u350704768_tributaria ya existe. Conservar sus datos y la configuración privada del servidor.
+- Publicado no significa validado: comprobar el funcionamiento de cada cambio y no dar por resuelto un error solo porque el código llegó a GitHub.
+- El trabajo actual consiste en corregir errores y desarrollar los módulos que solicite el usuario sobre esta base MVC existente.
+- Ya existen autenticación, perfil, inicio, primer acceso protegido y migraciones automáticas. No reconstruir el proyecto desde cero.
 
-## Requisitos obligatorios
+## Cómo trabajar con el responsable
 
-- Mantener PHP con MVC: controladores coordinan, modelos consultan, vistas presentan.
-- Usar SIEMPRE como referencia visual y de login C:\Workspace\desarrollo-skc\control-servicios-comerciales.
-- Conservar Poppins, colores, espaciados, componentes y formulario de acceso de esa referencia. No introducir otro tema o framework sin solicitud del usuario. Ver docs/ESTILOS-Y-LOGIN.md.
-- Archivos propios pequeños: objetivo hasta 150 líneas; máximo 250 líneas por PHP, JS o CSS manual. Dividir por responsabilidad antes de superar el límite. Excepción: archivos generados, lockfiles y tema original de referencia.
-- Desplegar en Hostinger con MySQL/MariaDB. Base asignada: u350704768_tributaria.
-- La persona NO debe entrar a phpMyAdmin ni importar SQL. La aplicación crea y actualiza tablas/columnas automáticamente al arrancar, con scripts versionados en database/.
-- TODA tabla, columna, índice, dato de catálogo o base nueva debe tener un script SQL versionado. Nunca dejar cambios manuales sin script.
-- Crear migraciones nuevas numeradas; no modificar una migración ya aplicada. Documentar orden, respaldo y reversión.
-- Ejecutar cambios de estructura exclusivamente mediante App/Services/Migrator en el arranque. No dispersar DDL por controladores o vistas. Cada migración SQL lleva una comprobación SQL del mismo nombre; ver database/README.md.
-- Para crear bases incluir un script CREATE DATABASE; si Hostinger restringe ese permiso, explicar la creación en hPanel y dejar que la app cree las tablas.
-- Usar consultas preparadas, escape HTML, CSRF en POST y password_hash/password_verify. No almacenar contraseñas en texto plano.
-- No copiar .env, credenciales, datos de clientes ni claves del proyecto de referencia.
-- Mantener config/local.php, SQL privados y logs fuera de Git. Nunca subir .git o archivos privados al directorio público sin protección.
-- No reutilizar cookies de sesión entre los dos proyectos. El login consulta la tabla local de funcionarios; no asumir acceso a WordPress ni implementar SSO sin requisito explícito.
-- Cada módulo nuevo debe proteger acceso y definir autorizaciones en el servidor. El rol inicial es informativo; no implica una política de permisos ya implementada.
-- Mantener la aplicación ejecutable sin Composer ni Node en Hostinger. El CSS compilado debe quedar en Git.
-- Actualizar documentación y pruebas relevantes con cada cambio. Ejecutar php bin/check.php y php tests/unit.php.
-- Revisar git diff y git status antes del commit. Hacer commits claros y trabajar por ramas para cambios futuros. No hacer push forzado.
+El responsable es un ingeniero industrial con experiencia limitada en programación. Explicar en español y con pasos concretos. Indicar qué se cambió, dónde se encuentra y cómo comprobarlo. Explicar los términos técnicos cuando sean necesarios. Evitar soluciones que le obliguen a administrar tablas manualmente.
 
-## Alcance inicial
+## Arquitectura y archivos pequeños
 
-Esta base incluye instalación web protegida, migraciones automáticas, autenticación, inicio y perfil. No inventar cálculos tributarios, entidades inmobiliarias, indicadores ni procesos de negocio sin requisitos del usuario.
+- Mantener PHP 8.2+ con MVC: controladores coordinan, modelos consultan y vistas presentan.
+- Flujo de entrada: public/index.php → bootstrap/app.php → routes/web.php → controlador → modelo/servicio → vista.
+- Antes de crear un archivo, revisar si existe una responsabilidad equivalente y reutilizarla.
+- Objetivo de 50 a 150 líneas por archivo propio; máximo 250 por PHP, JS o CSS manual. Dividir por responsabilidad antes de superar el límite.
+- Las excepciones son archivos generados, lockfiles y el tema original de referencia. No separar código arbitrariamente solo para cumplir el número de líneas.
+- Reutilizar app/Views/partials para cabecera, navegación, CSRF y pie de página.
+- No introducir un framework o dependencias de ejecución innecesarias. El servidor ejecuta el PHP sin Composer ni Node.
+
+## Estilos y login obligatorios
+
+- Usar SIEMPRE como referencia C:\Workspace\desarrollo-skc\control-servicios-comerciales.
+- Conservar Poppins, colores, espaciados, componentes y presentación del login de esa referencia.
+- Leer docs/ESTILOS-Y-LOGIN.md antes de modificar la interfaz. No crear otro tema sin que el usuario lo solicite.
+- El tema compartido está en resources/theme/comerciales.cjs. No editar a mano el CSS generado.
+- Si se agregan clases Tailwind, ejecutar npm ci y npm run build:css localmente e incluir public/assets/css/tailwind.css en el commit.
+- Las sesiones y cuentas son independientes de los otros proyectos. No asumir WordPress, una base compartida o inicio de sesión único.
+
+## Base de datos automática
+
+- La persona NO debe entrar a phpMyAdmin ni importar SQL. La aplicación crea y actualiza tablas/columnas mediante scripts versionados.
+- Para toda tabla, columna, índice o catálogo nuevo, crear la siguiente migración numerada en database/migrations y su comprobación del mismo nombre en database/checks.
+- Leer database/README.md. Cada migración contiene una sentencia SQL; su comprobación devuelve si el cambio ya está aplicado.
+- No modificar scripts ya aplicados ni borrar schema_migrations para ocultar errores. Crear una migración nueva cuando cambie el esquema.
+- Solo app/Services/Migrator ejecuta cambios de estructura durante el arranque. No dispersar CREATE o ALTER por controladores y vistas.
+- Probar cambios de datos en una base aislada. No usar las credenciales de producción en las pruebas.
+- La base actual ya está creada: no recrearla, vaciarla ni ejecutar el primer acceso como solución a un error.
+- Si se requiere otra base en el futuro, incluir su script de creación; no cambiar la base asignada sin un requisito explícito.
+
+## Configuración y seguridad
+
+- La configuración privada existente está en config/local.php, fuera de Git. La aplicación actualmente NO lee .env.
+- No reemplazar la configuración del servidor al corregir código. Usar config/local.example.php solo como referencia para desarrollo local.
+- No copiar secretos, datos de clientes ni credenciales del proyecto de referencia.
+- Usar consultas preparadas, escape HTML con e(), CSRF en operaciones POST y password_hash/password_verify.
+- Cada módulo nuevo debe verificar sesión y permisos en el servidor. El rol guardado no constituye por sí solo una política de autorización.
+- No exponer logs, SQL ni datos de conexión mediante rutas públicas o mensajes de error.
+
+## Flujo de trabajo
+
+1. Leer este archivo, README.md y docs/DESARROLLO.md; revisar git status y los archivos afectados.
+2. Identificar el requisito concreto y continuar sobre la estructura existente. No inventar procesos inmobiliarios ni cálculos tributarios.
+3. Implementar el cambio en archivos pequeños, manteniendo estilos, permisos y migraciones automáticas.
+4. Ejecutar php bin/check.php y php tests/unit.php. Si cambia autenticación o migraciones, ejecutar también la integración en una base aislada; ver docs/VALIDACION.md.
+5. Probar el flujo afectado y actualizar la documentación para quien continúe trabajando.
+6. Revisar git diff y git diff --cached antes de un commit. Nunca incluir config/local.php, logs, backups o datos reales.
+7. Usar ramas para cambios futuros salvo que el usuario indique trabajar en main. No hacer push forzado. main está conectada al sitio: un push puede actualizarlo automáticamente.
+8. Informar el resultado, las pruebas y cualquier verificación pendiente. No afirmar que producción funciona sin evidencia.
+
+## Diagnóstico de errores
+
+La pantalla «No fue posible completar la solicitud» es un mensaje genérico; no identifica la causa. Obtener las últimas líneas de storage/logs/app.log por un medio privado y revisar la excepción antes de cambiar credenciales, permisos, esquema o código. No activar display_errors en producción. Si falta evidencia, pedir únicamente el fragmento necesario, sin contraseñas, y avanzar con las tareas independientes.

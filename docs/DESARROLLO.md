@@ -32,7 +32,7 @@ git commit -m "Agregar descripción breve del cambio"
 git push -u origin feature/nombre-del-cambio
 ```
 
-Ajusta git add a las carpetas realmente modificadas. Nunca agregues claves, backups ni datos de clientes. Un commit guarda una versión local; push la envía a GitHub. Subir a GitHub no despliega por sí solo en Hostinger.
+Ajusta git add a las carpetas realmente modificadas. Nunca agregues claves, backups ni datos de clientes. Un commit guarda una versión local; push la envía a GitHub. Este sitio ya está conectado a Git en Hostinger: los cambios en main pueden actualizarlo automáticamente. Una rama de trabajo permite revisar los cambios antes de incorporarlos a main.
 
 ## Diagnóstico
 
@@ -41,3 +41,9 @@ Ajusta git add a las carpetas realmente modificadas. Nunca agregues claves, back
 - 419: formulario vencido; recargar para renovar token.
 - 429: límite de intentos alcanzado; esperar el tiempo indicado.
 - Cambio de estilo no aparece: recompilar CSS y recargar sin caché.
+
+La pantalla genérica de error no permite saber si falló la conexión, la configuración o una migración. Copia las últimas líneas de storage/logs/app.log desde el administrador de archivos del sitio, sin incluir secretos. Conserva config/local.php y no borres tablas ni versiones para intentar solucionar el error.
+
+## Comprobar la protección de archivos
+
+Las rutas config/local.php, database/migrations/001_funcionarios.sql, storage/logs/app.log y .git/config, bajo la carpeta del proyecto, deben responder 403 o 404 desde el navegador. Lee los logs mediante el administrador de archivos privado; no crees una página pública para mostrarlos.
