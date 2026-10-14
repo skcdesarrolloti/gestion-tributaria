@@ -33,6 +33,34 @@ salario, pensión, honorarios, arriendos, rendimientos y dividendos.
 - Registrar o marcar pendiente cada dato indispensable. No calcular usando supuestos
   silenciosos ni aplicar el formulario 210 universalmente.
 
+## Actividades económicas: requisito confirmado
+
+Incorporar al perfil anual la actividad económica principal, código y denominación
+oficial, y las actividades adicionales del RUT. Mantener fecha de vigencia y soporte.
+El campo de referencia es la casilla 24 de los formularios de renta aplicables.
+
+- Utilizar la clasificación oficial DIAN/CIIU vigente para el período, incluidos los
+  códigos especiales de personas naturales; no limitar el catálogo a profesiones.
+- Conservar el código como texto de cuatro dígitos para no perder ceros iniciales.
+- Mostrar bajo la opción su definición, alcance, inclusiones/exclusiones y fuente.
+- Ejemplos oficiales: 0010 asalariados, 0020 pensionados, 0090 rentistas de capital
+  (según ámbito de aplicación). No asignar un código solo por marcar una fuente.
+- Identificar y comparar los ingresos por actividad para revisar la principal del
+  año conforme al instructivo. No reemplazar automáticamente la información del RUT.
+- Distinguir actividad económica, fuente de ingreso, cédula y régimen. Un pensionado
+  puede recibir otras rentas; su actividad principal no elimina esas fuentes.
+- Relacionar cada movimiento con la actividad pertinente, conservando la justificación
+  si no corresponde a una actividad económica ordinaria.
+- Utilizar esa relación en revisiones futuras de SIMPLE, UGPP y costos, verificando
+  las reglas específicas; el código por sí solo no acredita beneficios ni aportes.
+- Permitir completar y corregir la actividad de perfiles ya registrados, con permisos,
+  CSRF y trazabilidad. No obligar a duplicar el contribuyente o el perfil anual.
+
+Referencia inicial: [Resolución DIAN 000227 de 2025](https://normograma.dian.gov.co/dian/compilacion/docs/resolucion_dian_0227_2025.htm)
+y el instructivo del formulario aplicable. Validar versión e historial al cargar el
+catálogo y registrar su migración/comprobación. Este requisito todavía no implementa
+los campos ni el catálogo en la pantalla actual.
+
 ## Causantes fallecidos y sucesiones: requisito confirmado
 
 Pendiente para la etapa de perfil fiscal. No crear un tipo independiente llamado
