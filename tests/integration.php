@@ -99,6 +99,7 @@ try {
     verify($status === 200 && str_contains($html, '&lt;b&gt;Funcionario central&lt;/b&gt;'), 'Perfil usa y escapa los datos centrales');
     verify(!str_contains($html, '$2y$'), 'Perfil no expone hash');
     require __DIR__ . '/contribuyentes-integration.php';
+    require __DIR__ . '/ingresos-integration.php';
     verify(request($client, $base, 'logout')[0] === 405, 'Logout rechaza GET');
     verify(request($client, $base, 'logout', ['_csrf_token' => ''])[0] === 419, 'Logout exige CSRF');
     verify(request($client, $base, 'logout', ['_csrf_token' => token($html)])[0] === 303, 'Logout termina sesión');

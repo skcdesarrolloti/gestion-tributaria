@@ -15,6 +15,15 @@ Verificación local realizada el 13 de octubre de 2026 con PHP 8.2.12, MariaDB 1
 
 ## Repetir integración
 
+### Ingresos: primera etapa
+
+El 14 de octubre de 2026 pasaron sintaxis PHP, unitarias e integración aislada del
+perfil anual y movimientos, incluida creación automática de catálogo y tablas,
+selección 210/110, cálculos por casilla, edición, CSRF y aislamiento por propietario.
+Se revisaron perfil, fichas y formulario en Edge a 1280px y 360px, sin desbordamiento;
+se verificó la apertura de explicaciones. CSS recompilado. Ver docs/INGRESOS.md.
+El flujo autenticado en producción debe comprobarse después del despliegue.
+
 ### Primer módulo: Contribuyentes
 
 Verificado localmente el 13 de octubre de 2026: sintaxis, pruebas unitarias e

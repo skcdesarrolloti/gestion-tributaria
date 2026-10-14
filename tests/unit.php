@@ -45,4 +45,5 @@ try {
     rmdir($directory);
 }
 require __DIR__ . '/contribuyentes-unit.php';
+require __DIR__ . '/ingresos-unit.php';
 echo "Pruebas de seguridad y contribuyentes correctas.\n";

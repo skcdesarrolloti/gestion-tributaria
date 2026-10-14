@@ -1,0 +1,22 @@
+CREATE TABLE IF NOT EXISTS movimientos_ingresos (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    perfil_id INT UNSIGNED NOT NULL,
+    concepto_id INT UNSIGNED NOT NULL,
+    fecha DATE NOT NULL,
+    estado ENUM('real','proyectado') NOT NULL,
+    descripcion VARCHAR(300) NOT NULL,
+    tercero VARCHAR(150) NOT NULL,
+    pais VARCHAR(80) NOT NULL,
+    moneda CHAR(3) NOT NULL,
+    valor_original DECIMAL(18,2) NOT NULL,
+    conversion VARCHAR(500) NOT NULL,
+    valor_cop BIGINT UNSIGNED NOT NULL,
+    soporte VARCHAR(500) NOT NULL,
+    justificacion VARCHAR(500) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    CONSTRAINT movimientos_perfil_fk FOREIGN KEY (perfil_id) REFERENCES perfiles_renta (id),
+    CONSTRAINT movimientos_concepto_fk FOREIGN KEY (concepto_id) REFERENCES conceptos_ingresos (id),
+    KEY movimientos_perfil_fecha (perfil_id, fecha)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

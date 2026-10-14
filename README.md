@@ -7,6 +7,8 @@ Base asignada: **u350704768_tributaria**.
 
 Incluye login de funcionarios con los estilos de Servicios Comerciales, inicio protegido, perfil, cierre de sesión y migraciones automáticas. El primer paso de la planeación es [Contribuyentes](docs/CONTRIBUYENTES.md): identificación y fuentes de ingresos, con registro y edición privados por funcionario.
 
+Desde cada contribuyente, **Ingresos por año** abre el [bloque inicial de ingresos](docs/INGRESOS.md): perfil anual, fichas por casilla, movimientos reales/proyectados y depuración preliminar. Todavía no calcula el impuesto final.
+
 ## Continuar el trabajo
 
 1. Lee [AGENTS.md](AGENTS.md): reglas para continuar el proyecto.

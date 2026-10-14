@@ -19,6 +19,11 @@ Cada migración contiene **una sentencia SQL**. Su archivo checks del mismo nomb
 
 ## Ejemplo: columna nueva
 
+El bloque inicial de ingresos incorpora migraciones y comprobaciones 004–007:
+catálogo de casillas, carga inicial de conceptos, perfiles anuales y movimientos.
+Los datos tributarios quedan en la base propia; no se escribe en auth_database.
+Ver docs/INGRESOS.md para alcance y comprobación del flujo.
+
 Crea migrations/002_telefono_funcionario.sql:
 
 ```sql

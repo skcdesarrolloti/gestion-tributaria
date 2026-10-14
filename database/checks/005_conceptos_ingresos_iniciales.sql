@@ -1,0 +1,1 @@
+SELECT COUNT(*) = 29 FROM conceptos_ingresos WHERE version = '2026-10' AND ((formulario='210' AND casilla IN (32,43,58,74,33,44,59,76,45,60,77,75,34,46,61,78)) OR (formulario='110' AND casilla IN (47,48,57,59,60,62,63,64,65,66,58,61,67)));

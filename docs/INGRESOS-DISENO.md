@@ -2,7 +2,8 @@
 
 Fecha de revisión inicial: 14 de octubre de 2026. Diseño solicitado por el
 responsable; las fichas, movimientos y cálculos descritos todavía no están
-implementados. Mantener separados el diseño, la revisión normativa y la ejecución.
+implementados en su totalidad. La primera etapa disponible y sus límites están
+en [INGRESOS.md](INGRESOS.md). Mantener separados el diseño, la revisión normativa y la ejecución.
 
 ## Cómo verá el usuario cada concepto
 
