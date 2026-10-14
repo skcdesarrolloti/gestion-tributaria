@@ -6,4 +6,6 @@ body { font-family: Poppins, system-ui, sans-serif; }
 :focus-visible { outline: 3px solid #735c00; outline-offset: 3px; }
 input:focus-visible { outline: 2px solid #735c00; }
 button, a { touch-action: manipulation; }
+.profile-grid > * { min-width: 0; }
+.taxpayer-name { overflow-wrap: anywhere; }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; } }

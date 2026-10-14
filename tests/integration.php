@@ -62,7 +62,8 @@ try {
     verify($status === 200 && token($html) !== '', 'Base y tablas creadas automáticamente');
     $db = new PDO(sprintf('mysql:host=%s;port=%d;dbname=%s;charset=utf8mb4', $dbConfig['host'], $dbConfig['port'], $name),
         $dbConfig['username'], $dbConfig['password'], [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
-    verify((int) $db->query('SELECT COUNT(*) FROM schema_migrations')->fetchColumn() === 1, 'Migración registrada una vez');
+    $migrationCount = count(glob($root . '/database/migrations/[0-9]*.sql'));
+    verify((int) $db->query('SELECT COUNT(*) FROM schema_migrations')->fetchColumn() === $migrationCount, 'Migraciones registradas una vez');
     $form = ['_csrf_token' => token($html), 'setup_key' => $key, 'name' => '<b>Administrador</b>',
         'username' => 'admin', 'password' => 'Prueba-segura-2026', 'confirmation' => 'Prueba-segura-2026'];
     verify(request($client, $base, 'instalacion', array_replace($form, ['_csrf_token' => '']))[0] === 419, 'Instalación exige CSRF');
@@ -71,6 +72,8 @@ try {
     verify(request($client, $base, 'instalacion', $form)[0] === 303, 'Primer administrador creado desde web');
     verify(request($client, $base, 'instalacion')[0] === 404, 'Instalador cerrado después del primer usuario');
     verify(request($client, $base, 'inicio')[0] === 303, 'Inicio exige autenticación');
+    verify(request($client, $base, 'contribuyentes')[0] === 303, 'Contribuyentes exige autenticación');
+    verify(request($client, $base, 'contribuyentes/formulario', [])[0] === 303, 'Registro exige autenticación');
     [$status, $html] = request($client, $base, 'login');
     $login = ['_csrf_token' => token($html), 'username' => 'admin', 'password' => 'Prueba-segura-2026'];
     verify(request($client, $base, 'login', array_replace($login, ['_csrf_token' => '']))[0] === 419, 'Login exige CSRF');
@@ -80,6 +83,7 @@ try {
     [$status, $html] = request($client, $base, 'perfil');
     verify($status === 200 && str_contains($html, '&lt;b&gt;Administrador&lt;/b&gt;'), 'Perfil escapa los datos del usuario');
     verify(!str_contains($html, '$2y$'), 'Perfil no expone hash');
+    require __DIR__ . '/contribuyentes-integration.php';
     verify(request($client, $base, 'logout')[0] === 405, 'Logout rechaza GET');
     verify(request($client, $base, 'logout', ['_csrf_token' => ''])[0] === 419, 'Logout exige CSRF');
     verify(request($client, $base, 'logout', ['_csrf_token' => token($html)])[0] === 303, 'Logout termina sesión');
@@ -103,10 +107,10 @@ try {
     $migrator = new Migrator($db, $temp);
     $migrator->run();
     $migrator->run();
-    verify((int) $db->query('SELECT COUNT(*) FROM schema_migrations')->fetchColumn() === 2, 'Columna nueva aplicada una sola vez');
+    verify((int) $db->query('SELECT COUNT(*) FROM schema_migrations')->fetchColumn() === $migrationCount + 1, 'Columna nueva aplicada una sola vez');
     $db->exec("DELETE FROM schema_migrations WHERE version = '002_test_column'");
     $migrator->run();
-    verify((int) $db->query('SELECT COUNT(*) FROM schema_migrations')->fetchColumn() === 2, 'Recupera DDL confirmado sin registro');
+    verify((int) $db->query('SELECT COUNT(*) FROM schema_migrations')->fetchColumn() === $migrationCount + 1, 'Recupera DDL confirmado sin registro');
     file_put_contents($temp . '/migrations/002_test_column.sql', '-- Cambio indebido', FILE_APPEND);
     $caught = false;
     try { $migrator->run(); } catch (RuntimeException $error) { $caught = str_contains($error->getMessage(), 'modificó'); }

@@ -6,6 +6,10 @@ Una visita entra por public/index.php, arranca bootstrap/app.php, busca la direc
 
 ## Agregar un módulo
 
+Antes de ampliar la planeación, revisar [ALCANCE-PLANEACION.md](ALCANCE-PLANEACION.md)
+y [DICCIONARIO-CAMPOS.md](DICCIONARIO-CAMPOS.md). Conservar la estructura del formulario
+aplicable, explicar cada campo y verificar fuentes normativas por año y régimen.
+
 1. Describe en español qué necesita hacer el usuario y quién podrá hacerlo.
 2. Si requiere datos, crea database/migrations/002_nombre_del_cambio.sql y su comprobación database/checks/002_nombre_del_cambio.sql. La app lo ejecutará automáticamente; documenta su reversión con respaldo. No pidas al responsable entrar a phpMyAdmin; usa siempre migraciones.
 3. Crea un modelo pequeño en app/Models; usa prepare y execute para los valores.

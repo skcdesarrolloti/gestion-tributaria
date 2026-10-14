@@ -28,4 +28,5 @@ try {
     foreach (glob($directory . '/*.json') as $file) { unlink($file); }
     rmdir($directory);
 }
-echo "Pruebas de seguridad básicas correctas.\n";
+require __DIR__ . '/contribuyentes-unit.php';
+echo "Pruebas de seguridad y contribuyentes correctas.\n";

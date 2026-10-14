@@ -44,6 +44,9 @@ $limiter = new App\Services\LoginLimiter(($config['storage_path'] ?? dirname(__D
 $authController = new App\Controllers\AuthController($auth, $view, $limiter, $config, $installation);
 $setupController = new App\Controllers\SetupController($installation, $view, $limiter, $config);
 $homeController = new App\Controllers\HomeController($auth, $view, $config);
+$contribuyenteController = new App\Controllers\ContribuyenteController(
+    $auth, new App\Models\Contribuyente($database), $view, $config
+);
 $router = new App\Core\Router();
 require dirname(__DIR__) . '/routes/web.php';
 return $router;

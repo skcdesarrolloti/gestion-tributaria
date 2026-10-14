@@ -10,6 +10,8 @@ En cada arranque, Migrator toma un bloqueo por base, lee schema_migrations y eje
 - schema_migrations.sql: crea el registro de versiones.
 - migrations/001_funcionarios.sql: crea las cuentas con campos compatibles con el login comercial.
 - checks/001_funcionarios.sql: confirma la presencia de los campos requeridos.
+- migrations/002_contribuyentes.sql: crea la identificación y fuentes de ingresos de contribuyentes por funcionario, sin borrar datos.
+- checks/002_contribuyentes.sql: verifica sus columnas, el índice de documentos y la relación con funcionarios.
 
 Cada migración contiene **una sentencia SQL**. Su archivo checks del mismo nombre contiene un SELECT que devuelve 1 si el cambio ya quedó aplicado y 0 si falta. Si hay un corte entre el DDL y el registro de versión, el siguiente arranque verifica el resultado y evita repetir un ALTER ya ejecutado. No usar procedimientos, DELIMITER ni varias sentencias por archivo.
 
