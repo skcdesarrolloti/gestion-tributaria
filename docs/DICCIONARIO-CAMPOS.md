@@ -3,6 +3,8 @@
 Requisito del responsable: conservar la estructura oficial DIAN y explicar cada
 campo con respaldo normativo actualizado. Este documento define el formato del
 diccionario futuro; no es todavía un catálogo completo de casillas ni un motor.
+El primer mapa de ingresos y el diseño de sus fichas están en
+[INGRESOS-DISENO.md](INGRESOS-DISENO.md).
 
 ## Ficha obligatoria por concepto
 
