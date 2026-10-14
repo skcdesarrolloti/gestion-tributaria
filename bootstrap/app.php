@@ -62,5 +62,8 @@ $exogenaController = new App\Controllers\ExogenaController(
 $exogena1007Controller = new App\Controllers\ExogenaController(
     $auth, new App\Models\Contribuyente($database), new App\Models\Exogena1007($database), $view, $config, '1007'
 );
+$exogena1001Controller = new App\Controllers\ExogenaController(
+    $auth, new App\Models\Contribuyente($database), new App\Models\Exogena1001($database), $view, $config, '1001'
+);
 require dirname(__DIR__) . '/routes/web.php';
 return $router;

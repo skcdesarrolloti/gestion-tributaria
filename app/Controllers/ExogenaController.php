@@ -6,6 +6,7 @@ namespace App\Controllers;
 use App\Core\View;
 use App\Models\{Contribuyente, ExogenaRecords};
 use App\Services\{AuthService, Csrf, Exogena5247Data, Exogena5247Fields, Exogena1007Data, Exogena1007Fields};
+use App\Services\{Exogena1001Data, Exogena1001Fields};
 
 final class ExogenaController
 {
@@ -25,6 +26,7 @@ final class ExogenaController
         $fields=$this->fields();
         $year=array_key_exists('anio',$_GET)?\input($_GET,'anio'):$fields::DEFAULT_YEAR;
         if (!preg_match('/^20[0-9]{2}$/D',$year)) { http_response_code(422); echo 'Año gravable inválido.'; return; }
+        if ($this->formatCode==='1001' && $year!=='2025') { http_response_code(422); echo '1001: versión 10 disponible para 2025. Revisar versión para otro año.'; return; }
         $company=null;
         $records=[];
         if (array_key_exists('contribuyente',$_GET)) {
@@ -43,7 +45,7 @@ final class ExogenaController
         $id=array_key_exists('id',$_GET)?$this->id('id'):null;
         $found=$id!==null?$this->model->findFor($id,(int)$user['_ID']):null;
         $fields=$this->fields();
-        $reader=$this->formatCode==='1007'?Exogena1007Data::class:Exogena5247Data::class;
+        $reader=match($this->formatCode) { '1001'=>Exogena1001Data::class, '1007'=>Exogena1007Data::class, default=>Exogena5247Data::class };
         if ($id!==null && (!$found || $found['estructura']!==$fields::STRUCTURE)) { $this->missing(); return; }
         $company=$this->company($found?(int)$found['contribuyente_id']:$this->id('contribuyente'),(int)$user['_ID']);
         if (!$company) { $this->missing(); return; }
@@ -65,12 +67,13 @@ final class ExogenaController
                 http_response_code(422);
             }
         }
-        $this->view->render($this->formatCode==='1007'?'exogena/record-1007':'exogena/record',compact('user','company','record','errors','id'));
+        $template=match($this->formatCode) { '1001'=>'exogena/record-1001','1007'=>'exogena/record-1007',default=>'exogena/record' };
+        $this->view->render($template,compact('user','company','record','errors','id'));
     }
 
     private function fields(): string
     {
-        return match($this->formatCode) { '1007'=>Exogena1007Fields::class, '5247'=>Exogena5247Fields::class,
+        return match($this->formatCode) { '1001'=>Exogena1001Fields::class, '1007'=>Exogena1007Fields::class, '5247'=>Exogena5247Fields::class,
             default=>throw new \InvalidArgumentException('Formato no disponible.') };
     }
 

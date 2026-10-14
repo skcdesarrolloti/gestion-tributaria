@@ -24,6 +24,7 @@
         </div>
     </section>
     <?php require __DIR__.'/structure.php'; ?>
+    <?php require __DIR__.'/structure-1001.php'; ?>
     <?php require __DIR__.'/structure-1007.php'; ?>
 </main>
 <?php require __DIR__.'/../partials/footer.php'; ?>

@@ -33,6 +33,9 @@ en la base propia. Ver docs/EXOGENA-5247.md; no importa registros ni precarga da
 La migración/comprobación 010 crea `exogena_1007`, con sus registros independientes
 de `exogena_5247` y Renta. No carga datos de los auxiliares recibidos. Ver docs/EXOGENA-1007.md.
 
+Migración/comprobación 011: `exogena_1001`, registros independientes AG2025 v10,
+sin datos precargados. Ver docs/EXOGENA-1001.md; conservar intactas migraciones anteriores.
+
 Crea migrations/002_telefono_funcionario.sql:
 
 ```sql

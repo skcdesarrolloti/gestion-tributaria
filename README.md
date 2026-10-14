@@ -22,6 +22,9 @@ Inicia en 2025 con captura vacía; los datos se cargarán después de revisar el
 También está **1007 → Ingresos Propios**, [estructura de once campos](docs/EXOGENA-1007.md)
 para 2025, sin datos precargados. El nombre visible del 5247 es **Pagos o Abonos en cuenta**.
 
+**1001 → Pagos o Abonos en Cuenta y Retenciones Practicadas** incorpora la
+[estructura oficial de 20 campos, versión 10 para 2025](docs/EXOGENA-1001.md), sin precargar datos.
+
 1. Lee [AGENTS.md](AGENTS.md): reglas para continuar el proyecto.
 2. Sigue [la guía de desarrollo](docs/DESARROLLO.md) para corregir errores o agregar módulos.
 3. Consulta [migraciones](database/README.md), [estilos/login](docs/ESTILOS-Y-LOGIN.md) y [pruebas](docs/VALIDACION.md).

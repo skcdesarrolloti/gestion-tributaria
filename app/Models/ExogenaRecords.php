@@ -11,7 +11,7 @@ class ExogenaRecords
 
     public function __construct(private Database $database, string $code, private string $fields)
     {
-        $this->table=match($code) { '5247'=>'exogena_5247', '1007'=>'exogena_1007',
+        $this->table=match($code) { '5247'=>'exogena_5247', '1007'=>'exogena_1007', '1001'=>'exogena_1001',
             default=>throw new \InvalidArgumentException('Formato no disponible.') };
     }
 

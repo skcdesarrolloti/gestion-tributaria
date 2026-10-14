@@ -15,6 +15,18 @@ Verificación local realizada el 13 de octubre de 2026 con PHP 8.2.12, MariaDB 1
 
 ## Repetir integración
 
+### Exógena 1001: AG2025 versión 10
+
+Verificado el 14/10/2026 con el anexo técnico DIAN (162/2023, anexo 18): veinte
+campos y ocho importes. Sintaxis y unitarias correctas; integración aislada confirma
+migración 011, captura vacía 2025, guardado/edición, CSRF, privacidad, ubicación
+Colombia/exterior, rechazo de otro año y formato exacto de importes de 18 dígitos.
+1007 y 5247 mantienen sus pruebas de funcionamiento. Revisión visual de listado,
+captura y menú en Edge a 1280px/360px sin desbordamiento; CSS recompilado.
+No se cargaron datos reales. Se identificó la actualización posterior v11 y su
+vigencia, sin aplicarla al módulo AG2025. Ver EXOGENA-1001.md.
+La consulta autenticada en Hostinger debe comprobarse tras publicar.
+
 ### Exógena 1007 y nombre del 5247
 
 Verificado el 14/10/2026: migración 010, captura vacía 2025 (incluido país), guardado

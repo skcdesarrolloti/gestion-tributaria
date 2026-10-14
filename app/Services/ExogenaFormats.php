@@ -10,6 +10,11 @@ final class ExogenaFormats
     public static function all(): array
     {
         return [
+            '1001'=>[
+                'route'=>'exogena/1001',
+                'name'=>'Pagos o Abonos en Cuenta y Retenciones Practicadas',
+                'description'=>'Pagos deducibles y no deducibles, IVA como mayor valor y retenciones por beneficiario. Año 2025 · Versión 10.',
+            ],
             '1007'=>[
                 'route'=>'exogena/1007',
                 'name'=>'Ingresos Propios',
