@@ -11,6 +11,15 @@ inicio también ofrece acceso a Exógena. Seleccionar una persona jurídica prop
 y un año gravable; crear, consultar o editar los registros de ese año.
 Si no existen empresas, registrarlas desde Contribuyentes.
 
+El menú Exógena presenta un botón con icono, un panel con acceso a todos los formatos
+y cada código acompañado de su nombre. Se cierra con Escape, clic exterior o al
+salir con el teclado. El catálogo `ExogenaFormats` alimenta tanto el menú como las
+tarjetas de la página inicial: incorporar allí los nuevos formatos cuando tengan
+rutas implementadas. No mostrar enlaces a módulos inexistentes.
+La página Exógena y la del 5247 muestran los 22 campos agrupados en cuatro bloques:
+contrato/concepto (A–D), informado (E–M), valores/retenciones (N–S) y fideicomiso/
+participante (T–V). La vista toma los nombres del diccionario de captura.
+
 La persona jurídica es la **informante**, no necesariamente el tercero informado.
 El tercero y el participante pueden ser personas naturales o entidades. No se
 habilita todavía a personas naturales o sucesiones como informantes del módulo.

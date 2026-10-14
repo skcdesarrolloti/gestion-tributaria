@@ -17,6 +17,12 @@ Verificación local realizada el 13 de octubre de 2026 con PHP 8.2.12, MariaDB 1
 
 ### Exógena 5247
 
+Presentación del menú y estructura revisada el 14/10/2026: panel de formatos,
+tarjetas y resumen de los 22 campos en Edge a 1280px y 360px, sin desbordamiento.
+Comprobados apertura, cierre con Escape/clic exterior y navegación por enlace.
+Sintaxis PHP/JS y unitarias correctas; CSS recompilado. Este cambio de presentación
+no modifica tablas ni registros. El flujo autenticado de producción sigue pendiente.
+
 Verificada el 14 de octubre de 2026 con datos ficticios: migración 009 automática
 en la base temporal, orden de 22 campos, preservación de códigos/identificaciones,
 captura y edición persistentes, importes explícitos, CSRF, sesión, y aislamiento

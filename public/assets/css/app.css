@@ -8,4 +8,15 @@ input:focus-visible { outline: 2px solid #735c00; }
 button, a { touch-action: manipulation; }
 .profile-grid > * { min-width: 0; }
 .taxpayer-name { overflow-wrap: anywhere; }
+.exogena-nav { position: relative; }
+.exogena-nav > summary { cursor: pointer; list-style: none; }
+.exogena-nav > summary::-webkit-details-marker { display: none; }
+.exogena-nav[open] .exogena-nav-chevron { transform: rotate(180deg); }
+.exogena-nav-panel { position: absolute; top: calc(100% + .5rem); right: 0; width: min(360px, calc(100vw - 2rem)); z-index: 30; }
+.exogena-nav-panel a:hover { text-decoration: underline; }
+@media (max-width: 640px) {
+    .portal-header { position: relative; }
+    .exogena-nav { position: static; }
+    .exogena-nav-panel { left: 0; right: 0; width: auto; }
+}
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; } }

@@ -30,6 +30,7 @@
         <a class="text-secondary underline" href="<?= e(url($config,'contribuyentes/formulario')) ?>">Registrar empresa</a>
     </section>
     <?php require __DIR__.'/notice.php'; ?>
+    <?php require __DIR__.'/structure.php'; ?>
     <section class="bg-surface-container-lowest rounded-2xl border border-surface-container p-space-xl space-y-space-sm">
         <h2 class="text-headline-sm font-semibold">Preparación para recibir información de 2025</h2>
         <p class="text-body-md">La estructura queda vacía, sin importar registros. Cuando recibamos el archivo .rar, revisaremos su contenido y las columnas antes de cargar la información de la empresa correspondiente.</p>

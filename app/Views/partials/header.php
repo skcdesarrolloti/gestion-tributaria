@@ -7,10 +7,7 @@
         <nav aria-label="Navegación principal" class="flex items-center gap-space-md flex-wrap">
             <a href="<?= e(url($config)) ?>" class="text-secondary">Inicio</a>
             <a href="<?= e(url($config, 'contribuyentes')) ?>" class="text-secondary">Contribuyentes</a>
-            <details class="text-secondary">
-                <summary class="text-body-md">Exógena</summary>
-                <a class="block text-secondary underline mt-2" href="<?= e(url($config,'exogena/5247')) ?>">5247</a>
-            </details>
+            <?php require __DIR__.'/exogena-menu.php'; ?>
             <a href="<?= e(url($config, 'perfil')) ?>" class="text-secondary">Mi perfil</a>
             <form method="post" action="<?= e(url($config, 'logout')) ?>">
                 <?php require __DIR__ . '/csrf.php'; ?>
@@ -19,3 +16,4 @@
         </nav>
     </div>
 </header>
+<script src="<?= e(asset($config,'js/exogena-menu.js')) ?>" defer></script>
