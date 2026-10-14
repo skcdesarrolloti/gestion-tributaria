@@ -26,6 +26,7 @@ final class IngresoController
                 if (!$errors) {
                     try {
                         $id = $this->model->createProfile($record,$taxpayer,(int) $user['_ID']);
+                        $_SESSION['perfil_notice']='Perfil anual guardado. Estos son los datos registrados y sus ingresos.';
                         $this->go('ingresos/detalle',$id);
                     } catch (\PDOException $error) {
                         if ((int) ($error->errorInfo[1] ?? 0) !== 1062) { throw $error; }
@@ -47,7 +48,41 @@ final class IngresoController
         $concepts = $this->model->concepts($profile);
         $movements = $this->model->movements((int) $profile['id'],(int) $user['_ID']);
         $totals = IngresoSummary::build($concepts,$movements);
-        $this->view->render('ingresos/detail',compact('user','profile','concepts','movements','totals'));
+        $notice=$_SESSION['perfil_notice']??'';
+        unset($_SESSION['perfil_notice']);
+        $this->view->render('ingresos/detail',compact('user','profile','concepts','movements','totals','notice'));
+    }
+
+    public function profile(): void
+    {
+        $user=$this->user();
+        $profile=$this->model->profileFor($this->id('id'),(int)$user['_ID']);
+        if (!$profile) { $this->missing(); return; }
+        $taxpayer=['id'=>$profile['contribuyente_id'],'tipo'=>$profile['tipo'],'nombre'=>$profile['nombre']];
+        $record=[];
+        foreach (Ingreso::PROFILE_FIELDS as $field) { $record[$field]=(string)$profile[$field]; }
+        $errors=[];
+        if ($_SERVER['REQUEST_METHOD']==='POST') {
+            $errors=$this->csrfErrors();
+            if (!$errors) {
+                $record=IngresoData::read($_POST,Ingreso::PROFILE_FIELDS);
+                $errors=IngresoData::profileErrors($record,$profile['tipo']);
+                if (!$errors) {
+                    try {
+                        $this->model->updateProfile($record,(int)$profile['id'],(int)$user['_ID']);
+                        $_SESSION['perfil_notice']='Perfil actualizado y guardado.';
+                        $this->go('ingresos/detalle',(int)$profile['id']);
+                    } catch (\DomainException $error) { $errors[]=$error->getMessage(); }
+                    catch (\PDOException $error) {
+                        if ((int)($error->errorInfo[1]??0)!==1062) { throw $error; }
+                        $errors[]='Ya existe otro perfil para ese año. No se modificó el registro.';
+                    }
+                }
+                http_response_code(422);
+            }
+        }
+        $hasMovements=(bool)$this->model->movements((int)$profile['id'],(int)$user['_ID']);
+        $this->view->render('ingresos/profile',compact('user','taxpayer','profile','record','errors','hasMovements'));
     }
 
     public function movement(): void
@@ -75,8 +110,10 @@ final class IngresoController
                 $concept = $found ? reset($found) : null;
                 $errors = IngresoData::movementErrors($record,$profile,$concept);
                 if (!$errors) {
-                    $this->model->saveMovement($record,(int) $profile['id'],(int) $user['_ID'],$id);
-                    $this->go('ingresos/detalle',(int) $profile['id']);
+                    try {
+                        $this->model->saveMovement($record,(int) $profile['id'],(int) $user['_ID'],$id);
+                        $this->go('ingresos/detalle',(int) $profile['id']);
+                    } catch (\DomainException $error) { $errors[]=$error->getMessage(); }
                 }
                 http_response_code(422);
             }

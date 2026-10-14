@@ -7,6 +7,7 @@
         <h1 class="text-headline-lg font-semibold mt-2"><?= e($profile['nombre']) ?></h1>
         <p class="text-body-md mt-2">Formulario <?= e($profile['formulario']) ?> · Referencia <?= e($profile['version']) ?> · Régimen ordinario · <?= e($profile['residencia']) ?></p>
     </section>
+    <?php if (($notice??'')!==''): ?><p role="status" class="bg-primary-container rounded-xl p-3"><?= e($notice) ?></p><?php endif; ?>
     <section class="bg-primary-container rounded-2xl p-space-xl space-y-space-sm">
         <h2 class="text-headline-sm font-semibold">Depuración preliminar de los movimientos registrados</h2>
         <p class="text-body-md">No calcula impuesto, exenciones personales, pérdidas fiscales ni UGPP. Las referencias normativas no validan automáticamente las partidas registradas.</p>
@@ -16,6 +17,7 @@
     <div class="flex items-center gap-space-md flex-wrap">
         <a class="rounded-xl bg-inverse-surface text-on-secondary px-4 py-2" href="<?= e(url($config,'ingresos/movimiento').'&id='.$profile['id']) ?>">Registrar movimiento</a>
         <a class="text-secondary underline" href="<?= e(url($config,'ingresos').'&contribuyente='.$profile['contribuyente_id']) ?>">Volver a los años</a>
+        <a class="text-secondary underline" href="<?= e(url($config,'ingresos/perfil').'&id='.$profile['id']) ?>">Ver o editar perfil guardado</a>
     </div>
     <section class="space-y-space-md">
         <h2 class="text-headline-md font-semibold">Casillas y fichas de respaldo</h2>

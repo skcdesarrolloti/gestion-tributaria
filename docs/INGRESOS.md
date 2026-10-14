@@ -49,8 +49,13 @@ decimales con punto. No se calcula ni se impone una TRM de cierre para todos los
   basada en los instructivos publicados en 2026. El año gravable se guarda aparte.
 - Las casillas 43–45 requieren opción de costos en el perfil del 210. Si el
   tratamiento está pendiente, revisar la clasificación antes de registrar servicios.
-- Un perfil anual se fija al crear y no se cambia desde esta etapa. Revisar sus
-  datos previamente; no crear otro contribuyente para ocultar un error del perfil.
+- Los perfiles guardados muestran año, selecciones y evidencia. **Ver o editar perfil**
+  recupera sus campos. Mientras no tenga movimientos se pueden corregir las opciones,
+  incluido el año; no se sobrescribe otro perfil ya existente. Con movimientos se
+  permite actualizar la evidencia, pero se bloquean cambios de año y clasificación.
+- **Crear otro perfil anual** queda plegado cuando hay perfiles guardados; es un
+  formulario nuevo, no la edición del anterior. No crear otro contribuyente para
+  ocultar un error. Los cambios se guardan al pulsar el botón, no al navegar.
 - No se calcula impuesto, límite de exenciones personales, pérdida fiscal, UGPP,
   ganancias ocasionales, dividendos especiales ni liquidación final.
 - Si una operación aritmética queda negativa, se muestra y se pide revisión.

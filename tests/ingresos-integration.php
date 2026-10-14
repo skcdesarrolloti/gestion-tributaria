@@ -15,6 +15,19 @@ verify(str_contains($helpHtml,'Impuesto unificado sujeto a requisitos') && (int)
     'Sin JavaScript conserva la explicación y no crea un perfil con otro régimen');
 verify(request($client,$base,$route,$annual)[0]===303, 'Perfil residente crea formulario 210');
 $profileId=(int)$db->query('SELECT id FROM perfiles_renta')->fetchColumn();
+[$status,$savedHtml]=request($client,$base,$route);
+verify($status===200 && str_contains($savedHtml,'Evidencia guardada:') && str_contains($savedHtml,'RUT y análisis fiscal ficticios'),
+    'Al volver muestra las selecciones y evidencia guardadas');
+$profileRoute='ingresos/perfil&id='.$profileId;
+[$status,$editHtml]=request($client,$base,$profileRoute);
+verify($status===200 && str_contains($editHtml,'value="2025" selected') && str_contains($editHtml,'RUT y análisis fiscal ficticios'),
+    'Edición carga datos persistidos en lugar de vaciar campos');
+verify(request($client,$base,$profileRoute,array_replace($annual,['_csrf_token'=>'']))[0]===419, 'Edición del perfil exige CSRF');
+verify(request($client,$base,$profileRoute,array_replace($annual,['anio'=>'2026']))[0]===303, 'Permite corregir año sin movimientos');
+verify(request($client,$base,$profileRoute,$annual)[0]===303, 'Puede restaurar el año antes de capturar');
+verify(request($client,$base,$route,array_replace($annual,['anio'=>'2026']))[0]===303, 'Otro año se registra por separado');
+verify(request($client,$base,$profileRoute,array_replace($annual,['anio'=>'2026']))[0]===422, 'No sobrescribe otro perfil al corregir año');
+verify((int)$db->query('SELECT anio FROM perfiles_renta WHERE id='.$profileId)->fetchColumn()===2025, 'Conflicto de año no pierde el perfil');
 verify(request($client,$base,$route,$annual)[0]===422, 'Evita duplicar año del contribuyente');
 [$status,$html]=request($client,$base,'ingresos/detalle&id='.$profileId);
 verify($status===200 && str_contains($html,'Casillas y fichas') && str_contains($html,'ET 335 numeral 2'), 'Casillas muestran respaldo normativo');
@@ -44,11 +57,18 @@ $movement['valor_original']=$movement['valor_cop']='300000';
 verify(request($client,$base,$movementRoute,$movement)[0]===303, 'Registra reducción documentada para revisión');
 [$status,$html]=request($client,$base,'ingresos/detalle&id='.$profileId);
 verify(str_contains($html,'2.200.000'), 'Primera depuración calcula capital menos costo');
+verify(request($client,$base,$profileRoute,array_replace($annual,['anio'=>'2026']))[0]===422, 'Con movimientos protege año y clasificación');
+$updatedProfile=array_replace($annual,['soporte_perfil'=>'Evidencia <b>actualizada</b>']);
+verify(request($client,$base,$profileRoute,$updatedProfile)[0]===303, 'Con movimientos permite actualizar evidencia');
+verify(str_contains(request($client,$base,$route)[1],'Evidencia &lt;b&gt;actualizada&lt;/b&gt;'), 'Resumen escapa la evidencia y conserva cambios');
+verify((int)$db->query('SELECT COUNT(*) FROM movimientos_ingresos WHERE perfil_id='.$profileId)->fetchColumn()===2,
+    'Editar perfil no borra ni duplica movimientos');
 verify(request($client,$base,'ingresos&contribuyente='.$otherId)[0]===404, 'No crea perfiles para contribuyentes ajenos');
 $otherProfile=$db->prepare("INSERT INTO perfiles_renta (contribuyente_id,anio,tipo,residencia,regimen,servicios,soporte_perfil,formulario,version)
     VALUES (?,2025,'natural','residente','ordinario','pendiente','Prueba','210','2026-10')");
 $otherProfile->execute([$otherId]);$otherProfileId=(int)$db->lastInsertId();
 verify(request($client,$base,'ingresos/detalle&id='.$otherProfileId)[0]===404, 'Perfil ajeno permanece privado');
+verify(request($client,$base,'ingresos/perfil&id='.$otherProfileId,$annual)[0]===404, 'No puede editar perfil ajeno');
 verify(request($client,$base,'ingresos/movimiento&id='.$otherProfileId,$movement)[0]===404, 'No escribe movimientos en perfil ajeno');
 verify(request($client,$base,$movementRoute.'&movimiento=999999',$movement)[0]===404, 'No crea mediante una edición inexistente');
 foreach ([['juridica','residente','110'],['sucesion','no_residente','110']] as [$type,$residence,$form]) {

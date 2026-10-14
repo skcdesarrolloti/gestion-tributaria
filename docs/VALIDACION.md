@@ -15,6 +15,15 @@ Verificación local realizada el 13 de octubre de 2026 con PHP 8.2.12, MariaDB 1
 
 ## Repetir integración
 
+### Consulta y edición de perfiles guardados
+
+Verificado el 14 de octubre de 2026: selecciones y evidencia visibles al volver,
+edición precargada (incluido año), corrección de perfiles sin movimientos, rechazo
+de años duplicados y protección de clasificación cuando ya hay movimientos.
+Pasaron integración aislada, CSRF y privacidad; editar el perfil no borra movimientos.
+Se bloquea el perfil durante las escrituras para evitar cambios concurrentes de
+clasificación. Revisión visual de listado y edición a 1280px y 360px.
+
 ### Ingresos: primera etapa
 
 El 14 de octubre de 2026 pasaron sintaxis PHP, unitarias e integración aislada del

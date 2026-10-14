@@ -41,6 +41,26 @@ final class Ingreso
             [$profile['formulario'],$profile['version']])->fetchAll();
     }
 
+    public function updateProfile(array $record, int $id, int $owner): void
+    {
+        $db=$this->database->connection();
+        $db->beginTransaction();
+        try {
+            $profile=$this->lockedProfile($id,$owner);
+            if (!$profile) { throw new \DomainException('Perfil no encontrado.'); }
+            $count=(int)$this->query('SELECT COUNT(*) FROM movimientos_ingresos WHERE perfil_id=?',[$id])->fetchColumn();
+            foreach (['anio','residencia','regimen','servicios'] as $field) {
+                if ($count>0 && (string)$record[$field] !== (string)$profile[$field]) {
+                    throw new \DomainException('Este perfil ya tiene movimientos. Puedes actualizar la evidencia, pero no cambiar el año, residencia, régimen o tratamiento sin revisar esos registros.');
+                }
+            }
+            $form=$profile['tipo']!=='juridica' && $record['residencia']==='residente'?'210':'110';
+            $this->query('UPDATE perfiles_renta SET anio=?,residencia=?,regimen=?,servicios=?,soporte_perfil=?,formulario=? WHERE id=?',
+                [$record['anio'],$record['residencia'],$record['regimen'],$record['servicios'],$record['soporte_perfil'],$form,$id]);
+            $db->commit();
+        } catch (\Throwable $error) { $db->rollBack(); throw $error; }
+    }
+
     public function movements(int $profile, int $owner): array
     {
         return $this->query('SELECT m.*, k.casilla, k.nombre FROM movimientos_ingresos m
@@ -50,6 +70,22 @@ final class Ingreso
     }
 
     public function saveMovement(array $record, int $profile, int $owner, ?int $id): void
+    {
+        $db=$this->database->connection();
+        $db->beginTransaction();
+        try {
+            $current=$this->lockedProfile($profile,$owner);
+            if (!$current) { throw new \DomainException('Perfil no encontrado.'); }
+            $concept=$this->query('SELECT * FROM conceptos_ingresos WHERE id=? AND formulario=? AND version=?',
+                [$record['concepto_id'],$current['formulario'],$current['version']])->fetch() ?: null;
+            $errors=\App\Services\IngresoData::movementErrors($record,$current,$concept);
+            if ($errors) { throw new \DomainException(implode(' ',$errors)); }
+            $this->writeMovement($record,$profile,$owner,$id);
+            $db->commit();
+        } catch (\Throwable $error) { $db->rollBack(); throw $error; }
+    }
+
+    private function writeMovement(array $record, int $profile, int $owner, ?int $id): void
     {
         $values = array_map(static fn ($field) => $record[$field], self::MOVEMENT_FIELDS);
         if ($id === null) {
@@ -64,6 +100,12 @@ final class Ingreso
             array_push($values,$id,$profile,$owner);
         }
         $this->query($sql,$values);
+    }
+
+    private function lockedProfile(int $id, int $owner): ?array
+    {
+        return $this->query('SELECT p.* FROM perfiles_renta p JOIN contribuyentes c ON c.id=p.contribuyente_id
+            WHERE p.id=? AND c.funcionario_id=? FOR UPDATE',[$id,$owner])->fetch() ?: null;
     }
 
     private function query(string $sql, array $values): \PDOStatement

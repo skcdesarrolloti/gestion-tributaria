@@ -8,6 +8,8 @@ $router->add('GET', 'contribuyentes/formulario', [$contribuyenteController, 'for
 $router->add('POST', 'contribuyentes/formulario', [$contribuyenteController, 'form']);
 $router->add('GET', 'ingresos', [$ingresoController, 'index']);
 $router->add('POST', 'ingresos', [$ingresoController, 'index']);
+$router->add('GET', 'ingresos/perfil', [$ingresoController, 'profile']);
+$router->add('POST', 'ingresos/perfil', [$ingresoController, 'profile']);
 $router->add('GET', 'ingresos/detalle', [$ingresoController, 'detail']);
 $router->add('GET', 'ingresos/movimiento', [$ingresoController, 'movement']);
 $router->add('POST', 'ingresos/movimiento', [$ingresoController, 'movement']);
