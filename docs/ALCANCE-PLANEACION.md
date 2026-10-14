@@ -1,6 +1,6 @@
 # Alcance acordado: planeación tributaria anticipada
 
-Actualizado el 13 de octubre de 2026. Este documento conserva los requisitos del
+Actualizado el 14 de octubre de 2026. Este documento conserva los requisitos del
 responsable para desarrollar por etapas sobre la aplicación MVC existente.
 Es una especificación pendiente; no confirma que los cálculos estén implementados.
 
@@ -32,6 +32,25 @@ salario, pensión, honorarios, arriendos, rendimientos y dividendos.
   de cambio de régimen deben revisar requisitos, exclusiones, plazos y efectos.
 - Registrar o marcar pendiente cada dato indispensable. No calcular usando supuestos
   silenciosos ni aplicar el formulario 210 universalmente.
+
+## Causantes fallecidos y sucesiones: requisito confirmado
+
+Pendiente para la etapa de perfil fiscal. No crear un tipo independiente llamado
+"fallecido": registrar esa condición y relacionar al causante con la sucesión.
+
+- Datos previstos: nombre y NIT del causante, fecha de fallecimiento, residencia
+  fiscal al fallecer y soporte de esa condición.
+- Identificar al representante y su calidad según el RUT, con vigencia y soporte.
+- Registrar estado de la sucesión, fecha y documento de adjudicación o terminación.
+- Distinguir obligaciones pendientes del causante, obligaciones durante la sucesión
+  y cierre; revisar los períodos y la eventual declaración por fracción de año.
+- Mantener separado el patrimonio y los ingresos del causante, la sucesión y los
+  herederos. Verificar titularidad, reconocimiento y tratamiento de cada operación.
+- Determinar el formulario según la residencia del causante al fallecer y demás
+  condiciones aplicables, conforme a FORMULARIOS-DIAN.md.
+- Preparar una lista de soportes y obligaciones pendientes. No trasladar beneficios,
+  ingresos o aportes automáticamente por el solo hecho del fallecimiento.
+- Validar las normas vigentes y las fechas relevantes antes de habilitar cálculos.
 
 ## Campos alineados con la DIAN
 
