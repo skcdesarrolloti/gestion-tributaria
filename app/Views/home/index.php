@@ -14,5 +14,10 @@
         <p class="text-body-md text-secondary mt-2">Registra sus datos y fuentes de ingresos. Después revisaremos las cédulas y los beneficios aplicables.</p>
         <a class="inline-block mt-4 rounded-xl bg-inverse-surface text-on-secondary px-4 py-2" href="<?= e(url($config, 'contribuyentes')) ?>">Ir a contribuyentes</a>
     </section>
+    <section class="bg-surface-container-lowest rounded-2xl border border-surface-container p-space-xl">
+        <h2 class="text-headline-md font-semibold">Exógena</h2>
+        <p class="text-body-md text-secondary mt-2">Prepara registros del formato 5247 por persona jurídica y año, en un módulo independiente.</p>
+        <a class="inline-block mt-4 rounded-xl bg-inverse-surface text-on-secondary px-4 py-2" href="<?= e(url($config,'exogena')) ?>">Abrir Exógena</a>
+    </section>
 </main>
 <?php require __DIR__ . '/../partials/footer.php'; ?>

@@ -47,4 +47,5 @@ try {
 require __DIR__ . '/contribuyentes-unit.php';
 require __DIR__ . '/ingresos-unit.php';
 require __DIR__ . '/proyeccion-unit.php';
+require __DIR__ . '/exogena-unit.php';
 echo "Pruebas de seguridad y contribuyentes correctas.\n";

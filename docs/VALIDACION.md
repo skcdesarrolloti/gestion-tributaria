@@ -15,6 +15,20 @@ Verificación local realizada el 13 de octubre de 2026 con PHP 8.2.12, MariaDB 1
 
 ## Repetir integración
 
+### Exógena 5247
+
+Verificada el 14 de octubre de 2026 con datos ficticios: migración 009 automática
+en la base temporal, orden de 22 campos, preservación de códigos/identificaciones,
+captura y edición persistentes, importes explícitos, CSRF, sesión, y aislamiento
+por propietario e informante jurídico. Pasaron sintaxis, unitarias e integración.
+Menú Exógena con submenú 5247, selección y captura revisados en Edge a 1280px y
+360px, sin desbordamiento horizontal; CSS recompilado con el tema compartido.
+No se importaron datos del Excel real. La referencia es la plantilla 2024, no una
+validación de presentación de otro período. Año objetivo confirmado: 2025, con
+captura inicial vacía; faltan catálogos y versión técnica antes de exportar/enviar.
+El responsable solicitó publicar esta estructura en main. El flujo autenticado en
+Hostinger debe comprobarse después del despliegue.
+
 ### Estructura de proyección anual
 
 Verificada el 14 de octubre de 2026: sintaxis, unitarias de agregación mensual,

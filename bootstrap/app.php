@@ -56,5 +56,8 @@ $ingresoController = new App\Controllers\IngresoController(
 $proyeccionController = new App\Controllers\ProyeccionController(
     $auth, new App\Models\Ingreso($database), $view, $config
 );
+$exogenaController = new App\Controllers\ExogenaController(
+    $auth, new App\Models\Contribuyente($database), new App\Models\Exogena5247($database), $view, $config
+);
 require dirname(__DIR__) . '/routes/web.php';
 return $router;

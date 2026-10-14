@@ -26,6 +26,10 @@ La migración/comprobación 008 agrega No aplica al tratamiento de servicios,
 separándolo de Pendiente. Los regímenes de consulta no se guardan como Ordinario.
 Ver docs/INGRESOS.md para alcance y comprobación del flujo.
 
+La migración/comprobación 009 incorpora `exogena_5247`, independiente de Renta,
+con registros por empresa y año y los campos de la plantilla en JSON. Solo se ejecuta
+en la base propia. Ver docs/EXOGENA-5247.md; no importa registros ni precarga datos reales.
+
 Crea migrations/002_telefono_funcionario.sql:
 
 ```sql

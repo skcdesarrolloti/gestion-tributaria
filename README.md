@@ -15,6 +15,10 @@ y comparar acciones antes del cierre. Los importes actuales son parciales; aún 
 
 ## Continuar el trabajo
 
+**Exógena → 5247**, [módulo independiente para personas jurídicas](docs/EXOGENA-5247.md)
+con los 22 campos de la plantilla 2024, registro y edición por empresa/año.
+Inicia en 2025 con captura vacía; los datos se cargarán después de revisar el archivo que enviará el responsable.
+
 1. Lee [AGENTS.md](AGENTS.md): reglas para continuar el proyecto.
 2. Sigue [la guía de desarrollo](docs/DESARROLLO.md) para corregir errores o agregar módulos.
 3. Consulta [migraciones](database/README.md), [estilos/login](docs/ESTILOS-Y-LOGIN.md) y [pruebas](docs/VALIDACION.md).
