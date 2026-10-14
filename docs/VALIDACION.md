@@ -15,6 +15,26 @@ Verificación local realizada el 13 de octubre de 2026 con PHP 8.2.12, MariaDB 1
 
 ## Repetir integración
 
+### Primer módulo: Contribuyentes
+
+Verificado localmente el 13 de octubre de 2026: sintaxis, pruebas unitarias e
+integración en base temporal, incluyendo registro, edición, fuentes múltiples,
+duplicados, CSRF y separación entre cuentas. La tabla se crea automáticamente.
+Revisión visual de listado y formulario con datos ficticios en Edge a 1280px y
+360px, sin desbordamiento horizontal. CSS recompilado con el tema existente.
+La ruta original `C:\Workspace\desarrollo-skc\control-servicios-comerciales`
+no estaba disponible; se conservó su copia versionada en `resources/theme/comerciales.cjs`.
+El funcionamiento del módulo en Hostinger queda pendiente de despliegue y comprobación.
+
+El 14 de octubre de 2026 se repitieron antes del commit la revisión PHP, las pruebas
+unitarias y las 49 comprobaciones de integración en una base temporal: todas correctas.
+
+Después de integrar con main y su autenticación central, se repitió la suite completa
+con dos bases temporales. Registro y edición funcionan con IDs centrales ausentes
+de la tabla local. La migración 003 elimina la referencia local sin modificar los
+scripts históricos ni la base central. Autenticación central, separación de cuentas,
+CSRF y migraciones pasaron; producción sigue pendiente de verificación.
+
 La prueba requiere MySQL/MariaDB local, extensiones pdo_mysql y curl, y permiso para crear bases temporales. Se ejecuta sin config/local.php: guarda ese archivo privado en otro lugar antes y restáuralo al terminar.
 
 ```powershell
@@ -30,6 +50,8 @@ GitHub Actions ejecutará lint, pruebas unitarias e integración con un servicio
 
 ## Alcance y dependencia de compilación
 
-El usuario confirmó que ambos proyectos ya funcionan en Hostinger. El nuevo acceso institucional requiere completar auth_database en el archivo privado; el login con una cuenta real todavía no se ha verificado. No se incluyen módulos de negocio todavía.
+El acceso institucional utiliza auth_database; el login con una cuenta real sigue
+pendiente de verificación. El módulo inicial de contribuyentes se describe en
+`docs/CONTRIBUYENTES.md`. Las pruebas locales no confirman el funcionamiento en Hostinger.
 
 `npm audit` reportó 7 avisos en dependencias de desarrollo de Tailwind 3.4.17 (2 moderados y 5 altos). Se conserva la versión del tema de referencia; no se hizo una migración mayor de estilos. Estas dependencias se usan solo para compilar CSS localmente y no se suben al hosting. Revisar los avisos antes de ampliar esa cadena de compilación; no procesar fuentes de terceros no confiables con ella.

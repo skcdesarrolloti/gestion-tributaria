@@ -8,11 +8,11 @@
         <p class="text-body-md mt-2">Bienvenido al portal. Aquí encontrarás las herramientas de tu equipo.</p>
     </section>
     <section class="bg-surface-container-lowest rounded-2xl border border-surface-container p-space-xl">
-        <span aria-hidden="true" class="material-symbols-outlined bg-primary-container rounded-xl p-3">dashboard</span>
-        <h2 class="text-headline-md font-semibold mt-4">Tu espacio de trabajo está listo</h2>
-        <p class="text-body-md text-secondary mt-2">Los módulos de <?= e(mb_strtolower($config['name'])) ?> se incorporarán aquí a medida que se definan los procesos.</p>
-        <p class="text-body-md text-secondary mt-2">Puedes consultar los datos de tu cuenta desde Mi perfil.</p>
-        <a class="inline-block mt-4 rounded-xl bg-inverse-surface text-on-secondary px-4 py-2" href="<?= e(url($config, 'perfil')) ?>">Ver mi perfil</a>
+        <span aria-hidden="true" class="material-symbols-outlined bg-primary-container rounded-xl p-3">group</span>
+        <h2 class="text-headline-md font-semibold mt-4">Paso 1 · Contribuyentes</h2>
+        <p class="text-body-md text-secondary mt-2">Empieza por identificar a la persona o entidad cuya situación tributaria vas a analizar.</p>
+        <p class="text-body-md text-secondary mt-2">Registra sus datos y fuentes de ingresos. Después revisaremos las cédulas y los beneficios aplicables.</p>
+        <a class="inline-block mt-4 rounded-xl bg-inverse-surface text-on-secondary px-4 py-2" href="<?= e(url($config, 'contribuyentes')) ?>">Ir a contribuyentes</a>
     </section>
 </main>
 <?php require __DIR__ . '/../partials/footer.php'; ?>

@@ -5,7 +5,7 @@ Base asignada: **u350704768_tributaria**.
 
 **La aplicación crea y actualiza las tablas automáticamente. No hay que entrar a phpMyAdmin ni importar SQL.** El acceso utiliza los funcionarios ya existentes del sistema central; no hay registro de administradores locales.
 
-Incluye login de funcionarios con los estilos de Servicios Comerciales, inicio protegido, perfil, cierre de sesión y migraciones automáticas. Los módulos inmobiliarios/tributarios se desarrollarán cuando se definan sus requisitos.
+Incluye login de funcionarios con los estilos de Servicios Comerciales, inicio protegido, perfil, cierre de sesión y migraciones automáticas. El primer paso de la planeación es [Contribuyentes](docs/CONTRIBUYENTES.md): identificación y fuentes de ingresos, con registro y edición privados por funcionario.
 
 ## Continuar el trabajo
 
@@ -13,6 +13,7 @@ Incluye login de funcionarios con los estilos de Servicios Comerciales, inicio p
 2. Sigue [la guía de desarrollo](docs/DESARROLLO.md) para corregir errores o agregar módulos.
 3. Consulta [migraciones](database/README.md), [estilos/login](docs/ESTILOS-Y-LOGIN.md) y [pruebas](docs/VALIDACION.md).
 4. Si necesitas ejecutar una copia en tu computador, usa [la guía local](docs/INICIO-RAPIDO.md). La configuración de producción ya existe y debe conservarse.
+5. Para continuar los módulos, consulta el [alcance de planeación](docs/ALCANCE-PLANEACION.md) y el [contrato de campos DIAN](docs/DICCIONARIO-CAMPOS.md): régimen, patrimonio nacional/exterior, ingresos, beneficios y revisión UGPP.
 
 No requiere Composer ni Node en el hosting. El CSS compilado está incluido. Node solo se utiliza localmente al modificar las clases Tailwind.
 

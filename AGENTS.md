@@ -63,7 +63,7 @@ El responsable es un ingeniero industrial con experiencia limitada en programaci
 4. Ejecutar php bin/check.php y php tests/unit.php. Si cambia autenticación o migraciones, ejecutar también la integración en una base aislada; ver docs/VALIDACION.md.
 5. Probar el flujo afectado y actualizar la documentación para quien continúe trabajando.
 6. Revisar git diff y git diff --cached antes de un commit. Nunca incluir config/local.php, logs, backups o datos reales.
-7. Usar ramas para cambios futuros salvo que el usuario indique trabajar en main. No hacer push forzado. main está conectada al sitio: un push puede actualizarlo automáticamente.
+7. Por instrucción expresa del responsable, trabajar y realizar commit y push siempre en main, salvo que solicite otra rama. Actualizar desde origin/main e integrar los cambios existentes antes del push. No hacer push forzado. main está conectada al sitio: un push puede actualizarlo automáticamente.
 8. Informar el resultado, las pruebas y cualquier verificación pendiente. No afirmar que producción funciona sin evidencia.
 
 ## Diagnóstico de errores

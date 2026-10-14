@@ -6,6 +6,10 @@ Una visita entra por public/index.php, arranca bootstrap/app.php, busca la direc
 
 ## Agregar un módulo
 
+Antes de ampliar la planeación, revisar [ALCANCE-PLANEACION.md](ALCANCE-PLANEACION.md)
+y [DICCIONARIO-CAMPOS.md](DICCIONARIO-CAMPOS.md). Conservar la estructura del formulario
+aplicable, explicar cada campo y verificar fuentes normativas por año y régimen.
+
 1. Describe en español qué necesita hacer el usuario y quién podrá hacerlo.
 2. Si requiere datos, crea database/migrations/002_nombre_del_cambio.sql y su comprobación database/checks/002_nombre_del_cambio.sql. La app lo ejecutará automáticamente; documenta su reversión con respaldo. No pidas al responsable entrar a phpMyAdmin; usa siempre migraciones.
 3. Crea un modelo pequeño en app/Models; usa prepare y execute para los valores.
@@ -20,8 +24,8 @@ Busca archivos de 50 a 150 líneas. El máximo de 250 líneas se valida para PHP
 ## Guardar con Git
 
 ```powershell
+git switch main
 git pull --ff-only
-git switch -c feature/nombre-del-cambio
 php bin/check.php
 php tests/unit.php
 git status
@@ -29,10 +33,10 @@ git diff
 git add app routes database docs public resources
 git diff --cached
 git commit -m "Agregar descripción breve del cambio"
-git push -u origin feature/nombre-del-cambio
+git push origin main
 ```
 
-Ajusta git add a las carpetas realmente modificadas. Nunca agregues claves, backups ni datos de clientes. Un commit guarda una versión local; push la envía a GitHub. Este sitio ya está conectado a Git en Hostinger: los cambios en main pueden actualizarlo automáticamente. Una rama de trabajo permite revisar los cambios antes de incorporarlos a main.
+Ajusta git add a las carpetas realmente modificadas. Nunca agregues claves, backups ni datos de clientes. Un commit guarda una versión local; push la envía a GitHub. Por instrucción del responsable, se trabaja y publica siempre en main, salvo indicación distinta. Este sitio ya está conectado a Git en Hostinger: los cambios en main pueden actualizarlo automáticamente; comprueba el flujo después del despliegue.
 
 ## Diagnóstico
 

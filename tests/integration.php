@@ -74,16 +74,20 @@ try {
     $authDb = (new App\Core\Database($authConfig, false))->connection();
     // Solo fixtures sintéticos en la base aleatoria de esta prueba.
     $authDb->exec(file_get_contents($root . '/database/migrations/001_funcionarios.sql'));
+    $authDb->exec('ALTER TABLE wp_jet_cct_funcionarios AUTO_INCREMENT = 100');
     $insertUser = $authDb->prepare('INSERT INTO wp_jet_cct_funcionarios (nombre, user_others_apss, pass_others_apss) VALUES (?, ?, ?)');
     $insertUser->execute(['<b>Funcionario central</b>', 'admin', 'Prueba-segura-2026']);
     $hash = password_hash('Otra-clave-segura', PASSWORD_DEFAULT);
     $insertUser->execute(['Cuenta con hash', 'hash-user', $hash]);
     $db = new PDO(sprintf('mysql:host=%s;port=%d;dbname=%s;charset=utf8mb4', $dbConfig['host'], $dbConfig['port'], $name),
         $dbConfig['username'], $dbConfig['password'], [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
-    verify((int) $db->query('SELECT COUNT(*) FROM schema_migrations')->fetchColumn() === 1, 'Migración registrada una vez');
+    $migrationCount = count(glob($root . '/database/migrations/[0-9]*.sql'));
+    verify((int) $db->query('SELECT COUNT(*) FROM schema_migrations')->fetchColumn() === $migrationCount, 'Migraciones registradas una vez');
     $localUser = $db->prepare('INSERT INTO wp_jet_cct_funcionarios (nombre, user_others_apss, pass_others_apss) VALUES (?, ?, ?)');
     $localUser->execute(['Cuenta antigua local', 'local-only', password_hash('Prueba-local-2026', PASSWORD_DEFAULT)]);
     verify(request($client, $base, 'inicio')[0] === 303, 'Inicio exige autenticación');
+    verify(request($client, $base, 'contribuyentes')[0] === 303, 'Contribuyentes exige autenticación');
+    verify(request($client, $base, 'contribuyentes/formulario', [])[0] === 303, 'Registro exige autenticación');
     [$status, $html] = request($client, $base, 'login');
     $login = ['_csrf_token' => token($html), 'username' => 'admin', 'password' => 'Prueba-segura-2026'];
     verify(request($client, $base, 'login', array_replace($login, ['username' => 'local-only', 'password' => 'Prueba-local-2026']))[0] === 401, 'Ignora cuentas locales antiguas');
@@ -94,6 +98,7 @@ try {
     [$status, $html] = request($client, $base, 'perfil');
     verify($status === 200 && str_contains($html, '&lt;b&gt;Funcionario central&lt;/b&gt;'), 'Perfil usa y escapa los datos centrales');
     verify(!str_contains($html, '$2y$'), 'Perfil no expone hash');
+    require __DIR__ . '/contribuyentes-integration.php';
     verify(request($client, $base, 'logout')[0] === 405, 'Logout rechaza GET');
     verify(request($client, $base, 'logout', ['_csrf_token' => ''])[0] === 419, 'Logout exige CSRF');
     verify(request($client, $base, 'logout', ['_csrf_token' => token($html)])[0] === 303, 'Logout termina sesión');
@@ -126,10 +131,10 @@ try {
     $migrator = new Migrator($db, $temp);
     $migrator->run();
     $migrator->run();
-    verify((int) $db->query('SELECT COUNT(*) FROM schema_migrations')->fetchColumn() === 2, 'Columna nueva aplicada una sola vez');
+    verify((int) $db->query('SELECT COUNT(*) FROM schema_migrations')->fetchColumn() === $migrationCount + 1, 'Columna nueva aplicada una sola vez');
     $db->exec("DELETE FROM schema_migrations WHERE version = '002_test_column'");
     $migrator->run();
-    verify((int) $db->query('SELECT COUNT(*) FROM schema_migrations')->fetchColumn() === 2, 'Recupera DDL confirmado sin registro');
+    verify((int) $db->query('SELECT COUNT(*) FROM schema_migrations')->fetchColumn() === $migrationCount + 1, 'Recupera DDL confirmado sin registro');
     file_put_contents($temp . '/migrations/002_test_column.sql', '-- Cambio indebido', FILE_APPEND);
     $caught = false;
     try { $migrator->run(); } catch (RuntimeException $error) { $caught = str_contains($error->getMessage(), 'modificó'); }
