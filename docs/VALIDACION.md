@@ -35,6 +35,12 @@ de la tabla local. La migración 003 elimina la referencia local sin modificar l
 scripts históricos ni la base central. Autenticación central, separación de cuentas,
 CSRF y migraciones pasaron; producción sigue pendiente de verificación.
 
+El 14 de octubre se validó también el cambio de fuentes según tipo: en Edge a
+1280px y 360px se ocultan/deshabilitan salario y pensión para empresas, cambian
+las etiquetas y la guía, se advierte sobre selecciones excluidas y se conservan
+al volver al tipo anterior antes de guardar. Pasaron sintaxis PHP/JS, unitarias
+y la integración aislada, incluida la validación de fuentes por el servidor.
+
 La prueba requiere MySQL/MariaDB local, extensiones pdo_mysql y curl, y permiso para crear bases temporales. Se ejecuta sin config/local.php: guarda ese archivo privado en otro lugar antes y restáuralo al terminar.
 
 ```powershell

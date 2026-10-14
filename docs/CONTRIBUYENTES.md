@@ -6,6 +6,8 @@ Esos datos se revisarán por año en las siguientes etapas de la planeación.
 
 El alcance de las etapas siguientes, incluyendo régimen, patrimonio en el exterior,
 campos DIAN y revisión UGPP, está en [ALCANCE-PLANEACION.md](ALCANCE-PLANEACION.md).
+Las opciones cambian con el tipo elegido; consulta [FORMULARIOS-DIAN.md](FORMULARIOS-DIAN.md)
+para sus diferencias, la regla de sucesiones y los bloques pendientes de cada formulario.
 
 ## Cómo usarlo
 

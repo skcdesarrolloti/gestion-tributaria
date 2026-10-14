@@ -41,6 +41,10 @@ verify(request($client, $base, 'contribuyentes/formulario&id=' . $otherId, $taxp
 verify($db->query('SELECT nombre FROM contribuyentes WHERE id = ' . $otherId)->fetchColumn() === 'Registro privado ajeno', 'Registro ajeno permanece intacto');
 foreach (['juridica', 'sucesion'] as $offset => $type) {
     $entity = array_replace($taxpayer, ['tipo' => $type, 'documento_tipo' => 'NIT', 'documento_numero' => '90012345' . $offset, 'dv' => '0']);
+    if ($type === 'juridica') {
+        verify(request($client, $base, 'contribuyentes/formulario', array_replace($entity, ['fuentes' => ['salario']]))[0] === 422,
+            'Servidor rechaza fuentes personales para entidad aunque se omita JavaScript');
+    }
     verify(request($client, $base, 'contribuyentes/formulario', $entity)[0] === 303, 'Registro admite ' . $type);
 }
 verify((int) $db->query("SELECT COUNT(*) FROM contribuyentes WHERE dv = '0'")->fetchColumn() === 2, 'Conserva dígito de verificación cero');

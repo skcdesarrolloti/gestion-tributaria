@@ -39,6 +39,7 @@ Los bloques, nombres, orden, totales y reglas seguirán el formulario e instruct
 oficial correspondiente a la versión utilizada. Cada concepto tendrá explicación,
 norma, vigencia, soportes y una relación verificable con la casilla de destino.
 El contrato de documentación está en [DICCIONARIO-CAMPOS.md](DICCIONARIO-CAMPOS.md).
+La comparación inicial de formularios está en [FORMULARIOS-DIAN.md](FORMULARIOS-DIAN.md).
 
 El formulario muestra totales; el sistema debe guardar el detalle que los respalda.
 No crear una sola columna por total como única fuente de información. Conservar

@@ -23,6 +23,18 @@ final class ContribuyenteData
         'dividendos' => 'Dividendos y participaciones', 'otros' => 'Otros ingresos',
     ];
 
+    public static function sourcesFor(string $type): array
+    {
+        if (!isset(self::TIPOS[$type])) { return []; }
+        if ($type !== 'juridica') { return self::FUENTES; }
+        return [
+            'negocio' => 'Ventas y otras actividades ordinarias',
+            'honorarios' => 'Prestación de servicios', 'arriendos' => 'Arrendamientos',
+            'rendimientos' => 'Ingresos financieros',
+            'dividendos' => 'Dividendos y participaciones', 'otros' => 'Otros ingresos',
+        ];
+    }
+
     public static function read(array $input): array
     {
         $data = [];
@@ -53,8 +65,8 @@ final class ContribuyenteData
             $errors[] = 'El dígito de verificación es un solo número y corresponde únicamente al NIT.';
         }
         foreach ($data['fuentes'] as $source) {
-            if (!is_string($source) || !isset(self::FUENTES[$source])) {
-                $errors[] = 'Selecciona fuentes de ingresos válidas.';
+            if (!is_string($source) || !isset(self::sourcesFor($data['tipo'])[$source])) {
+                $errors[] = 'Selecciona fuentes de ingresos válidas para el tipo de contribuyente.';
                 break;
             }
         }

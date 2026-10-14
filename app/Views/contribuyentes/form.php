@@ -51,18 +51,8 @@ require __DIR__ . '/../partials/head.php';
                     </div>
                 </div>
             </fieldset>
-            <fieldset class="space-y-space-md">
-                <legend class="text-headline-md font-semibold">Fuentes de ingresos (opcionales)</legend>
-                <p class="text-body-md text-secondary">Marca todas las que conozcas. Una persona pensionada también puede recibir honorarios, arriendos o intereses. Estas opciones todavía no determinan su tratamiento tributario.</p>
-                <div class="profile-grid">
-                    <?php foreach (ContribuyenteData::FUENTES as $key => $label): ?>
-                        <label class="flex items-center gap-space-sm text-body-md">
-                            <input type="checkbox" name="fuentes[]" value="<?= e($key) ?>" <?= in_array($key, $record['fuentes'], true) ? 'checked' : '' ?>>
-                            <?= e($label) ?>
-                        </label>
-                    <?php endforeach; ?>
-                </div>
-            </fieldset>
+            <?php require __DIR__ . '/sources.php'; ?>
+            <?php require __DIR__ . '/declaration-guide.php'; ?>
             <p class="text-body-md text-secondary">* Campos obligatorios. El siguiente paso será revisar el perfil tributario por año y las cédulas correspondientes.</p>
             <div class="flex items-center gap-space-md flex-wrap">
                 <button class="rounded-xl bg-inverse-surface text-on-secondary px-4 py-2" type="submit">Guardar contribuyente</button>
@@ -71,4 +61,5 @@ require __DIR__ . '/../partials/head.php';
         </form>
     </section>
 </main>
+<script src="<?= e(asset($config, 'js/contribuyentes.js')) ?>" defer></script>
 <?php require __DIR__ . '/../partials/footer.php'; ?>
