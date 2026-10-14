@@ -24,6 +24,11 @@ Se revisaron perfil, fichas y formulario en Edge a 1280px y 360px, sin desbordam
 se verificó la apertura de explicaciones. CSS recompilado. Ver docs/INGRESOS.md.
 El flujo autenticado en producción debe comprobarse después del despliegue.
 
+Ayuda contextual de desplegables verificada el 14 de octubre: perfiles de persona
+y entidad, selección de régimen, servicios y casillas/estado de movimiento en Edge
+a 1280px y 360px. Se comprobó el bloqueo de regímenes de consulta, su explicación
+sin JavaScript tras un POST y el guardado de No aplica mediante la migración 008.
+
 ### Primer módulo: Contribuyentes
 
 Verificado localmente el 13 de octubre de 2026: sintaxis, pruebas unitarias e

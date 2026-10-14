@@ -9,6 +9,22 @@
 4. La aplicación determina 210 para persona natural o sucesión residente, y 110
    para persona jurídica o persona natural/sucesión no residente. En sucesiones
    la residencia indicada corresponde al causante al fallecer.
+
+Debajo de cada desplegable del perfil se muestra definición, alcance y fundamento
+de la opción seleccionada. La ayuda también aparece debajo de la casilla y del
+estado de movimiento. Las opciones se adaptan al tipo de contribuyente.
+
+El régimen muestra Ordinario y SIMPLE (consulta) para personas naturales; para
+entidades, incluye RTE de ESAL y del sector cooperativo (consulta). Las sucesiones
+no reciben SIMPLE como opción predeterminada. Solo Ordinario permite crear perfil:
+los demás motores siguen pendientes y el servidor los rechaza sin convertirlos.
+No contribuyente, no declarante y otros tratamientos particulares requieren revisión
+separada; estas listas no pretenden cubrir todas las condiciones tributarias.
+
+En servicios personales se distinguen Pendiente, No aplica, Costos y Exención.
+Para entidades se ofrecen únicamente Pendiente/No aplica; no se les aplica la
+elección personal del art. 206.10. La migración 008 admite No aplica sin alterar
+los valores anteriores. La elección no acredita por sí sola elegibilidad ni beneficio.
 5. Abre las fichas para consultar explicación, artículos, ejemplo, soportes y fórmula.
 6. Pulsa **Registrar movimiento** y selecciona una casilla capturable.
 7. Registra fecha de reconocimiento fiscal, concepto, tercero, país, moneda original,

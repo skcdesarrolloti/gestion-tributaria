@@ -10,6 +10,9 @@ $annual=['_csrf_token'=>token($html),'anio'=>'2025','residencia'=>'residente','r
     'servicios'=>'costos','soporte_perfil'=>'RUT y análisis fiscal ficticios'];
 verify(request($client,$base,$route,array_replace($annual,['_csrf_token'=>'']))[0]===419, 'Perfil anual exige CSRF');
 verify(request($client,$base,$route,array_replace($annual,['regimen'=>'simple']))[0]===422, 'No aplica reglas ordinarias a SIMPLE');
+[$status,$helpHtml]=request($client,$base,$route,array_replace($annual,['regimen'=>'simple']));
+verify(str_contains($helpHtml,'Impuesto unificado sujeto a requisitos') && (int)$db->query('SELECT COUNT(*) FROM perfiles_renta')->fetchColumn()===0,
+    'Sin JavaScript conserva la explicación y no crea un perfil con otro régimen');
 verify(request($client,$base,$route,$annual)[0]===303, 'Perfil residente crea formulario 210');
 $profileId=(int)$db->query('SELECT id FROM perfiles_renta')->fetchColumn();
 verify(request($client,$base,$route,$annual)[0]===422, 'Evita duplicar año del contribuyente');
@@ -50,5 +53,5 @@ verify(request($client,$base,'ingresos/movimiento&id='.$otherProfileId,$movement
 verify(request($client,$base,$movementRoute.'&movimiento=999999',$movement)[0]===404, 'No crea mediante una edición inexistente');
 foreach ([['juridica','residente','110'],['sucesion','no_residente','110']] as [$type,$residence,$form]) {
     $entityId=(int)$db->query("SELECT id FROM contribuyentes WHERE tipo='$type' AND funcionario_id=100")->fetchColumn();
-    verify(request($client,$base,'ingresos&contribuyente='.$entityId,array_replace($annual,['residencia'=>$residence]))[0]===303, 'Perfil '.$type.' determina formulario '.$form);
+    verify(request($client,$base,'ingresos&contribuyente='.$entityId,array_replace($annual,['residencia'=>$residence,'servicios'=>'no_aplica']))[0]===303, 'Perfil '.$type.' determina formulario '.$form);
 }

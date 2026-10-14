@@ -22,7 +22,7 @@ final class IngresoController
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $errors = $this->csrfErrors();
             if (!$errors) {
-                $errors = IngresoData::profileErrors($record);
+                $errors = IngresoData::profileErrors($record,$taxpayer['tipo']);
                 if (!$errors) {
                     try {
                         $id = $this->model->createProfile($record,$taxpayer,(int) $user['_ID']);

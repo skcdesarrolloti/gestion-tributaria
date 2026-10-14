@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 use App\Services\{IngresoData, IngresoSummary};
+use App\Services\PerfilGuidance;
 
 $profile=['anio'=>2025,'formulario'=>'210','servicios'=>'costos'];
 $concept=['id'=>1,'casilla'=>58,'clase'=>'ingreso'];
@@ -24,3 +25,9 @@ $summary=IngresoSummary::build($concepts,[['casilla'=>58,'estado'=>'real','valor
 check($summary[61]===['real'=>1600000,'proyectado'=>500000], 'Depuración separa real y proyección adicional.');
 check(IngresoSummary::build($concepts,[['casilla'=>60,'estado'=>'real','valor_cop'=>100000]])[61]['real']===-100000,
     'No oculta inconsistencias negativas como ingresos cero.');
+$annual=['anio'=>'2025','residencia'=>'residente','regimen'=>'ordinario','servicios'=>'no_aplica','soporte_perfil'=>'Evidencia ficticia'];
+check(IngresoData::profileErrors($annual,'juridica')===[], 'Entidad admite no aplica sin confundir con pendiente.');
+check(IngresoData::profileErrors(array_replace($annual,['servicios'=>'costos']),'juridica')!==[], 'Empresa no elige exención/costos personales.');
+check(isset(PerfilGuidance::fields('natural')['regimen']['options']['simple']), 'SIMPLE visible como consulta.');
+check(isset(PerfilGuidance::fields('juridica')['regimen']['options']['especial']), 'RTE visible para entidades.');
+check(!isset(PerfilGuidance::fields('sucesion')['regimen']['options']['simple']), 'No ofrece SIMPLE a sucesiones por defecto.');

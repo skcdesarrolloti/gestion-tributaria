@@ -16,13 +16,24 @@ require __DIR__.'/../partials/head.php';
         <form method="post" action="<?= e($action) ?>" class="space-y-space-md">
             <?php require __DIR__.'/../partials/csrf.php'; ?>
             <label class="block text-body-md" for="concepto_id">Casilla y concepto *</label>
-            <select class="w-full px-3 py-2.5 bg-surface-container-low rounded-xl" id="concepto_id" name="concepto_id" required>
+            <?php
+            $field='concepto_id'; $options=[];
+            foreach ($concepts as $concept) {
+                if (!\App\Services\IngresoData::allowed($concept,$profile)) { continue; }
+                $options[$concept['id']]=['definicion'=>$concept['explicacion'],
+                    'alcance'=>$concept['bloque'].'. Soportes: '.$concept['soportes'],
+                    'norma'=>$concept['fundamento'],
+                    'url'=>'https://normograma.dian.gov.co/dian/compilacion/docs/estatuto_tributario.htm'];
+            }
+            ?>
+            <select class="w-full px-3 py-2.5 bg-surface-container-low rounded-xl" id="concepto_id" name="concepto_id" aria-describedby="concepto_id-help" data-guidance="<?= e(json_encode($options,JSON_UNESCAPED_UNICODE|JSON_THROW_ON_ERROR)) ?>" required>
                 <option value="">Selecciona una casilla</option>
                 <?php foreach ($concepts as $concept): ?>
                     <?php if (!\App\Services\IngresoData::allowed($concept,$profile)) { continue; } ?>
                     <option value="<?= e($concept['id']) ?>" <?= (string)$record['concepto_id']===(string)$concept['id']?'selected':'' ?>><?= e($concept['casilla'].' · '.$concept['bloque'].' · '.$concept['nombre']) ?></option>
                 <?php endforeach; ?>
             </select>
+            <?php require __DIR__.'/option-help.php'; ?>
             <p class="text-body-md text-secondary">Las casillas 43–45 solo se habilitan con la opción de costos del perfil. Si el tratamiento está pendiente, revisa la clasificación antes de registrar servicios personales en otro bloque.</p>
             <div class="profile-grid">
                 <?php foreach ([
@@ -41,10 +52,17 @@ require __DIR__.'/../partials/head.php';
                 <?php endforeach; ?>
                 <div>
                     <label class="block text-body-md mb-1" for="estado">Estado *</label>
-                    <select class="w-full px-3 py-2.5 bg-surface-container-low rounded-xl" id="estado" name="estado" required>
+                    <?php
+                    $field='estado'; $options=[
+                        'real'=>['definicion'=>'Operación ocurrida, reconocida fiscalmente en la fecha indicada.','alcance'=>'Exige referencia del soporte. No admite fecha futura y se suma al total real.','norma'=>'ET 27 y 28 según obligación y operación','url'=>'https://normograma.dian.gov.co/dian/compilacion/docs/estatuto_tributario.htm'],
+                        'proyectado'=>['definicion'=>'Estimación adicional de una operación prevista.','alcance'=>'No repitas el valor real acumulado. Se suma como proyección del escenario, no como ingreso ocurrido.','norma'=>'Criterio de simulación de la aplicación; reconocimiento fiscal: ET 27/28','url'=>'https://normograma.dian.gov.co/dian/compilacion/docs/estatuto_tributario.htm'],
+                    ];
+                    ?>
+                    <select class="w-full px-3 py-2.5 bg-surface-container-low rounded-xl" id="estado" name="estado" aria-describedby="estado-help" data-guidance="<?= e(json_encode($options,JSON_UNESCAPED_UNICODE|JSON_THROW_ON_ERROR)) ?>" required>
                         <option value="">Selecciona una opción</option>
                         <?php foreach (['real'=>'Real / ocurrido','proyectado'=>'Proyectado adicional'] as $key=>$label): ?><option value="<?= e($key) ?>" <?= $record['estado']===$key?'selected':'' ?>><?= e($label) ?></option><?php endforeach; ?>
                     </select>
+                    <?php require __DIR__.'/option-help.php'; ?>
                 </div>
             </div>
             <p class="text-body-md text-secondary">En COP ambos valores deben coincidir. En moneda extranjera registra el valor fiscal revisado y justifica su conversión; no se aplica una TRM automática.</p>
@@ -60,4 +78,5 @@ require __DIR__.'/../partials/head.php';
         <a class="text-secondary underline" href="<?= e(url($config,'ingresos/detalle').'&id='.$profile['id']) ?>">Volver a casillas y fichas</a>
     </section>
 </main>
+<script src="<?= e(asset($config,'js/ingresos-guidance.js')) ?>" defer></script>
 <?php require __DIR__.'/../partials/footer.php'; ?>

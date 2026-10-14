@@ -12,13 +12,14 @@ final class IngresoData
         return $record;
     }
 
-    public static function profileErrors(array $record): array
+    public static function profileErrors(array $record, string $type = 'natural'): array
     {
         $errors = [];
         if (!in_array($record['anio'], ['2025', '2026'], true)) { $errors[] = 'Selecciona un año disponible: 2025 o 2026.'; }
         if (!in_array($record['residencia'], ['residente', 'no_residente'], true)) { $errors[] = 'Confirma la residencia fiscal.'; }
-        if ($record['regimen'] !== 'ordinario') { $errors[] = 'Esta etapa admite únicamente régimen ordinario.'; }
-        if (!in_array($record['servicios'], ['pendiente', 'costos', 'exencion'], true)) { $errors[] = 'Revisa el tratamiento de servicios personales.'; }
+        if ($record['regimen'] !== 'ordinario') { $errors[] = 'El régimen seleccionado es solo de consulta: su cálculo está pendiente. No se crea un perfil ordinario en su lugar.'; }
+        $options = PerfilGuidance::fields($type)['servicios']['options'];
+        if (!isset($options[$record['servicios']])) { $errors[] = 'Revisa el tratamiento de servicios personales para este tipo de contribuyente.'; }
         if ($record['soporte_perfil'] === '' || mb_strlen($record['soporte_perfil']) > 500) {
             $errors[] = 'Indica la evidencia del perfil fiscal (máximo 500 caracteres).';
         }
