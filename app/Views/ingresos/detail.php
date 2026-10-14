@@ -15,6 +15,7 @@
         <p class="text-body-md">Los valores son pesos fiscales sin redondeo de presentación DIAN. Los totales negativos requieren revisión; no son pérdidas fiscales aceptadas.</p>
     </section>
     <div class="flex items-center gap-space-md flex-wrap">
+        <a class="rounded-xl bg-inverse-surface text-on-secondary px-4 py-2" href="<?= e(url($config,'proyeccion').'&id='.$profile['id']) ?>">Ver proyección anual</a>
         <a class="rounded-xl bg-inverse-surface text-on-secondary px-4 py-2" href="<?= e(url($config,'ingresos/movimiento').'&id='.$profile['id']) ?>">Registrar movimiento</a>
         <a class="text-secondary underline" href="<?= e(url($config,'ingresos').'&contribuyente='.$profile['contribuyente_id']) ?>">Volver a los años</a>
         <a class="text-secondary underline" href="<?= e(url($config,'ingresos/perfil').'&id='.$profile['id']) ?>">Ver o editar perfil guardado</a>

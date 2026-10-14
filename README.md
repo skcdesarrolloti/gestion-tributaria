@@ -9,6 +9,10 @@ Incluye login de funcionarios con los estilos de Servicios Comerciales, inicio p
 
 Desde cada contribuyente, **Ingresos por año** abre el [bloque inicial de ingresos](docs/INGRESOS.md): perfil anual, fichas por casilla, movimientos reales/proyectados y depuración preliminar. Todavía no calcula el impuesto final.
 
+Cada perfil tiene **Proyección anual**, una [estructura de seguimiento](docs/PROYECCION-ANUAL.md)
+con resumen real/esperado, ingresos por mes y bloques pendientes para calcular el impuesto
+y comparar acciones antes del cierre. Los importes actuales son parciales; aún no estima el impuesto.
+
 ## Continuar el trabajo
 
 1. Lee [AGENTS.md](AGENTS.md): reglas para continuar el proyecto.

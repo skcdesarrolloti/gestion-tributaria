@@ -15,6 +15,17 @@ Verificación local realizada el 13 de octubre de 2026 con PHP 8.2.12, MariaDB 1
 
 ## Repetir integración
 
+### Estructura de proyección anual
+
+Verificada el 14 de octubre de 2026: sintaxis, unitarias de agregación mensual,
+separación real/proyectado, exclusión de casillas derivadas y aviso de proyecciones
+pasadas. La integración aislada confirma sesión obligatoria, tablero propio con
+importes y meses sin registros, rechazo de perfiles ajenos/IDs inválidos y mensaje
+de cálculo pendiente. Revisión visual de la vista con datos ficticios en Edge a
+1280px y 360px, sin desbordamiento horizontal. Se reutilizaron clases ya existentes.
+El tablero no calcula impuesto ni ahorro y no confirma que sus datos estén completos.
+La consulta autenticada en Hostinger queda pendiente de comprobación.
+
 ### Consulta y edición de perfiles guardados
 
 Verificado el 14 de octubre de 2026: selecciones y evidencia visibles al volver,

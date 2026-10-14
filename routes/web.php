@@ -11,6 +11,7 @@ $router->add('POST', 'ingresos', [$ingresoController, 'index']);
 $router->add('GET', 'ingresos/perfil', [$ingresoController, 'profile']);
 $router->add('POST', 'ingresos/perfil', [$ingresoController, 'profile']);
 $router->add('GET', 'ingresos/detalle', [$ingresoController, 'detail']);
+$router->add('GET', 'proyeccion', [$proyeccionController, 'index']);
 $router->add('GET', 'ingresos/movimiento', [$ingresoController, 'movement']);
 $router->add('POST', 'ingresos/movimiento', [$ingresoController, 'movement']);
 $router->add('GET', 'login', [$authController, 'login']);

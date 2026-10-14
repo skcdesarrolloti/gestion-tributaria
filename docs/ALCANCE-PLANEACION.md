@@ -6,6 +6,11 @@ Es una especificación pendiente; no confirma que los cálculos estén implement
 
 ## Orden de trabajo
 
+La prioridad confirmada es el seguimiento del año en curso y la proyección antes
+del cierre. Ver [PROYECCION-ANUAL.md](PROYECCION-ANUAL.md): tablero inicial disponible
+y contrato de escenarios, caja y acciones pendientes. El instrumento debe guiar
+al usuario sin exigir conocimientos contables para escoger tratamientos.
+
 1. Contribuyente: identificación de persona natural, jurídica o sucesión ilíquida.
 2. Perfil por año: residencia fiscal, régimen, obligaciones y formulario aplicable.
 3. Explicación de cédulas y clasificación de fuentes de ingresos.

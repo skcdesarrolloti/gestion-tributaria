@@ -53,5 +53,8 @@ $router = new App\Core\Router();
 $ingresoController = new App\Controllers\IngresoController(
     $auth, new App\Models\Contribuyente($database), new App\Models\Ingreso($database), $view, $config
 );
+$proyeccionController = new App\Controllers\ProyeccionController(
+    $auth, new App\Models\Ingreso($database), $view, $config
+);
 require dirname(__DIR__) . '/routes/web.php';
 return $router;

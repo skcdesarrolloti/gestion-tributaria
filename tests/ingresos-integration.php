@@ -57,6 +57,11 @@ $movement['valor_original']=$movement['valor_cop']='300000';
 verify(request($client,$base,$movementRoute,$movement)[0]===303, 'Registra reducción documentada para revisión');
 [$status,$html]=request($client,$base,'ingresos/detalle&id='.$profileId);
 verify(str_contains($html,'2.200.000'), 'Primera depuración calcula capital menos costo');
+[$status,$projectionHtml]=request($client,$base,'proyeccion&id='.$profileId);
+verify($status===200 && str_contains($projectionHtml,'Proyección anual de renta') && str_contains($projectionHtml,'2.500.000')
+    && str_contains($projectionHtml,'2.200.000') && str_contains($projectionHtml,'Diciembre · Sin registros'),
+    'Tablero propio muestra ingresos, reducciones y meses sin información');
+verify(str_contains($projectionHtml,'Todavía no calcula el impuesto'), 'No presenta resumen parcial como impuesto calculado');
 verify(request($client,$base,$profileRoute,array_replace($annual,['anio'=>'2026']))[0]===422, 'Con movimientos protege año y clasificación');
 $updatedProfile=array_replace($annual,['soporte_perfil'=>'Evidencia <b>actualizada</b>']);
 verify(request($client,$base,$profileRoute,$updatedProfile)[0]===303, 'Con movimientos permite actualizar evidencia');
@@ -68,6 +73,8 @@ $otherProfile=$db->prepare("INSERT INTO perfiles_renta (contribuyente_id,anio,ti
     VALUES (?,2025,'natural','residente','ordinario','pendiente','Prueba','210','2026-10')");
 $otherProfile->execute([$otherId]);$otherProfileId=(int)$db->lastInsertId();
 verify(request($client,$base,'ingresos/detalle&id='.$otherProfileId)[0]===404, 'Perfil ajeno permanece privado');
+verify(request($client,$base,'proyeccion&id='.$otherProfileId)[0]===404, 'Proyección ajena permanece privada');
+verify(request($client,$base,'proyeccion&id[]=1')[0]===404, 'Proyección rechaza identificador inválido');
 verify(request($client,$base,'ingresos/perfil&id='.$otherProfileId,$annual)[0]===404, 'No puede editar perfil ajeno');
 verify(request($client,$base,'ingresos/movimiento&id='.$otherProfileId,$movement)[0]===404, 'No escribe movimientos en perfil ajeno');
 verify(request($client,$base,$movementRoute.'&movimiento=999999',$movement)[0]===404, 'No crea mediante una edición inexistente');

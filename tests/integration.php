@@ -86,6 +86,7 @@ try {
     $localUser = $db->prepare('INSERT INTO wp_jet_cct_funcionarios (nombre, user_others_apss, pass_others_apss) VALUES (?, ?, ?)');
     $localUser->execute(['Cuenta antigua local', 'local-only', password_hash('Prueba-local-2026', PASSWORD_DEFAULT)]);
     verify(request($client, $base, 'inicio')[0] === 303, 'Inicio exige autenticación');
+    verify(request($client, $base, 'proyeccion&id=1')[0] === 303, 'Proyección exige autenticación');
     verify(request($client, $base, 'contribuyentes')[0] === 303, 'Contribuyentes exige autenticación');
     verify(request($client, $base, 'contribuyentes/formulario', [])[0] === 303, 'Registro exige autenticación');
     [$status, $html] = request($client, $base, 'login');
