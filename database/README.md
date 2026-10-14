@@ -30,6 +30,9 @@ La migración/comprobación 009 incorpora `exogena_5247`, independiente de Renta
 con registros por empresa y año y los campos de la plantilla en JSON. Solo se ejecuta
 en la base propia. Ver docs/EXOGENA-5247.md; no importa registros ni precarga datos reales.
 
+La migración/comprobación 010 crea `exogena_1007`, con sus registros independientes
+de `exogena_5247` y Renta. No carga datos de los auxiliares recibidos. Ver docs/EXOGENA-1007.md.
+
 Crea migrations/002_telefono_funcionario.sql:
 
 ```sql

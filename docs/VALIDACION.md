@@ -15,6 +15,17 @@ Verificación local realizada el 13 de octubre de 2026 con PHP 8.2.12, MariaDB 1
 
 ## Repetir integración
 
+### Exógena 1007 y nombre del 5247
+
+Verificado el 14/10/2026: migración 010, captura vacía 2025 (incluido país), guardado
+y edición independientes, once campos/identificaciones conservados, CSRF, sesión,
+importes explícitos y protección por empresa/propietario. Unitarias e integración
+aislada correctas, incluido el 5247 tras reutilizar su acceso a registros y controlador.
+Revisión visual de lista/captura y menú con ambos nombres en Edge a 1280px y 360px,
+sin desbordamiento; CSS recompilado. El archivo recibido era un auxiliar 2024, no
+una plantilla DIAN 1007; no se importaron datos reales. Ver EXOGENA-1007.md.
+Las rutas en producción y el flujo autenticado deben comprobarse tras publicar.
+
 ### Exógena 5247
 
 Presentación del menú y estructura revisada el 14/10/2026: panel de formatos,

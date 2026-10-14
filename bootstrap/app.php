@@ -59,5 +59,8 @@ $proyeccionController = new App\Controllers\ProyeccionController(
 $exogenaController = new App\Controllers\ExogenaController(
     $auth, new App\Models\Contribuyente($database), new App\Models\Exogena5247($database), $view, $config
 );
+$exogena1007Controller = new App\Controllers\ExogenaController(
+    $auth, new App\Models\Contribuyente($database), new App\Models\Exogena1007($database), $view, $config, '1007'
+);
 require dirname(__DIR__) . '/routes/web.php';
 return $router;

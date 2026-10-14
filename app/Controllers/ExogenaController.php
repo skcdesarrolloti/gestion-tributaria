@@ -4,13 +4,13 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use App\Core\View;
-use App\Models\{Contribuyente, Exogena5247};
-use App\Services\{AuthService, Csrf, Exogena5247Data, Exogena5247Fields};
+use App\Models\{Contribuyente, ExogenaRecords};
+use App\Services\{AuthService, Csrf, Exogena5247Data, Exogena5247Fields, Exogena1007Data, Exogena1007Fields};
 
 final class ExogenaController
 {
     public function __construct(private AuthService $auth, private Contribuyente $taxpayers,
-        private Exogena5247 $model, private View $view, private array $config) {}
+        private ExogenaRecords $model, private View $view, private array $config, private string $formatCode='5247') {}
 
     public function index(): void
     {
@@ -22,7 +22,8 @@ final class ExogenaController
     {
         $user=$this->user();
         $companies=array_filter($this->taxpayers->listFor((int)$user['_ID']),static fn($c)=>$c['tipo']==='juridica');
-        $year=array_key_exists('anio',$_GET)?\input($_GET,'anio'):Exogena5247Fields::DEFAULT_YEAR;
+        $fields=$this->fields();
+        $year=array_key_exists('anio',$_GET)?\input($_GET,'anio'):$fields::DEFAULT_YEAR;
         if (!preg_match('/^20[0-9]{2}$/D',$year)) { http_response_code(422); echo 'Año gravable inválido.'; return; }
         $company=null;
         $records=[];
@@ -33,7 +34,7 @@ final class ExogenaController
         }
         $notice=$_SESSION['exogena_notice']??'';
         unset($_SESSION['exogena_notice']);
-        $this->view->render('exogena/5247',compact('user','companies','company','records','year','notice'));
+        $this->view->render('exogena/'.$this->formatCode,compact('user','companies','company','records','year','notice'));
     }
 
     public function record(): void
@@ -41,28 +42,36 @@ final class ExogenaController
         $user=$this->user();
         $id=array_key_exists('id',$_GET)?$this->id('id'):null;
         $found=$id!==null?$this->model->findFor($id,(int)$user['_ID']):null;
-        if ($id!==null && (!$found || $found['estructura']!==Exogena5247Fields::STRUCTURE)) { $this->missing(); return; }
+        $fields=$this->fields();
+        $reader=$this->formatCode==='1007'?Exogena1007Data::class:Exogena5247Data::class;
+        if ($id!==null && (!$found || $found['estructura']!==$fields::STRUCTURE)) { $this->missing(); return; }
         $company=$this->company($found?(int)$found['contribuyente_id']:$this->id('contribuyente'),(int)$user['_ID']);
         if (!$company) { $this->missing(); return; }
-        $record=Exogena5247Data::read($found?array_merge($found['datos'],['anio'=>(string)$found['anio']]):
-            ['anio'=>\input($_GET,'anio',Exogena5247Fields::DEFAULT_YEAR)]);
+        $record=$reader::read($found?array_merge($found['datos'],['anio'=>(string)$found['anio']]):
+            ['anio'=>\input($_GET,'anio',$fields::DEFAULT_YEAR)]);
         $errors=[];
         if ($_SERVER['REQUEST_METHOD']==='POST') {
-            $record=Exogena5247Data::read($_POST);
+            $record=$reader::read($_POST);
             if (!Csrf::valid(\input($_POST,'_csrf_token'))) {
                 http_response_code(419); $errors[]='Formulario vencido. Recarga antes de guardar.';
             } else {
-                $errors=Exogena5247Data::errors($record);
+                $errors=$reader::errors($record);
                 if (!$errors) {
                     $this->model->saveFor($record,(int)$company['id'],(int)$user['_ID'],$id);
-                    $_SESSION['exogena_notice']='Registro 5247 guardado como borrador de la estructura 2024.';
-                    header('Location: '.\url($this->config,'exogena/5247').'&contribuyente='.$company['id'].'&anio='.$record['anio'],true,303);
+                    $_SESSION['exogena_notice']='Registro '.$this->formatCode.' guardado como borrador.';
+                    header('Location: '.\url($this->config,'exogena/'.$this->formatCode).'&contribuyente='.$company['id'].'&anio='.$record['anio'],true,303);
                     exit;
                 }
                 http_response_code(422);
             }
         }
-        $this->view->render('exogena/record',compact('user','company','record','errors','id'));
+        $this->view->render($this->formatCode==='1007'?'exogena/record-1007':'exogena/record',compact('user','company','record','errors','id'));
+    }
+
+    private function fields(): string
+    {
+        return match($this->formatCode) { '1007'=>Exogena1007Fields::class, '5247'=>Exogena5247Fields::class,
+            default=>throw new \InvalidArgumentException('Formato no disponible.') };
     }
 
     private function company(int $id, int $owner): ?array

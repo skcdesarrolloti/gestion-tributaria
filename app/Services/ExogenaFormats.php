@@ -10,9 +10,14 @@ final class ExogenaFormats
     public static function all(): array
     {
         return [
+            '1007'=>[
+                'route'=>'exogena/1007',
+                'name'=>'Ingresos Propios',
+                'description'=>'Ingresos brutos y devoluciones, rebajas y descuentos por tercero informado.',
+            ],
             '5247'=>[
                 'route'=>'exogena/5247',
-                'name'=>'Pagos y retenciones de contratos',
+                'name'=>'Pagos o Abonos en cuenta',
                 'description'=>'Pagos o abonos en cuenta y retenciones practicadas en contratos de colaboración empresarial y otros contratos.',
             ],
         ];

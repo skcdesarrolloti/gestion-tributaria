@@ -88,6 +88,7 @@ try {
     verify(request($client, $base, 'inicio')[0] === 303, 'Inicio exige autenticación');
     verify(request($client, $base, 'proyeccion&id=1')[0] === 303, 'Proyección exige autenticación');
     verify(request($client, $base, 'exogena')[0] === 303, 'Exógena exige autenticación');
+    verify(request($client, $base, 'exogena/1007')[0] === 303, '1007 exige autenticación');
     verify(request($client, $base, 'exogena/5247/registro&contribuyente=1', [])[0] === 303, 'Captura 5247 exige autenticación');
     verify(request($client, $base, 'contribuyentes')[0] === 303, 'Contribuyentes exige autenticación');
     verify(request($client, $base, 'contribuyentes/formulario', [])[0] === 303, 'Registro exige autenticación');
@@ -104,6 +105,7 @@ try {
     require __DIR__ . '/contribuyentes-integration.php';
     require __DIR__ . '/ingresos-integration.php';
     require __DIR__ . '/exogena-integration.php';
+    require __DIR__ . '/exogena-1007-integration.php';
     verify(request($client, $base, 'logout')[0] === 405, 'Logout rechaza GET');
     verify(request($client, $base, 'logout', ['_csrf_token' => ''])[0] === 419, 'Logout exige CSRF');
     verify(request($client, $base, 'logout', ['_csrf_token' => token($html)])[0] === 303, 'Logout termina sesión');
