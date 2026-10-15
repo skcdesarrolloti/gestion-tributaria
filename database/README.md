@@ -54,6 +54,10 @@ Sube ambos archivos con el código que usa la columna. Al abrir la app se ejecut
 
 ## Reglas
 
+La migración 012 agrega exogena_registros sin precargar datos ni alterar 009–011.
+Su comprobación revisa columnas, índice, clave foránea y validación JSON.
+Ver [catálogo y alcance de Exógena](../docs/CATALOGO-EXOGENA.md).
+
 - Número consecutivo con tres dígitos: 002, 003... Una operación por archivo.
 - Nunca modificar una migración aplicada. El registro de versión lo inserta el motor, no el script.
 - La comprobación debe verificar la postcondición real (tabla/columna/índice/tipo o dato), no solo devolver 1. Revisa ambos scripts en Git.

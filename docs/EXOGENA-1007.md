@@ -1,7 +1,7 @@
-# 1007 · Ingresos Propios
+# 1007 · Ingresos Recibidos
 
 Estructura inicial para personas jurídicas, año gravable 2025, sin importar ni
-precargar registros. Acceso: Exógena → 1007 · Ingresos Propios. El 5247 aparece
+precargar registros. Acceso: Exógena → Ingresos → 1007 · Ingresos Recibidos. El 5247 aparece
 como Pagos o Abonos en cuenta; su alcance de contratos y sus campos se conservan.
 
 ## Archivo recibido y estructura utilizada
@@ -18,7 +18,7 @@ El auxiliar puede apoyar una carga posterior, tras confirmar año, cuentas,
 conceptos, terceros y conciliación. No trasladar créditos o saldos automáticamente
 a ingreso bruto; no usar datos 2024 para llenar el año 2025.
 
-Nombre visible solicitado: **Ingresos Propios**. Nombre oficial: **Ingresos Recibidos**.
+Nombre visible actualizado por solicitud del responsable: **Ingresos Recibidos**.
 Referencia: [Resolución DIAN 162 de 2023](https://normograma.dian.gov.co/dian/compilacion/docs/resolucion_dian_0162_2023.htm),
 artículo 22 y anexo del formato 1007 versión 9, y artículo 1.3.5.4.1 de la Resolución
 227 de 2025. Fundamento: ET 631 literal f) y 631-2. Verificar catálogo e historial

@@ -1,9 +1,9 @@
-<?php $title='Registro 1007 · Ingresos Propios'; require __DIR__.'/../partials/head.php'; ?>
+<?php $title='Registro 1007 · Ingresos Recibidos'; require __DIR__.'/../partials/head.php'; ?>
 <body class="bg-background min-h-screen font-body-md text-on-surface antialiased">
 <?php require __DIR__.'/../partials/header.php'; ?>
 <main class="portal-container space-y-space-lg py-8">
     <section class="bg-inverse-surface text-on-secondary rounded-2xl p-space-xl">
-        <p class="text-label-md uppercase tracking-wide">Exógena · 1007 · Ingresos Propios</p>
+        <p class="text-label-md uppercase tracking-wide">Exógena · 1007 · Ingresos Recibidos</p>
         <h1 class="text-headline-lg font-semibold mt-2"><?= $id===null?'Nuevo registro':'Editar registro' ?></h1>
         <p class="text-body-md mt-2 taxpayer-name">Empresa informante: <?= e($company['nombre']) ?></p>
     </section>

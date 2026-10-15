@@ -1,10 +1,10 @@
-<?php $title='Exógena · 1007 · Ingresos Propios'; $formatCode='1007'; require __DIR__.'/../partials/head.php'; ?>
+<?php $title='Exógena · 1007 · Ingresos Recibidos'; $formatCode='1007'; require __DIR__.'/../partials/head.php'; ?>
 <body class="bg-background min-h-screen font-body-md text-on-surface antialiased">
 <?php require __DIR__.'/../partials/header.php'; ?>
 <main class="portal-container space-y-space-lg py-8">
     <section class="bg-inverse-surface text-on-secondary rounded-2xl p-space-xl">
         <p class="text-label-md uppercase tracking-wide">Exógena · Personas jurídicas</p>
-        <h1 class="text-headline-lg font-semibold mt-2">1007 · Ingresos Propios</h1>
+        <h1 class="text-headline-lg font-semibold mt-2">1007 · Ingresos Recibidos</h1>
         <p class="text-body-md mt-2">Preparación de ingresos por empresa, tercero y año gravable.</p>
     </section>
     <?php if ($notice!==''): ?><p role="status" class="bg-primary-container rounded-xl p-3"><?= e($notice) ?></p><?php endif; ?>

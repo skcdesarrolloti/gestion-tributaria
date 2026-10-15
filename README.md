@@ -19,11 +19,16 @@ y comparar acciones antes del cierre. Los importes actuales son parciales; aún 
 con los 22 campos de la plantilla 2024, registro y edición por empresa/año.
 Inicia en 2025 con captura vacía; los datos se cargarán después de revisar el archivo que enviará el responsable.
 
-También está **1007 → Ingresos Propios**, [estructura de once campos](docs/EXOGENA-1007.md)
+También está **1007 → Ingresos Recibidos**, [estructura de once campos](docs/EXOGENA-1007.md)
 para 2025, sin datos precargados. El nombre visible del 5247 es **Pagos o Abonos en cuenta**.
 
 **1001 → Pagos o Abonos en Cuenta y Retenciones Practicadas** incorpora la
 [estructura oficial de 20 campos, versión 10 para 2025](docs/EXOGENA-1001.md), sin precargar datos.
+
+El [catálogo de Exógena](docs/CATALOGO-EXOGENA.md) reúne **14 formatos en seis grupos**,
+con selección de cliente y conteos por formato para 2025. Incluye once estructuras nuevas
+vacías, captura y edición de borradores. La importación mensual y la generación de XML
+quedan para una etapa posterior.
 
 1. Lee [AGENTS.md](AGENTS.md): reglas para continuar el proyecto.
 2. Sigue [la guía de desarrollo](docs/DESARROLLO.md) para corregir errores o agregar módulos.

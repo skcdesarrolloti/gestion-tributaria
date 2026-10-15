@@ -7,6 +7,8 @@ body { font-family: Poppins, system-ui, sans-serif; }
 input:focus-visible { outline: 2px solid #735c00; }
 button, a { touch-action: manipulation; }
 .profile-grid > * { min-width: 0; }
+.exogena-format-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 1.5rem; }
+.exogena-format-grid > * { min-width: 0; }
 .taxpayer-name { overflow-wrap: anywhere; }
 .exogena-nav { position: relative; }
 .exogena-nav > summary { cursor: pointer; list-style: none; }
@@ -14,6 +16,8 @@ button, a { touch-action: manipulation; }
 .exogena-nav[open] .exogena-nav-chevron { transform: rotate(180deg); }
 .exogena-nav-panel { position: absolute; top: calc(100% + .5rem); right: 0; width: min(360px, calc(100vw - 2rem)); z-index: 30; }
 .exogena-nav-panel a:hover { text-decoration: underline; }
+.exogena-nav-panel { max-height: min(65vh, 600px); overflow-y: auto; overscroll-behavior: contain; }
+.exogena-nav-panel summary { cursor: pointer; }
 @media (max-width: 640px) {
     .portal-header { position: relative; }
     .exogena-nav { position: static; }

@@ -65,5 +65,12 @@ $exogena1007Controller = new App\Controllers\ExogenaController(
 $exogena1001Controller = new App\Controllers\ExogenaController(
     $auth, new App\Models\Contribuyente($database), new App\Models\Exogena1001($database), $view, $config, '1001'
 );
+$exogenaCatalogControllers=[];
+foreach (App\Services\ExogenaSchemas::all() as $code=>$schema) {
+    $exogenaCatalogControllers[$code]=new App\Controllers\ExogenaController(
+        $auth, new App\Models\Contribuyente($database), new App\Models\ExogenaRecords($database,(string)$code,$schema),
+        $view, $config, (string)$code, $schema
+    );
+}
 require dirname(__DIR__) . '/routes/web.php';
 return $router;

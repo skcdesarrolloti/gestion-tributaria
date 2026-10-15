@@ -31,4 +31,4 @@ verify(request($client,$base,'exogena/1007&contribuyente='.$otherCompanyId)[0]==
 verify(request($client,$base,'exogena/1007/registro&contribuyente='.$taxpayerId,$incomePost)[0]===404, '1007 no admite informante natural en esta etapa');
 verify(request($client,$base,'exogena/1007/registro&id=999999',$incomePost)[0]===404, '1007 no crea por edición inexistente');
 [$status,$formatsHtml]=request($client,$base,'exogena');
-verify($status===200 && str_contains($formatsHtml,'Ingresos Propios') && str_contains($formatsHtml,'Pagos o Abonos en cuenta'), 'Menú y tarjetas muestran nombres solicitados');
+verify($status===200 && str_contains($formatsHtml,'Ingresos Recibidos') && str_contains($formatsHtml,'Pagos o Abonos en cuenta'), 'Menú y tarjetas muestran nombres solicitados');

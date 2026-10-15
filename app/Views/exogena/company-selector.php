@@ -2,7 +2,7 @@
     <h2 class="text-headline-md font-semibold">Seleccionar empresa y año</h2>
     <?php if (!$companies): ?><p class="text-body-md">Primero registra una persona jurídica en Contribuyentes.</p><?php endif; ?>
     <form method="get" action="<?= e($config['base_path'].'/index.php') ?>" class="space-y-space-md">
-        <input type="hidden" name="route" value="<?= e('exogena/'.$formatCode) ?>">
+        <input type="hidden" name="route" value="<?= e($selectorRoute??('exogena/'.$formatCode)) ?>">
         <div class="profile-grid">
             <label class="text-body-md">Empresa informante *
                 <select name="contribuyente" required class="mt-2 w-full px-space-md py-space-md border-0 rounded-xl bg-surface-container-low">

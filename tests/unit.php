@@ -50,4 +50,5 @@ require __DIR__ . '/proyeccion-unit.php';
 require __DIR__ . '/exogena-unit.php';
 require __DIR__ . '/exogena-1007-unit.php';
 require __DIR__ . '/exogena-1001-unit.php';
+require __DIR__ . '/exogena-catalog-unit.php';
 echo "Pruebas de seguridad y contribuyentes correctas.\n";

@@ -13,6 +13,11 @@ $router->add('POST', 'ingresos/perfil', [$ingresoController, 'profile']);
 $router->add('GET', 'ingresos/detalle', [$ingresoController, 'detail']);
 $router->add('GET', 'proyeccion', [$proyeccionController, 'index']);
 $router->add('GET', 'exogena', [$exogenaController, 'index']);
+foreach ($exogenaCatalogControllers as $code=>$formatController) {
+    $router->add('GET', 'exogena/'.$code, [$formatController, 'format']);
+    $router->add('GET', 'exogena/'.$code.'/registro', [$formatController, 'record']);
+    $router->add('POST', 'exogena/'.$code.'/registro', [$formatController, 'record']);
+}
 $router->add('GET', 'exogena/1001', [$exogena1001Controller, 'format']);
 $router->add('GET', 'exogena/1001/registro', [$exogena1001Controller, 'record']);
 $router->add('POST', 'exogena/1001/registro', [$exogena1001Controller, 'record']);

@@ -133,6 +133,14 @@ GitHub Actions ejecutará lint, pruebas unitarias e integración con un servicio
 
 ## Alcance y dependencia de compilación
 
+El catálogo ampliado de Exógena pasó sintaxis, unitarias e integración aislada:
+once formatos nuevos, migración 012, campos vacíos, captura y edición, CSRF,
+separación de propietarios y de formatos, y conservación de los registros previos.
+En Edge se inspeccionaron panel, menú y formularios 1010/2276/5252 a 1280 y 360 px,
+sin desbordamiento horizontal; el menú desplaza sus seis grupos dentro del panel.
+Estas pruebas usan empresas ficticias. No confirman captura autenticada ni
+presentación de información en producción. Ver docs/CATALOGO-EXOGENA.md.
+
 El acceso institucional utiliza auth_database; el login con una cuenta real sigue
 pendiente de verificación. El módulo inicial de contribuyentes se describe en
 `docs/CONTRIBUYENTES.md`. Las pruebas locales no confirman el funcionamiento en Hostinger.
