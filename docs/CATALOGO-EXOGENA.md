@@ -1,6 +1,9 @@
 # Exógena por cliente · Preparación 2025
 
 El menú y el panel comparten un catálogo de 14 formatos en seis grupos.
+El panel presenta una tabla compacta: código, nombre, grupo, registros y acceso.
+En celular cada fila se reorganiza para mantener legibles los datos sin desplazar
+horizontalmente. Las ayudas completas permanecen dentro de cada formato.
 Seleccionar una empresa propia en Exógena permite abrir sus formatos conservando
 cliente y año. Los conteos indican registros guardados; no significan que el reporte
 esté completo. Los informantes de esta etapa son personas jurídicas; los terceros

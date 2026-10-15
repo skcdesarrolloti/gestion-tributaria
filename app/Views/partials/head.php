@@ -9,5 +9,5 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
     <link rel="stylesheet" href="<?= e(asset($config, 'css/tailwind.css')) ?>">
-    <link rel="stylesheet" href="<?= e(asset($config, 'css/app.css')) ?>">
+    <link rel="stylesheet" href="<?= e(asset($config, 'css/app.css').'?v='.filemtime(dirname(__DIR__,3).'/public/assets/css/app.css')) ?>">
 </head>

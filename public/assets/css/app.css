@@ -7,8 +7,11 @@ body { font-family: Poppins, system-ui, sans-serif; }
 input:focus-visible { outline: 2px solid #735c00; }
 button, a { touch-action: manipulation; }
 .profile-grid > * { min-width: 0; }
-.exogena-format-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 1.5rem; }
-.exogena-format-grid > * { min-width: 0; }
+.exogena-format-table { width: 100%; border-collapse: collapse; text-align: left; }
+.exogena-format-table caption { text-align: left; padding-bottom: 1rem; }
+.exogena-format-table th, .exogena-format-table td { padding: .75rem; vertical-align: middle; }
+.exogena-format-table tbody tr:last-child { border-bottom: 0; }
+.exogena-format-table td:last-child { white-space: nowrap; }
 .taxpayer-name { overflow-wrap: anywhere; }
 .exogena-nav { position: relative; }
 .exogena-nav > summary { cursor: pointer; list-style: none; }
@@ -19,6 +22,12 @@ button, a { touch-action: manipulation; }
 .exogena-nav-panel { max-height: min(65vh, 600px); overflow-y: auto; overscroll-behavior: contain; }
 .exogena-nav-panel summary { cursor: pointer; }
 @media (max-width: 640px) {
+    .exogena-format-table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+    .exogena-format-table tbody { display: block; }
+    .exogena-format-table tbody tr { display: grid; grid-template-columns: auto minmax(0, 1fr); padding-block: .75rem; }
+    .exogena-format-table th, .exogena-format-table td { padding: .4rem; overflow-wrap: anywhere; }
+    .exogena-format-table td[data-label], .exogena-format-table td:last-child { grid-column: 2; }
+    .exogena-format-table td[data-label]::before { content: attr(data-label) ': '; font-weight: 600; }
     .portal-header { position: relative; }
     .exogena-nav { position: static; }
     .exogena-nav-panel { left: 0; right: 0; width: auto; }
