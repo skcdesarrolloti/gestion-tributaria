@@ -15,23 +15,20 @@
     </section>
     <section class="bg-surface-container-lowest rounded-2xl border border-surface-container p-4 space-y-space-md">
         <h2 class="text-headline-md font-semibold">Formatos disponibles · 2025</h2>
-        <table class="exogena-format-table text-body-md">
-            <caption class="text-secondary">14 formatos organizados por grupo. Selecciona un cliente para consultar sus registros.</caption>
-            <thead class="bg-surface-container-low text-secondary"><tr><th scope="col">Código</th><th scope="col">Formato</th><th scope="col">Grupo</th><th scope="col">Registros</th><th scope="col">Acceso</th></tr></thead>
-            <tbody>
+        <p class="text-body-md text-secondary">14 formatos. Selecciona un cliente para consultar sus registros.</p>
+        <div class="exogena-format-grid">
             <?php foreach (\App\Services\ExogenaFormats::grouped() as $group): ?>
             <?php foreach ($group['formats'] as $code=>$format): ?>
-                <tr class="border-b border-surface-container">
-                    <th scope="row"><span class="inline-block bg-primary-container rounded-xl p-2 font-semibold"><?= e($code) ?></span></th>
-                    <td class="font-semibold"><?= e($format['name']) ?></td>
-                    <td data-label="Grupo" class="text-secondary"><?= e($group['name']) ?></td>
-                    <td data-label="Registros"><?php if ($company): ?><?= (int)($counts[$code]??0)>0?e($counts[$code]).' en preparación':'Sin información' ?><?php else: ?>Selecciona cliente<?php endif; ?></td>
-                    <td><a class="inline-block rounded-xl bg-inverse-surface text-on-secondary px-4 py-2" aria-label="Abrir formato <?= e($code) ?>" href="<?= e(url($config,$format['route']).($company?'&contribuyente='.$company['id'].'&anio='.$year:'')) ?>">Abrir</a></td>
-                </tr>
+                <article class="exogena-format-card border border-surface-container rounded-xl p-4">
+                    <span class="inline-block bg-primary-container rounded-xl p-2 font-semibold">Formato <?= e($code) ?></span>
+                    <h3 class="text-body-md font-semibold taxpayer-name"><?= e($format['name']) ?></h3>
+                    <p class="text-label-sm text-secondary"><?= e($group['name']) ?></p>
+                    <p class="text-label-sm"><?php if ($company): ?><?= (int)($counts[$code]??0)>0?e($counts[$code]).' registros en preparación':'Sin información' ?><?php else: ?>Selecciona cliente<?php endif; ?></p>
+                    <div class="exogena-format-action"><a class="inline-block rounded-xl bg-inverse-surface text-on-secondary px-4 py-2" aria-label="Abrir formato <?= e($code) ?>" href="<?= e(url($config,$format['route']).($company?'&contribuyente='.$company['id'].'&anio='.$year:'')) ?>">Abrir <?= e($code) ?></a></div>
+                </article>
             <?php endforeach; ?>
             <?php endforeach; ?>
-            </tbody>
-        </table>
+        </div>
     </section>
 </main>
 <?php require __DIR__.'/../partials/footer.php'; ?>
