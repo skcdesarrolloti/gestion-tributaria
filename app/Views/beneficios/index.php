@@ -10,7 +10,8 @@
     <section class="bg-primary-container rounded-2xl p-4 space-y-space-sm">
         <h2 class="text-headline-sm font-semibold">Qué hace este catálogo</h2>
         <p class="text-body-md">Reúne 46 conceptos para revisar y 6 controles, con fundamento, condiciones, soportes y acciones antes del cierre. Un desembolso no garantiza ahorro: verifica el costo, el cupo y el efecto en caja.</p>
-        <p class="text-body-md">Es una consulta inicial: no asigna beneficios a una persona, no registra gastos ni calcula todavía el impuesto. Compararemos estas fichas con el PDF del contador antes de habilitar su aplicación a escenarios.</p>
+        <p class="text-body-md">Este catálogo explica los conceptos. La Hoja de planeación permite registrar escenarios y calcular reglas comunes; señala qué fichas requieren un dato verificado o una regla particular pendiente.</p>
+        <a class="inline-block rounded-xl bg-inverse-surface text-on-secondary px-4 py-2" href="<?= e(url($config,'simulador')) ?>">Abrir hoja de planeación</a>
         <p class="text-body-md">Los casos especiales requieren revisión individual. No es un inventario exhaustivo de todos los incentivos sectoriales. SIMPLE y no residentes necesitan reglas separadas.</p>
     </section>
     <?php require __DIR__.'/filters.php'; ?>

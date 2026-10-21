@@ -87,6 +87,8 @@ try {
     $localUser->execute(['Cuenta antigua local', 'local-only', password_hash('Prueba-local-2026', PASSWORD_DEFAULT)]);
     verify(request($client, $base, 'inicio')[0] === 303, 'Inicio exige autenticación');
     verify(request($client, $base, 'beneficios')[0] === 303, 'Catálogo de beneficios exige sesión');
+    verify(request($client, $base, 'simulador')[0] === 303, 'Hoja de planeación exige sesión');
+    verify(request($client, $base, 'simulador/calcular&id=1',[])[0] === 303, 'API de simulación exige sesión');
     verify(request($client, $base, 'proyeccion&id=1')[0] === 303, 'Proyección exige autenticación');
     verify(request($client, $base, 'exogena')[0] === 303, 'Exógena exige autenticación');
     verify(request($client, $base, 'exogena/1007')[0] === 303, '1007 exige autenticación');
@@ -111,6 +113,7 @@ try {
     require __DIR__ . '/beneficios-integration.php';
     require __DIR__ . '/contribuyentes-integration.php';
     require __DIR__ . '/ingresos-integration.php';
+    require __DIR__ . '/simulador-integration.php';
     require __DIR__ . '/exogena-integration.php';
     require __DIR__ . '/exogena-1007-integration.php';
     require __DIR__ . '/exogena-1001-integration.php';

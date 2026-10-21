@@ -7,6 +7,19 @@ body { font-family: Poppins, system-ui, sans-serif; }
 input:focus-visible { outline: 2px solid #735c00; }
 button, a { touch-action: manipulation; }
 .profile-grid > * { min-width: 0; }
+.renta-sheet-scroll { max-width: 100%; overflow-x: auto; }
+.renta-sheet-table { width: 100%; min-width: 800px; border-collapse: collapse; text-align: left; }
+.renta-sheet-table th, .renta-sheet-table td { padding: .75rem; vertical-align: top; border-bottom: 1px solid currentColor; }
+.renta-sheet-table input[inputmode="numeric"] { min-width: 110px; }
+.renta-sheet-table caption { text-align: left; padding-block: .5rem; }
+.renta-live-summary { position: sticky; top: .5rem; z-index: 20; display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1rem; }
+.renta-live-summary [data-result-key] { overflow-wrap: anywhere; }
+@media print {
+    header, footer, #recalculate-renta, #print-renta, #renta-sheet > button, .renta-live-summary { display: none; }
+    .renta-sheet-scroll { overflow: visible; }
+    .renta-sheet-table { min-width: 0; font-size: 9px; }
+    .renta-sheet-table input { min-width: 0 !important; }
+}
 .exogena-format-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
 .exogena-format-card { min-width: 0; display: flex; flex-direction: column; align-items: flex-start; gap: .5rem; }
 .exogena-format-card .exogena-format-action { margin-top: auto; padding-top: .5rem; }

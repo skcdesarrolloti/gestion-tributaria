@@ -15,6 +15,12 @@ y comparar acciones antes del cierre. Los importes actuales son parciales; aún 
 
 ## Continuar el trabajo
 
+**Hoja de planeación** es el simulador inicial por perfil de persona natural residente
+ordinaria (2025/2026). Entradas celda por celda, pensión mensual separada, reglas
+comunes, tarifa progresiva, retenciones/anticipo y versiones privadas comparables.
+Relaciona las 52 fichas con su cobertura; un importe de una regla pendiente impide
+mostrar saldo final. Se puede imprimir. Ver alcance y pruebas en docs/PROYECCION-ANUAL.md.
+
 **Beneficios de renta** abre el catálogo inicial para socios y familia como personas
 naturales residentes en régimen ordinario: 46 conceptos y seis controles, con norma,
 límites, soportes y acciones. Consulta 2025/2026 y UVT por año; todavía no registra

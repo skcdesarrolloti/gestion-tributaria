@@ -9,6 +9,7 @@
         <p class="text-body-md mt-2">Revisa lo ocurrido, actualiza lo que esperas recibir y prepara las decisiones antes del cierre del año.</p>
     </section>
     <div class="flex items-center gap-space-md flex-wrap">
+        <a class="rounded-xl bg-inverse-surface text-on-secondary px-4 py-2" href="<?= e(url($config,'simulador').'&id='.$profile['id']) ?>">Abrir hoja de cálculo de renta</a>
         <a class="rounded-xl bg-inverse-surface text-on-secondary px-4 py-2" href="<?= e(url($config,'ingresos/movimiento').'&id='.$profile['id']) ?>">Registrar ingreso o partida</a>
         <a class="text-secondary underline" href="<?= e(url($config,'ingresos/detalle').'&id='.$profile['id']) ?>">Ver casillas y editar registros</a>
         <a class="text-secondary underline" href="<?= e(url($config,'ingresos/perfil').'&id='.$profile['id']) ?>">Consultar perfil fiscal</a>

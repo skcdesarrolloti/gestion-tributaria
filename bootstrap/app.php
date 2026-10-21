@@ -47,6 +47,7 @@ $limiter = new App\Services\LoginLimiter(($config['storage_path'] ?? dirname(__D
 $authController = new App\Controllers\AuthController($auth, $view, $limiter, $config);
 $homeController = new App\Controllers\HomeController($auth, $view, $config);
 $beneficioController = new App\Controllers\BeneficioController($auth, $view, $config);
+$simuladorController = new App\Controllers\SimuladorController($auth, new App\Models\Ingreso($database), new App\Models\EscenarioRenta($database), $view, $config);
 $contribuyenteController = new App\Controllers\ContribuyenteController(
     $auth, new App\Models\Contribuyente($database), $view, $config
 );

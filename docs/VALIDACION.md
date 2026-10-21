@@ -133,6 +133,12 @@ GitHub Actions ejecutará lint, pruebas unitarias e integración con un servicio
 
 ## Alcance y dependencia de compilación
 
+La hoja de planeación agrega tests/simulador-unit.php e integración privada con
+tests/simulador-integration.php. Requiere base aislada por migración 013. Verificar
+también con navegador que cambiar una celda actualiza el impuesto sin guardar,
+que una respuesta atrasada no reaparece, y que guardar conserva versiones previas.
+Los fixtures son ficticios; no copiar importes ni identificación de la plantilla real.
+
 Catálogo de beneficios de personas naturales (21/10/2026): pruebas unitarias e
 integración aislada verifican UVT 2025/2026, búsqueda, filtros, rechazo de otro
 año, escape de búsquedas, autenticación y ausencia de rutas de escritura.

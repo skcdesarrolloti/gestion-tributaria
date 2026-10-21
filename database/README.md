@@ -54,6 +54,13 @@ Sube ambos archivos con el código que usa la columna. Al abrir la app se ejecut
 
 ## Reglas
 
+La migración/comprobación 013 crea escenarios_renta: entradas y resultado JSON,
+versión de reglas, nombre, fecha y perfil anual. No copia importes de documentos
+ni cambia los movimientos existentes. Cada guardado crea una versión; no hay
+reemplazo ni eliminación de históricos. Solo afecta la base propia. Cualquier
+reversión requiere respaldo y conservar estos escenarios; no borrar la tabla ni
+modificar el script aplicado como mecanismo de reversión.
+
 La migración 012 agrega exogena_registros sin precargar datos ni alterar 009–011.
 Su comprobación revisa columnas, índice, clave foránea y validación JSON.
 Ver [catálogo y alcance de Exógena](../docs/CATALOGO-EXOGENA.md).

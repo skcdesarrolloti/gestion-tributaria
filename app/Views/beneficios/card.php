@@ -8,7 +8,7 @@
         <p class="text-body-md"><strong>Alcance y límites:</strong> <?= e($item['limit']) ?></p>
         <p class="text-body-md"><strong>Qué debes conservar:</strong> <?= e($item['evidence']) ?></p>
         <p class="text-body-md"><strong>Acción antes del cierre:</strong> <?= e($item['action']) ?></p>
-        <p class="text-label-sm">Comparación con el contador: pendiente de recibir el PDF. Aplicación individual y casilla: pendientes de validar.</p>
+        <p class="text-label-sm">Aplicación individual y casilla: pendientes de validar. La Hoja de planeación identifica la cobertura de cálculo de cada ficha; el PDF revisado no contiene todas estas reglas.</p>
         <a class="text-secondary underline" href="<?= e($item['source']) ?>" target="_blank" rel="noopener noreferrer">Consultar norma oficial</a>
     </details>
 </article>

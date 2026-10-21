@@ -6,6 +6,78 @@ no es la finalidad del instrumento ni se copia como pronóstico del año actual.
 
 ## Disponible en esta entrega
 
+### Hoja de planeación · actualización 21/10/2026
+
+La ruta `simulador` agrega una hoja separada del resumen de movimientos descrito
+abajo. Se abre desde el menú o Proyección anual, por perfil propio de persona
+natural residente ordinaria. Usa UVT de 2025 o 2026 según el perfil. Los datos no se
+importan de movimientos ni del PDF. Las tablas tienen desplazamiento horizontal
+interno en celular; la impresión abre los detalles y conserva los datos capturados.
+
+Revisión del PDF de una página entregado por el responsable: estructura trabajo,
+pensiones, capital, no laborales, beneficios, impuesto, anticipo y patrimonio.
+No contiene fórmulas de Excel: sus dependencias se reconstruyen desde normas y
+no puede garantizarse equivalencia con el libro original. La suma visible de
+deudas no coincide con su total y el impuesto visible requiere conciliar el tramo
+del art. 241 con la base mostrada. No se incorporan datos reales al repositorio
+ni se toma ese saldo como prueba de exactitud del nuevo motor.
+
+Archivos: SimuladorFields define celdas y cobertura; RentaDeducciones aplica
+límites comunes; RentaTarifa implementa los siete tramos; RentaSimulador coordina.
+No se redondean UVT para elegir tramo. La exención de pensión se limita por mes
+efectivamente registrado, después de salud. Salario y pensión no son opciones
+excluyentes; otras fuentes conservan su tratamiento propio.
+
+Los costos de las 17 familias se imputan a honorarios, capital o no laborales,
+nunca automáticamente a salario/pensión/dividendos. Se impide usar a la vez costos
+y exención de honorarios. INCR, costo fiscal y bases certificadas son entradas que
+debe verificar el responsable; no se calcula procedencia desde un certificado.
+Dependientes art. 387 se calculan solo con salarios mensuales en esta versión;
+72 UVT adicionales requieren trabajo y máximo cuatro personas. Prepagada se
+controla por mes; FPV/AFC comparten cupo y además límite general. Para el 25%,
+las deducciones comunes se imputan primero a trabajo: revisar su imputabilidad
+individual. Cesantías se separan y no generan otra exención del 25%.
+
+Se incluyen dividendos nacionales ordinarios de utilidades 2017+, impuesto previo
+del 35% cuando corresponda, agregado art. 241 y descuento art. 254-1. Donaciones
+generales al 25%, limitadas por art. 258 y cupo. Anticipo por 25/50/75% sobre neto
+actual o promedio con el anterior, menos retenciones. Se separan impuesto, saldo
+y patrimonio líquido. No incluye sanciones ni reducciones particulares de anticipo.
+El redondeo inicial es de planeación: base agregada e importes finales a miles;
+no certifica reproducción de todos los redondeos por casilla del formulario 210.
+
+Cobertura de las 52 fichas: costo por fuente, regla común, dato previamente
+verificado, control o regla pendiente. Las reglas particulares tienen celda para
+conservar importe; si es positivo bloquea saldo final. También bloquean ganancias
+ocasionales, rentas extranjeras/ECE, pérdidas/compensaciones, regímenes antiguos o
+especiales de dividendos y pensiones retroactivas/sustitutivas. No ignorar estos
+casos ni guardar un saldo como si fueran cero. Una deducción sin soporte no queda
+aprobada por marcar una confirmación. El mapa de casillas oficiales está pendiente
+de cerrar por versión: esta hoja no es un formulario DIAN listo para presentar.
+
+Los vacíos solo pasan a cero al confirmar expresamente que no son pendientes.
+Se pueden guardar borradores incompletos con resultado pendiente. Migración 013
+crea versiones inmutables por perfil. El servidor recalcula al guardar, ignora
+resultados enviados por el cliente y verifica propietario en lecturas, cálculos,
+guardados y comparación. Se conserva versión de reglas; no recalcular una versión
+histórica distinta silenciosamente. Cambiar retenciones puede cambiar el saldo
+sin cambiar el impuesto; la comparación muestra ambos efectos por separado.
+
+La API POST usa CSRF; JavaScript solo envía entradas y presenta resultado del
+servidor. Cancela respuestas antiguas cuando se modifica una celda, elimina saldos
+anteriores en estados pendientes y permite recalcular explícitamente. Guardar es
+una acción separada del cálculo. Referencias legales revisadas en esta entrega:
+ET 55, 56, 107, 126-1, 126-4, 206, 241, 242, 254-1, 257–259, 330–337, 373 y 807;
+UVT: resoluciones 193/2024 y 238/2025. El catálogo completo no equivale a cobertura
+automática de todos los incentivos ni al contenido íntegro del Excel del contador.
+
+Pruebas nuevas: tramos y umbrales de tarifa, pensión mixta/exceso por mes,
+límites mensuales, FPV+AFC/global, RAIS, incompatibilidad costos/exención, datos
+desconocidos, casos no cubiertos, saldo versus impuesto, persistencia de versiones,
+CSRF y aislamiento. Ejecutar integración con bases temporales; nunca producción.
+
+### Resumen de movimientos existente
+
 Desde Contribuyentes → Ingresos por año → Proyección anual, cada perfil tiene un
 tablero privado alimentado por sus movimientos ya guardados. También se accede
 desde el detalle de casillas. No se duplican datos ni se crean nuevas tablas.
