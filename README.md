@@ -15,6 +15,11 @@ y comparar acciones antes del cierre. Los importes actuales son parciales; aún 
 
 ## Continuar el trabajo
 
+**Beneficios de renta** abre el catálogo inicial para socios y familia como personas
+naturales residentes en régimen ordinario: 46 conceptos y seis controles, con norma,
+límites, soportes y acciones. Consulta 2025/2026 y UVT por año; todavía no registra
+gastos ni calcula ahorro. La comparación con el PDF del contador está pendiente.
+
 **Exógena → 5247**, [módulo independiente para personas jurídicas](docs/EXOGENA-5247.md)
 con los 22 campos de la plantilla 2024, registro y edición por empresa/año.
 Inicia en 2025 con captura vacía; los datos se cargarán después de revisar el archivo que enviará el responsable.

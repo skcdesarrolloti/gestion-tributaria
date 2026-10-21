@@ -133,6 +133,11 @@ GitHub Actions ejecutará lint, pruebas unitarias e integración con un servicio
 
 ## Alcance y dependencia de compilación
 
+Catálogo de beneficios de personas naturales (21/10/2026): pruebas unitarias e
+integración aislada verifican UVT 2025/2026, búsqueda, filtros, rechazo de otro
+año, escape de búsquedas, autenticación y ausencia de rutas de escritura.
+No son pruebas de procedencia individual de beneficios ni de cálculo del impuesto.
+
 El catálogo ampliado de Exógena pasó sintaxis, unitarias e integración aislada:
 once formatos nuevos, migración 012, campos vacíos, captura y edición, CSRF,
 separación de propietarios y de formatos, y conservación de los registros previos.

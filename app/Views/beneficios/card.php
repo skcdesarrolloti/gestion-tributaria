@@ -1,0 +1,14 @@
+<article id="<?= e($item['id']) ?>" class="border border-surface-container rounded-xl p-4 bg-surface-container-lowest space-y-space-sm taxpayer-name">
+    <p class="text-label-sm text-secondary"><?= e($groups[$item['group']]) ?></p>
+    <h3 class="text-headline-sm font-semibold"><?= e($item['title']) ?></h3>
+    <p class="text-body-md"><strong>Fundamento:</strong> <?= e($item['norm']) ?></p>
+    <details class="space-y-space-sm">
+        <summary class="text-secondary underline">Ver alcance, límites y acción</summary>
+        <p class="text-body-md"><strong>A quién puede aplicar:</strong> <?= e($item['scope']) ?></p>
+        <p class="text-body-md"><strong>Alcance y límites:</strong> <?= e($item['limit']) ?></p>
+        <p class="text-body-md"><strong>Qué debes conservar:</strong> <?= e($item['evidence']) ?></p>
+        <p class="text-body-md"><strong>Acción antes del cierre:</strong> <?= e($item['action']) ?></p>
+        <p class="text-label-sm">Comparación con el contador: pendiente de recibir el PDF. Aplicación individual y casilla: pendientes de validar.</p>
+        <a class="text-secondary underline" href="<?= e($item['source']) ?>" target="_blank" rel="noopener noreferrer">Consultar norma oficial</a>
+    </details>
+</article>

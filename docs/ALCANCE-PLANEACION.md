@@ -6,6 +6,31 @@ Es una especificación pendiente; no confirma que los cálculos estén implement
 
 ## Orden de trabajo
 
+Prioridad del 21/10/2026: socios como personas naturales y miembros de la familia.
+La ruta protegida `beneficios` incorpora un catálogo de consulta sin datos personales:
+17 familias de costos/gastos, 8 deducciones, 6 rentas exentas, 4 conceptos no
+constitutivos de renta, 6 descuentos, 5 incentivos particulares y 6 controles.
+Fuentes: ET consolidado DIAN; leyes 361/1997, 814/2003 y 1715/2014; UVT 2025
+según Resolución 193/2024 y UVT 2026 según Resolución 238/2025. Consulta: 21/10/2026.
+Las fichas están en resources/beneficios, agrupadas por naturaleza; el servicio
+BeneficioCatalog arma su listado y filtros sin admitir rutas de archivos del usuario.
+
+No se aplica una deducción por ser socio. Se distinguen origen del ingreso,
+residencia, régimen, sujeto que soporta el gasto y contabilidad; gastos de la
+sociedad y su pérdida no se trasladan al socio. La cédula de dividendos no admite
+costos/deducciones, y la pensión tiene su depuración propia. El catálogo señala
+las incompatibilidades, topes individuales y conjunto, sin atribuir cupos personales.
+
+La etapa actual no implementa captura de egresos, cálculos, carga de PDF ni
+simulaciones de beneficios. El PDF del contador se contrastará ficha por ficha:
+coincide, falta concepto, cambia por año, requiere soporte o interpretación.
+Conservar identificadores al modificar fichas y fechar futuras revisiones legales.
+No afirmar exhaustividad de incentivos sectoriales ni aplicar este catálogo a
+SIMPLE, sociedades o no residentes. El porcentaje anual del componente inflacionario
+no está parametrizado; se mantiene pendiente de verificar para el año aplicable.
+Destino inicial por categoría, sin inventar números de casilla: confirmar cada
+casilla con el formulario 210 e instructivo del período antes de habilitar cálculos.
+
 La prioridad confirmada es el seguimiento del año en curso y la proyección antes
 del cierre. Ver [PROYECCION-ANUAL.md](PROYECCION-ANUAL.md): tablero inicial disponible
 y contrato de escenarios, caja y acciones pendientes. El instrumento debe guiar

@@ -86,6 +86,7 @@ try {
     $localUser = $db->prepare('INSERT INTO wp_jet_cct_funcionarios (nombre, user_others_apss, pass_others_apss) VALUES (?, ?, ?)');
     $localUser->execute(['Cuenta antigua local', 'local-only', password_hash('Prueba-local-2026', PASSWORD_DEFAULT)]);
     verify(request($client, $base, 'inicio')[0] === 303, 'Inicio exige autenticación');
+    verify(request($client, $base, 'beneficios')[0] === 303, 'Catálogo de beneficios exige sesión');
     verify(request($client, $base, 'proyeccion&id=1')[0] === 303, 'Proyección exige autenticación');
     verify(request($client, $base, 'exogena')[0] === 303, 'Exógena exige autenticación');
     verify(request($client, $base, 'exogena/1007')[0] === 303, '1007 exige autenticación');
@@ -107,6 +108,7 @@ try {
     [$status, $html] = request($client, $base, 'perfil');
     verify($status === 200 && str_contains($html, '&lt;b&gt;Funcionario central&lt;/b&gt;'), 'Perfil usa y escapa los datos centrales');
     verify(!str_contains($html, '$2y$'), 'Perfil no expone hash');
+    require __DIR__ . '/beneficios-integration.php';
     require __DIR__ . '/contribuyentes-integration.php';
     require __DIR__ . '/ingresos-integration.php';
     require __DIR__ . '/exogena-integration.php';

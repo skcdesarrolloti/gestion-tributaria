@@ -1,0 +1,78 @@
+<?php
+declare(strict_types=1);
+
+// Catálogo de consulta: no contiene datos personales ni un motor de cálculo.
+return [
+    [
+        'id'=>'vivienda',
+        'title'=>'Intereses de crédito de vivienda',
+        'scope'=>'Contribuyente que paga intereses para adquirir su vivienda.',
+        'limit'=>'Hasta 1.200 UVT anuales; condiciones de acreedor, hipoteca y titularidad. No incluye abonos a capital. Revisar límite conjunto del art. 336.3.',
+        'evidence'=>'Certificado del acreedor, crédito, pagos y titularidad; distribuir correctamente créditos conjuntos.',
+        'action'=>'Solicitar certificado y confirmar el cupo disponible antes de anticipar intereses.',
+        'norm'=>'ET 119, 387 y 336.3',
+    ],
+    [
+        'id'=>'icetex',
+        'title'=>'Intereses de préstamo educativo ICETEX',
+        'scope'=>'Educación superior del propio contribuyente financiada por ICETEX.',
+        'limit'=>'Hasta 100 UVT anuales por intereses; no matrícula, cuotas de capital ni cualquier crédito educativo bancario. Revisar límite conjunto.',
+        'evidence'=>'Certificado ICETEX de intereses y pago del período.',
+        'action'=>'Separar interés de capital y confirmar que el beneficiario es el contribuyente.',
+        'norm'=>'ET 119 y 336.3',
+    ],
+    [
+        'id'=>'salud-prepagada',
+        'title'=>'Medicina prepagada y seguros de salud',
+        'scope'=>'Trabajador y coberturas familiares admitidas por el art. 387.',
+        'limit'=>'Hasta 16 UVT mensuales, bajo requisitos del contrato y entidad vigilada; no equivale a deducir cualquier consulta, medicamento o seguro. Revisar límite conjunto.',
+        'evidence'=>'Certificado anual, contrato, beneficiarios y pagos.',
+        'action'=>'Reunir certificados; evitar duplicar salud obligatoria y cobertura voluntaria.',
+        'norm'=>'ET 387 y 336.3',
+    ],
+    [
+        'id'=>'dependientes-387',
+        'title'=>'Dependientes económicos: deducción del art. 387',
+        'scope'=>'Rentas de trabajo que cumplan condiciones y definición legal de dependiente.',
+        'limit'=>'Hasta 10% de ingresos laborales brutos y 32 UVT mensuales en total, no por cada dependiente. Sujeta al límite conjunto. Revisar exclusividad y concurrencia familiar.',
+        'evidence'=>'Identificación, parentesco, estudio o dependencia y certificaciones exigibles; revisar Ley 2411/2024.',
+        'action'=>'Identificar quién puede solicitarla y qué meses y requisitos se cumplen.',
+        'norm'=>'ET 387 y 336.3',
+    ],
+    [
+        'id'=>'dependientes-72',
+        'title'=>'Deducción adicional de 72 UVT por dependiente',
+        'scope'=>'Trabajador con dependientes que cumplan la definición aplicable.',
+        'limit'=>'72 UVT anuales por dependiente, máximo cuatro: hasta 288 UVT. Adicional al límite del art. 336.3. Revisar reglas de concurrencia con art. 387 y entre declarantes.',
+        'evidence'=>'Identificación, parentesco y acreditación de dependencia según el caso.',
+        'action'=>'Revisar cada dependiente y no duplicar automáticamente entre familiares.',
+        'norm'=>'ET 336.3 y 387',
+    ],
+    [
+        'id'=>'factura-electronica',
+        'title'=>'1% de adquisiciones con factura electrónica',
+        'scope'=>'Persona natural con ingresos declarados en la cédula general.',
+        'limit'=>'1% de compras elegibles, máximo 240 UVT anuales; fuera del límite del art. 336.3. Factura validada a nombre del adquirente y pago electrónico admisible en el año; sin otro beneficio sobre esa compra y sin generar pérdida.',
+        'evidence'=>'Factura electrónica validada con identificación y comprobante de pago por entidad vigilada.',
+        'action'=>'Pedir factura a nombre propio y conciliar pagos; no basta que aparezca en la información DIAN.',
+        'norm'=>'ET 336.5',
+    ],
+    [
+        'id'=>'gmf',
+        'title'=>'50% del gravamen a los movimientos financieros',
+        'scope'=>'Contribuyente que efectivamente pagó GMF y puede imputarlo en su depuración.',
+        'limit'=>'50% del GMF certificado, incluso sin causalidad. No es el 50% del dinero movilizado. Revisar límite conjunto y no duplicar como costo.',
+        'evidence'=>'Certificados de GMF de todas las entidades financieras.',
+        'action'=>'Consolidar certificados por titular y año.',
+        'norm'=>'ET 115 y 336.3',
+    ],
+    [
+        'id'=>'cesantia-independiente',
+        'title'=>'Aportes a cesantías de partícipes independientes',
+        'scope'=>'Independiente que efectúa aportes a título de cesantía.',
+        'limit'=>'Menor entre 2.500 UVT y un doceavo del ingreso gravable anual; revisar límite conjunto. No confundir con aporte voluntario a pensión.',
+        'evidence'=>'Certificado del fondo, condición del aportante y base de cálculo.',
+        'action'=>'Confirmar naturaleza del producto y límite antes del aporte.',
+        'norm'=>'ET 126-1 y 336.3',
+    ],
+];

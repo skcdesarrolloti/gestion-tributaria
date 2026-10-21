@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 $router->add('GET', 'inicio', [$homeController, 'index']);
 $router->add('GET', 'perfil', [$homeController, 'profile']);
+$router->add('GET', 'beneficios', [$beneficioController, 'index']);
 $router->add('GET', 'contribuyentes', [$contribuyenteController, 'index']);
 $router->add('GET', 'contribuyentes/formulario', [$contribuyenteController, 'form']);
 $router->add('POST', 'contribuyentes/formulario', [$contribuyenteController, 'form']);
