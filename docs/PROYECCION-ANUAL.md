@@ -156,6 +156,22 @@ Estas referencias no habilitan cálculos ni reemplazan la revisión particular.
 
 ## Comprobación
 
+La primera sección de la **Hoja de planeación** ofrece nombres de escenario
+desplegables, conservando también cualquier nombre de una versión anterior. Las
+ayudas «?» explican pensión, honorarios, historia de declaraciones y base del
+anticipo. Se acceden con ratón, toque o teclado, sin depender de JavaScript.
+El nombre es una etiqueta: no cambia ingresos ni aplica automáticamente una acción.
+La opción vacía se muestra como «No lo sé / por confirmar» y mantiene pendiente el
+resultado. No se sustituyen respuestas desconocidas por ceros ni se selecciona un
+porcentaje de anticipo por defecto. El campo libre opcional indica documentos o
+datos pendientes; no modifica importes. Revisar ET 807 para los dos métodos y los
+porcentajes; ayuda contrastada el 21/10/2026 con el Normograma DIAN.
+
+Verificar primera/segunda/tercera declaración, guardar y reabrir un escenario con
+nombre nuevo y uno histórico, comprobar que las ayudas no envían el formulario y
+que un dato por confirmar sigue bloqueando el saldo final. Estas mejoras de captura
+no cambian las fórmulas ni la cobertura del motor.
+
 Abrir un perfil propio → Proyección anual → registrar una partida real o proyectada
 → volver al tablero y comprobar mes e importe. Editar una proyección para convertirla
 en real: el cierre permanece igual si el importe no cambia. Intentar abrir un perfil

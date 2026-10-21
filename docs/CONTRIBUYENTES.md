@@ -29,6 +29,29 @@ sirvieron para identificar el requisito de múltiples fuentes de ingresos.
 
 ## Identificación y permisos
 
+### Inventario de atributos (revisado el 21 de octubre de 2026)
+
+El registro actual **no es todavía una ficha completa**. El formulario contiene una
+ayuda desplegable que distingue campos disponibles de bloques pendientes:
+
+| Bloque | Dónde se guarda hoy | Pendiente |
+| --- | --- | --- |
+| Identificación y fuentes | Contribuyente | Ampliar caracterización sin confundir fuentes con actividades |
+| Actividad económica / RUT | No implementado | Códigos oficiales y descripción, principal/secundarias/otras, fechas y responsabilidades; catálogo vigente y referencia al RUT |
+| Residencia, régimen y servicios | Perfil anual en Ingresos por año | Completar caracterización anual y evidencia; no trasladar a un dato permanente |
+| Pensión | Escenario de planeación | Caracterización personal y soporte, sin reemplazar las demás fuentes |
+| Dependientes y representación | No hay ficha de detalle | Relación, requisitos y soportes; fallecimiento, sucesión y representante cuando aplique |
+| Patrimonio | Solo totales en escenario | Bienes, deudas y cuentas nacionales/extranjeras detallados |
+| Seguridad social | No hay módulo integrado | Revisar y reutilizar el aplicativo que entregará el responsable |
+
+Siguiente bloque de caracterización: actividades económicas, usando códigos y
+descripciones oficiales, no una lista inventada a partir de las fuentes de ingresos.
+Antes de desarrollar seguridad social, recibir el aplicativo existente, revisar su
+código, reglas, vigencia y casos de prueba; documentar lo reutilizable y las correcciones.
+No se ha recibido ni validado todavía ese aplicativo.
+
+### Reglas del registro
+
 - El número no admite puntos, espacios ni guiones. Pasaportes permiten letras y números.
 - Se evita repetir el mismo tipo y número de documento dentro de la cuenta.
 - Cada funcionario activo puede crear, listar y editar exclusivamente sus registros.

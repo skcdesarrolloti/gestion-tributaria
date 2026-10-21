@@ -13,6 +13,7 @@ require __DIR__ . '/../partials/head.php';
         <p class="text-body-md mt-2">Ten a mano el documento de identidad o el RUT. No necesitas ingresar valores de ingresos todavía.</p>
     </section>
     <?php require __DIR__ . '/guide.php'; ?>
+    <?php require __DIR__ . '/profile-scope.php'; ?>
     <section class="bg-surface-container-lowest rounded-2xl border border-surface-container p-space-xl">
         <?php if ($errors): ?>
             <div role="alert" class="p-3 mb-4 rounded-xl bg-error-container text-on-error-container">
@@ -32,6 +33,11 @@ require __DIR__ . '/../partials/head.php';
                                 <option value="">Selecciona una opción</option>
                                 <?php foreach ($options as $key => $value): ?><option value="<?= e($key) ?>" <?= $record[$field] === $key ? 'selected' : '' ?>><?= e($value) ?></option><?php endforeach; ?>
                             </select>
+                            <?php $helpTitle=$label; $helpArticle=null;
+                            $helpText=$field==='tipo'
+                                ? 'Escoge la persona o entidad que vas a registrar. Para una persona fallecida, revisa si corresponde registrar su sucesión ilíquida con el NIT del RUT; no la registres como persona jurídica por ese solo hecho. Ser pensionado, empleado o independiente se indica como fuente de ingresos, no como tipo de contribuyente.'
+                                : 'Copia el tipo de documento del soporte de identificación. Para personas jurídicas y sucesiones ilíquidas, este formulario exige NIT. Escribe el número sin puntos ni guiones y el dígito de verificación en su campo separado.';
+                            require __DIR__.'/../partials/field-help.php'; ?>
                         </div>
                     <?php endforeach; ?>
                 </div>
