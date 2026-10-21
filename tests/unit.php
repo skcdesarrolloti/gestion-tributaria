@@ -53,4 +53,5 @@ require __DIR__ . '/exogena-1001-unit.php';
 require __DIR__ . '/exogena-catalog-unit.php';
 require __DIR__ . '/beneficios-unit.php';
 require __DIR__ . '/simulador-unit.php';
+require __DIR__ . '/caracterizacion-unit.php';
 echo "Pruebas de seguridad y contribuyentes correctas.\n";

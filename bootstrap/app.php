@@ -52,6 +52,9 @@ $simuladorController = new App\Controllers\SimuladorController($auth, new App\Mo
 $contribuyenteController = new App\Controllers\ContribuyenteController(
     $auth, new App\Models\Contribuyente($database), $view, $config
 );
+$caracterizacionController = new App\Controllers\CaracterizacionController(
+    $auth, new App\Models\Contribuyente($database), new App\Models\Caracterizacion($database), $view, $config
+);
 $router = new App\Core\Router();
 $ingresoController = new App\Controllers\IngresoController(
     $auth, new App\Models\Contribuyente($database), new App\Models\Ingreso($database), $view, $config

@@ -59,7 +59,7 @@ require __DIR__ . '/../partials/head.php';
             </fieldset>
             <?php require __DIR__ . '/sources.php'; ?>
             <?php require __DIR__ . '/declaration-guide.php'; ?>
-            <p class="text-body-md text-secondary">* Campos obligatorios. El siguiente paso será revisar el perfil tributario por año y las cédulas correspondientes.</p>
+            <p class="text-body-md text-secondary">* Campos obligatorios de identificación. Para ampliar RUT, actividades y condiciones del año, usa Completar perfil tributario y RUT.</p>
             <div class="flex items-center gap-space-md flex-wrap">
                 <button class="rounded-xl bg-inverse-surface text-on-secondary px-4 py-2" type="submit">Guardar contribuyente</button>
                 <a class="text-secondary underline" href="<?= e(url($config, 'contribuyentes')) ?>">Volver al listado</a>

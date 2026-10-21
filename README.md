@@ -13,6 +13,12 @@ Cada perfil tiene **Proyección anual**, una [estructura de seguimiento](docs/PR
 con resumen real/esperado, ingresos por mes y bloques pendientes para calcular el impuesto
 y comparar acciones antes del cierre. Los importes actuales son parciales; aún no estima el impuesto.
 
+**Completar perfil tributario y RUT**, desde cada contribuyente, abre una captura
+manual por año en 13 bloques: RUT, actividades, responsabilidades, representación,
+familia, condiciones fiscales, seguridad social, patrimonio nacional/exterior y
+soportes. Permite borradores sin PDF y muestra pendientes; no actualiza la DIAN ni
+modifica perfiles y cálculos existentes. Ver docs/CONTRIBUYENTES.md.
+
 ## Continuar el trabajo
 
 El menú **Planeación** reúne hoja de cálculo, categorías de beneficios y seguridad

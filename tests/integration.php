@@ -113,6 +113,7 @@ try {
     verify(!str_contains($html, '$2y$'), 'Perfil no expone hash');
     require __DIR__ . '/beneficios-integration.php';
     require __DIR__ . '/contribuyentes-integration.php';
+    require __DIR__ . '/caracterizacion-integration.php';
     require __DIR__ . '/ingresos-integration.php';
     require __DIR__ . '/simulador-integration.php';
     require __DIR__ . '/exogena-integration.php';

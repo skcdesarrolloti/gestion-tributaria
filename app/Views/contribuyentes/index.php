@@ -29,6 +29,7 @@ $title = 'Contribuyentes'; require __DIR__ . '/../partials/head.php';
                     <p class="text-body-md text-secondary">Fuentes: <?= e($row['fuentes'] ? implode(', ', array_map(static fn ($key) => ContribuyenteData::sourcesFor($row['tipo'])[$key] ?? ContribuyenteData::FUENTES[$key], $row['fuentes'])) : 'Pendientes de identificar') ?></p>
                     <a class="inline-block rounded-xl bg-inverse-surface text-on-secondary px-4 py-2" href="<?= e(url($config, 'contribuyentes/formulario') . '&id=' . $row['id']) ?>" aria-label="<?= e('Editar ' . $row['nombre']) ?>">Editar datos</a>
                     <a class="inline-block rounded-xl bg-inverse-surface text-on-secondary px-4 py-2" href="<?= e(url($config,'ingresos').'&contribuyente='.$row['id']) ?>">Ingresos por año</a>
+                    <a class="inline-block rounded-xl bg-inverse-surface text-on-secondary px-4 py-2" href="<?= e(url($config,'contribuyentes/perfil').'&id='.$row['id']) ?>">Completar perfil tributario y RUT</a>
                 </article>
             <?php endforeach; ?>
         </div>

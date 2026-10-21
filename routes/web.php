@@ -9,6 +9,8 @@ $router->add('GET', 'simulador', [$simuladorController, 'index']);
 $router->add('POST', 'simulador', [$simuladorController, 'index']);
 $router->add('POST', 'simulador/calcular', [$simuladorController, 'calculate']);
 $router->add('GET', 'contribuyentes', [$contribuyenteController, 'index']);
+$router->add('GET', 'contribuyentes/perfil', [$caracterizacionController, 'index']);
+$router->add('POST', 'contribuyentes/perfil', [$caracterizacionController, 'index']);
 $router->add('GET', 'contribuyentes/formulario', [$contribuyenteController, 'form']);
 $router->add('POST', 'contribuyentes/formulario', [$contribuyenteController, 'form']);
 $router->add('GET', 'ingresos', [$ingresoController, 'index']);

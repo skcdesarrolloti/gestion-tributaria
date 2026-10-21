@@ -29,26 +29,61 @@ sirvieron para identificar el requisito de múltiples fuentes de ingresos.
 
 ## Identificación y permisos
 
-### Inventario de atributos (revisado el 21 de octubre de 2026)
+### Perfil tributario y RUT ampliado · 21/10/2026
 
-El registro actual **no es todavía una ficha completa**. El formulario contiene una
-ayuda desplegable que distingue campos disponibles de bloques pendientes:
+Desde **Mis contribuyentes → Completar perfil tributario y RUT** o desde **Editar
+identificación básica**, abrir la caracterización de 2025 o 2026. No requiere PDF.
+Primero debe existir el registro básico del contribuyente. El botón es visible y
+reemplaza la explicación anterior de bloques aún no implementados.
 
-| Bloque | Dónde se guarda hoy | Pendiente |
-| --- | --- | --- |
-| Identificación y fuentes | Contribuyente | Ampliar caracterización sin confundir fuentes con actividades |
-| Actividad económica / RUT | No implementado | Códigos oficiales y descripción, principal/secundarias/otras, fechas y responsabilidades; catálogo vigente y referencia al RUT |
-| Residencia, régimen y servicios | Perfil anual en Ingresos por año | Completar caracterización anual y evidencia; no trasladar a un dato permanente |
-| Pensión | Escenario de planeación | Caracterización personal y soporte, sin reemplazar las demás fuentes |
-| Dependientes y representación | No hay ficha de detalle | Relación, requisitos y soportes; fallecimiento, sucesión y representante cuando aplique |
-| Patrimonio | Solo totales en escenario | Bienes, deudas y cuentas nacionales/extranjeras detallados |
-| Seguridad social | No hay módulo integrado | Revisar y reutilizar el aplicativo que entregará el responsable |
+La portada ofrece 13 bloques, sin desplegar todos los campos:
 
-Siguiente bloque de caracterización: actividades económicas, usando códigos y
-descripciones oficiales, no una lista inventada a partir de las fuentes de ingresos.
-Antes de desarrollar seguridad social, recibir el aplicativo existente, revisar su
-código, reglas, vigencia y casos de prueba; documentar lo reutilizable y las correcciones.
-No se ha recibido ni validado todavía ese aplicativo.
+| Bloque | Captura disponible |
+| --- | --- |
+| Identificación RUT | Formulario y fechas, seccional, documento, expedición, nombres separados, razón social, nombre comercial, sigla, nacimiento y nacionalidad |
+| Ubicación | País, departamento, municipio, dirección, correo, postal y teléfonos |
+| Actividades | Principal, secundaria, otras dos, fechas, ocupación y establecimientos |
+| Responsabilidades | Renglones con códigos de casilla 53 y control de casilla sin códigos |
+| Entidad / sucesión | Naturaleza y forma, constitución, registro, capital, vinculación, fallecimiento y estado de sucesión |
+| Aduanas | Códigos de casilla 54 y complementos 55–61 |
+| Fiscal anual | Residencia y sus datos de revisión, régimen, declaración, formulario, contabilidad, IVA, retenciones, facturación, exógena, patrimonio, exterior, RUB y precios de transferencia |
+| Fuentes y eventos | Todas las fuentes comunes, ingresos exteriores, ganancias ocasionales, ventas de activos, cripto, ECE y pérdidas |
+| Seguridad social | Vinculación, tipo de pensión, pagador, EPS/AFP/ARL, riesgo, nómina concurrente, PILA y UGPP |
+| Beneficios | Preguntas sobre costos y beneficios para revisar requisitos y soportes |
+| Relacionados | Renglones de representantes, apoderados, herederos, socios, junta, contador, revisor, cónyuge y dependientes |
+| Establecimientos | Renglones con ubicación, actividad, registro y apertura/cierre |
+| Patrimonio | Bienes, cuentas e inversiones nacionales/extranjeras y deudas; país, moneda, valores declarados, titularidad, fecha y soporte |
+
+**Guardar bloque** admite borradores incompletos. Cada bloque conserva estado,
+fuente documental, fecha y notas. Sin respuesta no equivale a No. No aplica exige
+justificación; no permite omitir naturaleza y representación de jurídicas/sucesiones
+como si fueran personas naturales sin representación. Los renglones vacíos se
+ignoran; hasta 100 por bloque, sin recorte silencioso.
+
+El estado se deriva de respuestas y condiciones mínimas: Pendiente, Incompleto,
+Diligenciado/falta contraste y Contrastado por usuario. El último requiere campos
+mínimos, soporte y fecha. No certifica integridad fiscal ni examen profesional.
+El tablero compara SIMPLE/IVA/pensión/dependientes/exterior y el perfil existente
+de Ingresos por año. No modifica ese perfil, sus movimientos ni sus cálculos.
+Los años no se copian automáticamente. No presenta ni actualiza el RUT en la DIAN.
+
+Los catálogos contienen 508 actividades/clasificaciones, 49 responsabilidades y
+74 usuarios aduaneros extraídos de las fuentes oficiales citadas en pantalla, con
+fecha 21/10/2026. Incluyen 0010, 0020, 0081, 0082 y 0090 con ceros iniciales. Las
+etiquetas identifican códigos; no trasladan instrucciones de elegibilidad antiguas
+de la página institucional. Si falta un código puede anotarse para verificación;
+ese bloque queda pendiente de contraste. Para lugares, formas y códigos no
+catalogados se admite transcripción manual; no se inventan listas completas.
+
+Migraciones 014–016: caracterización por contribuyente/año/bloque, catálogo e
+inserción oficial. Conservan datos previos y no afectan la base central. Una futura
+actualización del catálogo requiere otra migración, sin editar las aplicadas.
+Guardar compara la revisión del bloque; una ventana antigua devuelve 409 y no
+sobrescribe otra captura. Para revertir código conservar tablas y hacer respaldo;
+no borrar caracterizaciones ni modificar scripts aplicados.
+
+La calculadora recibida de seguridad social sigue sin integrarse por los errores
+registrados en ALCANCE-PLANEACION.md. Este bloque solo caracteriza condiciones.
 
 ### Reglas del registro
 

@@ -75,3 +75,13 @@ Ver [catálogo y alcance de Exógena](../docs/CATALOGO-EXOGENA.md).
 - Esta instalación está pensada para bases nuevas. Una tabla preexistente incompatible necesita una migración de adaptación revisada.
 
 Las migraciones solo se ejecutan sobre database. La autenticación consulta la tabla central wp_jet_cct_funcionarios mediante auth_database y no ejecuta DDL ni escrituras allí. No borrar la tabla local histórica ni modificar 001: el login ya la ignora. Ver docs/ACCESO-FUNCIONARIOS.md.
+
+## Caracterización y catálogos RUT
+
+014 crea `caracterizaciones_tributarias` por contribuyente/año/bloque, con JSON y
+revisión para evitar pérdida de cambios entre ventanas. 015 crea `catalogos_rut`;
+016 inserta 631 códigos de referencia oficial DIAN (508 actividades/clasificaciones,
+49 responsabilidades y 74 aduaneros), sin datos personales. El INSERT es un archivo
+generado de catálogo, no lógica de negocio. Todo se ejecuta en la base propia.
+No editar estos scripts tras aplicarlos: actualizar catálogos mediante otra migración.
+Conservar tablas y respaldar antes de cualquier reversión.

@@ -1,0 +1,31 @@
+<?php
+declare(strict_types=1);
+use App\Services\{CaracterizacionSchema,CaracterizacionData,CaracterizacionChecklist};
+$schemas=CaracterizacionSchema::all(['ciiu'=>['0020'=>'0020 · Pensionados','0111'=>'0111 · Cultivo']]);
+$empty=CaracterizacionData::read([],$schemas['identificacion']);
+check(CaracterizacionData::missing($empty,$schemas['identificacion'],'natural')!==[],'No considera completo un perfil sin RUT ni nombres ampliados.');
+$draft=CaracterizacionData::read(['campos'=>['rut_estado'=>'pendiente','nombre1'=>'Prueba','apellido1'=>'Ejemplo'],'estado'=>'borrador'],$schemas['identificacion']);
+check(CaracterizacionData::errors($draft,$schemas['identificacion'],'natural')===[],'Puede guardar un borrador sin tener aún el RUT.');
+$draft['estado']='documentado';$draft['fuente']='Declaración';$draft['fecha']='2026-10-21';
+check(CaracterizacionData::errors($draft,$schemas['identificacion'],'natural')!==[],'RUT pendiente no se convierte en contrastado por marcar una opción.');
+$activity=CaracterizacionData::read(['campos'=>['principal'=>'0020','principal_inicio'=>'2020-01-01'],'estado'=>'declarado'],$schemas['actividades']);
+check(CaracterizacionData::errors($activity,$schemas['actividades'],'natural')===[],'Conserva ceros iniciales de la actividad económica.');
+$activity['campos']['principal']='999999';
+check(CaracterizacionData::errors($activity,$schemas['actividades'],'natural')!==[],'Servidor rechaza códigos no incluidos en el catálogo.');
+$activity['campos']['principal']='0020';$activity['campos']['principal_inicio']='2026-02-30';
+check(CaracterizacionData::errors($activity,$schemas['actividades'],'natural')!==[],'No acepta fechas inexistentes.');
+$na=CaracterizacionData::read(['aplicabilidad'=>'no','justificacion'=>'Persona natural sin representación','estado'=>'declarado'],$schemas['relacionados']);
+check(CaracterizacionData::missing($na,$schemas['relacionados'],'natural')===[],'No aplica exige una justificación explícita.');
+check(CaracterizacionData::missing($na,$schemas['relacionados'],'juridica')!==[],'Una entidad no omite su representación marcando No aplica.');
+$pat=CaracterizacionData::read(['campos'=>['tiene_activos'=>'si','tiene_deudas'=>'no','exterior'=>'si','exterior_revisado'=>'no']],$schemas['patrimonio']);
+check(in_array('revisar expresamente cuentas y activos en el exterior',CaracterizacionData::missing($pat,$schemas['patrimonio'],'natural'),true),'Control explícito de activos y cuentas del exterior.');
+$pat['filas']=[['tipo'=>'cuenta','descripcion'=>'Banco ficticio','pais'=>'Colombia','moneda'=>'COP','referencia'=>'1234','porcentaje'=>'100','valor_origen'=>'1','valor_fiscal'=>'1','fecha_corte'=>'2026-10-21','soporte'=>'Extracto']];
+check(in_array('detalle de cuentas o activos del exterior',CaracterizacionData::missing($pat,$schemas['patrimonio'],'natural'),true),'Una cuenta nacional no completa el detalle del exterior.');
+$pat['filas'][0]['pais']='España';$pat['campos']['exterior']='no';
+check(in_array('corregir: hay activos extranjeros pero se indicó que no existen',CaracterizacionData::missing($pat,$schemas['patrimonio'],'natural'),true),'Detecta contradicción del país de la cuenta y la respuesta sobre exterior.');
+$blocks=['patrimonio'=>['datos'=>$pat],'beneficios'=>['datos'=>CaracterizacionData::read(['campos'=>['dependientes'=>'si']],$schemas['beneficios'])]];
+$review=CaracterizacionChecklist::review(['tipo'=>'natural'],$blocks,$schemas);
+check($review['reviewed']===0 && count($review['alerts'])>=2,'El tablero expone pendientes y no certifica integridad por haber guardado.');
+$overflow=false;
+try { CaracterizacionData::read(['filas'=>array_fill(0,101,[])],$schemas['relacionados']); } catch (InvalidArgumentException) { $overflow=true; }
+check($overflow,'No recorta silenciosamente una lista demasiado grande.');
