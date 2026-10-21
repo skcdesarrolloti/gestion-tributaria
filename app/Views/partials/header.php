@@ -17,4 +17,4 @@
         </nav>
     </div>
 </header>
-<script src="<?= e(asset($config,'js/portal-menu.js')) ?>" defer></script>
+<script src="<?= e(asset($config,'js/portal-menu.js').'?v='.filemtime(dirname(__DIR__,3).'/public/assets/js/portal-menu.js')) ?>" defer></script>
