@@ -18,7 +18,7 @@
             <input id="rut_pdf" name="rut_pdf" type="file" accept="application/pdf,.pdf" required class="block w-full bg-surface-container-low rounded-xl p-2">
             <button type="submit" class="rounded-xl bg-inverse-surface text-on-secondary px-4 py-2">Leer PDF y mostrar datos</button>
         </form>
-        <p class="text-body-md text-secondary">La primera hoja se lee automáticamente. Las hojas adicionales y los escaneos requieren revisión manual. El archivo se conserva de forma privada al aplicar la importación; nunca se publica como enlace directo.</p>
+        <p class="text-body-md text-secondary">Se recorren todas las páginas: identificación, entidad, representantes, socios/junta, contador, establecimientos y estados de las hojas 1–7 reconocidas. Los datos legibles completan el perfil; los campos ausentes quedan para diligenciar manualmente. Los escaneos o diseños no reconocidos se informan para revisión. El PDF se conserva como soporte privado al aplicar.</p>
     </section>
     <?php if ($preview): require __DIR__.'/preview.php'; endif; ?>
     <details class="bg-primary-container rounded-xl p-4 space-y-space-sm" open>

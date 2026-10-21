@@ -18,6 +18,8 @@ final class CaracterizacionSchema
         foreach (['rut','planeacion','detalles'] as $file) {
             $blocks=array_merge($blocks,require dirname(__DIR__,2).'/resources/caracterizacion/'.$file.'.php');
         }
+        $extra=require dirname(__DIR__,2).'/resources/caracterizacion/rut-complementos.php';
+        foreach ($extra as $key=>$fields) { $blocks[$key]['fields']=array_merge($blocks[$key]['fields'],$fields); }
         foreach ($blocks as $key=>&$block) { $block['key']=$key; }
         unset($block);
         return $blocks;

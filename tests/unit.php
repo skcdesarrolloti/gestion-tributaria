@@ -55,4 +55,5 @@ require __DIR__ . '/beneficios-unit.php';
 require __DIR__ . '/simulador-unit.php';
 require __DIR__ . '/caracterizacion-unit.php';
 require __DIR__ . '/rut-unit.php';
+require __DIR__ . '/rut-multi-unit.php';
 echo "Pruebas de seguridad y contribuyentes correctas.\n";

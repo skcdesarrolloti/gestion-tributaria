@@ -14,6 +14,22 @@
     form.addEventListener('submit', () => { dirty = false; });
     window.addEventListener('beforeunload', event => { if (dirty) { event.preventDefault(); event.returnValue = ''; } });
     const cachedOptions = new WeakMap();
+    const onlyEmpty = document.getElementById('profile-only-empty');
+    const filterEmpty = () => {
+        form.querySelectorAll('[data-profile-field]').forEach(wrapper => {
+            const field = wrapper.querySelector('select[name], textarea[name], input[name]');
+            const role = wrapper.closest('[data-profile-row]')?.querySelector('select[name$="[rol]"]')?.value;
+            const filled = Boolean(field && field.value.trim() !== '');
+            const irrelevant = wrapper.dataset.fieldRoles && role && role !== 'otro' && !wrapper.dataset.fieldRoles.split(',').includes(role);
+            wrapper.hidden = Boolean((onlyEmpty?.checked && filled) || (irrelevant && !filled));
+        });
+        form.querySelectorAll('[data-profile-group]').forEach(group => {
+            if (onlyEmpty?.checked) group.open = true;
+        });
+    };
+    onlyEmpty?.addEventListener('change', filterEmpty);
+    form.addEventListener('change', event => { if (event.target.name?.endsWith('[rol]')) filterEmpty(); });
+    filterEmpty();
     form.addEventListener('input', event => {
         const id = event.target.dataset.filterSelect;
         if (!id) return;
@@ -35,7 +51,7 @@
                 if (node.hasAttribute(attr)) node.setAttribute(attr, node.getAttribute(attr).replaceAll('__INDEX__', index));
             });
         });
-        document.getElementById('profile-rows').append(fragment); mark();
+        document.getElementById('profile-rows').append(fragment); filterEmpty(); mark();
     });
     form.addEventListener('click', event => {
         const remove = event.target.closest('[data-remove-profile-row]');

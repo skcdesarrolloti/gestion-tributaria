@@ -1,4 +1,9 @@
-<?php $parsed=$preview['file']['parsed']; ?>
+<?php $parsed=$preview['file']['parsed'];
+$describe=static function(array $row,array $schema): string {
+    $parts=[];
+    foreach ($row as $key=>$value) { if ($value!=='' && isset($schema['rows'][$key])) { $f=$schema['rows'][$key]; $parts[]=$f['label'].': '.($f['options'][$value]??$value); } }
+    return implode(' · ',$parts);
+}; ?>
 <section class="bg-surface-container-lowest rounded-xl border border-surface-container p-4 space-y-space-md">
     <h2 class="text-headline-md font-semibold">Datos leídos · revisa antes de aplicar</h2>
     <p>NIT <?= e($parsed['nit'].'-'.$parsed['dv']) ?> · Formulario <?= e($parsed['formulario']) ?> · <?= e($parsed['pages']) ?> página(s)</p>
@@ -16,6 +21,10 @@
                     <?php $existing=$blocks[$block]['datos']??[];
                     if ($item['kind']==='filas') {
                         $new=implode(', ',array_column($item['value'],'codigo')); $old=implode(', ',array_column($existing['filas']??[],'codigo'));
+                    } elseif ($item['kind']==='fila') {
+                        $new=$describe($item['value'],$schema);
+                        $index=\App\Services\RutImportRows::index($existing['filas']??[],$item['value'],$block);
+                        $old=$index===null?'':$describe($existing['filas'][$index],$schema);
                     } else {
                         $new=$schema['fields'][$item['field']]['options'][$item['value']]??$item['value'];
                         $oldValue=$existing['campos'][$item['field']]??''; $old=$schema['fields'][$item['field']]['options'][$oldValue]??$oldValue;

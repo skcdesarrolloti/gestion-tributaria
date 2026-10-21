@@ -2,17 +2,21 @@
 use App\Services\ContribuyenteData;
 return [
  'relacionados'=>['title'=>'Detalle · Representantes, familia y socios','allow_na'=>true,'guide'=>'Hojas 3–5 del RUT y complemento de dependientes. Añade las personas necesarias; los datos no acreditan automáticamente una deducción ni una representación.', 'fields'=>[], 'rows'=>[
-  'rol'=>$f('Relación','select',['representante'=>'Representante legal','apoderado'=>'Apoderado','heredero'=>'Representante de sucesión / heredero','socio'=>'Socio / accionista','junta'=>'Miembro de junta','contador'=>'Contador','revisor'=>'Revisor fiscal','conyuge'=>'Cónyuge / compañero(a)','dependiente'=>'Dependiente económico','otro'=>'Otro: explicar'],true),
+  'rol'=>$f('Relación','select',['representante'=>'Representante legal','apoderado'=>'Apoderado','heredero'=>'Representante de sucesión / heredero','socio'=>'Socio / accionista','socio_junta'=>'Hoja 4: socio o junta, por precisar','junta'=>'Miembro de junta','contador'=>'Contador','revisor'=>'Revisor fiscal','conyuge'=>'Cónyuge / compañero(a)','dependiente'=>'Dependiente económico','otro'=>'Otro: explicar'],true),
   'nombre'=>$f('Nombre completo / razón social','text',[],true), 'documento_tipo'=>$f('Tipo de documento','select',ContribuyenteData::DOCUMENTOS,true), 'documento'=>$f('Número de identificación','text',[],true), 'dv'=>$f('DV del NIT'),
-  'nacionalidad'=>$f('Nacionalidad / país'), 'parentesco'=>$f('Parentesco o calidad de representación'), 'nacimiento'=>$f('Fecha de nacimiento','date'),
-  'ingreso'=>$f('Fecha de ingreso / inicio de representación','date'), 'retiro'=>$f('Fecha de retiro / terminación','date'), 'participacion'=>$f('Participación (%)','percent'), 'capital'=>$f('Capital del socio (COP)','integer'),
-  'tarjeta'=>$f('Tarjeta profesional del contador / revisor'), 'soporte'=>$f('Documento, poder, registro civil o certificado que respalda la relación','text',[],true),
-  'dependencia'=>$f('Condiciones de dependencia, ingresos propios, estudios o discapacidad','textarea'), 'reclamado'=>$f('¿Otra persona solicita beneficio por este dependiente?','select',$yn),
+  'documento_tipo_rut'=>$f('Código de tipo de documento tal como figura en el RUT'),
+  'firma_nit'=>$f('NIT de firma / representante persona jurídica')+['roles'=>['representante','apoderado','contador','revisor']], 'firma_dv'=>$f('DV de la firma')+['roles'=>['representante','apoderado','contador','revisor']], 'firma_nombre'=>$f('Razón social de la firma designada')+['roles'=>['representante','apoderado','contador','revisor']],
+  'nacionalidad'=>$f('Nacionalidad / país'), 'parentesco'=>$f('Parentesco o calidad de representación'), 'nacimiento'=>$f('Fecha de nacimiento','date')+['roles'=>['dependiente','conyuge','heredero']],
+  'ingreso'=>$f('Fecha de ingreso / inicio de representación','date'), 'retiro'=>$f('Fecha de retiro / terminación','date'), 'participacion'=>$f('Participación (%)','percent')+['roles'=>['socio','junta','socio_junta']], 'capital'=>$f('Capital del socio (COP)','integer')+['roles'=>['socio','socio_junta']],
+  'tarjeta'=>$f('Tarjeta profesional del contador / revisor')+['roles'=>['contador','revisor','representante','apoderado']], 'soporte'=>$f('Documento, poder, registro civil o certificado que respalda la relación','text',[],true),
+  'dependencia'=>$f('Condiciones de dependencia, ingresos propios, estudios o discapacidad','textarea')+['roles'=>['dependiente']], 'reclamado'=>$f('¿Otra persona solicita beneficio por este dependiente?','select',$yn)+['roles'=>['dependiente']],
  ]],
  'establecimientos'=>['title'=>'Detalle · Establecimientos','allow_na'=>true,'guide'=>'Hoja 6 del RUT. Registra cada establecimiento, agencia, sucursal, oficina u otro lugar de actividad. El conteo se contrasta con la casilla 52; no actualiza la DIAN.', 'fields'=>[], 'rows'=>[
   'tipo'=>$f('Tipo','select',['establecimiento'=>'Establecimiento','agencia'=>'Agencia','sucursal'=>'Sucursal','oficina'=>'Oficina','otro'=>'Otro'],true), 'nombre'=>$f('Nombre','text',[],true),
   'actividad'=>$f('Actividad económica','select',$ciiu,true), 'pais'=>$f('País','text',[],true), 'departamento'=>$f('Departamento / estado'), 'ciudad'=>$f('Ciudad','text',[],true), 'direccion'=>$f('Dirección','text',[],true),
-  'matricula'=>$f('Matrícula mercantil / registro'), 'inicio'=>$f('Fecha de apertura','date'), 'cierre'=>$f('Fecha de cierre','date'),
+  'tipo_rut'=>$f('160 · Tipo y código tal como figuran en el RUT'),
+  'matricula'=>$f('Matrícula mercantil / registro'), 'fecha_matricula'=>$f('167 · Fecha de matrícula mercantil','date'), 'telefono'=>$f('168 · Teléfono'),
+  'inicio'=>$f('Fecha de apertura','date'), 'cierre'=>$f('Fecha de cierre','date'),
  ]],
  'patrimonio'=>['title'=>'Detalle · Patrimonio, cuentas y deudas','guide'=>'ET 261, 269, 288 y 607. Incluye Colombia y exterior, cuentas bancarias, inversiones, participaciones, bienes, derechos y deudas; no se consideran deducciones de renta por el solo registro. No se calcula valoración fiscal ni conversión automática de moneda.', 'fields'=>[
   'tiene_activos'=>$f('¿Tiene bienes, derechos, cuentas o inversiones?','select',$yn,true), 'tiene_deudas'=>$f('¿Tiene deudas?','select',$yn,true),

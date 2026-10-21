@@ -1,4 +1,4 @@
-<div>
+<div data-profile-field <?= isset($definition['roles'])?'data-field-roles="'.e(implode(',',$definition['roles'])).'"':'' ?>>
     <label class="block" for="<?= e($inputId) ?>"><?= e($definition['label']) ?><?= $definition['required']?' · necesario para completar':'' ?></label>
     <?php if ($definition['kind']==='select'): ?>
         <?php if (count($definition['options'])>25): ?>

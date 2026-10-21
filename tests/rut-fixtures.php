@@ -20,13 +20,21 @@ function rutFixturePdf(string $nit='12345678'): string
     $text(32.9,329.5,'0010'); $text(79.4,329.5,'20200101'); $text(64.8,291.5,'05'); $text(85,291.5,'22');
     $text(452,103.5,'2022-08-08 / 04:00PM'); $text(20,10,'Fecha generacion documento PDF: '.date('d-m-Y'));
     $stream=implode("\n",$commands);
-    $objects=['<< /Type /Catalog /Pages 2 0 R >>','<< /Type /Pages /Kids [3 0 R] /Count 1 >>',
-        '<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 5 0 R >> >> /Contents 4 0 R >>',
-        '<< /Length '.strlen($stream)." >>\nstream\n".$stream."\nendstream",
+    return rutFixturePages([$stream]);
+}
+
+function rutFixturePages(array $streams): string
+{
+    $kids=[];foreach ($streams as $i=>$stream) { $kids[]=4+2*$i; }
+    $objects=['<< /Type /Catalog /Pages 2 0 R >>','<< /Type /Pages /Kids ['.implode(' ',array_map(static fn($n)=>$n.' 0 R',$kids)).'] /Count '.count($streams).' >>',
         '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>'];
+    foreach ($streams as $i=>$stream) {
+        $objects[]='<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents '.(5+2*$i).' 0 R >>';
+        $objects[]='<< /Length '.strlen($stream)." >>\nstream\n".$stream."\nendstream";
+    }
     $pdf="%PDF-1.4\n"; $offsets=[0];
     foreach ($objects as $i=>$object) { $offsets[]=strlen($pdf); $pdf.=($i+1)." 0 obj\n".$object."\nendobj\n"; }
-    $xref=strlen($pdf); $pdf.="xref\n0 6\n0000000000 65535 f \n";
+    $size=count($objects)+1; $xref=strlen($pdf); $pdf.="xref\n0 ".$size."\n0000000000 65535 f \n";
     foreach (array_slice($offsets,1) as $offset) { $pdf.=sprintf('%010d 00000 n ',$offset)."\n"; }
-    return $pdf."trailer\n<< /Size 6 /Root 1 0 R >>\nstartxref\n".$xref."\n%%EOF\n";
+    return $pdf."trailer\n<< /Size ".$size." /Root 1 0 R >>\nstartxref\n".$xref."\n%%EOF\n";
 }

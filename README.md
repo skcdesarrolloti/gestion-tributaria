@@ -19,10 +19,13 @@ familia, condiciones fiscales, seguridad social, patrimonio nacional/exterior y
 soportes. Permite borradores sin PDF y muestra pendientes; no actualiza la DIAN ni
 modifica perfiles y cálculos existentes. Ver docs/CONTRIBUYENTES.md.
 
-**Subir RUT en PDF**, dentro del perfil, permite leer la primera hoja del formulario
-001, comparar los campos y aplicar una selección sin sobrescribir diferencias por
+**Subir RUT en PDF**, dentro del perfil, recorre las hojas 1–7 reconocidas del formulario
+001, rellena identificación, entidad y sus detalles, representantes, socios/junta,
+contador y establecimientos. Permite comparar los campos y aplicar una selección sin sobrescribir diferencias por
 defecto. Conserva el soporte privado. El RUT tiene vigencia indefinida; el estado
 actual ante la DIAN requiere consulta oficial. Ver [importación RUT](docs/IMPORTACION-RUT.md).
+Dentro de cada bloque, **Mostrar solo campos vacíos** permite continuar con los
+faltantes sin volver a digitar lo importado. La entidad se organiza por secciones plegables.
 
 ## Continuar el trabajo
 

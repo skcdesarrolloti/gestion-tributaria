@@ -60,3 +60,4 @@ try {
     request($otherClient,$base,'login',['_csrf_token'=>token($rutLoginHtml),'username'=>'otro','password'=>'Otra-clave-segura-2026']);
     verify(request($otherClient,$base,'contribuyentes/rut/documento&documento='.$doc['id'])[0]===404,'Ni otro administrador descarga el RUT ajeno');
 } finally { curl_close($otherClient); }
+require __DIR__.'/rut-multi-integration.php';

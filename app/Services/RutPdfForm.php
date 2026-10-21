@@ -10,7 +10,7 @@ final class RutPdfForm
         foreach (['numero de formulario','identificacion tributaria','responsabilidades'] as $marker) {
             if (!str_contains($normalized,$marker)) { throw new \InvalidArgumentException('No se reconoció un formulario RUT 001 de la DIAN.'); }
         }
-        if (preg_match('/(?:^|\n)\s*(BORRADOR|SUSPENDIDO|CANCELADO)\s*(?:\n|$)/iu',$pdf['text'])) {
+        if (preg_match('/(?:^|\n)\s*(BORRADOR|SUSPENDIDO|CANCELADO)\s*(?:\n|$)/iu',$pdf['sheets'][0]['text']??$pdf['text'])) {
             throw new \InvalidArgumentException('El documento contiene una marca de borrador, suspensión o cancelación. Revisa su estado en la DIAN antes de importarlo.');
         }
         $g=new RutPdfGrid($pdf['cells']); $nit=self::digits($g->value(25,190,600,610,true));
@@ -33,6 +33,11 @@ final class RutPdfForm
                 else { unset($fields['actividades'][$key]); }
             }
         }
+        if (isset($fields['identificacion']['expedicion_fecha'])) {
+            $date=\DateTimeImmutable::createFromFormat('!Ymd',$fields['identificacion']['expedicion_fecha']);
+            if ($date && $date->format('Ymd')===$fields['identificacion']['expedicion_fecha']) { $fields['identificacion']['expedicion_fecha']=$date->format('Y-m-d'); }
+            else { unset($fields['identificacion']['expedicion_fecha']); }
+        }
         $docCode=self::digits($g->value(282,307,566,572,true));
         if (isset(['13'=>'CC','22'=>'CE','31'=>'NIT','41'=>'PAS'][$docCode])) { $fields['identificacion']['identificacion_tipo']=['13'=>'CC','22'=>'CE','31'=>'NIT','41'=>'PAS'][$docCode]; }
         foreach (['expedicion_pais','expedicion_departamento','expedicion_municipio'] as $key) {
@@ -49,10 +54,21 @@ final class RutPdfForm
         if ($formalized!=='') { $fields['identificacion']['rut_formalizacion']=$formalized; }
         $responsibilities=$g->codes(291.5,61,20.5,26);
         $customs=array_merge($g->codes(167.5,61,20.5,10),$g->codes(143.5,61,20.5,10));
-        return ['nit'=>$nit,'dv'=>$dv,'formulario'=>$form,'generado'=>$generated,'formalizado'=>$formalized,
+        foreach (['modo'=>[150,164],'cpc'=>[135,148]] as $key=>[$bottom,$top]) {
+            $values=[];
+            foreach ([[463,505],[505,547],[547,596]] as $i=>[$left,$right]) {
+                $value=self::digits($g->value($left,$right,$bottom,$top,true));
+                if ($value!=='') { $values[]='Servicio '.($i+1).': '.$value; }
+            }
+            if ($values) { $fields['aduanas'][$key]=implode('; ',$values); }
+        }
+        $details=RutPdfDetails::extract($pdf['sheets']??[],$nit,$form);
+        $fields=array_replace_recursive($fields,$details['fields']);
+        return ['nit'=>$nit,'dv'=>$dv,'formulario'=>$form,'generado'=>$generated,'formalizado'=>$formalized,'lectura_hojas'=>$details['report'],
             'pages'=>$pdf['pages'],'reader'=>$pdf['reader'],'fields'=>$fields,'rows'=>[
                 'responsabilidades'=>array_map(static fn($v)=>['codigo'=>$v],$responsibilities),
                 'aduanas'=>array_map(static fn($v)=>['codigo'=>$v],array_unique($customs)),
+                ...$details['rows'],
             ],'estado_dian'=>'pendiente_consulta_oficial'];
     }
 

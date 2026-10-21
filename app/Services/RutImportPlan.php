@@ -19,8 +19,20 @@ final class RutImportPlan
         }
         foreach ($parsed['rows'] as $block=>$rows) {
             $valid=[];
-            foreach ($rows as $row) {
-                if (isset($schemas[$block]['rows']['codigo']['options'][$row['codigo']])) { $valid[]=$row; }
+            foreach ($rows as $i=>$row) {
+                if (in_array($block,['relacionados','establecimientos'],true)) {
+                    foreach ($schemas[$block]['rows'] as $field=>$definition) {
+                        $single=['fields'=>[$field=>$definition],'key'=>$block];
+                        $value=CaracterizacionData::read(['campos'=>[$field=>$row[$field]??''],'estado'=>'borrador'],$single);
+                        if (CaracterizacionData::errors($value,$single,$taxpayer['tipo'])) {
+                            $warnings[]=$schemas[$block]['title'].' · renglón '.($i+1).': '.$definition['label'].' requiere completar manualmente; se conservan los demás datos.';
+                            $row[$field]='';
+                        }
+                    }
+                    $data=CaracterizacionData::read(['filas'=>[$row],'estado'=>'borrador'],$schemas[$block]);
+                    if (CaracterizacionData::errors($data,$schemas[$block],$taxpayer['tipo'])) { $warnings[]='Página adicional: revisa manualmente el renglón '.($i+1).' de '.$schemas[$block]['title'].'.'; continue; }
+                    $items['fila:'.$block.':'.$i]=['block'=>$block,'field'=>'filas','kind'=>'fila','label'=>$schemas[$block]['title'].' · '.($row['nombre']?:'Renglón '.($i+1)),'value'=>$data['filas'][0]];
+                } elseif (isset($schemas[$block]['rows']['codigo']['options'][$row['codigo']])) { $valid[]=$row; }
                 else { $warnings[]='Código '.$row['codigo'].' fuera del catálogo de '.$schemas[$block]['title'].': pendiente de verificar.'; }
             }
             if ($valid) { $items['filas:'.$block]=['block'=>$block,'field'=>'filas','kind'=>'filas','label'=>$schemas[$block]['title'],'value'=>$valid]; }
@@ -31,7 +43,7 @@ final class RutImportPlan
         if ($parsed['generado']==='') { $warnings[]='No se identificó la fecha de generación. No se asignó una fecha supuesta.'; }
         elseif (substr($parsed['generado'],0,4)!==$year) { $warnings[]='El PDF se generó en otro año. Es una copia documental; no acredita las condiciones del año seleccionado.'; }
         if ($parsed['generado']!=='' && $parsed['generado']>date('Y-m-d')) { throw new \InvalidArgumentException('La fecha de generación del PDF es futura. Revisa el documento antes de importarlo.'); }
-        if ($parsed['pages']>1) { $warnings[]='Esta versión lee las casillas de la primera hoja; revisa manualmente las hojas adicionales de entidad, representantes y establecimientos.'; }
+        foreach ($parsed['lectura_hojas']??[] as $sheet) { $warnings[]='Página '.$sheet['pagina'].' · hoja '.($sheet['hoja']?:'no identificada').': '.$sheet['resultado'].'.'; }
         $warnings[]='No se importan datos ausentes: dependientes, patrimonio, cuentas, residencia fiscal y demás condiciones del año se completan aparte.';
         return compact('items','warnings');
     }
@@ -54,7 +66,12 @@ final class RutImportPlan
             $item=$preview['plan']['items'][$key]; $block=$item['block'];
             if (!isset($updates[$block])) { $updates[$block]=CaracterizacionData::read($blocks[$block]['datos']??[],$schemas[$block]); }
             $target=&$updates[$block];
-            if ($item['kind']==='filas') {
+            if ($item['kind']==='fila') {
+                $rowApplied=false;
+                $target['filas']=RutImportRows::merge($target['filas'],$item['value'],$block,$replace,$rowApplied);
+                if (!$rowApplied) { $skipped[]=$item['label']; continue; }
+                $target['aplicabilidad']='si';
+            } elseif ($item['kind']==='filas') {
                 if ($target['filas'] && $target['filas']!==$item['value'] && !$replace) { $skipped[]=$item['label']; continue; }
                 if ($target['filas']===$item['value']) { continue; }
                 $target['filas']=$item['value'];
@@ -65,6 +82,7 @@ final class RutImportPlan
                 if ($old===$item['value']) { continue; }
                 $target['campos'][$item['field']]=$item['value'];
             }
+            if (!empty($schemas[$block]['allow_na'])) { $target['aplicabilidad']='si'; }
             $applied[]=$key;
         }
         unset($target);

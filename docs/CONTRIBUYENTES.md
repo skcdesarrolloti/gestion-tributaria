@@ -65,8 +65,9 @@ justificación; no permite omitir naturaleza y representación de jurídicas/suc
 como si fueran personas naturales sin representación. Los renglones vacíos se
 ignoran; hasta 100 por bloque, sin recorte silencioso.
 
-El estado se deriva de respuestas y condiciones mínimas: Pendiente, Incompleto,
-Diligenciado/falta contraste y Contrastado por usuario. El último requiere campos
+El estado se deriva de respuestas y condiciones mínimas: Pendiente, Faltan datos,
+Importado del RUT, Completo/pendiente de revisión documental y Revisado con documentos
+por el usuario. El último requiere campos
 mínimos, soporte y fecha. No certifica integridad fiscal ni examen profesional.
 El tablero compara SIMPLE/IVA/pensión/dependientes/exterior y el perfil existente
 de Ingresos por año. No modifica ese perfil, sus movimientos ni sus cálculos.
@@ -77,7 +78,7 @@ Los catálogos contienen 508 actividades/clasificaciones, 49 responsabilidades y
 fecha 21/10/2026. Incluyen 0010, 0020, 0081, 0082 y 0090 con ceros iniciales. Las
 etiquetas identifican códigos; no trasladan instrucciones de elegibilidad antiguas
 de la página institucional. Si falta un código puede anotarse para verificación;
-ese bloque queda pendiente de contraste. Para lugares, formas y códigos no
+ese bloque queda pendiente de revisión documental. Para lugares, formas y códigos no
 catalogados se admite transcripción manual; no se inventan listas completas.
 
 Migraciones 014–016: caracterización por contribuyente/año/bloque, catálogo e

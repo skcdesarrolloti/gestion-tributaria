@@ -53,15 +53,15 @@ final class CaracterizacionData
             'decimal'=>preg_match('/^[0-9]{1,15}(\.[0-9]{1,6})?$/D',$value)===1,
             'percent'=>preg_match('/^[0-9]{1,3}(\.[0-9]{1,6})?$/D',$value)===1 && (float)$value<=100,
             'email'=>filter_var($value,FILTER_VALIDATE_EMAIL)!==false,
-            'date'=>self::validDate($value), default=>true,
+            'date'=>self::validDate($value,$f['max_date']??'2100-12-31'), default=>true,
         };
         if (!$valid) { $errors[]='Revisa '.$f['label'].': valor u opción inválidos.'; }
     }
 
-    private static function validDate(string $value): bool
+    private static function validDate(string $value, string $maximum='2100-12-31'): bool
     {
         $date=\DateTimeImmutable::createFromFormat('!Y-m-d',$value);
-        return $date!==false && $date->format('Y-m-d')===$value && $value<='2100-12-31' && $value>='1800-01-01';
+        return $date!==false && $date->format('Y-m-d')===$value && $value<=$maximum && $value>='1800-01-01';
     }
 
     public static function missing(array $data, array $schema, string $type): array
@@ -106,6 +106,7 @@ final class CaracterizacionData
         $hasForeign=false; $hasAsset=false; $hasDebt=false;
         foreach ($data['filas'] as $i=>$row) {
             $prefix='renglón '.($i+1).': ';
+            if (($row['rol']??'')==='socio_junta') { $missing[]=$prefix.'precisar si corresponde a socio, junta u otra relación de la hoja 4'; }
             if (($row['rol']??'')==='dependiente' && ($row['parentesco']==='' || $row['nacimiento']==='' || $row['reclamado']==='')) { $missing[]=$prefix.'parentesco, nacimiento y revisión de solicitud por otra persona'; }
             if (in_array($row['rol']??'', ['contador','revisor'],true) && $row['tarjeta']==='') { $missing[]=$prefix.'tarjeta profesional'; }
             if (($row['rol']??'')==='socio' && $row['participacion']==='') { $missing[]=$prefix.'participación del socio'; }
@@ -128,8 +129,8 @@ final class CaracterizacionData
 
     public static function status(array $data, array $schema, string $type): string
     {
-        if (self::missing($data,$schema,$type)) { return 'Incompleto'; }
-        if ($data['estado']==='documentado' && $data['fuente']!=='' && $data['fecha']!=='') { return 'Contrastado por usuario'; }
-        return 'Diligenciado · falta contraste';
+        if (self::missing($data,$schema,$type)) { return str_starts_with($data['fuente'],'RUT PDF')?'Importado del RUT · faltan datos':'Faltan datos por completar'; }
+        if ($data['estado']==='documentado' && $data['fuente']!=='' && $data['fecha']!=='') { return 'Revisado con documentos por el usuario'; }
+        return str_starts_with($data['fuente'],'RUT PDF')?'Importado del RUT · pendiente de revisión':'Completo · pendiente de revisión documental';
     }
 }

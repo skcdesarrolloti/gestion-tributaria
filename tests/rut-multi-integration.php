@@ -1,0 +1,22 @@
+<?php
+declare(strict_types=1);
+require_once __DIR__.'/rut-multi-fixtures.php';
+file_put_contents($rutPath,rutMultiFixture());
+[$status,$rutHtml]=rutRequest($client,$base,$rutRoute,$upload);
+verify($status===200 && str_contains($rutHtml,'Página 7') && str_contains($rutHtml,'CONTADOR FICTICIO'),'Vista previa muestra datos de las siete hojas');
+preg_match('/name="preview_token" value="([a-f0-9]+)"/',$rutHtml,$match);
+preg_match_all('/name="seleccion\[\]" value="([^"]+)"/',$rutHtml,$selected);
+$multiApply=['_csrf_token'=>token($rutHtml),'preview_token'=>$match[1]??'','accion'=>'aplicar','seleccion'=>$selected[1]];
+verify(request($client,$base,$rutRoute,$multiApply)[0]===303,'Guarda las hojas adicionales en el perfil con sus campos vacíos pendientes');
+$multiQuery=$db->prepare('SELECT datos FROM caracterizaciones_tributarias WHERE contribuyente_id=? AND anio=2026 AND bloque=?');
+$multiQuery->execute([$taxpayerId,'relacionados']);$related=json_decode($multiQuery->fetchColumn(),true);
+verify(count($related['filas'])===4 && $related['filas'][3]['rol']==='contador' && $related['filas'][0]['rol']==='dependiente','Representante, socio/junta y contador quedan guardados sin borrar la familia manual');
+$multiQuery->execute([$taxpayerId,'establecimientos']);$places=json_decode($multiQuery->fetchColumn(),true);
+verify($places['filas'][0]['nombre']==='LOCAL FICTICIO' && $places['filas'][0]['pais']==='','El establecimiento se rellena y conserva el país no informado como pendiente');
+[$status,$profileHtml]=request($client,$base,'contribuyentes/perfil&id='.$taxpayerId.'&anio=2026&bloque=relacionados');
+verify($status===200 && str_contains($profileHtml,'Mostrar solo campos vacíos') && str_contains($profileHtml,'CONTADOR FICTICIO'),'Al abrir el bloque ya aparecen los valores importados y el filtro de vacíos');
+[$status,$rutHtml]=rutRequest($client,$base,$rutRoute,$upload);
+preg_match('/name="preview_token" value="([a-f0-9]+)"/',$rutHtml,$match);$multiApply['preview_token']=$match[1]??'';
+verify(request($client,$base,$rutRoute,$multiApply)[0]===303,'Reimportación de las siete hojas es segura');
+$multiQuery->execute([$taxpayerId,'relacionados']);$relatedAgain=json_decode($multiQuery->fetchColumn(),true);
+verify(count($relatedAgain['filas'])===4,'Reimportación no duplica personas ni borra las filas existentes');

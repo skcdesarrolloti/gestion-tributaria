@@ -5,7 +5,7 @@ namespace App\Services;
 final class RutPdfReader
 {
     public const MAX_BYTES=5242880;
-    public const VERSION='dian-001-carta-v1';
+    public const VERSION='dian-001-carta-v2';
 
     public static function read(string $path): array
     {
@@ -24,21 +24,27 @@ final class RutPdfReader
             if (!$pages || count($pages)>10) { throw new \RuntimeException('Número de páginas fuera de alcance.'); }
             $text=$document->getText();
             if (strlen($text)>1000000 || mb_strlen(trim($text))<300) { throw new \RuntimeException('Sin texto utilizable.'); }
-            $raw=$pages[0]->getDataTm(); $texts=$pages[0]->getTextArray();
+            $sheets=[];
+            foreach ($pages as $page) { $sheets[]=['text'=>$page->getText(),'cells'=>self::cells($page)]; }
         } catch (\Throwable $e) {
             throw new \InvalidArgumentException('No se pudo leer este PDF. Usa el RUT descargado de la DIAN, sin contraseña; los escaneos requieren transcripción manual.');
         }
+        return ['text'=>$text,'cells'=>$sheets[0]['cells'],'sheets'=>$sheets,'pages'=>count($pages),'reader'=>self::VERSION];
+    }
+
+    private static function cells(\Smalot\PdfParser\Page $page): array
+    {
+        $raw=$page->getDataTm(); $texts=$page->getTextArray();
         // En formularios con un XObject de etiquetas, PdfParser agrega ese texto al
         // comienzo del arreglo, pero no a sus coordenadas. Alinear sin tocar la biblioteca.
-        $offset=isset($raw[0][1]) && mb_strlen($raw[0][1])>500
-            && str_contains(self::normalize($raw[0][1]),'responsabilidades')?1:0;
+        $offset=isset($raw[0][1]) && mb_strlen($raw[0][1])>500?1:0;
         $cells=[];
         foreach ($raw as $i=>$entry) {
             $value=$offset?($texts[$i+1]??''):$entry[1];
             if (!is_string($value) || mb_strlen($value)>500) { continue; }
             $cells[]=['x'=>(float)$entry[0][4],'y'=>(float)$entry[0][5],'text'=>trim($value)];
         }
-        return ['text'=>$text,'cells'=>$cells,'pages'=>count($pages),'reader'=>self::VERSION];
+        return $cells;
     }
 
     public static function normalize(string $value): string

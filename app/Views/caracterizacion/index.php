@@ -35,7 +35,7 @@ require __DIR__.'/../partials/head.php';
         <p class="mt-2">Es una ficha interna de planeación. No presenta ni actualiza el RUT de la DIAN. Las respuestas no activan beneficios ni modifican los perfiles y escenarios existentes. Los datos se revisan por año; no se copian automáticamente de otro año.</p>
         <p class="mt-2">Captura completa no equivale a revisión profesional. Hay que contrastar documentos, obligaciones, hechos y normas del año; el control muestra pendientes e incoherencias detectables, sin garantizar que cubra cualquier situación especial.</p>
         <p class="mt-2"><a class="underline text-secondary" href="<?= e(\App\Services\CaracterizacionSchema::SOURCE) ?>" target="_blank" rel="noopener noreferrer">DIAN · Secciones del RUT</a> · <a class="underline text-secondary" href="https://normograma.dian.gov.co/dian/compilacion/docs/resolucion_dian_0227_2025.htm" target="_blank" rel="noopener noreferrer">Resolución 227/2025 · Actividades</a> · <a class="underline text-secondary" href="https://www.dian.gov.co/impuestos/RUT/Paginas/Responsabilidades-y-Usuarios-Aduaneros.aspx" target="_blank" rel="noopener noreferrer">Responsabilidades y aduanas</a></p>
-        <p>Referencia consultada: 21/10/2026. No se han importado documentos personales ni valores reales.</p>
+        <p>Referencia consultada: 21/10/2026. Las importaciones del RUT conservan el soporte privado; el resto de la planeación se completa por año.</p>
     </details>
 </main>
 <?php require __DIR__.'/../partials/footer.php'; ?>

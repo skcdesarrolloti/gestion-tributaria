@@ -4,6 +4,8 @@
 return [
  'identificacion'=>[
   'rut_seccional'=>[201,490,601,611], 'identificacion_numero'=>[330,498,566,572,true],
+  'expedicion_fecha'=>[500,596,566,572,true],
+  'tipo_contribuyente_rut'=>[25,182,566,574], 'rut_buzon'=>[490,596,601,611],
   'apellido1'=>[25,151,518,525], 'apellido2'=>[151,280,518,525], 'nombre1'=>[280,405,518,525], 'otros_nombres'=>[405,596,518,525],
   'razon_social'=>[25,596,494,501], 'nombre_comercial'=>[25,343,470,477], 'sigla'=>[343,596,470,477],
   'expedicion_pais'=>[25,217,542,549], 'expedicion_departamento'=>[217,405,542,549], 'expedicion_municipio'=>[405,596,542,549],
@@ -18,5 +20,9 @@ return [
   'secundaria'=>[162,210,326,333,true], 'secundaria_inicio'=>[210,295,326,333,true],
   'otra1'=>[299,337,326,333,true], 'otra2'=>[337,387,326,333,true],
   'ocupacion'=>[430,510,326,333,true], 'establecimientos'=>[510,596,326,333,true],
+ ],
+ 'aduanas'=>[
+  'formas_exportacion'=>[337,381,137,166,true], 'tipo_exportador'=>[381,419,137,166,true],
+  'folios'=>[300,332,99,107,true],
  ],
 ];

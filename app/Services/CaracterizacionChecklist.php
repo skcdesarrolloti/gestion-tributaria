@@ -12,7 +12,7 @@ final class CaracterizacionChecklist
             $missing=CaracterizacionData::missing($d,$schema,$taxpayer['tipo']);
             $status=isset($blocks[$key])?CaracterizacionData::status($d,$schema,$taxpayer['tipo']):'Pendiente de diligenciar';
             $result['blocks'][$key]=compact('missing','status');
-            if ($status==='Contrastado por usuario') { $result['reviewed']++; }
+            if ($status==='Revisado con documentos por el usuario') { $result['reviewed']++; }
         }
         $c=static fn($block,$field)=>$data[$block]['campos'][$field]??'';
         $codes=array_column($data['responsabilidades']['filas'],'codigo');

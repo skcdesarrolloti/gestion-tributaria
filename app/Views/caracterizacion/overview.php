@@ -1,8 +1,8 @@
 <?php $checklist=\App\Services\CaracterizacionChecklist::review($taxpayer,$blocks,$schemas,$annual); ?>
 <section class="bg-primary-container rounded-xl p-4 space-y-space-sm">
     <h2 class="text-headline-md font-semibold">Qué falta completar</h2>
-    <p><?= count($blocks) ?> de <?= count($schemas) ?> bloques guardados · <?= e($checklist['reviewed']) ?> contrastados por el usuario.</p>
-    <p>Sin respuesta significa pendiente; «No aplica» exige una explicación. Puedes diligenciar ahora y contrastar después con los documentos.</p>
+    <p><?= count($blocks) ?> de <?= count($schemas) ?> bloques guardados · <?= e($checklist['reviewed']) ?> revisados con documentos por el usuario.</p>
+    <p>Los campos importados ya están guardados. Abre un bloque para completar solo lo que falta. «Pendiente de revisión» significa comprobar que los datos corresponden al documento; no significa que la importación falló.</p>
     <?php if ($checklist['alerts']): ?><ul class="list-disc pl-4"><?php foreach ($checklist['alerts'] as $alert): ?><li><?= e($alert) ?></li><?php endforeach; ?></ul><?php endif; ?>
 </section>
 <div class="exogena-format-grid">
