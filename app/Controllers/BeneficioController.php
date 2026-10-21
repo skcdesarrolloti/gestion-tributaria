@@ -21,8 +21,14 @@ final class BeneficioController
         if (!in_array($year,['2025','2026'],true) || ($group!=='' && !isset($groups[$group])) || mb_strlen($query)>100) {
             http_response_code(422); echo 'Revisa el año, el grupo o la búsqueda (máximo 100 caracteres).'; return;
         }
+        $page=filter_var(\input($_GET,'pagina','1'),FILTER_VALIDATE_INT,['options'=>['min_range'=>1,'max_range'=>1000]]);
+        if ($page===false) { http_response_code(422); echo 'Revisa el número de página.'; return; }
         $parameters=BeneficioCatalog::year($year);
-        $items=BeneficioCatalog::filter($group,$query);
-        $this->view->render('beneficios/index',compact('user','year','group','query','groups','parameters','items'));
+        $showItems=$group!=='' || $query!=='';
+        $found=$showItems?BeneficioCatalog::filter($group,$query):[];
+        $total=count($found); $pages=max(1,(int)ceil($total/9)); $page=min($page,$pages);
+        $items=array_slice($found,($page-1)*9,9);
+        $counts=array_count_values(array_column(BeneficioCatalog::all(),'group'));
+        $this->view->render('beneficios/index',compact('user','year','group','query','groups','parameters','items','showItems','total','pages','page','counts'));
     }
 }

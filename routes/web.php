@@ -4,6 +4,7 @@ declare(strict_types=1);
 $router->add('GET', 'inicio', [$homeController, 'index']);
 $router->add('GET', 'perfil', [$homeController, 'profile']);
 $router->add('GET', 'beneficios', [$beneficioController, 'index']);
+$router->add('GET', 'seguridad-social', [$seguridadSocialController, 'index']);
 $router->add('GET', 'simulador', [$simuladorController, 'index']);
 $router->add('POST', 'simulador', [$simuladorController, 'index']);
 $router->add('POST', 'simulador/calcular', [$simuladorController, 'calculate']);

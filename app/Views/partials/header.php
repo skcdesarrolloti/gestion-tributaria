@@ -7,8 +7,7 @@
         <nav aria-label="Navegación principal" class="flex items-center gap-space-md flex-wrap">
             <a href="<?= e(url($config)) ?>" class="text-secondary">Inicio</a>
             <a href="<?= e(url($config, 'contribuyentes')) ?>" class="text-secondary">Contribuyentes</a>
-            <a href="<?= e(url($config, 'beneficios')) ?>" class="text-secondary">Beneficios de renta</a>
-            <a href="<?= e(url($config, 'simulador')) ?>" class="text-secondary">Hoja de planeación</a>
+            <?php require __DIR__.'/planeacion-menu.php'; ?>
             <?php require __DIR__.'/exogena-menu.php'; ?>
             <a href="<?= e(url($config, 'perfil')) ?>" class="text-secondary">Mi perfil</a>
             <form method="post" action="<?= e(url($config, 'logout')) ?>">
@@ -18,4 +17,4 @@
         </nav>
     </div>
 </header>
-<script src="<?= e(asset($config,'js/exogena-menu.js')) ?>" defer></script>
+<script src="<?= e(asset($config,'js/portal-menu.js')) ?>" defer></script>

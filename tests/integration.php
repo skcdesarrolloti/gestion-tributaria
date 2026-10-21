@@ -87,6 +87,7 @@ try {
     $localUser->execute(['Cuenta antigua local', 'local-only', password_hash('Prueba-local-2026', PASSWORD_DEFAULT)]);
     verify(request($client, $base, 'inicio')[0] === 303, 'Inicio exige autenticación');
     verify(request($client, $base, 'beneficios')[0] === 303, 'Catálogo de beneficios exige sesión');
+    verify(request($client, $base, 'seguridad-social')[0] === 303, 'Revisión de seguridad social exige sesión');
     verify(request($client, $base, 'simulador')[0] === 303, 'Hoja de planeación exige sesión');
     verify(request($client, $base, 'simulador/calcular&id=1',[])[0] === 303, 'API de simulación exige sesión');
     verify(request($client, $base, 'proyeccion&id=1')[0] === 303, 'Proyección exige autenticación');

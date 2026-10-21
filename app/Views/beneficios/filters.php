@@ -10,7 +10,7 @@
             </label>
             <label>Tipo de concepto
                 <select name="grupo" class="mt-2 w-full px-space-md py-space-md rounded-xl bg-surface-container-low">
-                    <option value="">Todos los grupos</option>
+                    <option value="">Todas las categorías (para buscar)</option>
                     <?php foreach ($groups as $value=>$label): ?><option value="<?= e($value) ?>" <?= $group===$value?'selected':'' ?>><?= e($label) ?></option><?php endforeach; ?>
                 </select>
             </label>
@@ -19,6 +19,6 @@
             </label>
         </div>
         <button class="rounded-xl bg-inverse-surface text-on-secondary px-4 py-2" type="submit">Consultar</button>
-        <a class="text-secondary underline" href="<?= e(url($config,'beneficios').'&anio='.$year) ?>">Ver todo el listado</a>
+        <a class="text-secondary underline" href="<?= e(url($config,'beneficios').'&anio='.$year) ?>">Volver a categorías</a>
     </form>
 </section>

@@ -15,6 +15,12 @@ y comparar acciones antes del cierre. Los importes actuales son parciales; aún 
 
 ## Continuar el trabajo
 
+El menú **Planeación** reúne hoja de cálculo, categorías de beneficios y seguridad
+social. Las 52 fichas se consultan por siete categorías, hasta nueve por página;
+su explicación se abre dentro de cada ficha. **Seguridad social** contiene la
+revisión inicial del HTML recibido: detectados errores, el cálculo no está integrado.
+Ver hallazgos y criterios de reutilización en docs/ALCANCE-PLANEACION.md.
+
 **Hoja de planeación** es el simulador inicial por perfil de persona natural residente
 ordinaria (2025/2026). Entradas celda por celda, pensión mensual separada, reglas
 comunes, tarifa progresiva, retenciones/anticipo y versiones privadas comparables.

@@ -205,3 +205,48 @@ Consultadas el 13 de octubre de 2026; revisar nuevamente al implementar cada reg
 - [DIAN: régimen SIMPLE](https://micrositios.dian.gov.co/ruta-de-la-formalizacion/regimen-simple-de-tributacion/).
 - [UGPP: trabajador independiente](https://www.ugpp.gov.co/trabajador-independiente/).
 - [UGPP: Resolución 532 de 2024](https://www.ugpp.gov.co/normas/resolucion-532-de-2024/).
+
+## Revisión del aplicativo de seguridad social recibido · 21/10/2026
+
+Archivo: `calculadora-seguridad-social-rentas-mixtas_para aportes de Independientes.html`.
+SHA-256: `7096F0A0CBC5F3A2AD18DD02EC8F8477CBA8E340F236D8D9298996FCC26CC1F2`.
+Revisión inicial de código y ejecución local en Edge. El original permanece intacto;
+no se copia a public, no se ejecuta desde la aplicación ni se importan sus valores.
+
+Hallazgos reproducidos con valores ficticios:
+
+- Todos los ingresos en cero generan un IBC mínimo de $1.750.905 y aportes mostrados
+  de $499.008. Falta evaluar primero la obligación, separándola del piso aplicable.
+- IBC de exactamente 4 SMLMV: el archivo calcula FSP 0% porque usa `mult <= 4`.
+  Ley 100, arts. 20 y 27, incluye el límite igual a cuatro. Revisar también 16/17/18/19.
+- No hay mes/año. El esquema nuevo no puede trasladarse indiscriminadamente a 2025
+  ni a todos los meses de 2026. La UGPP informa vigencia desde el 09/05/2026.
+- Los valores iniciales de actividad para arriendos e intangibles no validan la
+  clasificación. No aprobar automáticamente todo el catálogo de coeficientes.
+- El consolidado salarial incluye la parte patronal, como advierte el propio HTML.
+  No equivale a lo pendiente por pagar por el independiente. Falta conciliar nómina,
+  tope concurrente, tipo de pensión, novedades, ARL cuando corresponda y redondeos PILA.
+
+Fuentes revisadas:
+
+- [UGPP: obligación de rentistas y mínimo](https://www.ugpp.gov.co/abc_rentistas_capital/).
+  Su explicación del esquema de costos antiguo debe distinguirse del período nuevo.
+- [UGPP: Decreto 379/2026 y vigencia](https://www.ugpp.gov.co/enterate-con-la-ugpp/).
+- [Ley 100, artículos 18, 20 y 27](https://cancilleria.gov.co/normograma/compilacion/docs/ley_0100_1993.htm).
+- [Calculadora orientadora oficial](https://www.ugpp.gov.co/calculadora-IBC/).
+
+Decisión: no habilitar todavía el cálculo recibido. En Planeación → Seguridad
+social se publica únicamente la revisión protegida por sesión. Reutilizar después
+su separación de fuentes y captura por filas, corrigiendo lo anterior y contrastando
+casos normales, cero, por debajo del mínimo, límites exactos, nómina concurrente,
+pensión y cambio de período. La revisión inicial no certifica las demás fórmulas.
+Los costos presuntos de aportes no pasan automáticamente a deducciones de renta.
+
+## Navegación por categorías
+
+Planeación → Beneficios por categoría ofrece siete grupos; la portada muestra solo
+las categorías. Cada categoría/búsqueda limita las fichas a nueve por página y conserva
+el año y los filtros. La academia, límites, soportes y norma se abren dentro de cada
+ficha. Las 52 fichas siguen disponibles; no se agregan 52 enlaces a la cabecera.
+La hoja conserva sus siete bloques plegables de captura para no perder valores al
+cambiar de categoría. No se modifican fórmulas ni escenarios existentes.
