@@ -21,7 +21,8 @@ final class CaracterizacionController
         if (!in_array($year,['2025','2026'],true) || ($block!=='' && !isset($schemas[$block]))) {
             http_response_code(422); echo 'Revisa el año y el bloque seleccionados.'; return;
         }
-        $blocks=$this->model->blocksFor((int)$raw,(int)$user['_ID'],(int)$year); $errors=[]; $notice=''; $record=[]; $revision=0;
+        $blocks=$this->model->blocksFor((int)$raw,(int)$user['_ID'],(int)$year); $errors=[]; $record=[]; $revision=0;
+        $notice=$_SESSION['rut_notice'][$raw.':'.$year]??''; unset($_SESSION['rut_notice'][$raw.':'.$year]);
         if ($block!=='') {
             $schema=$schemas[$block]; $record=CaracterizacionData::read($blocks[$block]['datos']??[],$schema);
             $revision=(int)($blocks[$block]['revision']??0);

@@ -10,6 +10,11 @@ require __DIR__.'/../partials/head.php';
         <p class="taxpayer-name"><?= e($taxpayer['nombre']) ?> · <?= e($taxpayer['documento_tipo'].' '.$taxpayer['documento_numero']) ?></p>
         <p>Completa un bloque a la vez. Puedes guardar borradores sin tener aún el RUT.</p>
     </section>
+    <section class="bg-primary-container rounded-xl p-4 space-y-space-sm">
+        <h2 class="text-headline-sm font-semibold">¿Ya tienes el RUT en PDF?</h2>
+        <p>Sube el documento para leer sus campos y revisarlos antes de aplicarlos. Los datos existentes se conservan salvo que elijas reemplazarlos.</p>
+        <a class="inline-block rounded-xl bg-inverse-surface text-on-secondary px-4 py-2" href="<?= e(url($config,'contribuyentes/rut').'&id='.$taxpayer['id'].'&anio='.$year) ?>">Subir RUT en PDF</a>
+    </section>
     <div class="flex items-center gap-space-md flex-wrap">
         <a class="text-secondary underline" href="<?= e(url($config,'contribuyentes/formulario').'&id='.$taxpayer['id']) ?>">Editar identificación básica</a>
         <a class="text-secondary underline" href="<?= e(url($config,'ingresos').'&contribuyente='.$taxpayer['id']) ?>">Ingresos por año</a>

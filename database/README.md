@@ -85,3 +85,10 @@ revisión para evitar pérdida de cambios entre ventanas. 015 crea `catalogos_ru
 generado de catálogo, no lógica de negocio. Todo se ejecuta en la base propia.
 No editar estos scripts tras aplicarlos: actualizar catálogos mediante otra migración.
 Conservar tablas y respaldar antes de cualquier reversión.
+
+017 crea `rut_documentos`: soporte por contribuyente/año, archivo privado,
+huella SHA-256 y metadatos de lectura. El índice evita duplicar el mismo PDF en
+el mismo perfil. La importación usa una transacción para documento y bloques;
+verifica propietario, identidad y revisión antes de guardar. No altera datos ni
+configuración centrales. Conservar los PDF de `storage/rut-importaciones` junto
+con los respaldos privados de la base; nunca incluirlos en Git.

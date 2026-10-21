@@ -9,6 +9,7 @@
 /database/private/*
 !/database/private/.gitkeep
 /dist/
+/storage/rut-importaciones/
 /.idea/
 /.vscode/
 *.log

@@ -4,6 +4,8 @@ return [
  'identificacion'=>['title'=>'RUT · Identificación','guide'=>'Casillas 4–37. El NIT y nombre principal se conservan en Editar datos; aquí amplías la información del documento consultado. No se cambia el RUT en la DIAN.', 'fields'=>[
   'rut_estado'=>$f('¿Dispones del RUT?','select',['disponible'=>'Sí, lo tengo','pendiente'=>'No, por conseguir'],true),
   'rut_formulario'=>$f('4 · Número del formulario RUT'), 'rut_fecha'=>$f('Fecha de generación / consulta del RUT','date'),
+  'rut_formalizacion'=>$f('Fecha del trámite que consta en el RUT (no equivale a vencimiento)','date'),
+  'rut_estado_dian'=>$f('Estado actual según consulta oficial DIAN','select',['activo'=>'Activo, contrastado en consulta DIAN','suspendido'=>'Suspendido','cancelado'=>'Cancelado'],false,'La lectura del PDF no consulta ni certifica el estado actual ante la DIAN. Registra aquí el resultado de la consulta oficial y su referencia en el soporte del bloque.'),
   'rut_inscripcion'=>$f('Fecha de inscripción en el RUT','date'), 'rut_seccional'=>$f('12 · Dirección seccional (código y nombre)'),
   'identificacion_tipo'=>$f('25 · Tipo del documento de identidad','select',ContribuyenteData::DOCUMENTOS),
   'identificacion_numero'=>$f('26 · Número del documento de identidad (distinto del campo NIT si corresponde)'),

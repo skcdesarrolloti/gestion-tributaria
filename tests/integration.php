@@ -86,6 +86,8 @@ try {
     $localUser = $db->prepare('INSERT INTO wp_jet_cct_funcionarios (nombre, user_others_apss, pass_others_apss) VALUES (?, ?, ?)');
     $localUser->execute(['Cuenta antigua local', 'local-only', password_hash('Prueba-local-2026', PASSWORD_DEFAULT)]);
     verify(request($client, $base, 'inicio')[0] === 303, 'Inicio exige autenticación');
+    verify(request($client, $base, 'contribuyentes/rut&id=1')[0] === 303, 'Carga RUT exige autenticación');
+    verify(request($client, $base, 'contribuyentes/rut/documento&documento=1')[0] === 303, 'Descarga RUT exige autenticación');
     verify(request($client, $base, 'beneficios')[0] === 303, 'Catálogo de beneficios exige sesión');
     verify(request($client, $base, 'seguridad-social')[0] === 303, 'Revisión de seguridad social exige sesión');
     verify(request($client, $base, 'simulador')[0] === 303, 'Hoja de planeación exige sesión');
@@ -114,6 +116,7 @@ try {
     require __DIR__ . '/beneficios-integration.php';
     require __DIR__ . '/contribuyentes-integration.php';
     require __DIR__ . '/caracterizacion-integration.php';
+    require __DIR__ . '/rut-integration.php';
     require __DIR__ . '/ingresos-integration.php';
     require __DIR__ . '/simulador-integration.php';
     require __DIR__ . '/exogena-integration.php';

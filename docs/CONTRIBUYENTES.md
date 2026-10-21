@@ -18,16 +18,21 @@ para sus diferencias, la regla de sucesiones y los bloques pendientes de cada fo
 5. Escribe nombre o razón social, tipo y número de documento. Para entidades y
    sucesiones utiliza el NIT del RUT; escríbelo sin el dígito de verificación.
 6. El dígito de verificación se puede registrar aparte. Es opcional y su valor no
-   se contrasta todavía con el RUT ni se calcula automáticamente.
+   se contrasta con el PDF cuando se usa la importación del RUT; el registro manual
+   no realiza esa comprobación.
 7. Marca todas las fuentes de ingresos conocidas; puedes dejarlas pendientes.
    Pensión y arrendamientos pueden coexistir en una persona natural.
 8. Guarda. El registro aparecerá en **Mis contribuyentes**; usa **Editar datos**
    para corregirlo posteriormente.
 
-No se cargan declaraciones o datos reales de los PDF de referencia. Los documentos
-sirvieron para identificar el requisito de múltiples fuentes de ingresos.
+No se importan declaraciones de renta desde los PDF de referencia. La carga del
+RUT tiene su propio flujo de lectura y confirmación descrito a continuación.
 
 ## Identificación y permisos
+
+La opción **Subir RUT en PDF** completa campos desde una copia digital y conserva
+el soporte privado después de confirmar. Revisa los pasos, límites y comprobación
+de estado en [IMPORTACION-RUT.md](IMPORTACION-RUT.md). La captura manual sigue disponible.
 
 ### Perfil tributario y RUT ampliado · 21/10/2026
 

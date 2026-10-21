@@ -55,6 +55,10 @@ $contribuyenteController = new App\Controllers\ContribuyenteController(
 $caracterizacionController = new App\Controllers\CaracterizacionController(
     $auth, new App\Models\Contribuyente($database), new App\Models\Caracterizacion($database), $view, $config
 );
+$rutController = new App\Controllers\RutController(
+    $auth, new App\Models\Contribuyente($database), new App\Models\Caracterizacion($database),
+    new App\Models\RutDocumento($database), $view, $config
+);
 $router = new App\Core\Router();
 $ingresoController = new App\Controllers\IngresoController(
     $auth, new App\Models\Contribuyente($database), new App\Models\Ingreso($database), $view, $config
