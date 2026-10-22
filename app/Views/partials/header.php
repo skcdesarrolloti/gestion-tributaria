@@ -7,8 +7,7 @@
         <nav aria-label="Navegación principal" class="flex items-center gap-space-md flex-wrap">
             <a href="<?= e(url($config)) ?>" class="text-secondary">Inicio</a>
             <a href="<?= e(url($config, 'contribuyentes')) ?>" class="text-secondary">Contribuyentes</a>
-            <?php $profileContext=str_starts_with(input($_GET,'route'),'contribuyentes') || in_array(input($_GET,'route','inicio'),['','inicio'],true); ?>
-            <?php if (!$profileContext): require __DIR__.'/planeacion-menu.php'; require __DIR__.'/exogena-menu.php'; endif; ?>
+            <?php require __DIR__.'/planeacion-menu.php'; require __DIR__.'/exogena-menu.php'; ?>
             <a href="<?= e(url($config, 'perfil')) ?>" class="text-secondary">Mi perfil</a>
             <form method="post" action="<?= e(url($config, 'logout')) ?>">
                 <?php require __DIR__ . '/csrf.php'; ?>

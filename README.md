@@ -3,6 +3,11 @@
 Proyecto MVC en PHP 8.2+, ya publicado en Hostinger y conectado con Git. Continuar el desarrollo sobre esta estructura.
 Base asignada: **u350704768_tributaria**.
 
+**Inicio y menú principal conservan todos los módulos.** Accesos en filas a
+Contribuyentes, Hoja de planeación, Deducciones y beneficios (52 fichas con sus
+fuentes) y Exógena como módulo independiente. Los menús Planeación y Exógena
+permanecen visibles también al consultar el perfil del contribuyente.
+
 **Recorrido actual: Inicio → Contribuyentes → Abrir perfil.** Una sola ficha con
 pestañas por naturaleza de información, carga del RUT que completa vacíos y edición
 de identificación en el mismo lugar. Socios, junta, representantes y profesionales

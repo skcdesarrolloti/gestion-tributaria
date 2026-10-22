@@ -77,6 +77,11 @@ compatibilidad, con los mismos controles de propietario.
 
 ## Continuidad y verificación
 
+La separación del contenido del perfil no oculta los módulos de la aplicación.
+Inicio muestra los accesos a Contribuyentes, hoja de cálculos, deducciones y
+Exógena en filas. Los menús Planeación y Exógena están disponibles en todas las
+pantallas autenticadas, incluida la ficha del contribuyente.
+
 La [revisión de campos del 22/10/2026](ALCANCE-CAMPOS-PERFIL.md) explica qué
 complementos permanecen, su finalidad y cuáles se diligencian ahora fuera del
 perfil. Cada campo dispone de ayuda «?». EPS/PILA/UGPP, condiciones del beneficio
