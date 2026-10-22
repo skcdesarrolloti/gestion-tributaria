@@ -14,9 +14,14 @@
         <?php if ($block==='identificacion'): $identityPrefix='identidad['; $identitySuffix=']'; require __DIR__.'/../contribuyentes/identity-fields.php'; endif; ?>
         <?php if ($roles): ?><input type="hidden" name="aplicabilidad" value="si"><input type="hidden" name="justificacion" value="<?= e($record['justificacion']) ?>"><?php endif; ?>
         <?php if (!empty($schema['allow_na']) && !$roles): ?>
-            <label class="block" for="aplicabilidad">¿Esta información aplica?</label>
+            <div class="profile-field-label"><label for="aplicabilidad">¿Esta información aplica?</label>
+            <?php $helpTitle='Aplicabilidad'; $helpId='aplicabilidad-ayuda'; $helpText=\App\Services\PerfilAyuda::text('control','aplicabilidad',['help'=>'']); require __DIR__.'/../partials/profile-help.php'; ?>
+            </div>
             <select id="aplicabilidad" name="aplicabilidad" class="w-full bg-surface-container-low rounded-xl p-2"><?php foreach ([''=>'Por confirmar','si'=>'Sí, aplica','no'=>'No aplica: justificar'] as $key=>$text): ?><option value="<?= e($key) ?>" <?= $record['aplicabilidad']===$key?'selected':'' ?>><?= e($text) ?></option><?php endforeach; ?></select>
-            <label class="block" for="justificacion">Si no aplica, explica por qué</label><input id="justificacion" name="justificacion" value="<?= e($record['justificacion']) ?>" maxlength="500" class="w-full bg-surface-container-low rounded-xl p-2">
+            <div class="profile-field-label"><label for="justificacion">Si no aplica, explica por qué</label>
+            <?php $helpTitle='Justificación'; $helpId='justificacion-ayuda'; $helpText=\App\Services\PerfilAyuda::text('control','justificacion',['help'=>'']); require __DIR__.'/../partials/profile-help.php'; ?>
+            </div>
+            <input id="justificacion" name="justificacion" value="<?= e($record['justificacion']) ?>" maxlength="500" class="w-full bg-surface-container-low rounded-xl p-2">
         <?php endif; ?>
         <?php require __DIR__.'/fields.php'; ?>
         <?php if (isset($schema['rows'])): ?>
@@ -26,15 +31,7 @@
             <template id="profile-row-template"><?php $rowIndex='__INDEX__'; $row=[]; require __DIR__.'/row.php'; ?></template>
             <button type="button" id="add-profile-row" data-next="<?= count($record['filas']) ?>" class="rounded-xl bg-surface-container-low text-secondary px-4 py-2">Agregar renglón</button>
         <?php endif; ?>
-        <details class="border border-surface-container rounded-xl p-4">
-            <summary class="font-semibold">Soporte y notas</summary>
-            <div class="profile-grid mt-2">
-                <div><label for="estado">Estado de la información</label><select id="estado" name="estado" class="w-full bg-surface-container-low rounded-xl p-2"><?php foreach ([''=>'Por confirmar','borrador'=>'Borrador: estoy completando','declarado'=>'Declarado por el contribuyente','documentado'=>'Revisado por mí contra los documentos'] as $key=>$text): ?><option value="<?= e($key) ?>" <?= $record['estado']===$key?'selected':'' ?>><?= e($text) ?></option><?php endforeach; ?></select></div>
-                <div><label for="fecha">Fecha de revisión</label><input id="fecha" name="fecha" type="date" value="<?= e($record['fecha']) ?>" class="w-full bg-surface-container-low rounded-xl p-2"></div>
-            </div>
-            <label class="block mt-2" for="fuente">Documento o fuente de los datos</label><input id="fuente" name="fuente" maxlength="500" value="<?= e($record['fuente']) ?>" placeholder="Ejemplo: declaración del contribuyente; RUT pendiente de conseguir." class="w-full bg-surface-container-low rounded-xl p-2">
-            <label class="block mt-2" for="notas">Notas, diferencias o documentos pendientes</label><textarea id="notas" name="notas" maxlength="2000" rows="3" class="w-full bg-surface-container-low rounded-xl p-2"><?= e($record['notas']) ?></textarea>
-        </details>
+        <?php require __DIR__.'/metadata.php'; ?>
         <p role="status" id="profile-save-status">Se guarda esta pestaña. Puedes continuar después.</p>
         <button type="submit" class="rounded-xl bg-inverse-surface text-on-secondary px-4 py-2">Guardar información</button>
     </form>

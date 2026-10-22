@@ -29,6 +29,14 @@ button, a { touch-action: manipulation; }
     .exogena-format-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 .taxpayer-name { overflow-wrap: anywhere; }
+.profile-field-label, [data-profile-field], .profile-basic-field { position: relative; }
+.profile-basic-field > label { display: inline; }
+.profile-field-label { display: flex; align-items: baseline; gap: .4rem; }
+.profile-help { display: inline-block; }
+.profile-help > summary { cursor: help; list-style: none; font-weight: 600; text-decoration: underline; padding-inline: .3rem; }
+.profile-help > summary::-webkit-details-marker { display: none; }
+.profile-help-content { position: absolute; z-index: 40; left: 0; top: 100%; width: min(32rem, 100%); max-height: 45vh; overflow-y: auto; box-sizing: border-box; }
+@media (max-width: 640px) { .profile-help-content { position: fixed; inset: auto 1rem 1rem; width: auto; } }
 .contribuyente-tabs { display: flex; flex-wrap: wrap; gap: .5rem; padding-block: .5rem; }
 .contribuyente-tabs a { text-decoration: none; font-size: .875rem; }
 .contribuyente-tabs a[aria-current="page"] { font-weight: 600; }

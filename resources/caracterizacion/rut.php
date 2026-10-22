@@ -1,7 +1,7 @@
 <?php
 use App\Services\ContribuyenteData;
 return [
- 'identificacion'=>['title'=>'RUT · Identificación','guide'=>'Casillas 4–37. El NIT y nombre principal se conservan en Editar datos; aquí amplías la información del documento consultado. No se cambia el RUT en la DIAN.', 'fields'=>[
+ 'identificacion'=>['title'=>'RUT · Identificación','guide'=>'Casillas 4–37 y complementos personales opcionales. El nombre y NIT se editan en esta misma pestaña. Cada ayuda distingue los datos del RUT de los complementos internos. No se cambia el RUT en la DIAN.', 'fields'=>[
   'rut_estado'=>$f('¿Dispones del RUT?','select',['disponible'=>'Sí, lo tengo','pendiente'=>'No, por conseguir'],true),
   'rut_formulario'=>$f('4 · Número del formulario RUT'), 'rut_fecha'=>$f('Fecha de generación / consulta del RUT','date'),
   'rut_formalizacion'=>$f('61 · Fecha del trámite que consta en el RUT (no equivale a vencimiento)','date'),

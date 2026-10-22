@@ -77,6 +77,12 @@ compatibilidad, con los mismos controles de propietario.
 
 ## Continuidad y verificación
 
+La [revisión de campos del 22/10/2026](ALCANCE-CAMPOS-PERFIL.md) explica qué
+complementos permanecen, su finalidad y cuáles se diligencian ahora fuera del
+perfil. Cada campo dispone de ayuda «?». EPS/PILA/UGPP, condiciones del beneficio
+por dependientes y obligaciones anuales están en sus componentes, accesibles en
+**Datos que se diligencian en otros componentes**, sin duplicar ni borrar datos.
+
 `PerfilContribuyente` define pestañas y separación de personas; `CaracterizacionController`
 coordina la ficha; `Caracterizacion` guarda bloques y la identidad conjunta.
 `RutAplicacion` reutiliza comprobación, conservación privada y transacción del PDF.

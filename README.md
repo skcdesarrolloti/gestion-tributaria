@@ -9,6 +9,10 @@ de identificación en el mismo lugar. Socios, junta, representantes y profesiona
 se muestran separados sin perder sus datos. Ingresos, costos y escenarios quedan
 fuera de este recorrido. Ver [ficha única](docs/CONTRIBUYENTES.md).
 
+Los campos tienen ayuda «?» sobre su finalidad. Los complementos de aportes,
+beneficios y obligaciones anuales se diligencian en sus componentes, conservando
+los datos existentes. Ver [revisión de campos](docs/ALCANCE-CAMPOS-PERFIL.md).
+
 **La aplicación crea y actualiza las tablas automáticamente. No hay que entrar a phpMyAdmin ni importar SQL.** El acceso utiliza los funcionarios ya existentes del sistema central; no hay registro de administradores locales.
 
 Incluye login de funcionarios con los estilos de Servicios Comerciales, inicio protegido, perfil, cierre de sesión y migraciones automáticas. [Contribuyentes](docs/CONTRIBUYENTES.md) reúne su identificación y perfil, con registro y edición privados por funcionario.

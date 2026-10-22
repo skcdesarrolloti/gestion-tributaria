@@ -107,7 +107,7 @@ final class CaracterizacionData
         foreach ($data['filas'] as $i=>$row) {
             $prefix='renglón '.($i+1).': ';
             if (($row['rol']??'')==='socio_junta') { $missing[]=$prefix.'precisar si corresponde a socio, junta u otra relación de la hoja 4'; }
-            if (($row['rol']??'')==='dependiente' && ($row['parentesco']==='' || $row['nacimiento']==='' || $row['reclamado']==='')) { $missing[]=$prefix.'parentesco, nacimiento y revisión de solicitud por otra persona'; }
+            if (($row['rol']??'')==='dependiente' && isset($schema['rows']['reclamado']) && ($row['parentesco']==='' || $row['nacimiento']==='' || $row['reclamado']==='')) { $missing[]=$prefix.'parentesco, nacimiento y revisión de solicitud por otra persona'; }
             if (in_array($row['rol']??'', ['contador','revisor'],true) && $row['tarjeta']==='') { $missing[]=$prefix.'tarjeta profesional'; }
             if (in_array($row['rol']??'',['socio','participacion'],true) && $row['participacion']==='') { $missing[]=$prefix.'porcentaje de participación'; }
             if ($schema['key']==='patrimonio') {

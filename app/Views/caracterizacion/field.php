@@ -1,5 +1,7 @@
 <div data-profile-field <?= isset($definition['roles'])?'data-field-roles="'.e(implode(',',$definition['roles'])).'"':'' ?>>
-    <label class="block" for="<?= e($inputId) ?>"><?= e($definition['label']) ?><?= $definition['required']?' · necesario para completar':'' ?></label>
+    <div class="profile-field-label"><label for="<?= e($inputId) ?>"><?= e($definition['label']) ?><?= $definition['required']?' · necesario para completar':'' ?></label>
+        <?php $helpTitle=$definition['label']; $helpText=\App\Services\PerfilAyuda::text($block,$key,$definition); $helpId=$inputId.'-ayuda'; require __DIR__.'/../partials/profile-help.php'; ?>
+    </div>
     <?php if ($definition['kind']==='select'): ?>
         <?php if (count($definition['options'])>25): ?>
             <label class="block text-label-sm text-secondary mt-2" for="<?= e($inputId.'-buscar') ?>">Buscar código o descripción</label>
@@ -15,5 +17,4 @@
     <?php else: ?>
         <input id="<?= e($inputId) ?>" name="<?= e($name) ?>" value="<?= e($value) ?>" type="<?= e(in_array($definition['kind'],['date','email'],true)?$definition['kind']:'text') ?>" <?= in_array($definition['kind'],['integer','decimal','percent'],true)?'inputmode="decimal"':'' ?> maxlength="500" class="mt-2 w-full px-3 py-2.5 bg-surface-container-low rounded-xl">
     <?php endif; ?>
-    <?php if ($definition['help']!==''): $helpTitle=$definition['label']; $helpText=$definition['help']; $helpArticle=null; require __DIR__.'/../partials/field-help.php'; endif; ?>
 </div>

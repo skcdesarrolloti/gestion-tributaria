@@ -1,8 +1,12 @@
 <?php
 $groups=$block==='entidad'?require dirname(__DIR__,3).'/resources/caracterizacion/grupos.php':[];
-if ($block==='identificacion') { $groups=['Datos del RUT'=>array_keys($schema['fields'])]; }
+if ($block==='identificacion') {
+    $extra=['rut_estado','rut_estado_dian','rut_inscripcion','nacimiento','nacionalidad'];
+    $groups=['Datos del RUT'=>array_diff(array_keys($schema['fields']),$extra),'Complementos del perfil'=>array_intersect($extra,array_keys($schema['fields']))];
+}
 if (!$groups) { $groups=[''=>array_keys($schema['fields'])]; }
 foreach ($groups as $heading=>$keys):
+if (!array_intersect($keys,array_keys($schema['fields']))) { continue; }
 ?>
     <?php if ($heading!==''): ?><details class="border border-surface-container rounded-xl p-4" data-profile-group><summary class="font-semibold"><?= e($heading) ?></summary><?php endif; ?>
     <div class="scenario-settings-grid mt-2">

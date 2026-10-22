@@ -1,4 +1,4 @@
-<?php $planningActive=in_array(input($_GET,'route'),['beneficios','simulador','seguridad-social'],true); ?>
+<?php $planningActive=in_array(input($_GET,'route'),['beneficios','simulador','seguridad-social','planeacion/datos'],true); ?>
 <details class="exogena-nav" data-planeacion-menu>
     <summary class="flex items-center gap-space-sm rounded-xl px-3 py-2.5 <?= $planningActive?'bg-inverse-surface text-on-secondary':'bg-surface-container-low text-secondary' ?>">
         <span aria-hidden="true" class="material-symbols-outlined">calculate</span>

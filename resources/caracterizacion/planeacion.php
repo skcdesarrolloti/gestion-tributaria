@@ -1,6 +1,6 @@
 <?php
 return [
- 'fiscal'=>['title'=>'Planeación · Perfil fiscal del año','guide'=>'Complemento del RUT. ET 9, 10, 12-1 y 555-2: registrar residencia y régimen exige revisar los hechos y soportes del año. Esta caracterización no reemplaza ni modifica el perfil de Ingresos por año.', 'fields'=>[
+ 'fiscal'=>['title'=>'Planeación · Perfil fiscal del año','guide'=>'Complemento del RUT. Residencia, régimen y condiciones del titular se conservan en el perfil; la obligación de declarar, formulario y otras revisiones se diligencian en Obligaciones del año. Son respuestas manuales respaldadas con los hechos y documentos del período; no calculan topes ni modifican el simulador.', 'fields'=>[
   'residencia'=>$f('Residencia fiscal del año','select',['residente'=>'Residente','no_residente'=>'No residente','doble'=>'Posible doble residencia: revisar convenio'],true,'No se decide solo por nacionalidad, domicilio o RUT. Documenta permanencia, vínculos, certificados y convenio cuando corresponda.'),
   'dias_colombia'=>$f('Días de permanencia en Colombia a revisar','integer'), 'pais_residencia'=>$f('País de residencia fiscal declarado','text',[],true), 'nit_exterior'=>$f('Identificación tributaria extranjera'),
   'sujecion'=>$f('Condición frente al impuesto de renta','select',['contribuyente'=>'Contribuyente','no_contribuyente'=>'No contribuyente: revisar fundamento'],true,'Ser no contribuyente y no estar obligado a declarar son condiciones diferentes. Registra aparte el régimen y la obligación de presentar declaración.'),

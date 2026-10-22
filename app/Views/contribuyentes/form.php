@@ -36,4 +36,5 @@ require __DIR__ . '/../partials/head.php';
         </form>
     </section>
 </main>
+<script src="<?= e(asset($config,'js/caracterizacion.js').'?v='.filemtime(dirname(__DIR__,3).'/public/assets/js/caracterizacion.js')) ?>" defer></script>
 <?php require __DIR__ . '/../partials/footer.php'; ?>

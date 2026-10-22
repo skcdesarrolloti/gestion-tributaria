@@ -1,5 +1,7 @@
 (() => {
     'use strict';
+    document.addEventListener('keydown', event => { if (event.key === 'Escape') document.querySelectorAll('.profile-help[open]').forEach(help => help.open = false); });
+    document.addEventListener('click', event => { document.querySelectorAll('.profile-help[open]').forEach(help => { if (!help.contains(event.target)) help.open = false; }); });
     const activeTab = document.querySelector('.contribuyente-tabs [aria-current="page"]');
     if (activeTab && window.matchMedia('(max-width: 640px)').matches) activeTab.scrollIntoView({block: 'nearest', inline: 'center'});
     const form = document.getElementById('caracterizacion-form');
