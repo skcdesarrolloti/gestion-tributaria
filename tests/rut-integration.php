@@ -7,7 +7,8 @@ function rutRequest(CurlHandle $client,string $base,string $route,array $post): 
         CURLOPT_POSTFIELDS=>$post,CURLOPT_HEADER=>true,CURLOPT_RETURNTRANSFER=>true,CURLOPT_FOLLOWLOCATION=>false,CURLOPT_TIMEOUT=>20]);
     $response=curl_exec($client);
     if ($response===false) { throw new RuntimeException(curl_error($client)); }
-    return [curl_getinfo($client,CURLINFO_HTTP_CODE),substr($response,curl_getinfo($client,CURLINFO_HEADER_SIZE))];
+    $headerSize=curl_getinfo($client,CURLINFO_HEADER_SIZE);
+    return [curl_getinfo($client,CURLINFO_HTTP_CODE),substr($response,$headerSize),substr($response,0,$headerSize)];
 }
 $rutPath=$temp.'/rut-ficticio.pdf'; file_put_contents($rutPath,rutFixturePdf());
 $rutRoute='contribuyentes/rut&id='.$taxpayerId.'&anio=2026';

@@ -26,10 +26,21 @@ $registrationNewId=(int)$db->query('SELECT id FROM contribuyentes WHERE document
 verify($registrationNewId>0 && (int)$db->query('SELECT COUNT(*) FROM caracterizaciones_tributarias WHERE contribuyente_id='.$registrationNewId.' AND anio=2025')->fetchColumn()>=6,'El alta guarda los bloques del RUT completo en el mismo paso');
 verify((int)$db->query('SELECT COUNT(*) FROM rut_documentos WHERE contribuyente_id='.$registrationNewId.' AND anio=2025')->fetchColumn()===1,'El PDF original queda como soporte privado del nuevo contribuyente');
 verify(request($client,$base,$registrationRoute,$registrationSave)[0]===422,'La misma confirmación no crea dos contribuyentes');
-verify(rutRequest($client,$base,$registrationRoute,$registrationUpload)[0]===422,'Un RUT ya registrado se remite al perfil existente');
+[$registrationStatus,,$registrationHeaders]=rutRequest($client,$base,$registrationRoute,$registrationUpload);
+verify($registrationStatus===303 && str_contains($registrationHeaders,'&id='.$registrationNewId.'&anio=2025'),'Un RUT ya registrado abre la importación del contribuyente y año correctos');
+[$registrationStatus,$existingRutHtml]=request($client,$base,'contribuyentes/rut&id='.$registrationNewId.'&anio=2025');
+verify($registrationStatus===200 && str_contains($existingRutHtml,'Encontramos tu contribuyente') && str_contains($existingRutHtml,'Datos leídos'),'El contribuyente encontrado tiene el mismo PDF listo para aplicar y enlaces directos');
+preg_match('/name="preview_token" value="([a-f0-9]+)"/',$existingRutHtml,$existingRutToken);
+preg_match_all('/name="seleccion\[\]" value="([^"]+)"/',$existingRutHtml,$existingRutKeys);
+verify(request($client,$base,'contribuyentes/rut&id='.$registrationNewId.'&anio=2025',[
+    '_csrf_token'=>token($existingRutHtml),'accion'=>'aplicar','preview_token'=>$existingRutToken[1]??'','seleccion'=>$existingRutKeys[1]])[0]===303,
+    'Completa el perfil existente con la lectura transferida sin volver a subir el PDF');
+verify((int)$db->query('SELECT COUNT(*) FROM contribuyentes')->fetchColumn()===$registrationCount+1,'La continuación con un RUT existente no duplica al contribuyente');
 // La identidad puede existir con CC, aunque el alta desde RUT proponga NIT.
 file_put_contents($registrationFile,rutFixturePdf('12345678'));
-verify(rutRequest($client,$base,$registrationRoute,$registrationUpload)[0]===422,'Detecta el contribuyente previo identificado con cédula y evita duplicarlo como NIT');
+verify(rutRequest($client,$base,$registrationRoute,$registrationUpload)[0]===303,'El RUT de una cédula existente también continúa sin duplicarla como NIT');
+[$registrationStatus,$existingRutHtml]=request($client,$base,'contribuyentes/rut&id='.$taxpayerId.'&anio=2025');
+verify($registrationStatus===200 && str_contains($existingRutHtml,'Encontramos tu contribuyente'),'El enlace continúa con el propietario y contribuyente correctos');
 file_put_contents($registrationFile,rutFixturePdf('888999000'));
 verify(rutRequest($client,$base,$registrationRoute,$registrationUpload)[0]===303,'Permite preparar otra alta independiente');
 [$registrationStatus,$registrationHtml]=request($client,$base,$registrationRoute);
@@ -37,3 +48,14 @@ preg_match('/name="rut_registro_token" value="([a-f0-9]+)"/',$registrationHtml,$
 verify(request($client,$base,$registrationRoute,['_csrf_token'=>token($registrationHtml),'accion'=>'descartar_rut','rut_registro_token'=>$registrationToken[1]])[0]===303,'Descartar permite seguir con el registro manual');
 [$registrationStatus,$registrationHtml]=request($client,$base,$registrationRoute);
 verify(!str_contains($registrationHtml,'name="rut_registro_token"'),'Descartar elimina la lectura temporal del formulario');
+file_put_contents($registrationFile,rutFixturePdf('888999000'));
+rutRequest($client,$base,$registrationRoute,$registrationUpload);
+[$registrationStatus,$registrationHtml]=request($client,$base,$registrationRoute);
+preg_match('/name="rut_registro_token" value="([a-f0-9]+)"/',$registrationHtml,$registrationToken);
+$registrationRace=array_replace($registrationSave,['documento_numero'=>'888999000','dv'=>App\Services\RutPdfForm::digit('888999000'),'rut_registro_token'=>$registrationToken[1]]);
+$registrationInsert=$db->prepare('INSERT INTO contribuyentes (funcionario_id,nombre,tipo,documento_tipo,documento_numero,dv,fuentes) VALUES (?,?,?,?,?,?,?)');
+$registrationOwner=(int)$db->query('SELECT funcionario_id FROM contribuyentes WHERE id='.(int)$taxpayerId)->fetchColumn();
+$registrationInsert->execute([$registrationOwner,'Registro desde otra ventana','natural','NIT','888999000',$registrationRace['dv'],'[]']);
+$registrationRaceId=(int)$db->lastInsertId();
+[$registrationStatus,,$registrationHeaders]=request($client,$base,$registrationRoute,$registrationRace);
+verify($registrationStatus===303 && str_contains($registrationHeaders,'&id='.$registrationRaceId.'&anio=2025'),'Si se registra en otra ventana mientras se revisa, también continúa al existente sin un callejón sin salida');

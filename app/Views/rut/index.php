@@ -3,13 +3,24 @@
 <?php require __DIR__.'/../partials/header.php'; ?>
 <main class="portal-container space-y-space-lg py-8">
     <section class="bg-inverse-surface text-on-secondary rounded-2xl p-space-xl space-y-space-sm">
-        <h1 class="text-headline-lg font-semibold">Subir RUT en PDF</h1>
+        <h1 class="text-headline-lg font-semibold"><?= $preview?'Revisar datos del RUT':'Subir RUT en PDF' ?></h1>
         <p class="taxpayer-name"><?= e($taxpayer['nombre']) ?> · Perfil <?= e($year) ?></p>
-        <p>1 · Subir PDF → 2 · Revisar datos → 3 · Aplicar al perfil.</p>
+        <p><?= $preview?'PDF ya leído → Revisa los datos → Aplica al perfil.':'1 · Subir PDF → 2 · Revisar datos → 3 · Aplicar al perfil.' ?></p>
     </section>
+    <?php if (!empty($preview['from_registration'])): ?>
+    <section role="status" class="bg-primary-container rounded-xl p-4 space-y-space-sm">
+        <h2 class="text-headline-sm font-semibold">Encontramos tu contribuyente: <?= e($taxpayer['nombre']) ?></h2>
+        <p>Ya estaba registrado. Abrimos su información y conservamos el PDF que acabas de subir. Revisa abajo los datos y pulsa Aplicar datos seleccionados al perfil para completarlo. No necesitas subirlo otra vez.</p>
+        <div class="flex items-center gap-space-md flex-wrap">
+            <a class="rounded-xl bg-inverse-surface text-on-secondary px-4 py-2" href="#rut-datos-leidos">Continuar con este RUT</a>
+            <a class="underline text-secondary" href="<?= e(url($config,'contribuyentes/perfil').'&id='.$taxpayer['id'].'&anio='.$year) ?>">Abrir perfil tributario</a>
+            <a class="underline text-secondary" href="<?= e(url($config,'contribuyentes/formulario').'&id='.$taxpayer['id']) ?>">Editar identificación</a>
+        </div>
+    </section>
+    <?php endif; ?>
     <a class="text-secondary underline" href="<?= e(url($config,'contribuyentes/perfil').'&id='.$taxpayer['id'].'&anio='.$year) ?>">← Volver al perfil tributario</a>
     <?php if ($errors): ?><div role="alert" class="bg-error-container text-on-error-container rounded-xl p-4"><ul class="list-disc pl-4"><?php foreach ($errors as $error): ?><li><?= e($error) ?></li><?php endforeach; ?></ul></div><?php endif; ?>
-    <section class="bg-surface-container-lowest rounded-xl border border-surface-container p-4 space-y-space-md">
+    <section class="bg-surface-container-lowest rounded-xl border border-surface-container p-4 space-y-space-md" <?= $preview?'hidden':'' ?>>
         <h2 class="text-headline-md font-semibold">Seleccionar documento</h2>
         <form method="post" enctype="multipart/form-data" action="<?= e($action) ?>" class="space-y-space-md">
             <?php require __DIR__.'/../partials/csrf.php'; ?>

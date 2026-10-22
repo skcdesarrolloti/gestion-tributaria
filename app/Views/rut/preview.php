@@ -4,7 +4,7 @@ $describe=static function(array $row,array $schema): string {
     foreach ($row as $key=>$value) { if ($value!=='' && isset($schema['rows'][$key])) { $f=$schema['rows'][$key]; $parts[]=$f['label'].': '.($f['options'][$value]??$value); } }
     return implode(' · ',$parts);
 }; ?>
-<section class="bg-surface-container-lowest rounded-xl border border-surface-container p-4 space-y-space-md">
+<section id="rut-datos-leidos" class="bg-surface-container-lowest rounded-xl border border-surface-container p-4 space-y-space-md">
     <h2 class="text-headline-md font-semibold">Datos leídos · revisa antes de aplicar</h2>
     <p>NIT <?= e($parsed['nit'].'-'.$parsed['dv']) ?> · Formulario <?= e($parsed['formulario']) ?> · <?= e($parsed['pages']) ?> página(s)</p>
     <p>Generación del PDF: <?= e($parsed['generado']?:'No identificada') ?> · Trámite que consta: <?= e($parsed['formalizado']?:'No identificado') ?></p>

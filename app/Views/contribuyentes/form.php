@@ -19,6 +19,7 @@ require __DIR__ . '/../partials/head.php';
             <div role="alert" class="p-3 mb-4 rounded-xl bg-error-container text-on-error-container">
                 <p class="font-semibold">Revisa los siguientes datos:</p>
                 <ul class="list-disc pl-4"><?php foreach ($errors as $error): ?><li><?= e($error) ?></li><?php endforeach; ?></ul>
+                <a class="underline" href="<?= e(url($config,'contribuyentes')) ?>">Ver mis contribuyentes</a>
             </div>
         <?php endif; ?>
         <form method="post" action="<?= e($action) ?>" class="space-y-space-lg">

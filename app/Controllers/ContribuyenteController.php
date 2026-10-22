@@ -45,7 +45,10 @@ final class ContribuyenteController
                 $errors[] = 'El formulario venció. Recarga la página antes de guardar.';
             } elseif ($id===null && in_array(\input($_POST,'accion'),['leer_rut','descartar_rut'],true)) {
                 try {
-                    if (\input($_POST,'accion')==='leer_rut') { $this->rutRegistration->receive($_FILES['rut_pdf']??[],$owner,\input($_POST,'rut_anio')); }
+                    if (\input($_POST,'accion')==='leer_rut') {
+                        $existing=$this->rutRegistration->receive($_FILES['rut_pdf']??[],$owner,\input($_POST,'rut_anio'));
+                        if ($existing) { $this->openRut($existing); return; }
+                    }
                     else { $this->rutRegistration->discard($owner,\input($_POST,'rut_registro_token')); }
                     \redirect($this->config,'contribuyentes/formulario');
                 } catch (\InvalidArgumentException $e) { http_response_code(422); $errors[]=$e->getMessage(); }
@@ -59,6 +62,7 @@ final class ContribuyenteController
                         $rutToken=\input($_POST,'rut_registro_token');
                         if ($id===null && ($rutDraft || $rutToken!=='')) {
                             $created=$this->rutRegistration->create($record,$owner,$rutToken);
+                            if (!empty($created['existing'])) { $this->openRut($created); return; }
                             $_SESSION['rut_notice'][$created['id'].':'.$created['year']]='Contribuyente registrado desde el RUT: '.$created['applied'].' campos y renglones guardados. Completa los vacíos. Estado actual DIAN: consulta pendiente.';
                             header('Location: '.\url($this->config,'contribuyentes/perfil').'&id='.$created['id'].'&anio='.$created['year'],true,303); return;
                         }
@@ -82,6 +86,11 @@ final class ContribuyenteController
         if (!$user) { \redirect($this->config, 'login'); }
         // Política inicial: todo funcionario activo gestiona exclusivamente sus propios registros.
         return $user;
+    }
+
+    private function openRut(array $existing): void
+    {
+        header('Location: '.\url($this->config,'contribuyentes/rut').'&id='.$existing['id'].'&anio='.$existing['year'],true,303);
     }
 
     private function notFound(): void

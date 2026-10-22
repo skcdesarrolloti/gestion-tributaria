@@ -19,7 +19,14 @@ está ligada a la sesión del funcionario. Puedes descartarla y registrar manual
 El guardado comprueba nuevamente identidad y coincidencia de tipo con la casilla 24;
 una persona natural puede requerir sucesión, pero no se convierte en jurídica.
 Si el RUT ya corresponde a alguien registrado por ese funcionario, incluso con
-cédula en lugar de NIT, se indica utilizar el perfil existente.
+cédula en lugar de NIT, se abre directamente su importación con el mismo PDF ya
+leído. El aviso muestra el nombre y ofrece **Continuar con este RUT**, **Abrir perfil
+tributario** y **Editar identificación**. Al pulsar **Aplicar datos seleccionados al
+perfil**, completa ese contribuyente sin crear otro ni exigir una nueva carga.
+La coincidencia conserva funcionario, identidad y año, y requiere confirmación antes
+de modificar campos. La misma continuación funciona si se registró en otra ventana
+después de preparar el alta. Si ya existieran dos coincidencias históricas propias,
+se prioriza el registro con NIT; no se fusionan ni se eliminan automáticamente.
 
 Alta, bloques y documento se guardan juntos en una transacción; ante un error se
 revierte el alta y se conserva la lectura para corregir/reintentar. No se necesita

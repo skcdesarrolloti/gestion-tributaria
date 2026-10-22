@@ -11,6 +11,8 @@ En **Registrar contribuyente**, **Subir RUT y rellenar datos** es la primera opc
 Lee el PDF antes del alta, propone identificación y muestra lo que se importará.
 **Guardar contribuyente** crea el registro, su perfil del año elegido y el soporte
 privado en una sola operación. También permite continuar con captura manual.
+Si el RUT corresponde a alguien ya registrado, abre directamente su importación
+con el PDF leído y enlaces al perfil y la identificación; conserva el registro existente.
 
 Desde cada contribuyente, **Ingresos por año** abre el [bloque inicial de ingresos](docs/INGRESOS.md): perfil anual, fichas por casilla, movimientos reales/proyectados y depuración preliminar. Todavía no calcula el impuesto final.
 

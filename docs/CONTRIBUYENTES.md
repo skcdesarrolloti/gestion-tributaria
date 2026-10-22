@@ -16,7 +16,8 @@ para sus diferencias, la regla de sucesiones y los bloques pendientes de cada fo
 3. Pulsa **Registrar contribuyente**.
    Al comienzo puedes **Subir RUT y rellenar datos**, elegir el año y revisar la
    identificación propuesta antes de guardar. El alta conserva también los campos
-   reconocidos del perfil y el soporte privado. Si ya existe, usa el perfil anterior.
+   reconocidos del perfil y el soporte privado. Si ya existe, abre automáticamente
+   su importación con el PDF listo y botones para entrar al perfil o editar identificación.
    Los pasos siguientes siguen disponibles para completar o registrar manualmente.
 4. Selecciona persona natural, persona jurídica o sucesión ilíquida.
 5. Escribe nombre o razón social, tipo y número de documento. Para entidades y

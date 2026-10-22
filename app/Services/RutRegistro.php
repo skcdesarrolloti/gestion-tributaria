@@ -28,12 +28,13 @@ final class RutRegistro
             'documento_tipo'=>'NIT','documento_numero'=>$parsed['nit'],'dv'=>$parsed['dv']]);
     }
 
-    public function receive(array $upload, int $owner, string $year): void
+    public function receive(array $upload, int $owner, string $year): ?array
     {
         if (!in_array($year,['2025','2026'],true)) { throw new \InvalidArgumentException('Selecciona el año del perfil: 2025 o 2026.'); }
         $this->files->cleanup(); $file=$this->files->receive($upload);
         try {
-            if ((new Contribuyente($this->database))->existsFromRut($file['parsed'],$owner)) { throw new \InvalidArgumentException('Este RUT corresponde a un contribuyente que ya registraste. Ábrelo desde Contribuyentes y usa Subir RUT en PDF para completar su perfil.'); }
+            $existing=(new Contribuyente($this->database))->findFromRutFor($file['parsed'],$owner);
+            if ($existing) { return $this->openExisting($file,$existing,$owner,$year); }
             $seed=self::seed($file['parsed']); $schemas=CaracterizacionSchema::all((new Caracterizacion($this->database))->catalogs());
             $plan=RutImportPlan::build($file['parsed'],$seed,$schemas,$year);
         } catch (\Throwable $e) { $this->files->remove($file['key']); throw $e; }
@@ -41,6 +42,22 @@ final class RutRegistro
         $_SESSION['rut_registro']=['owner'=>$owner,'time'=>time(),'token'=>bin2hex(random_bytes(24)),
             'year'=>$year,'file'=>$file,'seed'=>$seed,'warnings'=>$plan['warnings'],'count'=>count($plan['items']),
             'summary'=>self::summary($plan,$schemas)];
+        return null;
+    }
+
+    private function openExisting(array $file, array $existing, int $owner, string $year): array
+    {
+        $profiles=new Caracterizacion($this->database); $schemas=CaracterizacionSchema::all($profiles->catalogs());
+        $plan=RutImportPlan::build($file['parsed'],$existing,$schemas,$year);
+        $blocks=$profiles->blocksFor((int)$existing['id'],$owner,(int)$year);
+        $previous=$_SESSION['rut_import']['file']['key']??'';
+        if ($previous!=='' && $previous!==$file['key']) { $this->files->remove($previous); }
+        $draft=$this->draft($owner);
+        if ($draft && $draft['file']['key']!==$file['key']) { $this->files->remove($draft['file']['key']); }
+        unset($_SESSION['rut_registro']);
+        $_SESSION['rut_import']=['owner'=>$owner,'id'=>(int)$existing['id'],'year'=>$year,'time'=>time(),'token'=>bin2hex(random_bytes(24)),
+            'file'=>$file,'plan'=>$plan,'revisions'=>array_map(static fn($b)=>(int)$b['revision'],$blocks),'from_registration'=>true];
+        return ['id'=>(int)$existing['id'],'year'=>$year,'existing'=>true];
     }
 
     private function confirmed(int $owner, string $token): array
@@ -59,6 +76,8 @@ final class RutRegistro
     {
         $draft=$this->confirmed($owner,$token); $file=$draft['file'];
         RutImportPlan::matchIdentity($file['parsed'],$record);
+        $existing=(new Contribuyente($this->database))->findFromRutFor($file['parsed'],$owner);
+        if ($existing) { return $this->openExisting($file,$existing,$owner,$draft['year']); }
         $type=$draft['seed']['tipo'];
         if (($type==='juridica' && $record['tipo']!=='juridica') || ($type==='natural' && $record['tipo']==='juridica')) {
             throw new \InvalidArgumentException('El tipo de contribuyente no coincide con la casilla 24 del RUT. Para una persona fallecida revisa Sucesión ilíquida; no Persona jurídica.');
@@ -71,11 +90,19 @@ final class RutRegistro
         $db=$this->database->connection();
         try {
             $db->beginTransaction();
-            if ((new Contribuyente($this->database))->existsFromRut($file['parsed'],$owner)) { throw new \InvalidArgumentException('Este contribuyente se registró después de leer el RUT. Abre su registro existente; no se creó otro.'); }
+            $late=(new Contribuyente($this->database))->findFromRutFor($file['parsed'],$owner);
+            if ($late) {
+                $db->rollBack(); rename($this->files->path($final),$path);
+                return $this->openExisting($file,$late,$owner,$draft['year']);
+            }
             $id=(new Contribuyente($this->database))->saveFor($record,$owner,null);
             $result=(new RutDocumento($this->database))->applyFor($id,$owner,(int)$draft['year'],$preview,array_keys($preview['plan']['items']),false,$schemas,$final);
             $db->commit();
-        } catch (\Throwable $e) { if ($db->inTransaction()) { $db->rollBack(); } rename($this->files->path($final),$path); throw $e; }
+        } catch (\Throwable $e) {
+            if ($db->inTransaction()) { $db->rollBack(); }
+            if (is_file($this->files->path($final))) { rename($this->files->path($final),$path); }
+            throw $e;
+        }
         unset($_SESSION['rut_registro']);
         return ['id'=>$id,'year'=>$draft['year'],'applied'=>$result['applied']];
     }

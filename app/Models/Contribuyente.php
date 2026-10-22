@@ -28,11 +28,17 @@ final class Contribuyente
 
     public function existsFromRut(array $parsed, int $owner): bool
     {
+        return $this->findFromRutFor($parsed,$owner)!==null;
+    }
+
+    public function findFromRutFor(array $parsed, int $owner): ?array
+    {
         $identity=$parsed['fields']['identificacion'];
-        $q=$this->database->connection()->prepare('SELECT id FROM contribuyentes WHERE funcionario_id=? AND
-            ((documento_tipo="NIT" AND documento_numero=?) OR (documento_tipo=? AND documento_numero=?)) LIMIT 1');
+        $q=$this->database->connection()->prepare('SELECT * FROM contribuyentes WHERE funcionario_id=? AND
+            ((documento_tipo="NIT" AND documento_numero=?) OR (documento_tipo=? AND documento_numero=?))
+            ORDER BY (documento_tipo="NIT") DESC,id LIMIT 1');
         $q->execute([$owner,$parsed['nit'],$identity['identificacion_tipo']??'',$identity['identificacion_numero']??'']);
-        return $q->fetchColumn()!==false;
+        $row=$q->fetch(); return $row?$this->decode($row):null;
     }
 
     public function saveFor(array $data, int $owner, ?int $id): int
