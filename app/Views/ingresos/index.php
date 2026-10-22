@@ -35,6 +35,7 @@
         <?php require __DIR__.'/errors.php'; ?>
         <?php
         $profileAction=url($config,'ingresos').'&contribuyente='.$taxpayer['id'];
+        if ($registration) { $profileAction.='&origen=registro'.\App\Services\RegistroNavegacion::query($registration,(int)$taxpayer['id']); }
         $profileButton='Crear perfil y abrir ingresos';
         require __DIR__.'/profile-form.php';
         ?>

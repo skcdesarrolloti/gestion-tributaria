@@ -1,4 +1,4 @@
-document.querySelectorAll('[data-exogena-menu], [data-planeacion-menu]').forEach((menu) => {
+document.querySelectorAll('[data-exogena-menu], [data-portal-menu]').forEach((menu) => {
     document.addEventListener('pointerdown', (event) => {
         if (!menu.contains(event.target)) menu.open = false;
     });

@@ -2,6 +2,8 @@
 declare(strict_types=1);
 
 $router->add('GET', 'inicio', [$homeController, 'index']);
+$router->add('GET', 'registro', [$registroController, 'index']);
+$router->add('GET', 'analisis', [$registroController, 'analysis']);
 $router->add('GET', 'perfil', [$cuentaController, 'profile']);
 $router->add('POST', 'perfil', [$cuentaController, 'profile']);
 $router->add('GET', 'usuarios/crear', [$cuentaController, 'create']);

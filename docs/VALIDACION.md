@@ -4,6 +4,17 @@ Verificación local realizada el 13 de octubre de 2026 con PHP 8.2.12, MariaDB 1
 
 ## Resultado
 
+### Menú y registro de información · 22/10/2026
+
+Menús ordenados por el recorrido solicitado, con Exógena independiente y sin
+cambios de esquema. Registro y análisis usan consultas autorizadas existentes;
+2025/2026 se seleccionan por perfil, sin copiar importes. Las pestañas incompletas
+se identifican expresamente. Ver [MENU-Y-REGISTRO.md](MENU-Y-REGISTRO.md).
+Integración aislada completa correcta: costos separados de ingresos, conservación
+de año/componente al guardar, casilla preseleccionada y rechazo de fichas ajenas.
+Revisión en Edge a 1440px y 390px: menús, Escape, registro de costo y retorno a la
+pestaña, acceso a la hoja de escenarios; sin desbordamiento ni errores JavaScript.
+
 ### Cuentas independientes · 22/10/2026
 
 Integración completa correcta en bases temporales: migración 021, activación

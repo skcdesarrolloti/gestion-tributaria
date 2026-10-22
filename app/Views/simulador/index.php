@@ -18,7 +18,7 @@
             </label>
             <button class="rounded-xl bg-inverse-surface text-on-secondary px-4 py-2 mt-2" type="submit">Abrir hoja</button>
         </form>
-        <p class="text-body-md text-secondary">Si aún no aparece la persona, registra su contribuyente y crea su perfil en Ingresos por año. La hoja guarda escenarios independientes; no importa ni modifica los movimientos de ingresos existentes.</p>
+        <p class="text-body-md text-secondary">Si aún no aparece la persona, abre Registro de información, selecciona contribuyente y año y confirma su perfil fiscal. La hoja guarda escenarios independientes; no importa ni modifica los movimientos de ingresos existentes.</p>
     </section>
     <?php if ($profile): ?>
         <?php require __DIR__.'/scope.php'; ?>

@@ -1,0 +1,34 @@
+<?php
+declare(strict_types=1);
+[$s,$navigation]=request($client,$base,'registro');
+verify($s===200 && strpos($navigation,'Usuarios y accesos')<strpos($navigation,'>Contribuyentes<') && str_contains($navigation,'Beneficios tributarios') && str_contains($navigation,'Análisis y acciones'),'Menú sigue el recorrido y conserva Exógena');
+$registrationRoute='registro&contribuyente='.$taxpayerId.'&anio=2025&componente=costos&cedula=general&renta=capital';
+[$s,$registrationHtml]=request($client,$base,$registrationRoute);
+verify($s===200 && str_contains($registrationHtml,'60 · Costos') && !str_contains($registrationHtml,'58 · Ingresos brutos'),'Costos muestra sus casillas separadas de ingresos');
+verify(str_contains(request($client,$base,str_replace('componente=costos','componente=ingresos',$registrationRoute))[1],'58 · Ingresos brutos'),'Ingresos de capital tiene pestaña propia');
+verify(!str_contains(request($client,$base,str_replace('anio=2025','anio=2026',$registrationRoute))[1],'Movimiento corregido'),'Cambiar año no muestra movimientos del otro perfil');
+verify(str_contains(request($client,$base,str_replace('cedula=general','cedula=pensiones',$registrationRoute))[1],'esta cédula aún está pendiente'),'Pensiones no se presenta como captura ya implementada');
+verify(request($client,$base,'registro&anio=2027')[0]===422 && request($client,$base,'registro&componente=desconocido')[0]===422,'Registro valida año y componente');
+$registrationMovement='ingresos/movimiento&id='.$profileId.'&concepto='.$codeId('210',60).'&origen=registro&anio=2025&componente=costos&cedula=general&renta=capital';
+[$s,$registrationForm]=request($client,$base,$registrationMovement);
+verify($s===200 && str_contains($registrationForm,'value="'.$codeId('210',60).'" selected'),'Registrar valor preselecciona la casilla');
+$registeredCost=array_replace($movement,['_csrf_token'=>token($registrationForm),'concepto_id'=>$codeId('210',60),'fecha'=>'2025-10-01','descripcion'=>'Costo desde pestaña capital','justificacion'=>'ET 107 y soporte ficticio','valor_original'=>'111','valor_cop'=>'111']);
+[$s,,$back]=request($client,$base,$registrationMovement,$registeredCost);
+verify($s===303 && str_contains($back,'route=registro') && str_contains($back,'componente=costos') && str_contains($back,'renta=capital'),'Guardar regresa al mismo año, componente y renta');
+verify(str_contains(request($client,$base,$registrationRoute)[1],'Costo desde pestaña capital'),'Movimiento queda guardado en la pestaña correspondiente');
+verify(request($client,$base,'analisis&contribuyente='.$taxpayerId.'&anio=2025')[0]===200,'Análisis conserva persona y año');
+$newYearRoute='ingresos&contribuyente='.$otherId.'&origen=registro&anio=2026&componente=costos&cedula=general&renta=capital';
+[$s,$newYearForm]=request($client,$base,$newYearRoute);
+verify($s===200 && str_contains($newYearForm,'value="2026" selected'),'Configurar año desde registro preselecciona el solicitado');
+[$s,,$newYearBack]=request($client,$base,$newYearRoute,array_replace($annual,['_csrf_token'=>token($newYearForm),'anio'=>'2026']));
+verify($s===303 && str_contains($newYearBack,'route=registro') && str_contains($newYearBack,'anio=2026'),'Crear perfil anual regresa al registro del año solicitado');
+$entityRegistration=$db->query("SELECT contribuyente_id,anio FROM perfiles_renta WHERE formulario='110' LIMIT 1")->fetch();
+[$s,$entityRegistrationHtml]=request($client,$base,'registro&contribuyente='.$entityRegistration['contribuyente_id'].'&anio='.$entityRegistration['anio'].'&componente=costos');
+verify($s===200 && !str_contains($entityRegistrationHtml,'aria-label="Cédulas del formulario 210"') && str_contains($entityRegistrationHtml,'62 · Costos'),'Formulario 110 conserva costos propios sin pestañas cedulares');
+$registered=curl_init();curl_setopt($registered,CURLOPT_COOKIEFILE,'');
+try {
+    [, $registeredLogin]=request($registered,$base,'login');
+    request($registered,$base,'login',['_csrf_token'=>token($registeredLogin),'username'=>'hash-user','password'=>'Otra-clave-segura']);
+    verify(request($registered,$base,$registrationRoute)[0]===200,'Usuario usa el registro de su ficha asignada');
+    verify(request($registered,$base,'registro&contribuyente='.$otherId)[0]===404 && request($registered,$base,'analisis&contribuyente='.$otherId)[0]===404,'Los menús nuevos no amplían permisos sobre otras fichas');
+} finally { curl_close($registered); }

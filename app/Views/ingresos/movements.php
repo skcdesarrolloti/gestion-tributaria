@@ -9,7 +9,7 @@
             <p class="text-body-md text-secondary">Soporte: <?= e($movement['soporte']?:'Pendiente (proyección)') ?></p>
             <?php if ($movement['justificacion']!==''): ?><p class="text-body-md text-secondary">Justificación: <?= e($movement['justificacion']) ?></p><?php endif; ?>
             <?php if ($movement['conversion']!==''): ?><p class="text-body-md text-secondary">Conversión: <?= e($movement['conversion']) ?></p><?php endif; ?>
-            <a class="text-secondary underline" href="<?= e(url($config,'ingresos/movimiento').'&id='.$profile['id'].'&movimiento='.$movement['id']) ?>">Editar movimiento</a>
+            <a class="text-secondary underline" href="<?= e(url($config,'ingresos/movimiento').'&id='.$profile['id'].'&movimiento='.$movement['id'].(isset($registration)?'&origen=registro'.\App\Services\RegistroNavegacion::query($registration,(int)$profile['contribuyente_id']):'')) ?>">Editar movimiento</a>
         </article>
     <?php endforeach; ?>
 </section>

@@ -8,23 +8,29 @@
         <p class="text-body-md mt-2">Bienvenido al portal. Aquí encontrarás las herramientas de tu equipo.</p>
     </section>
     <div class="scenario-settings-grid" aria-label="Módulos de Gestión Tributaria">
+    <?php if (\App\Services\AccesoRoles::socio($user)): ?><section class="bg-surface-container-lowest rounded-2xl border border-surface-container p-4">
+        <h2 class="text-headline-md font-semibold">Usuarios y accesos</h2><p class="text-secondary mt-2">Crea cuentas propias, asigna el contribuyente de cada tercero y administra los permisos.</p><a class="inline-block mt-4 rounded-xl bg-inverse-surface text-on-secondary px-4 py-2" href="<?= e(url($config,'accesos')) ?>">Administrar usuarios</a>
+    </section><?php endif; ?>
     <section class="bg-surface-container-lowest rounded-2xl border border-surface-container p-4">
         <span aria-hidden="true" class="material-symbols-outlined bg-primary-container rounded-xl p-3">group</span>
         <h2 class="text-headline-md font-semibold mt-4">Paso 1 · Contribuyentes</h2>
-        <p class="text-body-md text-secondary mt-2">Abre su perfil, sube el RUT y consulta su información organizada por pestañas.</p>
+        <p class="text-body-md text-secondary mt-2">Abre su perfil y completa manualmente los campos que el RUT no diligenció. Revisa y guarda cada pestaña.</p>
         <a class="inline-block mt-4 rounded-xl bg-inverse-surface text-on-secondary px-4 py-2" href="<?= e(url($config, 'contribuyentes')) ?>">Ir a contribuyentes</a>
     </section>
     <section class="bg-surface-container-lowest rounded-2xl border border-surface-container p-4">
         <span aria-hidden="true" class="material-symbols-outlined bg-primary-container rounded-xl p-3">calculate</span>
-        <h2 class="text-headline-md font-semibold mt-4">Paso 2 · Hoja de planeación</h2>
-        <p class="text-body-md text-secondary mt-2">Diligencia las celdas, realiza los primeros cálculos de renta y compara tus escenarios guardados.</p>
-        <a class="inline-block mt-4 rounded-xl bg-inverse-surface text-on-secondary px-4 py-2" href="<?= e(url($config,'simulador')) ?>">Abrir hoja de cálculos</a>
+        <h2 class="text-headline-md font-semibold mt-4">Paso 2 · Beneficios tributarios</h2>
+        <p class="text-body-md text-secondary mt-2">Consulta las 52 fichas por categoría con definición, artículos, límites y soportes antes de registrar tus valores.</p>
+        <a class="inline-block mt-4 rounded-xl bg-inverse-surface text-on-secondary px-4 py-2" href="<?= e(url($config,'beneficios')) ?>">Consultar deducciones y normas</a>
     </section>
     <section class="bg-surface-container-lowest rounded-2xl border border-surface-container p-4">
         <span aria-hidden="true" class="material-symbols-outlined bg-primary-container rounded-xl p-3">menu_book</span>
-        <h2 class="text-headline-md font-semibold mt-4">Paso 3 · Deducciones y beneficios</h2>
-        <p class="text-body-md text-secondary mt-2">Consulta las 52 fichas por categoría: costos, deducciones, exenciones y descuentos, con fundamento normativo, límites y soportes.</p>
-        <a class="inline-block mt-4 rounded-xl bg-inverse-surface text-on-secondary px-4 py-2" href="<?= e(url($config,'beneficios')) ?>">Consultar deducciones y normas</a>
+        <h2 class="text-headline-md font-semibold mt-4">Paso 3 · Registro de información</h2>
+        <p class="text-body-md text-secondary mt-2">Selecciona 2025 o 2026 y registra Ingresos o Costos y gastos por cédula, conservando sus movimientos y soportes.</p>
+        <a class="inline-block mt-4 rounded-xl bg-inverse-surface text-on-secondary px-4 py-2" href="<?= e(url($config,'registro')) ?>">Registrar información del año</a>
+    </section>
+    <section class="bg-surface-container-lowest rounded-2xl border border-surface-container p-4">
+        <h2 class="text-headline-md font-semibold">Paso 4 · Análisis y acciones</h2><p class="text-secondary mt-2">Revisa la proyección anual y abre la hoja de cálculos para comparar escenarios.</p><a class="inline-block mt-4 rounded-xl bg-inverse-surface text-on-secondary px-4 py-2" href="<?= e(url($config,'analisis')) ?>">Abrir análisis y acciones</a>
     </section>
     <section class="bg-surface-container-lowest rounded-2xl border border-surface-container p-4">
         <span aria-hidden="true" class="material-symbols-outlined bg-primary-container rounded-xl p-3">folder_open</span>

@@ -11,10 +11,11 @@ en **Mi perfil**. No existe conexión a funcionarios ni inscripción pública.
 Ver [primera entrada y cuentas independientes](docs/CUENTAS-INDEPENDIENTES.md).
 Ver [perfiles y permisos](docs/PERFILES-Y-ACCESOS.md).
 
-**Inicio y menú principal conservan todos los módulos.** Accesos en filas a
-Contribuyentes, Hoja de planeación, Deducciones y beneficios (52 fichas con sus
-fuentes) y Exógena como módulo independiente. Los menús Planeación y Exógena
-permanecen visibles también al consultar el perfil del contribuyente.
+**Menú de trabajo:** Usuarios y accesos (Socio), Contribuyentes, Beneficios
+tributarios, Registro de información y Análisis y acciones. Exógena permanece
+independiente. Registro selecciona contribuyente y año 2025/2026 y muestra Ingresos
+o Costos y gastos en pestañas, reutilizando los movimientos existentes. Las 52
+fichas y la hoja de cálculos se conservan. Ver [recorrido y alcance](docs/MENU-Y-REGISTRO.md).
 
 **Recorrido actual: Inicio → Contribuyentes → Abrir perfil.** Una sola ficha con
 pestañas por naturaleza de información, carga del RUT que completa vacíos y edición
@@ -59,8 +60,8 @@ faltantes sin volver a digitar lo importado. La entidad se organiza por seccione
 
 ## Continuar el trabajo
 
-El menú **Planeación** reúne hoja de cálculo, categorías de beneficios y seguridad
-social. Las 52 fichas se consultan por siete categorías, hasta nueve por página;
+**Análisis y acciones** reúne proyección, hoja de cálculo y seguridad social.
+**Beneficios tributarios** conserva las 52 fichas por siete categorías, hasta nueve por página;
 su explicación se abre dentro de cada ficha. **Seguridad social** contiene la
 revisión inicial del HTML recibido: detectados errores, el cálculo no está integrado.
 Ver hallazgos y criterios de reutilización en docs/ALCANCE-PLANEACION.md.

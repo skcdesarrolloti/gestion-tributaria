@@ -1,6 +1,7 @@
 <?php
 $title=$id===null?'Registrar movimiento':'Editar movimiento';
 $action=url($config,'ingresos/movimiento').'&id='.$profile['id'].($id===null?'':'&movimiento='.$id);
+if ($registration) { $action.='&origen=registro'.\App\Services\RegistroNavegacion::query($registration,(int)$profile['contribuyente_id']); }
 require __DIR__.'/../partials/head.php';
 ?>
 <body class="bg-background min-h-screen font-body-md text-on-surface antialiased">
@@ -78,7 +79,7 @@ require __DIR__.'/../partials/head.php';
             <button class="rounded-xl bg-inverse-surface text-on-secondary px-4 py-2" type="submit">Guardar movimiento</button>
         </fieldset>
         </form>
-        <a class="text-secondary underline" href="<?= e(url($config,'ingresos/detalle').'&id='.$profile['id']) ?>">Volver a casillas y fichas</a>
+        <a class="text-secondary underline" href="<?= e($registration?url($config,'registro').\App\Services\RegistroNavegacion::query($registration,(int)$profile['contribuyente_id']):url($config,'ingresos/detalle').'&id='.$profile['id']) ?>">Volver al registro</a>
     </section>
 </main>
 <script src="<?= e(asset($config,'js/ingresos-guidance.js')) ?>" defer></script>

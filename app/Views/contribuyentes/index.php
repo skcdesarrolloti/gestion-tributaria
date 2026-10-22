@@ -8,7 +8,7 @@ $title = 'Contribuyentes'; require __DIR__ . '/../partials/head.php';
     <section class="bg-inverse-surface text-on-secondary rounded-2xl p-space-xl">
         <p class="text-label-md uppercase tracking-wide">Paso 1 · Identificación</p>
         <h1 class="text-headline-lg font-semibold mt-2">Contribuyentes</h1>
-        <p class="text-body-md mt-2">Conoce y completa la ficha de cada persona, sociedad o sucesión.</p>
+        <p class="text-body-md mt-2">Abre el perfil y completa los campos que el RUT no diligenció automáticamente. Revisa cada pestaña y guarda sus cambios.</p>
     </section>
 
     <?php if ($notice !== ''): ?>

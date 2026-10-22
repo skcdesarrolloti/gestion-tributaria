@@ -15,10 +15,16 @@ final class IngresoController
     public function index(): void
     {
         $user = $this->user();
+        $registration=null;
+        if (\input($_GET,'origen')==='registro') {
+            try { $registration=\App\Services\RegistroNavegacion::state($_GET); }
+            catch (\InvalidArgumentException $e) { http_response_code(422);echo \e($e->getMessage());return; }
+        }
         $taxpayer = $this->taxpayers->findFor($this->id('contribuyente'), (int) $user['_ID']);
         if (!$taxpayer) { $this->missing(); return; }
         if ($_SERVER['REQUEST_METHOD']==='POST' && !\App\Services\AccesoRoles::writable($user,$taxpayer)) { return; }
         $record = IngresoData::read($_POST, Ingreso::PROFILE_FIELDS);
+        if ($_SERVER['REQUEST_METHOD']==='GET' && in_array(\input($_GET,'anio'),['2025','2026'],true)) { $record['anio']=\input($_GET,'anio'); }
         $errors = [];
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $errors = $this->csrfErrors();
@@ -27,6 +33,7 @@ final class IngresoController
                 if (!$errors) {
                     try {
                         $id = $this->model->createProfile($record,$taxpayer,(int) $user['_ID']);
+                        if ($registration) { $registration['anio']=$record['anio'];header('Location: '.\url($this->config,'registro').\App\Services\RegistroNavegacion::query($registration,(int)$taxpayer['id']),true,303);return; }
                         $_SESSION['perfil_notice']='Perfil anual guardado. Estos son los datos registrados y sus ingresos.';
                         $this->go('ingresos/detalle',$id);
                     } catch (\PDOException $error) {
@@ -38,7 +45,7 @@ final class IngresoController
             }
         }
         $profiles = $this->model->profiles((int) $taxpayer['id'],(int) $user['_ID']);
-        $this->view->render('ingresos/index',compact('user','taxpayer','profiles','record','errors'));
+        $this->view->render('ingresos/index',compact('user','taxpayer','profiles','record','errors','registration'));
     }
 
     public function detail(): void
@@ -96,6 +103,12 @@ final class IngresoController
         $concepts = $this->model->concepts($profile);
         $id = array_key_exists('movimiento',$_GET) ? $this->id('movimiento') : null;
         $record = IngresoData::read([],Ingreso::MOVEMENT_FIELDS);
+        $registration=null;
+        if (\input($_GET,'origen')==='registro') {
+            try { $registration=\App\Services\RegistroNavegacion::state($_GET);$registration['anio']=(string)$profile['anio']; }
+            catch (\InvalidArgumentException $e) { http_response_code(422);echo \e($e->getMessage());return; }
+        }
+        foreach ($concepts as $concept) { if ((int)$concept['id']===$this->id('concepto') && IngresoData::allowed($concept,$profile)) { $record['concepto_id']=(string)$concept['id']; } }
         if ($id !== null) {
             $found = array_filter($this->model->movements((int) $profile['id'],(int) $user['_ID']),
                 static fn ($row) => (int) $row['id'] === $id);
@@ -115,13 +128,14 @@ final class IngresoController
                 if (!$errors) {
                     try {
                         $this->model->saveMovement($record,(int) $profile['id'],(int) $user['_ID'],$id);
+                        if ($registration) { header('Location: '.\url($this->config,'registro').\App\Services\RegistroNavegacion::query($registration,(int)$profile['contribuyente_id']),true,303);return; }
                         $this->go('ingresos/detalle',(int) $profile['id']);
                     } catch (\DomainException $error) { $errors[]=$error->getMessage(); }
                 }
                 http_response_code(422);
             }
         }
-        $this->view->render('ingresos/movement',compact('user','profile','concepts','id','record','errors'));
+        $this->view->render('ingresos/movement',compact('user','profile','concepts','id','record','errors','registration'));
     }
 
     private function user(): array
