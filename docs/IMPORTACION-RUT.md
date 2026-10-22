@@ -2,6 +2,31 @@
 
 ## Uso
 
+### Al registrar por primera vez
+
+1. Abre **Contribuyentes → Registrar contribuyente**. La carga está al comienzo,
+   antes de Datos de identificación: no hace falta guardar primero un registro vacío.
+2. Selecciona el RUT completo y el año; pulsa **Subir RUT y rellenar datos**.
+3. Revisa NIT, dígito, nombre/razón social y tipo propuestos. Si la casilla 24 no
+   permite reconocer el tipo, selecciónalo; una sucesión requiere confirmación expresa.
+   Las fuentes personales de ingresos no se infieren del solo RUT.
+4. Abre el resumen plegable si quieres ver los datos reconocidos de las hojas.
+5. Pulsa **Guardar contribuyente**. Se crea la identificación, se completan los
+   bloques del año y se conserva el PDF privado. Se abre el perfil para completar vacíos.
+
+Leer el documento no crea registros. La lectura temporal vence en 30 minutos y
+está ligada a la sesión del funcionario. Puedes descartarla y registrar manualmente.
+El guardado comprueba nuevamente identidad y coincidencia de tipo con la casilla 24;
+una persona natural puede requerir sucesión, pero no se convierte en jurídica.
+Si el RUT ya corresponde a alguien registrado por ese funcionario, incluso con
+cédula en lugar de NIT, se indica utilizar el perfil existente.
+
+Alta, bloques y documento se guardan juntos en una transacción; ante un error se
+revierte el alta y se conserva la lectura para corregir/reintentar. No se necesita
+una migración adicional: se usan las tablas y mecanismos privados existentes.
+
+### Para un contribuyente que ya existe
+
 1. En Contribuyentes, abre **Completar perfil tributario y RUT** y elige el año.
 2. Pulsa **Subir RUT en PDF**, selecciona el archivo y **Leer PDF y mostrar datos**.
 3. Abre cada grupo para comparar el valor leído con el dato actual. Desmarca los
@@ -88,6 +113,12 @@ licencia LGPL-3.0 y procedencia en NOTICE.md. No requiere Composer en el servido
 usa las extensiones PHP mbstring, iconv, fileinfo y zlib. Los PDF se procesan en
 el servidor de la aplicación, sin enviarse a servicios externos de IA. No se
 ejecutan acciones o instrucciones contenidas en los documentos.
+
+`RutRegistro` coordina el borrador de alta con `ContribuyenteController`; reutiliza
+los mismos lector, validador y almacenamiento. `RutDocumento` participa en la
+transacción del alta cuando esta ya existe, y conserva su transacción propia para
+importaciones posteriores. La vista inicial no incluye archivos personales en HTML
+ni permite descargar el soporte antes de confirmar el alta.
 
 Sesión, propietario y CSRF se comprueban en el servidor. La vista previa está ligada
 al contribuyente/año, vence en 30 minutos y se consume al aplicar. Un cambio de

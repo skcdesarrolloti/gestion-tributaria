@@ -18,7 +18,8 @@ function rutFixturePdf(string $nit='12345678'): string
     $text(27,437.47,'COLOMBIA 169'); $text(201,437.47,'Departamento 13'); $text(393,437.47,'Ciudad 001');
     $text(27,412.5,'Direccion ficticia 1'); $text(106,401.5,'prueba@example.invalid'); $text(309,387.5,'3000000000');
     $text(32.9,329.5,'0010'); $text(79.4,329.5,'20200101'); $text(64.8,291.5,'05'); $text(85,291.5,'22');
-    $text(452,103.5,'2022-08-08 / 04:00PM'); $text(20,10,'Fecha generacion documento PDF: '.date('d-m-Y'));
+    $today=new DateTimeImmutable('now',new DateTimeZone('America/Bogota'));
+    $text(452,103.5,'2022-08-08 / 04:00PM'); $text(20,10,'Fecha generacion documento PDF: '.$today->format('d-m-Y'));
     $stream=implode("\n",$commands);
     return rutFixturePages([$stream]);
 }

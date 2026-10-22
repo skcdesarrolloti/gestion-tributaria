@@ -50,7 +50,8 @@ $beneficioController = new App\Controllers\BeneficioController($auth, $view, $co
 $seguridadSocialController = new App\Controllers\SeguridadSocialController($auth, $view, $config);
 $simuladorController = new App\Controllers\SimuladorController($auth, new App\Models\Ingreso($database), new App\Models\EscenarioRenta($database), $view, $config);
 $contribuyenteController = new App\Controllers\ContribuyenteController(
-    $auth, new App\Models\Contribuyente($database), $view, $config
+    $auth, new App\Models\Contribuyente($database), $view, $config,
+    new App\Services\RutRegistro($database,$config['storage_path']??dirname(__DIR__).'/storage')
 );
 $caracterizacionController = new App\Controllers\CaracterizacionController(
     $auth, new App\Models\Contribuyente($database), new App\Models\Caracterizacion($database), $view, $config

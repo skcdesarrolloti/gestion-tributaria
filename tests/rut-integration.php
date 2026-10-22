@@ -61,3 +61,4 @@ try {
     verify(request($otherClient,$base,'contribuyentes/rut/documento&documento='.$doc['id'])[0]===404,'Ni otro administrador descarga el RUT ajeno');
 } finally { curl_close($otherClient); }
 require __DIR__.'/rut-multi-integration.php';
+require __DIR__.'/rut-registro-integration.php';

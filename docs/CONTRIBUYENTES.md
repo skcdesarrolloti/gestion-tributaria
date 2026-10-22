@@ -14,6 +14,10 @@ para sus diferencias, la regla de sucesiones y los bloques pendientes de cada fo
 1. Inicia sesión y entra a **Contribuyentes** desde la navegación o el inicio.
 2. Abre **¿Qué es un contribuyente?** para consultar la explicación inicial.
 3. Pulsa **Registrar contribuyente**.
+   Al comienzo puedes **Subir RUT y rellenar datos**, elegir el año y revisar la
+   identificación propuesta antes de guardar. El alta conserva también los campos
+   reconocidos del perfil y el soporte privado. Si ya existe, usa el perfil anterior.
+   Los pasos siguientes siguen disponibles para completar o registrar manualmente.
 4. Selecciona persona natural, persona jurídica o sucesión ilíquida.
 5. Escribe nombre o razón social, tipo y número de documento. Para entidades y
    sucesiones utiliza el NIT del RUT; escríbelo sin el dígito de verificación.

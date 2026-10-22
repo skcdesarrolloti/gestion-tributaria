@@ -25,7 +25,8 @@ final class RutDocumento
 
     public function applyFor(int $id, int $owner, int $year, array $preview, array $selected, bool $replace, array $schemas, string $fileKey): array
     {
-        $db=$this->database->connection(); $db->beginTransaction();
+        $db=$this->database->connection(); $ownsTransaction=!$db->inTransaction();
+        if ($ownsTransaction) { $db->beginTransaction(); }
         try {
             $q=$db->prepare('SELECT * FROM contribuyentes WHERE id=? AND funcionario_id=? FOR UPDATE'); $q->execute([$id,$owner]);
             $taxpayer=$q->fetch();
@@ -57,7 +58,8 @@ final class RutDocumento
                     throw new \DomainException('El bloque cambió antes de guardar. Vuelve a revisar el PDF.');
                 }
             }
-            $db->commit(); return ['document'=>$document,'applied'=>count($merged['applied']),'skipped'=>count($merged['skipped'])];
-        } catch (\Throwable $e) { if ($db->inTransaction()) { $db->rollBack(); } throw $e; }
+            if ($ownsTransaction) { $db->commit(); }
+            return ['document'=>$document,'applied'=>count($merged['applied']),'skipped'=>count($merged['skipped'])];
+        } catch (\Throwable $e) { if ($ownsTransaction && $db->inTransaction()) { $db->rollBack(); } throw $e; }
     }
 }

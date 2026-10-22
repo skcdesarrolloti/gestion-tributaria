@@ -26,7 +26,16 @@ final class Contribuyente
         return $row ? $this->decode($row) : null;
     }
 
-    public function saveFor(array $data, int $owner, ?int $id): void
+    public function existsFromRut(array $parsed, int $owner): bool
+    {
+        $identity=$parsed['fields']['identificacion'];
+        $q=$this->database->connection()->prepare('SELECT id FROM contribuyentes WHERE funcionario_id=? AND
+            ((documento_tipo="NIT" AND documento_numero=?) OR (documento_tipo=? AND documento_numero=?)) LIMIT 1');
+        $q->execute([$owner,$parsed['nit'],$identity['identificacion_tipo']??'',$identity['identificacion_numero']??'']);
+        return $q->fetchColumn()!==false;
+    }
+
+    public function saveFor(array $data, int $owner, ?int $id): int
     {
         $values = [$data['nombre'], $data['tipo'], $data['documento_tipo'], $data['documento_numero'],
             $data['dv'] === '' ? null : $data['dv'], json_encode(array_values(array_unique($data['fuentes'])), JSON_THROW_ON_ERROR)];
@@ -40,6 +49,7 @@ final class Contribuyente
             array_push($values, $id, $owner);
         }
         $this->database->connection()->prepare($sql)->execute($values);
+        return $id ?? (int)$this->database->connection()->lastInsertId();
     }
 
     private function decode(array $row): array

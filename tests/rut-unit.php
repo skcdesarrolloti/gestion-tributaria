@@ -10,6 +10,11 @@ try {
     check($rut['fields']['actividades']['principal']==='0010' && $rut['fields']['actividades']['principal_inicio']==='2020-01-01','Conserva ceros iniciales y normaliza fecha de actividad.');
     check(array_column($rut['rows']['responsabilidades'],'codigo')===['05','22'],'Extrae los códigos de responsabilidad como renglones separados.');
     check($rut['formalizado']==='2022-08-08' && $rut['estado_dian']==='pendiente_consulta_oficial','Fecha de trámite antigua no se transforma en vencimiento ni estado oficial verificado.');
+    $seedSource=$rut;$seedSource['fields']['identificacion']['tipo_contribuyente_rut']='Persona natural 2';
+    $seed=App\Services\RutRegistro::seed($seedSource);
+    check($seed['tipo']==='natural' && $seed['documento_tipo']==='NIT' && $seed['nombre']==='PERSONA EJEMPLO FICTICIO','El alta desde RUT propone nombre, tipo, NIT y dígito sin inferir fuentes de ingresos.');
+    $seedSource['fields']['identificacion']['tipo_contribuyente_rut']='Persona jurídica 1';$seedSource['fields']['identificacion']['razon_social']='EMPRESA FICTICIA';
+    check(App\Services\RutRegistro::seed($seedSource)['nombre']==='EMPRESA FICTICIA','El alta jurídica utiliza razón social y no el nombre de un representante.');
     $schemas=CaracterizacionSchema::all(['ciiu'=>['0010'=>'Asalariados'],'responsabilidad'=>['05'=>'Renta','22'=>'Terceros']]);
     $tax=['tipo'=>'natural','documento_tipo'=>'CC','documento_numero'=>'12345678','dv'=>''];
     $plan=RutImportPlan::build($rut,$tax,$schemas,'2026'); $preview=['file'=>['parsed'=>$rut,'sha256'=>str_repeat('a',64)],'plan'=>$plan];

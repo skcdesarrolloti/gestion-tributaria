@@ -1,0 +1,39 @@
+<?php
+declare(strict_types=1);
+require_once __DIR__.'/rut-multi-fixtures.php';
+$registrationRoute='contribuyentes/formulario';
+[$registrationStatus,$registrationHtml]=request($client,$base,$registrationRoute);
+verify($registrationStatus===200 && strpos($registrationHtml,'Comienza subiendo el RUT')<strpos($registrationHtml,'Datos de identificación'),'El paso 1 ofrece subir RUT antes de identificar al contribuyente');
+$registrationCount=(int)$db->query('SELECT COUNT(*) FROM contribuyentes')->fetchColumn();
+$registrationFile=$temp.'/rut-alta-ficticio.pdf';file_put_contents($registrationFile,rutMultiFixture('777888999'));
+$registrationUpload=['_csrf_token'=>token($registrationHtml),'accion'=>'leer_rut','rut_anio'=>'2025','rut_pdf'=>new CURLFile($registrationFile,'application/pdf','rut-alta.pdf')];
+verify(rutRequest($client,$base,$registrationRoute,array_replace($registrationUpload,['_csrf_token'=>'']))[0]===419,'Leer RUT antes del alta exige CSRF');
+verify(rutRequest($client,$base,$registrationRoute,array_replace($registrationUpload,['rut_anio'=>'2027']))[0]===422,'No recibe un año de perfil no soportado');
+verify(rutRequest($client,$base,$registrationRoute,$registrationUpload)[0]===303,'Lee RUT de nuevo contribuyente sin exigir registro previo');
+verify((int)$db->query('SELECT COUNT(*) FROM contribuyentes')->fetchColumn()===$registrationCount,'Leer el PDF no crea aún contribuyente ni perfil');
+[$registrationStatus,$registrationHtml]=request($client,$base,$registrationRoute);
+verify(str_contains($registrationHtml,'value="777888999"') && str_contains($registrationHtml,'value="PERSONA EJEMPLO FICTICIO"'),'NIT y nombre aparecen diligenciados en el formulario inicial');
+verify(str_contains($registrationHtml,'CONTADOR FICTICIO') && str_contains($registrationHtml,'2025'),'La vista previa incluye las hojas adicionales y el año elegido');
+preg_match('/name="rut_registro_token" value="([a-f0-9]+)"/',$registrationHtml,$registrationToken);
+$registrationSave=['_csrf_token'=>token($registrationHtml),'rut_registro_token'=>$registrationToken[1]??'',
+    'nombre'=>'Persona nueva ficticia','tipo'=>'natural','documento_tipo'=>'NIT','documento_numero'=>'777888999','dv'=>App\Services\RutPdfForm::digit('777888999')];
+verify(request($client,$base,$registrationRoute,array_replace($registrationSave,['rut_registro_token'=>'invalido']))[0]===422,'Otra vista previa no puede aplicarse a esta alta');
+verify(request($client,$base,$registrationRoute,array_replace($registrationSave,['documento_numero'=>'888999000']))[0]===422,'Cambiar la identidad impide mezclar el PDF con otra persona');
+verify((int)$db->query('SELECT COUNT(*) FROM contribuyentes')->fetchColumn()===$registrationCount,'Errores de confirmación dejan intactos los registros');
+[$registrationStatus,,$registrationHeaders]=request($client,$base,$registrationRoute,$registrationSave);
+verify($registrationStatus===303 && str_contains(rawurldecode($registrationHeaders),'contribuyentes/perfil') && str_contains($registrationHeaders,'anio=2025'),'Guardar crea el contribuyente y abre el perfil elegido');
+$registrationNewId=(int)$db->query('SELECT id FROM contribuyentes WHERE documento_tipo="NIT" AND documento_numero="777888999"')->fetchColumn();
+verify($registrationNewId>0 && (int)$db->query('SELECT COUNT(*) FROM caracterizaciones_tributarias WHERE contribuyente_id='.$registrationNewId.' AND anio=2025')->fetchColumn()>=6,'El alta guarda los bloques del RUT completo en el mismo paso');
+verify((int)$db->query('SELECT COUNT(*) FROM rut_documentos WHERE contribuyente_id='.$registrationNewId.' AND anio=2025')->fetchColumn()===1,'El PDF original queda como soporte privado del nuevo contribuyente');
+verify(request($client,$base,$registrationRoute,$registrationSave)[0]===422,'La misma confirmación no crea dos contribuyentes');
+verify(rutRequest($client,$base,$registrationRoute,$registrationUpload)[0]===422,'Un RUT ya registrado se remite al perfil existente');
+// La identidad puede existir con CC, aunque el alta desde RUT proponga NIT.
+file_put_contents($registrationFile,rutFixturePdf('12345678'));
+verify(rutRequest($client,$base,$registrationRoute,$registrationUpload)[0]===422,'Detecta el contribuyente previo identificado con cédula y evita duplicarlo como NIT');
+file_put_contents($registrationFile,rutFixturePdf('888999000'));
+verify(rutRequest($client,$base,$registrationRoute,$registrationUpload)[0]===303,'Permite preparar otra alta independiente');
+[$registrationStatus,$registrationHtml]=request($client,$base,$registrationRoute);
+preg_match('/name="rut_registro_token" value="([a-f0-9]+)"/',$registrationHtml,$registrationToken);
+verify(request($client,$base,$registrationRoute,['_csrf_token'=>token($registrationHtml),'accion'=>'descartar_rut','rut_registro_token'=>$registrationToken[1]])[0]===303,'Descartar permite seguir con el registro manual');
+[$registrationStatus,$registrationHtml]=request($client,$base,$registrationRoute);
+verify(!str_contains($registrationHtml,'name="rut_registro_token"'),'Descartar elimina la lectura temporal del formulario');

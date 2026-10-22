@@ -10,11 +10,11 @@ require __DIR__ . '/../partials/head.php';
     <section class="bg-inverse-surface text-on-secondary rounded-2xl p-space-xl">
         <p class="text-label-md uppercase tracking-wide">Paso 1 · Identificación</p>
         <h1 class="text-headline-lg font-semibold mt-2"><?= e($title) ?></h1>
-        <p class="text-body-md mt-2">Ten a mano el documento de identidad o el RUT. No necesitas ingresar valores de ingresos todavía.</p>
+        <p class="text-body-md mt-2"><?= $id===null?'Empieza subiendo el RUT para rellenar tus datos. Si no lo tienes, puedes registrar manualmente.':'Actualiza los datos básicos de identificación del contribuyente.' ?></p>
     </section>
+    <?php if ($id===null): require __DIR__.'/rut-registro.php'; else: require __DIR__.'/profile-scope.php'; endif; ?>
     <?php require __DIR__ . '/guide.php'; ?>
-    <?php require __DIR__ . '/profile-scope.php'; ?>
-    <section class="bg-surface-container-lowest rounded-2xl border border-surface-container p-space-xl">
+    <section id="datos-identificacion" class="bg-surface-container-lowest rounded-2xl border border-surface-container p-space-xl">
         <?php if ($errors): ?>
             <div role="alert" class="p-3 mb-4 rounded-xl bg-error-container text-on-error-container">
                 <p class="font-semibold">Revisa los siguientes datos:</p>
@@ -23,6 +23,7 @@ require __DIR__ . '/../partials/head.php';
         <?php endif; ?>
         <form method="post" action="<?= e($action) ?>" class="space-y-space-lg">
             <?php require __DIR__ . '/../partials/csrf.php'; ?>
+            <?php if ($rutDraft): ?><input type="hidden" name="rut_registro_token" value="<?= e($rutDraft['token']) ?>"><?php endif; ?>
             <fieldset class="space-y-space-md">
                 <legend class="text-headline-md font-semibold">Datos de identificación</legend>
                 <div class="profile-grid">
@@ -59,7 +60,7 @@ require __DIR__ . '/../partials/head.php';
             </fieldset>
             <?php require __DIR__ . '/sources.php'; ?>
             <?php require __DIR__ . '/declaration-guide.php'; ?>
-            <p class="text-body-md text-secondary">* Campos obligatorios de identificación. Para ampliar RUT, actividades y condiciones del año, usa Completar perfil tributario y RUT.</p>
+            <p class="text-body-md text-secondary"><?= $rutDraft?'Al guardar se crea el contribuyente, se aplican los datos reconocidos de todas las hojas del RUT y se conserva el PDF como soporte privado.':'* Campos obligatorios de identificación. Puedes registrar manualmente si no tienes el RUT.' ?></p>
             <div class="flex items-center gap-space-md flex-wrap">
                 <button class="rounded-xl bg-inverse-surface text-on-secondary px-4 py-2" type="submit">Guardar contribuyente</button>
                 <a class="text-secondary underline" href="<?= e(url($config, 'contribuyentes')) ?>">Volver al listado</a>

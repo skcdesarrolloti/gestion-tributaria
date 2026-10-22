@@ -7,6 +7,11 @@ Base asignada: **u350704768_tributaria**.
 
 Incluye login de funcionarios con los estilos de Servicios Comerciales, inicio protegido, perfil, cierre de sesión y migraciones automáticas. El primer paso de la planeación es [Contribuyentes](docs/CONTRIBUYENTES.md): identificación y fuentes de ingresos, con registro y edición privados por funcionario.
 
+En **Registrar contribuyente**, **Subir RUT y rellenar datos** es la primera opción.
+Lee el PDF antes del alta, propone identificación y muestra lo que se importará.
+**Guardar contribuyente** crea el registro, su perfil del año elegido y el soporte
+privado en una sola operación. También permite continuar con captura manual.
+
 Desde cada contribuyente, **Ingresos por año** abre el [bloque inicial de ingresos](docs/INGRESOS.md): perfil anual, fichas por casilla, movimientos reales/proyectados y depuración preliminar. Todavía no calcula el impuesto final.
 
 Cada perfil tiene **Proyección anual**, una [estructura de seguimiento](docs/PROYECCION-ANUAL.md)
