@@ -1,0 +1,42 @@
+<?php
+declare(strict_types=1);
+// Continúa con el contribuyente ficticio creado desde el RUT de siete hojas.
+$tabsId=$registrationNewId;$tabsBase='contribuyentes/perfil&id='.$tabsId.'&anio=2025';
+[$tabsStatus,$tabsHtml]=request($client,$base,'contribuyentes/perfil&id='.$tabsId);
+verify($tabsStatus===200 && str_contains($tabsHtml,'Perfil 2025'),'Abrir el perfil recupera el último año guardado');
+verify(str_contains($tabsHtml,'aria-current="page"') && !str_contains($tabsHtml,'¿Qué es un contribuyente?') && !str_contains($tabsHtml,'Ingresos por año'),'La ficha única usa pestañas sin academia repetida ni componentes de ingresos');
+[$tabsStatus,$tabsList]=request($client,$base,'contribuyentes');
+verify(str_contains($tabsList,'Abrir perfil') && !str_contains($tabsList,'Editar datos') && !str_contains($tabsList,'Completar perfil tributario y RUT'),'El listado ofrece una sola entrada al perfil');
+[$tabsStatus,$tabsHtml]=request($client,$base,$tabsBase.'&tab=socios');
+verify(str_contains($tabsHtml,'SOCIO FICTICIO') && !str_contains($tabsHtml,'CONTADOR FICTICIO'),'Socios muestra sus propias personas sin mezclar contador');
+$tabsQuery=$db->prepare('SELECT datos,revision FROM caracterizaciones_tributarias WHERE contribuyente_id=? AND anio=2025 AND bloque=?');
+$tabsQuery->execute([$tabsId,'relacionados']);$tabsSaved=$tabsQuery->fetch();$tabsPeople=json_decode($tabsSaved['datos'],true);
+$tabsPartner=array_values(array_filter($tabsPeople['filas'],static fn($r)=>$r['rol']==='socio_junta'))[0];
+$tabsPartner['rol']='socio';$tabsPartner['participacion']='25';
+$tabsPost=['_csrf_token'=>token($tabsHtml),'revision'=>(string)$tabsSaved['revision'],'estado'=>'borrador','aplicabilidad'=>'si','filas'=>[$tabsPartner]];
+verify(request($client,$base,$tabsBase.'&tab=socios',$tabsPost)[0]===303,'Guarda participación desde la pestaña de socios');
+$tabsQuery->execute([$tabsId,'relacionados']);$tabsAfter=$tabsQuery->fetch();$tabsPeople=json_decode($tabsAfter['datos'],true);
+verify(count($tabsPeople['filas'])===3 && in_array('contador',array_column($tabsPeople['filas'],'rol'),true) && in_array('representante',array_column($tabsPeople['filas'],'rol'),true),'Guardar socios conserva contador y representantes de las otras pestañas');
+verify(request($client,$base,$tabsBase.'&tab=socios',$tabsPost)[0]===409,'Una pestaña antigua no sobrescribe cambios de otra ventana');
+$tabsBad=$tabsPost;$tabsBad['revision']=(string)$tabsAfter['revision'];$tabsBad['filas'][0]['rol']='contador';
+verify(request($client,$base,$tabsBase.'&tab=socios',$tabsBad)[0]===422,'El servidor rechaza relaciones que no pertenecen a la pestaña');
+$tabsEmpty=['_csrf_token'=>token($tabsHtml),'revision'=>(string)$tabsAfter['revision'],'estado'=>'borrador','aplicabilidad'=>'no','justificacion'=>'Sin junta','filas'=>[]];
+verify(request($client,$base,$tabsBase.'&tab=junta',$tabsEmpty)[0]===303,'Una junta vacía no obliga a registrar personas');
+$tabsQuery->execute([$tabsId,'relacionados']);$tabsStillThere=json_decode($tabsQuery->fetch()['datos'],true);
+verify(count($tabsStillThere['filas'])===3 && $tabsStillThere['aplicabilidad']==='si','Guardar una junta vacía no marca como No aplica a socios y representantes');
+[$tabsStatus,$tabsHtml]=request($client,$base,$tabsBase.'&tab=identificacion');
+$tabsQuery->execute([$tabsId,'identificacion']);$tabsIdentity=$tabsQuery->fetch();$tabsData=json_decode($tabsIdentity['datos'],true);
+$tabsIdentityPost=['_csrf_token'=>token($tabsHtml),'revision'=>(string)$tabsIdentity['revision'],'estado'=>'borrador','campos'=>$tabsData['campos'],
+    'identidad'=>['nombre'=>'Nombre en ficha única','tipo'=>'natural','documento_tipo'=>'NIT','documento_numero'=>'777888999','dv'=>App\Services\RutPdfForm::digit('777888999')]];
+verify(request($client,$base,$tabsBase.'&tab=identificacion',array_replace($tabsIdentityPost,['revision'=>'invalida']))[0]===422,'Una revisión malformada no inicia el guardado conjunto');
+verify(request($client,$base,$tabsBase.'&tab=identificacion',$tabsIdentityPost)[0]===303,'La misma ficha guarda identidad básica y detalle RUT juntos');
+$tabsQuery->execute([$tabsId,'identificacion']);$tabsIdentityNew=$tabsQuery->fetch();
+$tabsIdentityPost['revision']=(string)$tabsIdentityNew['revision'];$tabsIdentityPost['identidad']['documento_tipo']='CC';$tabsIdentityPost['identidad']['documento_numero']='12345678';$tabsIdentityPost['identidad']['dv']='';
+verify(request($client,$base,$tabsBase.'&tab=identificacion',$tabsIdentityPost)[0]===422,'Duplicado de identificación se rechaza en la ficha única');
+$tabsQuery->execute([$tabsId,'identificacion']);verify($tabsQuery->fetch()['revision']===$tabsIdentityNew['revision'],'Un error de identidad revierte también los cambios del RUT');
+file_put_contents($registrationFile,rutMultiFixture('777888999'));
+$tabsUpload=$registrationUpload;$tabsUpload['accion']='leer';$tabsUpload['aplicar_vacios']='1';
+[$tabsStatus,,$tabsHeaders]=rutRequest($client,$base,'contribuyentes/rut&id='.$tabsId.'&anio=2025',$tabsUpload);
+verify($tabsStatus===303 && str_contains($tabsHeaders,'tab=identificacion'),'Subir RUT desde la ficha completa vacíos y vuelve a las pestañas sin pantalla intermedia');
+$tabsQuery->execute([$tabsId,'relacionados']);$tabsAfterImport=json_decode($tabsQuery->fetch()['datos'],true);
+verify(count($tabsAfterImport['filas'])===3 && array_values(array_filter($tabsAfterImport['filas'],static fn($r)=>$r['rol']==='socio'))[0]['participacion']==='25','La importación conserva la participación corregida y no duplica personas');

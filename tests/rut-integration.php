@@ -63,3 +63,4 @@ try {
 } finally { curl_close($otherClient); }
 require __DIR__.'/rut-multi-integration.php';
 require __DIR__.'/rut-registro-integration.php';
+require __DIR__.'/perfil-tabs-integration.php';

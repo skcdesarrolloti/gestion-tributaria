@@ -109,7 +109,7 @@ final class CaracterizacionData
             if (($row['rol']??'')==='socio_junta') { $missing[]=$prefix.'precisar si corresponde a socio, junta u otra relación de la hoja 4'; }
             if (($row['rol']??'')==='dependiente' && ($row['parentesco']==='' || $row['nacimiento']==='' || $row['reclamado']==='')) { $missing[]=$prefix.'parentesco, nacimiento y revisión de solicitud por otra persona'; }
             if (in_array($row['rol']??'', ['contador','revisor'],true) && $row['tarjeta']==='') { $missing[]=$prefix.'tarjeta profesional'; }
-            if (($row['rol']??'')==='socio' && $row['participacion']==='') { $missing[]=$prefix.'participación del socio'; }
+            if (in_array($row['rol']??'',['socio','participacion'],true) && $row['participacion']==='') { $missing[]=$prefix.'porcentaje de participación'; }
             if ($schema['key']==='patrimonio') {
                 $debt=($row['tipo']??'')==='deuda'; $hasDebt=$hasDebt||$debt; $hasAsset=$hasAsset||!$debt;
                 $foreign=($row['pais']??'')!=='' && !in_array(mb_strtolower(trim($row['pais'])),['colombia','co','col','169'],true);

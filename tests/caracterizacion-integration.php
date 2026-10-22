@@ -2,7 +2,7 @@
 declare(strict_types=1);
 $profileRoute='contribuyentes/perfil&id='.$taxpayerId.'&anio=2026';
 [$status,$profileHtml]=request($client,$base,$profileRoute);
-verify($status===200 && str_contains($profileHtml,'Qué falta completar'),'Tablero ampliado abre con pendientes reales');
+verify($status===200 && str_contains($profileHtml,'Información del contribuyente') && !str_contains($profileHtml,'Qué falta completar'),'La ficha abre una sola pestaña y elimina el tablero de bloques');
 verify(request($client,$base,'contribuyentes/perfil&id='.$otherId)[0]===404,'Perfil ampliado oculta contribuyentes ajenos');
 verify(request($client,$base,$profileRoute.'&bloque=../config')[0]===422,'Bloques solo del catálogo permitido');
 verify(request($client,$base,$profileRoute.'&bloque=actividades',['_csrf_token'=>''])[0]===419,'Perfil ampliado exige CSRF');

@@ -2,6 +2,19 @@
 
 ## Uso
 
+### Recorrido actual: ficha por pestañas
+
+En **Contribuyentes → Abrir perfil → Subir o actualizar RUT**, el botón
+**Subir RUT y completar perfil** aplica directamente los datos reconocidos a los
+campos vacíos y vuelve a la ficha. No abre un segundo asistente de confirmación.
+Los valores diferentes existentes se conservan; las personas de otras pestañas no
+se borran. El soporte queda en **RUT y documentos**. Se reutiliza `RutAplicacion`
+para la misma comprobación de identidad, propietario, revisión y transacción.
+Un error de lectura vuelve a esta pestaña con su mensaje. La ruta histórica de
+vista previa y selección sigue disponible para compatibilidad, sin enlaces en el
+recorrido normal. La carga desde Registrar de un RUT existente también completa
+su ficha y abre Identificación directamente. Ver [CONTRIBUYENTES.md](CONTRIBUYENTES.md).
+
 ### Al registrar por primera vez
 
 1. Abre **Contribuyentes → Registrar contribuyente**. La carga está al comienzo,

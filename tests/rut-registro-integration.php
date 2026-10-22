@@ -28,19 +28,14 @@ verify((int)$db->query('SELECT COUNT(*) FROM rut_documentos WHERE contribuyente_
 verify(request($client,$base,$registrationRoute,$registrationSave)[0]===422,'La misma confirmación no crea dos contribuyentes');
 [$registrationStatus,,$registrationHeaders]=rutRequest($client,$base,$registrationRoute,$registrationUpload);
 verify($registrationStatus===303 && str_contains($registrationHeaders,'&id='.$registrationNewId.'&anio=2025'),'Un RUT ya registrado abre la importación del contribuyente y año correctos');
-[$registrationStatus,$existingRutHtml]=request($client,$base,'contribuyentes/rut&id='.$registrationNewId.'&anio=2025');
-verify($registrationStatus===200 && str_contains($existingRutHtml,'Encontramos tu contribuyente') && str_contains($existingRutHtml,'Datos leídos'),'El contribuyente encontrado tiene el mismo PDF listo para aplicar y enlaces directos');
-preg_match('/name="preview_token" value="([a-f0-9]+)"/',$existingRutHtml,$existingRutToken);
-preg_match_all('/name="seleccion\[\]" value="([^"]+)"/',$existingRutHtml,$existingRutKeys);
-verify(request($client,$base,'contribuyentes/rut&id='.$registrationNewId.'&anio=2025',[
-    '_csrf_token'=>token($existingRutHtml),'accion'=>'aplicar','preview_token'=>$existingRutToken[1]??'','seleccion'=>$existingRutKeys[1]])[0]===303,
-    'Completa el perfil existente con la lectura transferida sin volver a subir el PDF');
+[$registrationStatus,$existingRutHtml]=request($client,$base,'contribuyentes/perfil&id='.$registrationNewId.'&anio=2025');
+verify($registrationStatus===200 && str_contains($existingRutHtml,'Este contribuyente ya existía') && str_contains($existingRutHtml,'Información del contribuyente'),'El RUT existente rellena directamente las pestañas sin otra pantalla de confirmación');
 verify((int)$db->query('SELECT COUNT(*) FROM contribuyentes')->fetchColumn()===$registrationCount+1,'La continuación con un RUT existente no duplica al contribuyente');
 // La identidad puede existir con CC, aunque el alta desde RUT proponga NIT.
 file_put_contents($registrationFile,rutFixturePdf('12345678'));
 verify(rutRequest($client,$base,$registrationRoute,$registrationUpload)[0]===303,'El RUT de una cédula existente también continúa sin duplicarla como NIT');
-[$registrationStatus,$existingRutHtml]=request($client,$base,'contribuyentes/rut&id='.$taxpayerId.'&anio=2025');
-verify($registrationStatus===200 && str_contains($existingRutHtml,'Encontramos tu contribuyente'),'El enlace continúa con el propietario y contribuyente correctos');
+[$registrationStatus,$existingRutHtml]=request($client,$base,'contribuyentes/perfil&id='.$taxpayerId.'&anio=2025');
+verify($registrationStatus===200 && str_contains($existingRutHtml,'Este contribuyente ya existía'),'El enlace continúa con el propietario y contribuyente correctos');
 file_put_contents($registrationFile,rutFixturePdf('888999000'));
 verify(rutRequest($client,$base,$registrationRoute,$registrationUpload)[0]===303,'Permite preparar otra alta independiente');
 [$registrationStatus,$registrationHtml]=request($client,$base,$registrationRoute);

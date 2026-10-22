@@ -27,6 +27,13 @@ final class Caracterizacion
         return $catalogs;
     }
 
+    public function latestYearFor(int $id, int $owner): int
+    {
+        $q=$this->database->connection()->prepare('SELECT MAX(p.anio) FROM caracterizaciones_tributarias p
+            JOIN contribuyentes c ON c.id=p.contribuyente_id WHERE c.id=? AND c.funcionario_id=?');
+        $q->execute([$id,$owner]); return (int)($q->fetchColumn()?:2026);
+    }
+
     public function incomeProfileFor(int $id, int $owner, int $year): ?array
     {
         $q=$this->database->connection()->prepare('SELECT p.residencia,p.regimen,p.formulario FROM perfiles_renta p
@@ -48,5 +55,17 @@ final class Caracterizacion
             $q->execute([$json,$id,$owner,$year,$block,$revision]);
         }
         return $q->rowCount()===1;
+    }
+
+    public function saveIdentityFor(int $id, int $owner, int $year, array $data, int $revision, array $identity): bool
+    {
+        $db=$this->database->connection(); $db->beginTransaction();
+        try {
+            $lock=$db->prepare('SELECT id FROM contribuyentes WHERE id=? AND funcionario_id=? FOR UPDATE');
+            $lock->execute([$id,$owner]);
+            if (!$lock->fetchColumn() || !$this->saveFor($id,$owner,$year,'identificacion',$data,$revision)) { $db->rollBack(); return false; }
+            (new Contribuyente($this->database))->saveFor($identity,$owner,$id);
+            $db->commit(); return true;
+        } catch (\Throwable $e) { if ($db->inTransaction()) { $db->rollBack(); } throw $e; }
     }
 }

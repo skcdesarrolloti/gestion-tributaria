@@ -18,7 +18,8 @@ verify(request($client, $base, 'contribuyentes/formulario', $taxpayer)[0] === 42
 [$status, $html] = request($client, $base, 'contribuyentes');
 verify($status === 200 && str_contains($html, '&lt;script&gt;Ejemplo&lt;/script&gt;') && !str_contains($html, '<script>Ejemplo'), 'Listado escapa nombres');
 [$status, $html] = request($client, $base, 'contribuyentes/formulario&id=' . $taxpayerId);
-verify($status === 200 && substr_count($html, 'checked') === 2, 'Edición recupera fuentes seleccionadas');
+verify($status === 303, 'El enlace antiguo de edición lleva a la ficha única');
+verify(json_decode($db->query('SELECT fuentes FROM contribuyentes WHERE id='.(int)$taxpayerId)->fetchColumn(),true)===['pension','arriendos'], 'Abrir el perfil conserva fuentes anteriores aunque ya no se capturen aquí');
 $taxpayer['nombre'] = 'Nombre actualizado';
 $taxpayer['fuentes'] = ['pension'];
 verify(request($client, $base, 'contribuyentes/formulario&id=' . $taxpayerId, $taxpayer)[0] === 303, 'Edición guarda datos');

@@ -11,18 +11,10 @@
         <span aria-hidden="true" class="material-symbols-outlined bg-primary-container rounded-xl p-3">group</span>
         <h2 class="text-headline-md font-semibold mt-4">Paso 1 · Contribuyentes</h2>
         <p class="text-body-md text-secondary mt-2">Empieza por identificar a la persona o entidad cuya situación tributaria vas a analizar.</p>
-        <p class="text-body-md text-secondary mt-2">Registra sus datos y fuentes de ingresos. Después revisaremos las cédulas y los beneficios aplicables.</p>
+        <p class="text-body-md text-secondary mt-2">Abre su perfil, sube el RUT y consulta su información organizada por pestañas.</p>
         <a class="inline-block mt-4 rounded-xl bg-inverse-surface text-on-secondary px-4 py-2" href="<?= e(url($config, 'contribuyentes')) ?>">Ir a contribuyentes</a>
     </section>
-    <section class="bg-surface-container-lowest rounded-2xl border border-surface-container p-space-xl">
-        <h2 class="text-headline-md font-semibold">Planeación de socios y familia</h2>
-        <p class="text-body-md text-secondary mt-2">Consulta costos, deducciones y beneficios de personas naturales: requisitos, límites, norma y acciones antes del cierre.</p>
-        <a class="inline-block mt-4 rounded-xl bg-inverse-surface text-on-secondary px-4 py-2" href="<?= e(url($config,'beneficios')) ?>">Revisar beneficios de renta</a>
-    </section>
-    <section class="bg-surface-container-lowest rounded-2xl border border-surface-container p-space-xl">
-        <h2 class="text-headline-md font-semibold">Exógena</h2>
-        <p class="text-body-md text-secondary mt-2">Prepara los formatos 1001, 1007 y 5247, por persona jurídica y año. Consulta sus campos y referencias desde Exógena.</p>
-        <a class="inline-block mt-4 rounded-xl bg-inverse-surface text-on-secondary px-4 py-2" href="<?= e(url($config,'exogena')) ?>">Abrir Exógena</a>
-    </section>
+
+
 </main>
 <?php require __DIR__ . '/../partials/footer.php'; ?>

@@ -1,9 +1,11 @@
 (() => {
     'use strict';
+    const activeTab = document.querySelector('.contribuyente-tabs [aria-current="page"]');
+    if (activeTab && window.matchMedia('(max-width: 640px)').matches) activeTab.scrollIntoView({block: 'nearest', inline: 'center'});
     const form = document.getElementById('caracterizacion-form');
     if (!form) return;
     let dirty = false;
-    const mark = () => { dirty = true; document.getElementById('profile-save-status').textContent = 'Cambios sin guardar. Pulsa Guardar bloque antes de cambiar de sección.'; };
+    const mark = () => { dirty = true; document.getElementById('profile-save-status').textContent = 'Cambios sin guardar. Pulsa Guardar información antes de cambiar de pestaña.'; };
     form.addEventListener('input', mark);
     form.addEventListener('change', mark);
     form.addEventListener('change', event => {

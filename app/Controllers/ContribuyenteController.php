@@ -35,6 +35,10 @@ final class ContribuyenteController
             $id = (int) $raw;
             $record = $this->model->findFor($id, $owner);
             if (!$record) { $this->notFound(); return; }
+            if ($_SERVER['REQUEST_METHOD']==='GET') {
+                $year=\input($_GET,'anio'); $yearQuery=in_array($year,['2025','2026'],true)?'&anio='.$year:'';
+                header('Location: '.\url($this->config,'contribuyentes/perfil').'&id='.$id.$yearQuery.'&tab=identificacion',true,303); return;
+            }
         }
         $errors = [];
         $rutDraft=$id===null?$this->rutRegistration->draft($owner):null;
@@ -55,7 +59,9 @@ final class ContribuyenteController
                 catch (\Throwable $e) { error_log('Lectura RUT en registro: '.get_class($e)); http_response_code(422); $errors[]='No se pudo leer el RUT. Revisa el PDF e inténtalo nuevamente.'; }
                 if ($rutDraft) { $record=$rutDraft['seed']; }
             } else {
+                $previousSources=$record['fuentes'];
                 $record = ContribuyenteData::read($_POST);
+                if ($id!==null && !array_key_exists('fuentes',$_POST)) { $record['fuentes']=$previousSources; }
                 $errors = ContribuyenteData::errors($record);
                 if (!$errors) {
                     try {
@@ -90,7 +96,7 @@ final class ContribuyenteController
 
     private function openRut(array $existing): void
     {
-        header('Location: '.\url($this->config,'contribuyentes/rut').'&id='.$existing['id'].'&anio='.$existing['year'],true,303);
+        header('Location: '.\url($this->config,'contribuyentes/perfil').'&id='.$existing['id'].'&anio='.$existing['year'].'&tab=identificacion',true,303);
     }
 
     private function notFound(): void

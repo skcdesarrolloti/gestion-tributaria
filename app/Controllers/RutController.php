@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 use App\Core\View;
 use App\Models\{Contribuyente,Caracterizacion,RutDocumento};
-use App\Services\{AuthService,Csrf,RutUpload,RutImportPlan,CaracterizacionSchema};
+use App\Services\{AuthService,Csrf,RutUpload,RutImportPlan,CaracterizacionSchema,RutAplicacion};
 
 final class RutController
 {
@@ -35,6 +35,12 @@ final class RutController
                         $preview=['owner'=>$owner,'id'=>(int)$raw,'year'=>$year,'time'=>time(),'token'=>bin2hex(random_bytes(24)),
                             'file'=>$received,'plan'=>$plan,'revisions'=>array_map(static fn($b)=>(int)$b['revision'],$blocks)];
                         $_SESSION['rut_import']=$preview;
+                        if (\input($_POST,'aplicar_vacios')==='1') {
+                            $result=$this->apply($preview,array_keys($plan['items']),false,$schemas);
+                            unset($_SESSION['rut_import']);
+                            $_SESSION['rut_notice'][$raw.':'.$year]='RUT importado: '.$result['applied'].' campos y renglones completados; '.$result['skipped'].' datos existentes conservados. Completa solo los vacíos en tus pestañas.';
+                            header('Location: '.\url($this->config,'contribuyentes/perfil').'&id='.$raw.'&anio='.$year.'&tab=identificacion',true,303); return;
+                        }
                     } elseif ($action==='aplicar' || $action==='cancelar') {
                         if (!$preview || !hash_equals($preview['token'],\input($_POST,'preview_token'))) { throw new \InvalidArgumentException('La vista previa venció o corresponde a otro contribuyente. Vuelve a subir el PDF.'); }
                         if ($action==='cancelar') {
@@ -54,6 +60,10 @@ final class RutController
                 catch (\Throwable $e) { error_log('Importación RUT: '.get_class($e)); http_response_code(422); $errors[]='No se pudo completar la carga. Intenta con un PDF descargado de la DIAN y revisa los datos antes de aplicar.'; }
             }
         }
+        if ($errors && \input($_POST,'aplicar_vacios')==='1') {
+            $_SESSION['rut_notice'][$raw.':'.$year]=implode(' ',$errors);
+            header('Location: '.\url($this->config,'contribuyentes/perfil').'&id='.$raw.'&anio='.$year.'&tab=documentos',true,303); return;
+        }
         $documents=$this->documents->listFor((int)$raw,$owner,(int)$year);
         $this->view->render('rut/index',compact('user','taxpayer','year','schemas','blocks','preview','errors','documents'));
     }
@@ -67,13 +77,7 @@ final class RutController
 
     private function apply(array $preview, array $selected, bool $replace, array $schemas): array
     {
-        $old=$preview['file']['key']; $final=substr($old,0,64).'.pdf'; $path=$this->files->path($old);
-        if (!is_file($path) || !hash_equals($preview['file']['sha256'],hash_file('sha256',$path))) { throw new \InvalidArgumentException('El archivo temporal no está disponible o cambió. Vuelve a subirlo.'); }
-        if (!rename($path,$this->files->path($final))) { throw new \RuntimeException('No se pudo conservar el documento.'); }
-        try { $result=$this->documents->applyFor($preview['id'],$preview['owner'],(int)$preview['year'],$preview,$selected,$replace,$schemas,$final); }
-        catch (\Throwable $e) { rename($this->files->path($final),$path); throw $e; }
-        if ($result['document']['archivo']!==$final) { $this->files->remove($final); }
-        return $result;
+        return (new RutAplicacion($this->documents,$this->files))->apply($preview,$selected,$replace,$schemas);
     }
 
     public function download(): void

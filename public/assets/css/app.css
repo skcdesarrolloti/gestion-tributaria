@@ -29,6 +29,15 @@ button, a { touch-action: manipulation; }
     .exogena-format-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 .taxpayer-name { overflow-wrap: anywhere; }
+.contribuyente-tabs { display: flex; flex-wrap: wrap; gap: .5rem; padding-block: .5rem; }
+.contribuyente-tabs a { text-decoration: none; font-size: .875rem; }
+.contribuyente-tabs a[aria-current="page"] { font-weight: 600; }
+.contribuyente-tab-hint { display: none; }
+@media (max-width: 640px) {
+    .contribuyente-tabs { flex-wrap: nowrap; overflow-x: auto; }
+    .contribuyente-tabs a { flex: 0 0 auto; }
+    .contribuyente-tab-hint { display: block; }
+}
 .exogena-nav { position: relative; }
 .exogena-nav > summary { cursor: pointer; list-style: none; }
 .exogena-nav > summary::-webkit-details-marker { display: none; }

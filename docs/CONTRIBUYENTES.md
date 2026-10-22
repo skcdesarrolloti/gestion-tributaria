@@ -1,141 +1,96 @@
-# Paso 1: Contribuyentes
+# Contribuyentes · ficha única
 
-Este módulo identifica a la persona o entidad que se analizará. No determina todavía
-la obligación de declarar, la residencia fiscal, el régimen, las cédulas ni el impuesto.
-Esos datos se revisarán por año en las siguientes etapas de la planeación.
+El objetivo de este módulo es conocer a la persona, sociedad o sucesión que se va
+ a analizar. Aquí se organiza su perfil; ingresos, costos y escenarios se trabajarán
+por separado. No se presentan declaraciones ni se actualiza el RUT ante la DIAN.
 
-El alcance de las etapas siguientes, incluyendo régimen, patrimonio en el exterior,
-campos DIAN y revisión UGPP, está en [ALCANCE-PLANEACION.md](ALCANCE-PLANEACION.md).
-Las opciones cambian con el tipo elegido; consulta [FORMULARIOS-DIAN.md](FORMULARIOS-DIAN.md)
-para sus diferencias, la regla de sucesiones y los bloques pendientes de cada formulario.
+## Recorrido
 
-## Cómo usarlo
+1. **Inicio → Ir a contribuyentes**.
+2. En cada registro, pulsa **Abrir perfil**. Es la única entrada de consulta/edición;
+   también funciona con los contribuyentes creados antes de disponer del RUT.
+3. Pulsa **Subir o actualizar RUT**. Selecciona el PDF completo y pulsa
+   **Subir RUT y completar perfil**.
+4. El archivo se lee una sola vez: sus datos reconocidos completan campos vacíos y
+   vuelves a la misma ficha. Los valores diferentes ya guardados se conservan.
+5. Abre la pestaña que necesitas y corrige/completa los datos que no figuren en el
+   documento. **Guardar información** guarda esa pestaña, sin borrar las demás.
 
-1. Inicia sesión y entra a **Contribuyentes** desde la navegación o el inicio.
-2. Abre **¿Qué es un contribuyente?** para consultar la explicación inicial.
-3. Pulsa **Registrar contribuyente**.
-   Al comienzo puedes **Subir RUT y rellenar datos**, elegir el año y revisar la
-   identificación propuesta antes de guardar. El alta conserva también los campos
-   reconocidos del perfil y el soporte privado. Si ya existe, abre automáticamente
-   su importación con el PDF listo y botones para entrar al perfil o editar identificación.
-   Los pasos siguientes siguen disponibles para completar o registrar manualmente.
-4. Selecciona persona natural, persona jurídica o sucesión ilíquida.
-5. Escribe nombre o razón social, tipo y número de documento. Para entidades y
-   sucesiones utiliza el NIT del RUT; escríbelo sin el dígito de verificación.
-6. El dígito de verificación se puede registrar aparte. Es opcional y su valor no
-   se contrasta con el PDF cuando se usa la importación del RUT; el registro manual
-   no realiza esa comprobación.
-7. Marca todas las fuentes de ingresos conocidas; puedes dejarlas pendientes.
-   Pensión y arrendamientos pueden coexistir en una persona natural.
-8. Guarda. El registro aparecerá en **Mis contribuyentes**; usa **Editar datos**
-   para corregirlo posteriormente.
+Para una persona nueva, **Registrar contribuyente** permite subir el RUT antes de
+crear la ficha o diligenciar la identificación manualmente. Si el RUT pertenece a
+un registro propio existente, completa y abre ese perfil sin duplicarlo.
 
-No se importan declaraciones de renta desde los PDF de referencia. La carga del
-RUT tiene su propio flujo de lectura y confirmación descrito a continuación.
+## Pestañas
 
-## Identificación y permisos
-
-La opción **Subir RUT en PDF** completa campos desde una copia digital y conserva
-el soporte privado después de confirmar. Revisa los pasos, límites y comprobación
-de estado en [IMPORTACION-RUT.md](IMPORTACION-RUT.md). La captura manual sigue disponible.
-
-### Perfil tributario y RUT ampliado · 21/10/2026
-
-Desde **Mis contribuyentes → Completar perfil tributario y RUT** o desde **Editar
-identificación básica**, abrir la caracterización de 2025 o 2026. No requiere PDF.
-Primero debe existir el registro básico del contribuyente. El botón es visible y
-reemplaza la explicación anterior de bloques aún no implementados.
-
-La portada ofrece 13 bloques, sin desplegar todos los campos:
-
-| Bloque | Captura disponible |
+| Información | Contenido |
 | --- | --- |
-| Identificación RUT | Formulario y fechas, seccional, documento, expedición, nombres separados, razón social, nombre comercial, sigla, nacimiento y nacionalidad |
-| Ubicación | País, departamento, municipio, dirección, correo, postal y teléfonos |
-| Actividades | Principal, secundaria, otras dos, fechas, ocupación y establecimientos |
-| Responsabilidades | Renglones con códigos de casilla 53 y control de casilla sin códigos |
-| Entidad / sucesión | Naturaleza y forma, constitución, registro, capital, vinculación, fallecimiento y estado de sucesión |
-| Aduanas | Códigos de casilla 54 y complementos 55–61 |
-| Fiscal anual | Residencia y sus datos de revisión, régimen, declaración, formulario, contabilidad, IVA, retenciones, facturación, exógena, patrimonio, exterior, RUB y precios de transferencia |
-| Fuentes y eventos | Todas las fuentes comunes, ingresos exteriores, ganancias ocasionales, ventas de activos, cripto, ECE y pérdidas |
-| Seguridad social | Vinculación, tipo de pensión, pagador, EPS/AFP/ARL, riesgo, nómina concurrente, PILA y UGPP |
-| Beneficios | Preguntas sobre costos y beneficios para revisar requisitos y soportes |
-| Relacionados | Renglones de representantes, apoderados, herederos, socios, junta, contador, revisor, cónyuge y dependientes |
-| Establecimientos | Renglones con ubicación, actividad, registro y apertura/cierre |
-| Patrimonio | Bienes, cuentas e inversiones nacionales/extranjeras y deudas; país, moneda, valores declarados, titularidad, fecha y soporte |
+| Identificación | Tipo, nombre/razón social, documento/NIT, DV y detalle de identificación del RUT; un solo guardado |
+| Contacto | Dirección, país, municipio, correo y teléfonos |
+| Actividades económicas | Principal, secundaria, otras, fechas, ocupación y establecimientos; catálogo y explicación del código seleccionado |
+| Responsabilidades | Casilla 53 y códigos fuera de catálogo pendientes de verificar |
+| Sociedad / constitución o situación personal / sucesión | Naturaleza, constitución, reforma, capital, vinculación, exterior y estados; grupos plegables |
+| Representantes | Representantes legales, apoderados y representación sucesoral |
+| Socios y participaciones | Socios/accionistas, capital, porcentaje, ingreso y retiro; en naturales se llama Participaciones |
+| Junta directiva | Miembros de junta en su propio detalle |
+| Contador y revisor | Profesionales, tarjeta, nombramiento y firma designada |
+| Personas relacionadas | Cónyuge, dependientes y otras relaciones |
+| Condiciones personales | Para naturales/sucesiones: vinculación, pensión, afiliaciones y soporte; sin liquidación de aportes |
+| Establecimientos | Agencias, sucursales, oficinas, actividad, ubicación y matrícula |
+| Aduanas | Códigos y datos aduaneros del RUT |
+| Condiciones tributarias | Residencia, régimen y obligaciones informadas; sin calcular renta |
+| RUT y documentos | Carga única del PDF y descarga privada de sus soportes |
 
-**Guardar bloque** admite borradores incompletos. Cada bloque conserva estado,
-fuente documental, fecha y notas. Sin respuesta no equivale a No. No aplica exige
-justificación; no permite omitir naturaleza y representación de jurídicas/sucesiones
-como si fueran personas naturales sin representación. Los renglones vacíos se
-ignoran; hasta 100 por bloque, sin recorte silencioso.
+Se muestra una pestaña a la vez, mediante enlaces que funcionan también sin JS.
+Las ayudas se abren solo si se necesitan. Se retiraron la explicación repetida
+«¿Qué es un contribuyente?», las tarjetas de trece bloques y las fuentes/importes de
+ ingresos del recorrido. En Inicio y Contribuyentes la navegación se concentra en
+esta ficha; no se eliminaron módulos ni datos anteriores de planeación o exógena.
 
-El estado se deriva de respuestas y condiciones mínimas: Pendiente, Faltan datos,
-Importado del RUT, Completo/pendiente de revisión documental y Revisado con documentos
-por el usuario. El último requiere campos
-mínimos, soporte y fecha. No certifica integridad fiscal ni examen profesional.
-El tablero compara SIMPLE/IVA/pensión/dependientes/exterior y el perfil existente
-de Ingresos por año. No modifica ese perfil, sus movimientos ni sus cálculos.
-Los años no se copian automáticamente. No presenta ni actualiza el RUT en la DIAN.
+El RUT no necesariamente contiene las participaciones de una persona natural en
+otras empresas, sus dependientes, su condición pensional o todos sus hechos fiscales.
+Esos vacíos se completan con sus documentos. La hoja 4 agrupa varias calidades: se
+conserva «socio o junta, por precisar»; al elegir Junta en esa fila, pasa a su pestaña.
+Ningún dato de relaciones concede por sí solo una deducción o beneficio.
 
-Los catálogos contienen 508 actividades/clasificaciones, 49 responsabilidades y
-74 usuarios aduaneros extraídos de las fuentes oficiales citadas en pantalla, con
-fecha 21/10/2026. Incluyen 0010, 0020, 0081, 0082 y 0090 con ceros iniciales. Las
-etiquetas identifican códigos; no trasladan instrucciones de elegibilidad antiguas
-de la página institucional. Si falta un código puede anotarse para verificación;
-ese bloque queda pendiente de revisión documental. Para lugares, formas y códigos no
-catalogados se admite transcripción manual; no se inventan listas completas.
+## Datos y permisos
 
-Migraciones 014–016: caracterización por contribuyente/año/bloque, catálogo e
-inserción oficial. Conservan datos previos y no afectan la base central. Una futura
-actualización del catálogo requiere otra migración, sin editar las aplicadas.
-Guardar compara la revisión del bloque; una ventana antigua devuelve 409 y no
-sobrescribe otra captura. Para revertir código conservar tablas y hacer respaldo;
-no borrar caracterizaciones ni modificar scripts aplicados.
+La ficha recuerda el último año guardado cuando el enlace no especifica uno. Puede
+cambiarse el año en la cabecera; nunca se mezclan o copian snapshots sin instrucción.
+Los bloques JSON históricos se reutilizan: no hace falta crear nuevamente personas,
+importar SQL o borrar sus respuestas. La migración 017 conserva los soportes RUT.
+Ver [IMPORTACION-RUT.md](IMPORTACION-RUT.md) para lectura de hojas 1–7 y límites.
 
-La calculadora recibida de seguridad social sigue sin integrarse por los errores
-registrados en ALCANCE-PLANEACION.md. Este bloque solo caracteriza condiciones.
+Cada consulta y POST verifica sesión y funcionario propietario. No se pueden ver,
+modificar o importar datos de otro funcionario mediante un ID o pestaña alterados.
+El guardado exige CSRF, validación de campos y revisión vigente.
 
-### Reglas del registro
+Las pestañas de representantes, socios, junta y profesionales usan el bloque
+histórico `relacionados`, filtrado por rol. El servidor conserva los renglones de
+las otras pestañas y verifica la revisión del bloque entero para evitar perder
+cambios entre ventanas. El formulario no elimina datos ocultos al filtrar vacíos.
 
-- El número no admite puntos, espacios ni guiones. Pasaportes permiten letras y números.
-- Se evita repetir el mismo tipo y número de documento dentro de la cuenta.
-- Cada funcionario activo puede crear, listar y editar exclusivamente sus registros.
-  El filtro se aplica en el servidor; el rol administrador no permite ver registros ajenos.
-- El documento puede existir en cuentas diferentes. Compartir registros entre miembros
-  del equipo requiere una política explícita posterior.
-- No hay borrado ni cálculos tributarios en esta etapa.
-- Las fuentes son una caracterización inicial, no una clasificación fiscal definitiva.
+La identidad básica y el detalle RUT se guardan en una transacción: si el documento
+se duplica o la revisión cambió, ambos quedan intactos. Las fuentes antiguas se
+conservan, aunque ya no se capturen aquí. Los enlaces anteriores de Editar datos
+redirigen a la pestaña Identificación. Las rutas históricas siguen disponibles para
+compatibilidad, con los mismos controles de propietario.
 
-## Estructura y despliegue
+## Continuidad y verificación
 
-El controlador `ContribuyenteController` coordina el flujo, el modelo `Contribuyente`
-consulta la base y `ContribuyenteData` valida el formulario. Las vistas están en
-`app/Views/contribuyentes`, con cabecera, CSRF y pie compartidos.
+`PerfilContribuyente` define pestañas y separación de personas; `CaracterizacionController`
+coordina la ficha; `Caracterizacion` guarda bloques y la identidad conjunta.
+`RutAplicacion` reutiliza comprobación, conservación privada y transacción del PDF.
+No modificar la configuración privada del servidor ni usar credenciales de producción
+para pruebas. No hay cambios de esquema en esta reorganización.
 
-La migración `002_contribuyentes.sql` crea la tabla, la relación con el funcionario y
-el índice que evita duplicados. Su comprobación verifica columnas, índice y relación inicial.
-La migración `003_contribuyentes_funcionario_central.sql` retira la relación con la
-tabla histórica local, porque el propietario es ahora el ID autenticado en la base
-central. No copia cuentas ni escribe en auth_database; los filtros del modelo
-verifican el propietario. Ambas migraciones deben desplegarse juntas.
-La aplicación la ejecuta automáticamente al arrancar, sin importar SQL manualmente.
+Ejecutar `php bin/check.php`, `php tests/unit.php` y la integración aislada de
+[VALIDACION.md](VALIDACION.md). Se comprueba ficha sin módulos ajenos, importación
+directa de siete hojas, último año, separación de roles sin pérdida de personas,
+rechazo de roles ajenos a la pestaña, conflicto de revisión y reversión de identidad.
+Completar la revisión visual en escritorio/móvil y comprobar la sesión de producción.
 
-Conservar la configuración privada del servidor. Desplegar código, migración,
-comprobaciones y CSS compilado juntos. Verificar el flujo en el sitio después de
-desplegar; las pruebas locales no confirman el funcionamiento de Hostinger.
+Fuentes de las secciones del RUT:
 
-Para volver temporalmente al código anterior, conservar la tabla y sus registros:
-el cambio es aditivo. Una eliminación futura requiere respaldo y revisión expresa.
-
-## Comprobaciones
-
-Ejecutar `php bin/check.php`, `php tests/unit.php` y la integración aislada descrita
-en `docs/VALIDACION.md`. La integración comprueba registro y edición, varios tipos,
-fuentes múltiples y pendientes, CSRF, escape HTML, duplicados y acceso entre cuentas.
-
-Referencias de las explicaciones:
-
-- [DIAN: renta de personas naturales AG 2025](https://micrositios.dian.gov.co/renta-personas-naturales-ag-2025/todo-lo-que-usted-debe-saber-sobre-renta/).
-- [DIAN: personas naturales y sucesiones ilíquidas](https://micrositios.dian.gov.co/renta-personas-naturales-ag-2022/las-personas-naturales-y-las-sucesiones-iliquidas/).
-- [DIAN: renta de personas jurídicas](https://www.dian.gov.co/impuestos/sociedades/Paginas/Renta-personas-juridicas.aspx).
+- [DIAN · Secciones del RUT](https://www.dian.gov.co/impuestos/Documents/Secciones-RUT-DIAN.pdf).
+- [DIAN · Formulario 001, hojas](https://www.dian.gov.co/Documents/RUT_1_4_0.pdf).
+- [DIAN · Responsabilidades y aduanas](https://www.dian.gov.co/impuestos/RUT/Paginas/Responsabilidades-y-Usuarios-Aduaneros.aspx).

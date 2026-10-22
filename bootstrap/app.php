@@ -54,7 +54,7 @@ $contribuyenteController = new App\Controllers\ContribuyenteController(
     new App\Services\RutRegistro($database,$config['storage_path']??dirname(__DIR__).'/storage')
 );
 $caracterizacionController = new App\Controllers\CaracterizacionController(
-    $auth, new App\Models\Contribuyente($database), new App\Models\Caracterizacion($database), $view, $config
+    $auth, new App\Models\Contribuyente($database), new App\Models\Caracterizacion($database), $view, $config, new App\Models\RutDocumento($database)
 );
 $rutController = new App\Controllers\RutController(
     $auth, new App\Models\Contribuyente($database), new App\Models\Caracterizacion($database),

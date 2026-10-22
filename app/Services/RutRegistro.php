@@ -50,13 +50,15 @@ final class RutRegistro
         $profiles=new Caracterizacion($this->database); $schemas=CaracterizacionSchema::all($profiles->catalogs());
         $plan=RutImportPlan::build($file['parsed'],$existing,$schemas,$year);
         $blocks=$profiles->blocksFor((int)$existing['id'],$owner,(int)$year);
+        $preview=['owner'=>$owner,'id'=>(int)$existing['id'],'year'=>$year,'time'=>time(),'token'=>bin2hex(random_bytes(24)),
+            'file'=>$file,'plan'=>$plan,'revisions'=>array_map(static fn($b)=>(int)$b['revision'],$blocks)];
+        $result=(new RutAplicacion(new RutDocumento($this->database),$this->files))->apply($preview,array_keys($plan['items']),false,$schemas);
         $previous=$_SESSION['rut_import']['file']['key']??'';
         if ($previous!=='' && $previous!==$file['key']) { $this->files->remove($previous); }
         $draft=$this->draft($owner);
         if ($draft && $draft['file']['key']!==$file['key']) { $this->files->remove($draft['file']['key']); }
-        unset($_SESSION['rut_registro']);
-        $_SESSION['rut_import']=['owner'=>$owner,'id'=>(int)$existing['id'],'year'=>$year,'time'=>time(),'token'=>bin2hex(random_bytes(24)),
-            'file'=>$file,'plan'=>$plan,'revisions'=>array_map(static fn($b)=>(int)$b['revision'],$blocks),'from_registration'=>true];
+        unset($_SESSION['rut_registro'],$_SESSION['rut_import']);
+        $_SESSION['rut_notice'][$existing['id'].':'.$year]='Este contribuyente ya existía. Completamos su perfil con el RUT: '.$result['applied'].' campos y renglones importados. Sus datos anteriores se conservan.';
         return ['id'=>(int)$existing['id'],'year'=>$year,'existing'=>true];
     }
 

@@ -3,33 +3,39 @@
 Proyecto MVC en PHP 8.2+, ya publicado en Hostinger y conectado con Git. Continuar el desarrollo sobre esta estructura.
 Base asignada: **u350704768_tributaria**.
 
+**Recorrido actual: Inicio → Contribuyentes → Abrir perfil.** Una sola ficha con
+pestañas por naturaleza de información, carga del RUT que completa vacíos y edición
+de identificación en el mismo lugar. Socios, junta, representantes y profesionales
+se muestran separados sin perder sus datos. Ingresos, costos y escenarios quedan
+fuera de este recorrido. Ver [ficha única](docs/CONTRIBUYENTES.md).
+
 **La aplicación crea y actualiza las tablas automáticamente. No hay que entrar a phpMyAdmin ni importar SQL.** El acceso utiliza los funcionarios ya existentes del sistema central; no hay registro de administradores locales.
 
-Incluye login de funcionarios con los estilos de Servicios Comerciales, inicio protegido, perfil, cierre de sesión y migraciones automáticas. El primer paso de la planeación es [Contribuyentes](docs/CONTRIBUYENTES.md): identificación y fuentes de ingresos, con registro y edición privados por funcionario.
+Incluye login de funcionarios con los estilos de Servicios Comerciales, inicio protegido, perfil, cierre de sesión y migraciones automáticas. [Contribuyentes](docs/CONTRIBUYENTES.md) reúne su identificación y perfil, con registro y edición privados por funcionario.
 
 En **Registrar contribuyente**, **Subir RUT y rellenar datos** es la primera opción.
 Lee el PDF antes del alta, propone identificación y muestra lo que se importará.
 **Guardar contribuyente** crea el registro, su perfil del año elegido y el soporte
 privado en una sola operación. También permite continuar con captura manual.
-Si el RUT corresponde a alguien ya registrado, abre directamente su importación
-con el PDF leído y enlaces al perfil y la identificación; conserva el registro existente.
+Si el RUT corresponde a alguien ya registrado, completa los vacíos y abre directamente
+su ficha por pestañas; conserva el registro existente.
 
-Desde cada contribuyente, **Ingresos por año** abre el [bloque inicial de ingresos](docs/INGRESOS.md): perfil anual, fichas por casilla, movimientos reales/proyectados y depuración preliminar. Todavía no calcula el impuesto final.
+La ruta histórica **Ingresos por año** conserva el [bloque inicial de ingresos](docs/INGRESOS.md), fuera del recorrido actual del contribuyente: perfil anual, fichas por casilla, movimientos reales/proyectados y depuración preliminar.
 
 Cada perfil tiene **Proyección anual**, una [estructura de seguimiento](docs/PROYECCION-ANUAL.md)
 con resumen real/esperado, ingresos por mes y bloques pendientes para calcular el impuesto
 y comparar acciones antes del cierre. Los importes actuales son parciales; aún no estima el impuesto.
 
-**Completar perfil tributario y RUT**, desde cada contribuyente, abre una captura
-manual por año en 13 bloques: RUT, actividades, responsabilidades, representación,
-familia, condiciones fiscales, seguridad social, patrimonio nacional/exterior y
-soportes. Permite borradores sin PDF y muestra pendientes; no actualiza la DIAN ni
-modifica perfiles y cálculos existentes. Ver docs/CONTRIBUYENTES.md.
+**Abrir perfil** reúne el RUT, actividades, responsabilidades, sociedad, personas,
+participaciones, establecimientos y condiciones tributarias en pestañas. Reutiliza
+los bloques guardados sin repetir la ficha básica ni mostrar las tarjetas anteriores.
+Ver docs/CONTRIBUYENTES.md.
 
 **Subir RUT en PDF**, dentro del perfil, recorre las hojas 1–7 reconocidas del formulario
 001, rellena identificación, entidad y sus detalles, representantes, socios/junta,
-contador y establecimientos. Permite comparar los campos y aplicar una selección sin sobrescribir diferencias por
-defecto. Conserva el soporte privado. El RUT tiene vigencia indefinida; el estado
+contador y establecimientos. Completa automáticamente los vacíos y conserva los datos
+existentes; las diferencias se corrigen en su pestaña. La ruta avanzada histórica
+conserva la comparación y selección manual. Conserva el soporte privado. El RUT tiene vigencia indefinida; el estado
 actual ante la DIAN requiere consulta oficial. Ver [importación RUT](docs/IMPORTACION-RUT.md).
 Dentro de cada bloque, **Mostrar solo campos vacíos** permite continuar con los
 faltantes sin volver a digitar lo importado. La entidad se organiza por secciones plegables.
