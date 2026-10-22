@@ -75,8 +75,8 @@ $otherProfile->execute([$otherId]);$otherProfileId=(int)$db->lastInsertId();
 verify(request($client,$base,'ingresos/detalle&id='.$otherProfileId)[0]===200, 'Socio consulta ingresos de otro contribuyente');
 verify(request($client,$base,'proyeccion&id='.$otherProfileId)[0]===200, 'Socio consulta la proyección de otro contribuyente');
 verify(request($client,$base,'proyeccion&id[]=1')[0]===404, 'Proyección rechaza identificador inválido');
-verify(request($client,$base,'ingresos/perfil&id='.$otherProfileId,$annual)[0]===403, 'No puede editar perfil ajeno');
-verify(request($client,$base,'ingresos/movimiento&id='.$otherProfileId,$movement)[0]===403, 'No escribe movimientos en perfil ajeno');
+verify(request($client,$base,'ingresos/perfil&id='.$otherProfileId, array_replace($annual, ['_csrf_token'=>'']))[0]===419, 'La edición global de Socio exige CSRF');
+verify(request($client,$base,'ingresos/movimiento&id='.$otherProfileId, array_replace($movement, ['_csrf_token'=>'']))[0]===419, 'La edición global de Socio exige CSRF');
 verify(request($client,$base,$movementRoute.'&movimiento=999999',$movement)[0]===404, 'No crea mediante una edición inexistente');
 foreach ([['juridica','residente','110'],['sucesion','no_residente','110']] as [$type,$residence,$form]) {
     $entityId=(int)$db->query("SELECT id FROM contribuyentes WHERE tipo='$type' AND funcionario_id=100")->fetchColumn();

@@ -22,6 +22,7 @@ final class AccesoController
             else {
                 $revision=filter_var(\input($_POST,'revision'),FILTER_VALIDATE_INT,['options'=>['min_range'=>0]]);
                 $raw=\input($_POST,'contribuyente_id'); $taxpayer=$raw===''?null:filter_var($raw,FILTER_VALIDATE_INT,['options'=>['min_range'=>1]]);
+                if (\input($_POST,'perfil')==='socio') { $taxpayer=null; }
                 try {
                     if (!$target || $revision===false || $taxpayer===false || !in_array(\input($_POST,'activo'),['0','1'],true)) { throw new \InvalidArgumentException('Revisa la cuenta, contribuyente y revisión seleccionados.'); }
                     $this->access->save((int)$user['_ID'],$target,\input($_POST,'perfil'),$taxpayer,\input($_POST,'activo')==='1',$revision);

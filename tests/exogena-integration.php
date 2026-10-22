@@ -43,6 +43,6 @@ $foreignRow=$db->prepare('INSERT INTO exogena_5247 (contribuyente_id,anio,estruc
 $foreignRow->execute([$otherCompanyId,'plantilla-2024',json_encode($saved)]);$foreignExogenaId=(int)$db->lastInsertId();
 verify(request($client,$base,'exogena/5247&contribuyente='.$otherCompanyId)[0]===200, 'Socio consulta todas las empresas jurídicas');
 verify(request($client,$base,'exogena/5247/registro&id='.$foreignExogenaId)[0]===200, 'Socio consulta el detalle completo de otro registro');
-verify(request($client,$base,'exogena/5247/registro&id='.$foreignExogenaId,$exogenaRecord)[0]===403, 'No modifica registro 5247 ajeno');
+verify(request($client,$base,'exogena/5247/registro&id='.$foreignExogenaId, array_replace($exogenaRecord, ['_csrf_token'=>'']))[0]===419, 'La edición global de Socio exige CSRF');
 verify(request($client,$base,'exogena/5247/registro&id=999999',$exogenaRecord)[0]===404, 'No crea registro mediante edición inexistente');
 verify(request($client,$base,'exogena/5247/registro&contribuyente='.$taxpayerId,$exogenaRecord)[0]===404, 'Servidor rechaza informante natural aunque reciba POST');

@@ -21,6 +21,7 @@ final class AccesoTributario
     }
     public function save(int $actor, array $target, string $role, ?int $taxpayer, bool $active, int $revision): void
     {
+        if ($role==='socio') { $taxpayer=null; }
         if (!in_array($role,['socio','usuario'],true) || ($role==='usuario' && $active && !$taxpayer)) { throw new \InvalidArgumentException('Un Usuario activo necesita su contribuyente asignado.'); }
         $db=$this->database->connection(); $db->beginTransaction();
         try {

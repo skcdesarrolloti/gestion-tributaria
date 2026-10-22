@@ -30,7 +30,7 @@ verify((int)$db->query('SELECT COUNT(*) FROM exogena_1001')->fetchColumn()===1, 
 $foreignPayment=$db->prepare('INSERT INTO exogena_1001 (contribuyente_id,anio,estructura,datos) VALUES (?,2025,?,?)');
 $foreignPayment->execute([$otherCompanyId,'1001-v10-ag2025',json_encode($paymentJson)]);$foreignPaymentId=(int)$db->lastInsertId();
 verify(request($client,$base,'exogena/1001/registro&id='.$foreignPaymentId)[0]===200, '1001 consulta de Socio restringe el editor ajeno');
-verify(request($client,$base,'exogena/1001/registro&id='.$foreignPaymentId,$paymentPost)[0]===403, '1001 no modifica registros ajenos');
+verify(request($client,$base,'exogena/1001/registro&id='.$foreignPaymentId, array_replace($paymentPost, ['_csrf_token'=>'']))[0]===419, 'La edición global de Socio exige CSRF');
 verify(request($client,$base,'exogena/1001&contribuyente='.$otherCompanyId)[0]===200, '1001 permite consultar empresas como Socio');
 verify(request($client,$base,'exogena/1001/registro&contribuyente='.$taxpayerId,$paymentPost)[0]===404, '1001 no admite informante natural en esta etapa');
 verify(request($client,$base,'exogena/1001&anio=2026')[0]===422, '1001 distingue versiones al consultar otro año');

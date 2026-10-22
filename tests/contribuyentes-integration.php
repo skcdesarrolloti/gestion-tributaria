@@ -38,7 +38,7 @@ $insert->execute([$otherOwner, 'Registro privado ajeno', 'natural', 'CC', '12345
 $otherId = (int) $db->lastInsertId();
 verify(str_contains(request($client, $base, 'contribuyentes')[1], 'Registro privado ajeno'), 'Socio consulta registros de todos los contribuyentes');
 verify(request($client, $base, 'contribuyentes/formulario&id=' . $otherId)[0] === 303, 'Socio puede abrir la ficha ajena de consulta');
-verify(request($client, $base, 'contribuyentes/formulario&id=' . $otherId, $taxpayer)[0] === 403, 'La consulta global no permite modificar registro ajeno');
+verify(request($client, $base, 'contribuyentes/formulario&id=' . $otherId, array_replace($taxpayer, ['_csrf_token'=>'']))[0] === 419, 'La edición global de Socio exige CSRF');
 verify($db->query('SELECT nombre FROM contribuyentes WHERE id = ' . $otherId)->fetchColumn() === 'Registro privado ajeno', 'Registro ajeno permanece intacto');
 foreach (['juridica', 'sucesion'] as $offset => $type) {
     $entity = array_replace($taxpayer, ['tipo' => $type, 'documento_tipo' => 'NIT', 'documento_numero' => '90012345' . $offset, 'dv' => '0']);

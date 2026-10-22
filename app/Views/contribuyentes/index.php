@@ -16,7 +16,7 @@ $title = 'Contribuyentes'; require __DIR__ . '/../partials/head.php';
     <?php endif; ?>
     <section class="bg-surface-container-lowest rounded-2xl border border-surface-container p-space-xl space-y-space-md">
         <h2 class="text-headline-md font-semibold"><?= \App\Services\AccesoRoles::socio($user)?'Todos los contribuyentes':'Mi contribuyente' ?> (<?= count($rows) ?>)</h2>
-        <p class="text-body-md text-secondary"><?= \App\Services\AccesoRoles::socio($user)?'Puedes consultar todos los contribuyentes. Conservas la edición de los que creaste y de tu ficha asignada.':'Aquí aparece únicamente tu contribuyente asignado. Puedes completar sus datos y documentación.' ?></p>
+        <p class="text-body-md text-secondary"><?= \App\Services\AccesoRoles::socio($user)?'Tienes acceso total para consultar y completar la información de todos los contribuyentes.':'Aquí aparece únicamente tu contribuyente asignado. Puedes completar sus datos y documentación.' ?></p>
         <?php if (\App\Services\AccesoRoles::socio($user)): ?>
         <a class="inline-block rounded-xl bg-inverse-surface text-on-secondary px-4 py-2" href="<?= e(url($config, 'contribuyentes/formulario')) ?>">Registrar contribuyente</a>
         <?php endif; ?>

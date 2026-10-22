@@ -128,6 +128,7 @@ try {
     require __DIR__ . '/exogena-1001-integration.php';
     require __DIR__ . '/exogena-catalog-integration.php';
     require __DIR__ . '/accesos-integration.php';
+    require __DIR__ . '/socio-total-integration.php';
     verify(request($client, $base, 'logout')[0] === 405, 'Logout rechaza GET');
     verify(request($client, $base, 'logout', ['_csrf_token' => ''])[0] === 419, 'Logout exige CSRF');
     verify(request($client, $base, 'logout', ['_csrf_token' => token($html)])[0] === 303, 'Logout termina sesión');

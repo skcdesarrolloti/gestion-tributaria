@@ -3,7 +3,7 @@
 Proyecto MVC en PHP 8.2+, ya publicado en Hostinger y conectado con Git. Continuar el desarrollo sobre esta estructura.
 Base asignada: **u350704768_tributaria**.
 
-**Accesos: Socio y Usuario.** El Socio consulta toda la información; el Usuario
+**Accesos: Socio y Usuario.** El Socio consulta y edita toda la información; el Usuario
 solo ve y completa el contribuyente que se le asigna. La cuenta inicial autorizada
 se vincula al identificador central al entrar. Los Socios administran asignaciones
 desde **Usuarios y accesos**, sin crear cuentas ni cambiar contraseñas centrales.

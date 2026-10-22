@@ -8,8 +8,7 @@ final class AccesoRoles
     public static function edit(array $user, array $record): bool
     {
         $a=$user['_acceso']??[]; $id=(int)($record['contribuyente_id']??$record['id']??0);
-        return !empty($a['activo']) && ((int)($a['contribuyente_id']??0)===$id && $id>0
-            || self::socio($user) && (int)($record['funcionario_id']??0)===(int)$user['_ID']);
+        return self::socio($user) || (!empty($a['activo']) && (int)($a['contribuyente_id']??0)===$id && $id>0);
     }
     public static function writable(array $user, array $record): bool
     {

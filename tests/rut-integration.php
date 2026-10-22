@@ -14,7 +14,7 @@ $rutPath=$temp.'/rut-ficticio.pdf'; file_put_contents($rutPath,rutFixturePdf());
 $rutRoute='contribuyentes/rut&id='.$taxpayerId.'&anio=2026';
 [$status,$rutHtml]=request($client,$base,$rutRoute);
 verify($status===200 && str_contains($rutHtml,'multipart/form-data'),'Formulario RUT protegido permite carga PDF');
-verify(request($client,$base,'contribuyentes/rut&id='.$otherId)[0]===403,'No sube RUT a un contribuyente ajeno');
+verify(request($client,$base,'contribuyentes/rut&id='.$otherId)[0]===200,'Socio puede abrir la importación RUT de otro contribuyente');
 $upload=['accion'=>'leer','_csrf_token'=>token($rutHtml),'rut_pdf'=>new CURLFile($rutPath,'application/pdf','rut-ficticio.pdf')];
 verify(rutRequest($client,$base,$rutRoute,array_replace($upload,['_csrf_token'=>'']))[0]===419,'Carga PDF exige CSRF');
 [$status,$rutHtml]=rutRequest($client,$base,$rutRoute,$upload);

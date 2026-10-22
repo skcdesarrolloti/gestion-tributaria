@@ -26,7 +26,7 @@ verify(json_decode($db->query('SELECT datos FROM exogena_5247 WHERE id='.$exogen
 $foreignIncome=$db->prepare('INSERT INTO exogena_1007 (contribuyente_id,anio,estructura,datos) VALUES (?,2025,?,?)');
 $foreignIncome->execute([$otherCompanyId,'1007-v9',json_encode($incomeJson)]);$foreignIncomeId=(int)$db->lastInsertId();
 verify(request($client,$base,'exogena/1007/registro&id='.$foreignIncomeId)[0]===200, '1007 consulta de Socio restringe el editor ajeno');
-verify(request($client,$base,'exogena/1007/registro&id='.$foreignIncomeId,$incomePost)[0]===403, '1007 no modifica registros ajenos');
+verify(request($client,$base,'exogena/1007/registro&id='.$foreignIncomeId, array_replace($incomePost, ['_csrf_token'=>'']))[0]===419, 'La edición global de Socio exige CSRF');
 verify(request($client,$base,'exogena/1007&contribuyente='.$otherCompanyId)[0]===200, '1007 permite consultar empresas como Socio');
 verify(request($client,$base,'exogena/1007/registro&contribuyente='.$taxpayerId,$incomePost)[0]===404, '1007 no admite informante natural en esta etapa');
 verify(request($client,$base,'exogena/1007/registro&id=999999',$incomePost)[0]===404, '1007 no crea por edición inexistente');

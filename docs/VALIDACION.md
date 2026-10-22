@@ -6,6 +6,15 @@ Verificación local realizada el 13 de octubre de 2026 con PHP 8.2.12, MariaDB 1
 
 ### Perfiles Socio y Usuario · 22/10/2026
 
+Ampliación solicitada: Socio habilitado puede consultar y editar todos los
+contribuyentes sin asignación individual. Integración aislada completa correcta:
+edición de contacto ajeno, importación RUT, escenario y Exógena; Usuario conserva
+la limitación a su ficha aunque haya creado otra anteriormente. Se comprueba
+que guardar Socio ignora el selector de contribuyente y conserva CSRF.
+Revisión en Edge: selector oculto para Socio y visible para Usuario, edición
+global persistida, Usuario sin acceso a ficha ajena ni administración; escritorio
+y móvil de 390px sin desbordamiento ni errores de JavaScript.
+
 Sintaxis, unitarias e integración completa en bases aleatorias correctas. Se
 comprobaron migraciones 018–020, vinculación inicial explícita, asignación,
 consulta global de Socio, edición propia, usuario con una sola ficha, rechazo

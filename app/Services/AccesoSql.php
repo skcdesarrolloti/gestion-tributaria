@@ -8,7 +8,8 @@ final class AccesoSql
     public static function condition(string $alias, bool $write=false): string
     {
         if (!in_array($alias,['c','contribuyentes'],true)) { throw new \InvalidArgumentException('Alias de acceso inválido.'); }
-        $scope=$write?"(permiso.perfil='socio' AND $alias.funcionario_id=permiso.funcionario_id)":"permiso.perfil='socio'";
+        // Socio tiene acceso total tanto para lectura como escritura; Usuario solo a su ficha.
+        $scope="permiso.perfil='socio'";
         return "EXISTS (SELECT 1 FROM accesos_tributarios permiso WHERE permiso.funcionario_id=? AND permiso.activo=1
             AND ($scope OR permiso.contribuyente_id=$alias.id))";
     }

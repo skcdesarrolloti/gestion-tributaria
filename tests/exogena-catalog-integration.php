@@ -29,7 +29,7 @@ foreach (App\Services\ExogenaSchemas::all() as $code=>$schema) {
     $foreign=$db->prepare('INSERT INTO exogena_registros (contribuyente_id,formato,anio,estructura,datos) VALUES (?,?,2025,?,?)');
     $foreign->execute([$otherCompanyId,(string)$code,$schema['structure'],json_encode($saved)]);$foreignId=(int)$db->lastInsertId();
     verify(request($client,$base,$prefix.'/registro&id='.$foreignId)[0]===200, "$code consulta de Socio restringe el editor ajeno");
-    verify(request($client,$base,$prefix.'/registro&id='.$foreignId,$fixture)[0]===403, "$code no modifica registros ajenos");
+    verify(request($client,$base,$prefix.'/registro&id='.$foreignId, array_replace($fixture, ['_csrf_token'=>'']))[0]===419, "La edición global de Socio exige CSRF");
     verify(request($client,$base,$prefix.'&contribuyente='.$otherCompanyId)[0]===200, "$code permite consultar clientes como Socio");
     verify(request($client,$base,$prefix.'/registro&contribuyente='.$taxpayerId,$fixture)[0]===404, "$code conserva alcance de informante jurídico");
     verify(request($client,$base,$prefix.'/registro&id=999999',$fixture)[0]===404, "$code rechaza edición inexistente");

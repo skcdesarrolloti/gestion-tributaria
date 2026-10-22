@@ -30,7 +30,7 @@ $simDraft=array_replace($simPost,['elegibilidad'=>'']);
 verify(request($client,$base,$simRoute,$simDraft)[0]===303,'Permite conservar borradores pendientes');
 verify(request($client,$base,'simulador&id='.$otherProfileId)[0]===200,'Socio consulta el perfil ajeno en el simulador');
 verify(request($client,$base,'simulador/calcular&id='.$otherProfileId,$simPost)[0]===200,'Socio explora cálculos sin persistir cambios ajenos');
-verify(request($client,$base,'simulador&id='.$otherProfileId,$simPost)[0]===403,'No guarda en perfil ajeno');
+verify(request($client,$base,'simulador&id='.$otherProfileId, array_replace($simPost, ['_csrf_token'=>'']))[0]===419,'La edición global de Socio exige CSRF');
 $foreignSim=$db->prepare('INSERT INTO escenarios_renta (perfil_id,nombre,version,entradas,resultado) VALUES (?,?,?,?,?)');
 $foreignSim->execute([$otherProfileId,'Ajeno',\App\Services\SimuladorFields::VERSION,json_encode($simPost),json_encode($stored)]);
 $foreignSimId=(int)$db->lastInsertId();
