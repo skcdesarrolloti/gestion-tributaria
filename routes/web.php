@@ -2,7 +2,13 @@
 declare(strict_types=1);
 
 $router->add('GET', 'inicio', [$homeController, 'index']);
-$router->add('GET', 'perfil', [$homeController, 'profile']);
+$router->add('GET', 'perfil', [$cuentaController, 'profile']);
+$router->add('POST', 'perfil', [$cuentaController, 'profile']);
+$router->add('GET', 'usuarios/crear', [$cuentaController, 'create']);
+$router->add('POST', 'usuarios/crear', [$cuentaController, 'create']);
+$router->add('POST', 'usuarios/restablecer', [$cuentaController, 'reset']);
+$router->add('GET', 'activar', [$activacionController, 'index']);
+$router->add('POST', 'activar', [$activacionController, 'index']);
 $router->add('GET', 'accesos', [$accesoController, 'index']);
 $router->add('POST', 'accesos', [$accesoController, 'index']);
 $router->add('GET', 'beneficios', [$beneficioController, 'index']);

@@ -7,16 +7,19 @@
         <p>Socio: acceso total para consultar y editar todos los contribuyentes y módulos. Usuario: consulta y completa solo su ficha asignada.</p>
     </section>
     <section class="bg-surface-container-lowest border border-surface-container rounded-xl p-4 space-y-space-md">
-        <p>Selecciona una cuenta institucional existente. Aquí asignas permisos de Gestión Tributaria; no creas cuentas ni cambias contraseñas del sistema central.</p>
+        <p>Cuentas propias para socios y terceros. Crea el acceso y asigna el alcance que corresponda.</p>
+        <a class="rounded-xl bg-inverse-surface text-on-secondary px-4 py-2 inline-block" href="<?= e(url($config,'usuarios/crear')) ?>">Crear usuario</a>
         <form method="get" action="<?= e($config['base_path'].'/index.php') ?>">
             <input type="hidden" name="route" value="accesos">
-            <label for="cuenta">Cuenta institucional activa</label>
+            <label for="cuenta">Cuenta de Gestión Tributaria</label>
             <select id="cuenta" name="funcionario" required class="w-full bg-surface-container-low rounded-xl p-2"><option value="">Selecciona una cuenta</option><?php foreach ($directory as $account): ?><option value="<?= e($account['_ID']) ?>" <?= (int)$account['_ID']===$selected?'selected':'' ?>><?= e($account['nombre'].' · '.$account['user_others_apss']) ?></option><?php endforeach; ?></select>
             <button class="rounded-xl bg-inverse-surface text-on-secondary px-4 py-2 mt-2">Abrir asignación</button>
         </form>
     </section>
     <?php if ($errors): ?><div role="alert" class="bg-error-container text-on-error-container rounded-xl p-3"><?php foreach ($errors as $error): ?><p><?= e($error) ?></p><?php endforeach; ?></div><?php endif; ?>
     <?php if (input($_GET,'guardado')==='1'): ?><p role="status" class="bg-primary-container rounded-xl p-3">Acceso guardado. Se comprobará al abrir cada página, incluso en una sesión ya iniciada.</p><?php endif; ?>
+    <?php if (input($_GET,'creado')==='1'): ?><p role="status" class="bg-primary-container rounded-xl p-3">Usuario creado. Al ingresar deberá cambiar su contraseña inicial.</p><?php endif; ?>
+    <?php if (input($_GET,'restablecido')==='1'): ?><p role="status" class="bg-primary-container rounded-xl p-3">Contraseña restablecida. Sus sesiones anteriores quedan invalidadas y deberá cambiarla al ingresar.</p><?php endif; ?>
     <?php if ($target): ?><section class="bg-surface-container-lowest border border-surface-container rounded-xl p-4 space-y-space-md">
         <h2 class="text-headline-md font-semibold"><?= e($target['nombre']) ?></h2>
         <form method="post" action="<?= e(url($config,'accesos').'&funcionario='.$selected) ?>" class="space-y-space-md">
@@ -28,6 +31,7 @@
             <button type="submit" class="rounded-xl bg-inverse-surface text-on-secondary px-4 py-2">Guardar acceso</button>
         </form>
     </section><?php endif; ?>
+    <?php if ($target && $selected!==(int)$user['_ID']): require __DIR__.'/reset.php'; endif; ?>
     <details class="border border-surface-container rounded-xl p-4"><summary class="font-semibold">Asignaciones actuales (<?= count($assignments) ?>)</summary>
         <?php foreach ($directory as $account): if (!isset($assignments[$account['_ID']])) { continue; } $assignment=$assignments[$account['_ID']]; ?>
             <p class="mt-2"><?= e($account['nombre']) ?> · <?= e(ucfirst($assignment['perfil'])) ?> · <?= $assignment['activo']?'Habilitado':'Suspendido' ?> · <?= e($assignment['perfil']==='socio'?'Acceso total':($assignment['contribuyente']??'Sin ficha asignada')) ?> · <a class="text-secondary underline" href="<?= e(url($config,'accesos').'&funcionario='.$account['_ID']) ?>">Revisar acceso</a></p>

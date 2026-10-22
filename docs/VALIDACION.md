@@ -4,6 +4,22 @@ Verificación local realizada el 13 de octubre de 2026 con PHP 8.2.12, MariaDB 1
 
 ## Resultado
 
+### Cuentas independientes · 22/10/2026
+
+Integración completa correcta en bases temporales: migración 021, activación
+privada con secreto de un solo uso, mantenimiento del ID del Socio, creación de
+terceros sin conexión a funcionarios, contraseñas con hash, cambio inicial
+obligatorio, CSRF, duplicados, aislamiento, cambio y restablecimiento con clave
+actual, revocación de sesiones y suspensión. Las pruebas tributarias existentes
+siguen pasando. No se modificaron cuentas ni contraseñas reales.
+Ver [primera entrada](CUENTAS-INDEPENDIENTES.md).
+Revisión visual en Edge a 1440px y 390px: activación, login independiente, creación
+de Socio externo, cambio inicial obligatorio y acceso global; sin desbordamiento
+ni errores JavaScript. CSS recompilado con el tema existente. La activación y
+creación de cuentas reales se completan en la sesión del responsable.
+
+Los apartados de autenticación central siguientes describen versiones anteriores.
+
 ### Perfiles Socio y Usuario · 22/10/2026
 
 Ampliación solicitada: Socio habilitado puede consultar y editar todos los

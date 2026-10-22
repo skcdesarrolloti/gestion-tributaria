@@ -13,7 +13,7 @@
 
     <div>
       <h1 class="font-headline-lg text-headline-lg text-on-surface tracking-tight font-bold">Iniciar sesión</h1>
-      <p class="font-body-md text-body-md text-on-surface-variant mt-1">Ingresa con tus credenciales institucionales.</p>
+      <p class="font-body-md text-body-md text-on-surface-variant mt-1">Ingresa con tu cuenta de Gestión Tributaria.</p>
     </div>
 
     <?php if ($error !== ''): ?>

@@ -2,7 +2,7 @@
     'use strict';
     const role = document.querySelector('select[name="perfil"]');
     const group = document.querySelector('[data-user-taxpayer]');
-    const active = document.querySelector('select[name="activo"]');
+    const active = document.querySelector('[name="activo"]');
     if (!role || !group || !active) return;
     const taxpayer = group.querySelector('select');
     const refresh = () => {

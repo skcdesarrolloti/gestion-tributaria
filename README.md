@@ -5,8 +5,10 @@ Base asignada: **u350704768_tributaria**.
 
 **Accesos: Socio y Usuario.** El Socio consulta y edita toda la información; el Usuario
 solo ve y completa el contribuyente que se le asigna. La cuenta inicial autorizada
-se vincula al identificador central al entrar. Los Socios administran asignaciones
-desde **Usuarios y accesos**, sin crear cuentas ni cambiar contraseñas centrales.
+se activa de forma privada conservando sus expedientes. Los Socios crean cuentas
+propias desde **Usuarios y accesos → Crear usuario**; cada persona cambia su clave
+en **Mi perfil**. No existe conexión a funcionarios ni inscripción pública.
+Ver [primera entrada y cuentas independientes](docs/CUENTAS-INDEPENDIENTES.md).
 Ver [perfiles y permisos](docs/PERFILES-Y-ACCESOS.md).
 
 **Inicio y menú principal conservan todos los módulos.** Accesos en filas a
@@ -24,9 +26,9 @@ Los campos tienen ayuda «?» sobre su finalidad. Los complementos de aportes,
 beneficios y obligaciones anuales se diligencian en sus componentes, conservando
 los datos existentes. Ver [revisión de campos](docs/ALCANCE-CAMPOS-PERFIL.md).
 
-**La aplicación crea y actualiza las tablas automáticamente. No hay que entrar a phpMyAdmin ni importar SQL.** El acceso utiliza los funcionarios ya existentes del sistema central; no hay registro de administradores locales.
+**La aplicación crea y actualiza las tablas automáticamente. No hay que entrar a phpMyAdmin ni importar SQL.** Las cuentas de socios y terceros son propias de este aplicativo.
 
-Incluye login de funcionarios con los estilos de Servicios Comerciales, inicio protegido, perfil, cierre de sesión y migraciones automáticas. [Contribuyentes](docs/CONTRIBUYENTES.md) reúne su identificación y perfil, con registro y edición privados por funcionario.
+Incluye login propio con los estilos de Servicios Comerciales, inicio protegido, perfil, cambio de clave, cierre de sesión y migraciones automáticas. [Contribuyentes](docs/CONTRIBUYENTES.md) reúne su identificación y perfil con permisos por cuenta.
 
 En **Registrar contribuyente**, **Subir RUT y rellenar datos** es la primera opción.
 Lee el PDF antes del alta, propone identificación y muestra lo que se importará.
@@ -125,4 +127,4 @@ php bin/check.php
 php tests/unit.php
 ```
 
-Las credenciales de conexión se guardan en config/local.php, excluido de Git. Conserva database para los datos de este proyecto y agrega auth_database para consultar los funcionarios existentes. Ver [acceso institucional](docs/ACCESO-FUNCIONARIOS.md).
+Las credenciales de conexión se guardan en config/local.php, excluido de Git. Conserva database para este proyecto. No se usa una conexión de funcionarios. Ver [cuentas independientes](docs/CUENTAS-INDEPENDIENTES.md).

@@ -40,7 +40,7 @@ $server = new PDO(sprintf('mysql:host=%s;port=%d;charset=utf8mb4', $dbConfig['ho
     $dbConfig['username'], $dbConfig['password'], [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
 $authName = $name . '_auth';
 $authConfig = array_replace($dbConfig, ['name' => $authName]);
-$config = ['database' => $dbConfig, 'auth_database' => $authConfig,
+$config = ['database' => $dbConfig, 'auth_database' => $authConfig,'activation_token_sha256'=>hash('sha256',str_repeat('b',64)),
     'auth_allow_legacy_passwords' => true, 'secure_cookies' => false,
     'session_name' => 'test_' . $id, 'storage_path' => $temp];
 $socket = stream_socket_server('tcp://127.0.0.1:0');
@@ -61,11 +61,11 @@ try {
         usleep(100000);
     }
     [$status, $html] = request($client, $base, 'login');
-    verify($status === 200 && token($html) !== '', 'Login directo incluso sin cuentas locales ni conexión de funcionarios');
-    verify(!str_contains($html, 'Crear administrador') && !str_contains($html, 'setup_key'), 'No muestra instalador');
+    verify($status === 303, 'Sin cuentas dirige a activación privada');
+    [$status,$activationHtml]=request($client,$base,'activar');
+    verify($status===200 && !str_contains($activationHtml,'"clave":'), 'La activación no publica su secreto');
     [$status, , $headers] = request($client, $base, 'instalacion');
-    verify($status === 303 && str_contains($headers, 'route=login'), 'Enlace antiguo del instalador redirige al login');
-    verify(request($client, $base, 'instalacion', ['username' => 'intruso'])[0] === 405, 'No existe registro de administradores');
+    verify($status === 303 && str_contains($headers, 'route=activar'), 'Enlace antiguo no permite eludir activación privada');
     $missingRejected = false;
     try { (new App\Core\Database($authConfig, false))->connection(); }
     catch (PDOException $error) { $missingRejected = (int) $error->errorInfo[1] === 1049; }
@@ -83,8 +83,19 @@ try {
         $dbConfig['username'], $dbConfig['password'], [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
     // Sustituye únicamente en la base aleatoria la autorización inicial por un Socio sintético.
     $db->exec('DELETE FROM accesos_tributarios WHERE funcionario_id=0');
-    $grant=$db->prepare("INSERT INTO accesos_tributarios (funcionario_id,login_hash,perfil) VALUES (100,?,'socio')");
+    $grant=$db->prepare("INSERT INTO accesos_tributarios (funcionario_id,login_hash,perfil,revision) VALUES (100,?,'socio',0)");
     $grant->execute([hash('sha256','admin')]);
+    require __DIR__.'/activacion-integration.php';
+    $activation=['_csrf_token'=>token($activationHtml),'username'=>'admin','nombre'=>'<b>Socio independiente</b>','correo'=>'','password'=>'Prueba-segura-2026','confirmation'=>'Prueba-segura-2026','activation_key'=>''];
+    verify(request($client,$base,'activar',$activation)[0]===422,'Un visitante no puede reclamar el Socio sin prueba privada');
+    $activation['activation_key']=str_repeat('b',64);
+    verify(request($client,$base,'activar',array_replace($activation,['username'=>'intruso']))[0]===422,'El código no permite inventar otro Socio inicial');
+    verify(request($client,$base,'activar',array_replace($activation,['activation_key'=>$config['activation_token_sha256']]))[0]===422,'La huella pública del código no permite activar');
+    verify(request($client,$base,'activar',array_replace($activation,['_csrf_token'=>'']))[0]===419,'Activación exige CSRF');
+    verify(request($client,$base,'activar',$activation)[0]===303,'Activa cuenta propia del Socio y conserva identificador previo');
+    verify(!is_file($temp.'/activacion-inicial.json'),'Retira el secreto tras activación');
+    verify(request($client,$base,'activar',$activation)[0]===303 && (int)$db->query('SELECT COUNT(*) FROM usuarios_tributarios')->fetchColumn()===1,'Activación de un solo uso');
+    $db->prepare('INSERT INTO usuarios_tributarios (id,usuario,nombre,clave_hash,cambiar_clave) VALUES (101,?,?,?,0)')->execute(['hash-user','Cuenta con hash',$hash]);
     $migrationCount = count(glob($root . '/database/migrations/[0-9]*.sql'));
     verify((int) $db->query('SELECT COUNT(*) FROM schema_migrations')->fetchColumn() === $migrationCount, 'Migraciones registradas una vez');
     $localUser = $db->prepare('INSERT INTO wp_jet_cct_funcionarios (nombre, user_others_apss, pass_others_apss) VALUES (?, ?, ?)');
@@ -115,7 +126,7 @@ try {
     [$status, , $headers] = request($client, $base, 'login', $login);
     verify($status === 303 && str_contains(strtolower($headers), 'set-cookie:'), 'Login válido regenera sesión');
     [$status, $html] = request($client, $base, 'perfil');
-    verify($status === 200 && str_contains($html, '&lt;b&gt;Funcionario central&lt;/b&gt;'), 'Perfil usa y escapa los datos centrales');
+    verify($status === 200 && str_contains($html, '&lt;b&gt;Socio independiente&lt;/b&gt;'), 'Perfil usa y escapa los datos propios');
     verify(!str_contains($html, '$2y$'), 'Perfil no expone hash');
     require __DIR__ . '/beneficios-integration.php';
     require __DIR__ . '/contribuyentes-integration.php';
@@ -129,6 +140,8 @@ try {
     require __DIR__ . '/exogena-catalog-integration.php';
     require __DIR__ . '/accesos-integration.php';
     require __DIR__ . '/socio-total-integration.php';
+    require __DIR__ . '/cuentas-integration.php';
+    [, $html]=request($client,$base,'perfil');
     verify(request($client, $base, 'logout')[0] === 405, 'Logout rechaza GET');
     verify(request($client, $base, 'logout', ['_csrf_token' => ''])[0] === 419, 'Logout exige CSRF');
     verify(request($client, $base, 'logout', ['_csrf_token' => token($html)])[0] === 303, 'Logout termina sesión');
@@ -137,7 +150,7 @@ try {
     $login['_csrf_token'] = token($html);
     verify(request($client, $base, 'login', array_replace($login, ['username' => 'hash-user', 'password' => 'Otra-clave-segura']))[0] === 303, 'También acepta contraseñas con hash');
     [, $html] = request($client, $base, 'perfil');
-    verify(str_contains($html, 'Cuenta con hash'), 'Perfil corresponde a la cuenta central autenticada');
+    verify(str_contains($html, 'Cuenta con hash'), 'Perfil corresponde a la cuenta propia autenticada');
     request($client, $base, 'logout', ['_csrf_token' => token($html)]);
     [, $html] = request($client, $base, 'login');
     $login['_csrf_token'] = token($html);
@@ -146,6 +159,10 @@ try {
     verify($authDb->query("SELECT pass_others_apss FROM wp_jet_cct_funcionarios WHERE user_others_apss = 'hash-user'")->fetchColumn() === $hash, 'No reemplaza el hash central');
     verify($authDb->query("SHOW TABLES LIKE 'schema_migrations'")->fetchColumn() === false, 'No ejecuta migraciones en la base central');
     $authDb->exec("UPDATE wp_jet_cct_funcionarios SET activo = 'No'");
+    verify(request($client,$base,'perfil')[0]===200,'La base central no interviene en la sesión');
+    $server->exec('DROP DATABASE '.$authName);
+    verify(request($client,$base,'perfil')[0]===200,'Funciona incluso sin existir la base de funcionarios');
+    $db->exec('UPDATE accesos_tributarios SET activo=0 WHERE funcionario_id=100');
     verify(request($client, $base, 'perfil')[0] === 303, 'Desactivar cuenta invalida sesión abierta');
     [, $html] = request($client, $base, 'login');
     $login['_csrf_token'] = token($html);

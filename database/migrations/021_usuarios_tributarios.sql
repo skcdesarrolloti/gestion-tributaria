@@ -1,0 +1,13 @@
+CREATE TABLE usuarios_tributarios (
+    id BIGINT UNSIGNED NOT NULL PRIMARY KEY,
+    usuario VARCHAR(100) NOT NULL,
+    nombre VARCHAR(160) NOT NULL,
+    correo VARCHAR(190) NULL,
+    clave_hash VARCHAR(255) NOT NULL,
+    cambiar_clave TINYINT(1) NOT NULL DEFAULT 1,
+    clave_version INT UNSIGNED NOT NULL DEFAULT 1,
+    creado_por BIGINT UNSIGNED NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    UNIQUE KEY usuario_tributario_login (usuario)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

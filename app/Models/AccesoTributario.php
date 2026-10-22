@@ -8,10 +8,7 @@ final class AccesoTributario
     public function __construct(private Database $database) {}
     public function forUser(array $user): array
     {
-        $db=$this->database->connection(); $hash=hash('sha256',mb_strtolower(trim($user['user_others_apss'])));
-        // Solo vincula la autorización inicial explícita; no crea una cuenta ni deduce permisos del rol central.
-        $q=$db->prepare('UPDATE accesos_tributarios SET funcionario_id=? WHERE funcionario_id=0 AND login_hash=? AND activo=1');
-        $q->execute([(int)$user['_ID'],$hash]);
+        $db=$this->database->connection();
         $q=$db->prepare('SELECT * FROM accesos_tributarios WHERE funcionario_id=?');
         $q->execute([(int)$user['_ID']]); return $q->fetch()?:[];
     }
@@ -30,11 +27,12 @@ final class AccesoTributario
             $id=(int)$target['_ID']; $old=$all[$id]??null;
             $hash=hash('sha256',mb_strtolower(trim($target['user_others_apss'])));
             foreach ($all as $otherId=>$assignment) {
-                if ((int)$otherId!==$id && hash_equals($assignment['login_hash'],$hash)) { throw new \InvalidArgumentException('Ese usuario institucional ya está vinculado a otra cuenta. Revisa su identificación central.'); }
+                if ((int)$otherId!==$id && hash_equals($assignment['login_hash'],$hash)) { throw new \InvalidArgumentException('Ese usuario ya está vinculado a otra cuenta.'); }
             }
             if ((int)($old['revision']??0)!==$revision) { throw new \DomainException('La asignación cambió en otra ventana. Recarga antes de guardar.'); }
             if ($old && $old['perfil']==='socio' && $old['activo'] && (!$active || $role!=='socio')) {
-                $partners=array_filter($all,static fn($r)=>$r['perfil']==='socio' && $r['activo']);
+                $local=array_flip($db->query('SELECT id FROM usuarios_tributarios FOR UPDATE')->fetchAll(\PDO::FETCH_COLUMN));
+                $partners=array_filter(array_intersect_key($all,$local),static fn($r)=>$r['perfil']==='socio' && $r['activo']);
                 if (count($partners)<=1) { throw new \InvalidArgumentException('Debe permanecer al menos un Socio activo.'); }
             }
             if ($taxpayer) { $q=$db->prepare('SELECT id FROM contribuyentes WHERE id=? FOR UPDATE'); $q->execute([$taxpayer]); if (!$q->fetchColumn()) { throw new \InvalidArgumentException('Selecciona un contribuyente existente.'); } }

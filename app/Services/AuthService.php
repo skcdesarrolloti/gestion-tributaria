@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\Models\Funcionario;
+use App\Models\Usuario;
 
 final class AuthService
 {
@@ -11,24 +11,23 @@ final class AuthService
     private const DUMMY_HASH = '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2uheWG/igi.';
 
     public function __construct(
-        private Funcionario $users,
-        private bool $allowLegacyPasswords,
+        private Usuario $users,
         private string $sourceId,
         private ?\App\Models\AccesoTributario $access=null,
     ) {}
 
     public function attempt(string $login, string $password): bool
     {
-        if ($login === '' || strlen($login) > 100 || $password === '' || strlen($password) > 4096) {
+        if ($login === '' || strlen($login) > 100 || $password === '' || strlen($password) > 72 || str_contains($password,"\0")) {
             return false;
         }
         $user = $this->users->findActiveByLogin($login);
-        $valid = PasswordVerifier::verify($password, $user['pass_others_apss'] ?? self::DUMMY_HASH, $this->allowLegacyPasswords);
+        $valid = password_verify($password, $user['clave_hash'] ?? self::DUMMY_HASH);
         if (!$user || !$valid) {
             return false;
         }
         session_regenerate_id(true);
-        $_SESSION = ['user_id' => (int) $user['_ID'], 'last_activity' => time(), 'auth_source' => $this->sourceId];
+        $_SESSION = ['user_id' => (int) $user['_ID'], 'last_activity' => time(), 'auth_source' => $this->sourceId,'clave_version'=>(int)$user['clave_version']];
         return true;
     }
 
@@ -37,7 +36,7 @@ final class AuthService
         if (empty($_SESSION['user_id'])) {
             return null;
         }
-        // Las sesiones antiguas de cuentas locales no autorizan una cuenta central con el mismo ID.
+        // Una sesión de otro origen nunca autentica una cuenta propia con el mismo ID.
         if (($_SESSION['auth_source'] ?? '') !== $this->sourceId) {
             $this->forget();
             return null;
@@ -47,12 +46,12 @@ final class AuthService
             return null;
         }
         $user = $this->users->findActiveById((int) $_SESSION['user_id']);
-        if (!$user) {
+        if (!$user || (int)($user['clave_version']??0)!==(int)($_SESSION['clave_version']??0)) {
             $this->forget();
             return null;
         }
         $_SESSION['last_activity'] = time();
-        unset($user['pass_others_apss']);
+        unset($user['clave_hash']);
         $user['_acceso']=$this->access?->forUser($user)??[];
         return $user;
     }

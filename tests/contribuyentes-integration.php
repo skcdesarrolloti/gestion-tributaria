@@ -29,9 +29,9 @@ $taxpayer['fuentes'] = [];
 verify(request($client, $base, 'contribuyentes/formulario', $taxpayer)[0] === 303, 'Permite registrar sin fuentes conocidas');
 verify(request($client, $base, 'contribuyentes/formulario&id=abc')[0] === 404, 'Identificador inválido rechazado');
 verify(request($client, $base, 'contribuyentes/formulario&id=99999', $taxpayer)[0] === 404, 'No crea registros mediante edición inexistente');
-$insert = $authDb->prepare("INSERT INTO wp_jet_cct_funcionarios (nombre, user_others_apss, pass_others_apss, rol) VALUES (?, ?, ?, ?)");
-$insert->execute(['Otro funcionario', 'otro', password_hash('Otra-clave-segura-2026', PASSWORD_DEFAULT), 'administrador']);
-$otherOwner = (int) $authDb->lastInsertId();
+$otherOwner=102;
+$db->prepare('INSERT INTO usuarios_tributarios (id,nombre,usuario,clave_hash,cambiar_clave) VALUES (102,?,?,?,0)')->execute(['Otro titular','otro',password_hash('Otra-clave-segura-2026',PASSWORD_DEFAULT)]);
+$db->prepare("INSERT INTO accesos_tributarios (funcionario_id,login_hash,perfil,revision) VALUES (102,?,'usuario',0)")->execute([hash('sha256','otro')]);
 $insert = $db->prepare('INSERT INTO contribuyentes (funcionario_id, nombre, tipo, documento_tipo, documento_numero, fuentes)
                        VALUES (?, ?, ?, ?, ?, ?)');
 $insert->execute([$otherOwner, 'Registro privado ajeno', 'natural', 'CC', '12345678', '[]']);

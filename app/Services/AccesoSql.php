@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace App\Services;
 
-/** Un único parámetro: ID central del actor autenticado, nunca el propietario solicitado. */
+/** Un único parámetro: ID de la cuenta autenticada, nunca el propietario solicitado. */
 final class AccesoSql
 {
     public static function condition(string $alias, bool $write=false): string

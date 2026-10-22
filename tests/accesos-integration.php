@@ -2,13 +2,14 @@
 declare(strict_types=1);
 $restricted=curl_init();curl_setopt($restricted,CURLOPT_COOKIEFILE,'');
 try {
+    $auditBefore=(int)$db->query('SELECT COUNT(*) FROM historial_accesos')->fetchColumn();
     [, $loginHtml]=request($restricted,$base,'login');
     verify(request($restricted,$base,'login',['_csrf_token'=>token($loginHtml),'username'=>'otro','password'=>'Otra-clave-segura-2026'])[0]===303,'Cuenta institucional existente entra sin crear una cuenta local');
     verify(!str_contains(request($restricted,$base,'contribuyentes')[1],'Registro privado ajeno'),'Sin asignación no obtiene acceso ni siquiera por haber creado registros antes');
     verify(request($restricted,$base,'accesos')[0]===403 && request($restricted,$base,'contribuyentes/formulario')[0]===403,'Usuario no administra permisos ni registra nuevos contribuyentes');
     $grantRoute='accesos&funcionario='.$otherOwner;
     [$s,$grantHtml]=request($client,$base,$grantRoute);
-    verify($s===200 && str_contains($grantHtml,'Cuenta institucional activa') && !str_contains($grantHtml,'pass_others_apss'),'Socio abre asignaciones sin exponer claves centrales');
+    verify($s===200 && str_contains($grantHtml,'Cuenta de Gestión Tributaria') && !str_contains($grantHtml,'clave_hash'),'Socio abre asignaciones sin exponer claves');
     $grantPost=['_csrf_token'=>token($grantHtml),'revision'=>'0','perfil'=>'usuario','contribuyente_id'=>(string)$taxpayerId,'activo'=>'1'];
     verify(request($client,$base,$grantRoute,array_replace($grantPost,['_csrf_token'=>'']))[0]===419,'Asignar acceso exige CSRF');
     verify(request($client,$base,$grantRoute,array_replace($grantPost,['contribuyente_id'=>'']))[0]===422,'Usuario activo exige una ficha explícita');
@@ -46,20 +47,21 @@ try {
     verify(request($restricted,$base,'exogena/5247/registro&id='.$foreignExogenaId,$authorizedPayment)[0]===303,'El permiso de edición asignado funciona también en Exógena');
     verify(request($restricted,$base,'exogena/5247/registro&id='.$exogenaId)[0]===404,'No expone registros de otra empresa');
     $grantPost['revision']='2';$grantPost['activo']='0';
-    verify(request($client,$base,$grantRoute,$grantPost)[0]===303 && request($restricted,$base,'exogena/5247/registro&id='.$foreignExogenaId)[0]===404,'Suspender acceso bloquea documentos en una sesión ya abierta');
+    verify(request($client,$base,$grantRoute,$grantPost)[0]===303 && request($restricted,$base,'exogena/5247/registro&id='.$foreignExogenaId)[0]===303,'Suspender acceso cierra una sesión ya abierta');
     verify(request($client,$base,$grantRoute,$grantPost)[0]===409,'Una asignación antigua no sobrescribe cambios recientes');
     [$s,$selfHtml]=request($client,$base,'accesos&funcionario=100');
     $selfPost=['_csrf_token'=>token($selfHtml),'revision'=>'1','perfil'=>'usuario','contribuyente_id'=>(string)$taxpayerId,'activo'=>'1'];
+    $db->prepare("INSERT INTO accesos_tributarios (funcionario_id,login_hash,perfil) VALUES (800,?,'socio')")->execute([hash('sha256','socio-historico-sin-cuenta')]);
     verify(request($client,$base,'accesos&funcionario=100',$selfPost)[0]===422,'No permite eliminar al último Socio activo');
-    verify((int)$db->query('SELECT COUNT(*) FROM historial_accesos')->fetchColumn()===3,'Audita concesión, reasignación y suspensión sin guardar contraseñas');
+    $db->exec('DELETE FROM accesos_tributarios WHERE funcionario_id=800');
+    verify((int)$db->query('SELECT COUNT(*) FROM historial_accesos')->fetchColumn()===$auditBefore+3,'Audita concesión, reasignación y suspensión sin guardar contraseñas');
     // La autorización inicial solo puede vincularse al login expresamente aprobado.
     $bootDb=new App\Core\Database($dbConfig);$bootAccess=new App\Models\AccesoTributario($bootDb);
     $db->exec(file_get_contents($root.'/database/migrations/019_socio_inicial_autorizado.sql'));
     $db->prepare('UPDATE accesos_tributarios SET login_hash=? WHERE funcionario_id=0')->execute([hash('sha256','socio-fixture')]);
     $bootAccess->forUser(['_ID'=>$otherOwner,'user_others_apss'=>'otro']);
     verify((int)$db->query('SELECT COUNT(*) FROM accesos_tributarios WHERE funcionario_id=0')->fetchColumn()===1,'Un visitante distinto no reclama la autorización inicial');
-    $insertUser->execute(['Socio inicial ficticio','socio-fixture','Clave-sintetica-no-real']);$bootId=(int)$authDb->lastInsertId();
-    $bootRole=$bootAccess->forUser(['_ID'=>$bootId,'user_others_apss'=>'socio-fixture']);
-    verify($bootRole['perfil']==='socio' && (int)$bootRole['funcionario_id']===$bootId,'La autorización inicial se vincula al ID real de la cuenta aprobada');
-    $db->prepare('DELETE FROM accesos_tributarios WHERE funcionario_id=?')->execute([$bootId]);
+    $bootRole=$bootAccess->forUser(['_ID'=>999,'user_others_apss'=>'socio-fixture']);
+    verify($bootRole===[],'La coincidencia de login por sí sola no activa cuentas ni privilegios');
+    $db->exec('DELETE FROM accesos_tributarios WHERE funcionario_id=0');
 } finally { curl_close($restricted); }

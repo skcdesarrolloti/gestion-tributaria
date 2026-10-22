@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 require dirname(__DIR__) . '/bootstrap/autoload.php';
 require dirname(__DIR__) . '/app/Support/helpers.php';
-use App\Services\{AuthService, Csrf, LoginLimiter, PasswordVerifier};
+use App\Services\{AuthService, Csrf, LoginLimiter, ClaveCuenta};
 
 function check(bool $condition, string $message): void {
     if (!$condition) { throw new RuntimeException($message); }
@@ -15,21 +15,18 @@ $token = Csrf::token();
 check(Csrf::valid($token) && !Csrf::valid('incorrecto'), 'Validación CSRF.');
 check(e('<script>"') === '&lt;script&gt;&quot;', 'Escape HTML.');
 check(input(['route' => ['inicio']], 'route', 'inicio') === 'inicio', 'Rechazo de arrays.');
-check(PasswordVerifier::verify('clave-existente', 'clave-existente', true), 'Compatibilidad con clave institucional existente.');
-check(!PasswordVerifier::verify('incorrecta', 'clave-existente', true), 'No acepta una clave distinta.');
-check(!PasswordVerifier::verify('clave-existente', 'clave-existente', false), 'Respeta desactivación de compatibilidad.');
-check(!PasswordVerifier::verify('', '', true), 'No acepta claves vacías.');
-$hash = password_hash('clave-segura', PASSWORD_DEFAULT);
-check(PasswordVerifier::verify('clave-segura', $hash, true), 'Valida hashes.');
-check(!PasswordVerifier::verify($hash, $hash, true), 'Un hash no sirve como contraseña.');
-$bcrypt = password_hash(str_repeat('a', 72), PASSWORD_BCRYPT);
-check(!PasswordVerifier::verify(str_repeat('a', 73), $bcrypt, true), 'Evita truncamiento bcrypt.');
-$users = new App\Models\Funcionario(new App\Core\Database(['name' => 'no_debe_conectarse'], false));
-$auth = new AuthService($users, true, 'central');
+foreach (['','corta',str_repeat('a',73),"frase-larga-con\0nulo"] as $badPassword) {
+    $rejected=false;try { ClaveCuenta::validate($badPassword); } catch (InvalidArgumentException) { $rejected=true; }
+    check($rejected,'Rechaza clave vacía, débil, truncable o con bytes nulos.');
+}
+ClaveCuenta::validate('Mi frase propia y extensa');
+check(ClaveCuenta::identity('Usuario.EXTERNO','Persona ficticia','')[0]==='usuario.externo','Normaliza identidad de cuenta independiente.');
+$users = new App\Models\Usuario(new App\Core\Database(['name' => 'no_debe_conectarse'], false));
+$auth = new AuthService($users, 'cuentas-propias');
 $_SESSION = ['user_id' => 1, 'last_activity' => time()];
 check($auth->user() === null && empty($_SESSION['user_id']), 'Invalida sesiones antiguas de cuentas locales.');
 $_SESSION = ['user_id' => 1, 'last_activity' => time(), 'auth_source' => 'otra-fuente'];
-check($auth->user() === null, 'Una sesión no se reutiliza al cambiar la fuente de funcionarios.');
+check($auth->user() === null, 'Una sesión de otro origen no autentica una cuenta propia.');
 $directory = sys_get_temp_dir() . '/mvc-limiter-' . bin2hex(random_bytes(8));
 mkdir($directory);
 try {

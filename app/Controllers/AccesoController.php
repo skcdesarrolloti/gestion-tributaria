@@ -2,17 +2,18 @@
 declare(strict_types=1);
 namespace App\Controllers;
 use App\Core\View;
-use App\Models\{AccesoTributario,Funcionario,Contribuyente};
+use App\Models\{AccesoTributario,Usuario,Contribuyente};
 use App\Services\{AuthService,AccesoRoles,Csrf};
 
 final class AccesoController
 {
-    public function __construct(private AuthService $auth,private AccesoTributario $access,private Funcionario $users,private Contribuyente $taxpayers,private View $view,private array $config) {}
+    public function __construct(private AuthService $auth,private AccesoTributario $access,private Usuario $users,private Contribuyente $taxpayers,private View $view,private array $config) {}
     public function index(): void
     {
         $user=$this->auth->user(); if (!$user) { \redirect($this->config,'login'); }
         if (!AccesoRoles::socio($user)) { http_response_code(403); echo 'Solo un Socio puede administrar accesos.'; return; }
         $directory=$this->users->activeDirectory(); $assignments=array_column($this->access->rows(),null,'funcionario_id');
+        $assignments=array_intersect_key($assignments,array_column($directory,null,'_ID'));
         $selected=filter_var(\input($_GET,'funcionario'),FILTER_VALIDATE_INT,['options'=>['min_range'=>1]])?:0;
         $target=null; foreach ($directory as $account) { if ((int)$account['_ID']===$selected) { $target=$account; } }
         $record=$assignments[$selected]??['perfil'=>'usuario','contribuyente_id'=>'','activo'=>1,'revision'=>0];

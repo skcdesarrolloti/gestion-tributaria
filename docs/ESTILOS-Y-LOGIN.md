@@ -21,10 +21,10 @@ Compara visualmente login e inicio antes del commit. Revisa también cambios de 
 
 ## Autenticación
 
-El modelo Funcionario consulta wp_jet_cct_funcionarios de la base central u350704768_M4FvI mediante auth_database. Valida user_others_apss, pass_others_apss y activo = 'Si' con la misma compatibilidad de contraseñas del sistema comercial. No existe primer administrador ni alta de cuentas locales. Consulta docs/ACCESO-FUNCIONARIOS.md.
+El modelo Usuario consulta usuarios_tributarios de la base propia. Por instrucción del responsable del 22/10/2026 se eliminó la conexión a funcionarios; los Socios crean cuentas propias y cada persona cambia su contraseña. Ver docs/CUENTAS-INDEPENDIENTES.md. La referencia comercial solo define la presentación.
 
-Las cookies tienen nombres distintos por proyecto, HttpOnly y SameSite=Lax. Secure debe estar activo en producción HTTPS. La sesión cambia de identificador al entrar, vence tras 30 minutos sin actividad y comprueba que el funcionario siga activo en cada página protegida. El cierre exige POST y token CSRF. El acceso limita a 10 intentos por usuario/IP y 30 por IP en 15 minutos, incluidos los exitosos.
+Las cookies tienen nombres distintos por proyecto, HttpOnly y SameSite=Lax. Secure debe estar activo en producción HTTPS. La sesión cambia de identificador al entrar, vence tras 30 minutos sin actividad y comprueba acceso activo y versión de contraseña en cada página protegida. El cierre exige POST y token CSRF. El acceso limita a 10 intentos por usuario/IP y 30 por IP en 15 minutos, incluidos los exitosos.
 
-La base propia conserva los procesos del proyecto; la conexión de autenticación solo lee funcionarios centrales. No se copian cuentas ni se modifican sus claves. Las cookies siguen siendo independientes; los enlaces de acceso firmado del sistema comercial no forman parte de esta integración.
+La base propia conserva procesos y cuentas del proyecto. No hay autenticación central ni se modifican claves externas. Cambiar o restablecer una contraseña invalida sesiones anteriores; el alta y restablecimiento exigen sustituir la contraseña temporal.
 
 Poppins e iconos se cargan desde Google Fonts; el CSS principal está alojado en el propio proyecto.

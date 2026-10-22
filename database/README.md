@@ -1,5 +1,10 @@
 # Migraciones automáticas
 
+**Acceso actual (22/10/2026):** 021 crea `usuarios_tributarios` en la base propia.
+No existe conexión a funcionarios. Los párrafos sobre `auth_database` que siguen
+describen el historial de 001–020 y no son instrucciones de configuración actual.
+Conservar esos scripts intactos. Ver docs/CUENTAS-INDEPENDIENTES.md.
+
 Base: **u350704768_tributaria**. No importar scripts manualmente ni entrar a phpMyAdmin.
 
 Migraciones 018–020: perfiles Socio/Usuario, autorización inicial explícita y

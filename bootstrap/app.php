@@ -36,14 +36,20 @@ header('Referrer-Policy: same-origin');
 
 $database = new App\Core\Database($config['database']);
 (new App\Services\Migrator($database->connection(), dirname(__DIR__) . '/database'))->run();
-$authDatabase = new App\Core\Database($config['auth_database'], false);
-$users = new App\Models\Funcionario($authDatabase);
-$authSource = hash('sha256', json_encode([
-    $config['auth_database']['host'], $config['auth_database']['port'], $config['auth_database']['name'],
-]));
+$users = new App\Models\Usuario($database);
+$authSource = hash('sha256','cuentas-tributarias-v1|'.$config['database']['name']);
 $access=new App\Models\AccesoTributario($database);
-$auth = new App\Services\AuthService($users, $config['auth_allow_legacy_passwords'], $authSource, $access);
+$auth = new App\Services\AuthService($users, $authSource, $access);
 $view = new App\Core\View(dirname(__DIR__) . '/app/Views', $config);
+$cuentaController=new App\Controllers\CuentaController($auth,$users,$database,$view,$config);
+$activation=new App\Services\ActivacionCuenta($database,($config['storage_path']??dirname(__DIR__).'/storage').'/activacion-inicial.json',$config);
+$activacionController=new App\Controllers\ActivacionController($users,$activation,$view,$config);
+// La activación es privada y de una sola vez; no es un registro público de Socios.
+if (!$users->exists() && input($_GET,'route')!=='activar') { redirect($config,'activar'); }
+if ($users->exists() && input($_GET,'route')!=='activar') {
+    $currentUser=$auth->user();
+    if ($currentUser && $currentUser['cambiar_clave'] && !in_array(input($_GET,'route'),['perfil','logout'],true)) { redirect($config,'perfil'); }
+}
 $accesoController=new App\Controllers\AccesoController($auth,$access,$users,new App\Models\Contribuyente($database),$view,$config);
 $limiter = new App\Services\LoginLimiter(($config['storage_path'] ?? dirname(__DIR__) . '/storage') . '/rate-limits');
 $authController = new App\Controllers\AuthController($auth, $view, $limiter, $config);
