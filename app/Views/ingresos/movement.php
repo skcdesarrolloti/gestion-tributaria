@@ -14,6 +14,8 @@ require __DIR__.'/../partials/head.php';
         <?php require __DIR__.'/errors.php'; ?>
         <p class="text-body-md text-secondary">Cada movimiento se asigna una sola vez. Para registrar una reducción real, consulta antes su ficha y documenta la norma particular. Los totales calculados no se capturan aquí.</p>
         <form method="post" action="<?= e($action) ?>" class="space-y-space-md">
+        <fieldset <?= $readOnly?'disabled':'' ?> class="space-y-space-md">
+        <?php if ($readOnly): ?><legend>Solo consulta: no se guardan cambios en esta ficha.</legend><?php endif; ?>
             <?php require __DIR__.'/../partials/csrf.php'; ?>
             <label class="block text-body-md" for="concepto_id">Casilla y concepto *</label>
             <?php
@@ -74,6 +76,7 @@ require __DIR__.'/../partials/head.php';
             <?php endforeach; ?>
             <p class="text-body-md text-secondary">Por ahora se guarda la referencia, no se adjuntan archivos. No escribas contraseñas bancarias ni enlaces públicos a documentos privados.</p>
             <button class="rounded-xl bg-inverse-surface text-on-secondary px-4 py-2" type="submit">Guardar movimiento</button>
+        </fieldset>
         </form>
         <a class="text-secondary underline" href="<?= e(url($config,'ingresos/detalle').'&id='.$profile['id']) ?>">Volver a casillas y fichas</a>
     </section>

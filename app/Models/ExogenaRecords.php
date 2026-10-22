@@ -32,14 +32,14 @@ class ExogenaRecords
     {
         return array_map([$this,'decode'],$this->query('SELECT x.* FROM '.$this->table.' x
             JOIN contribuyentes c ON c.id=x.contribuyente_id
-            WHERE c.id=? AND x.anio=? AND c.funcionario_id=? AND c.tipo=\'juridica\''.$this->scope.' ORDER BY x.id DESC',
+            WHERE c.id=? AND x.anio=? AND '.\App\Services\AccesoSql::condition('c',false).' AND c.tipo=\'juridica\''.$this->scope.' ORDER BY x.id DESC',
             [$company,$year,$owner])->fetchAll());
     }
 
     public function findFor(int $id, int $owner): ?array
     {
         $row=$this->query('SELECT x.* FROM '.$this->table.' x JOIN contribuyentes c ON c.id=x.contribuyente_id
-            WHERE x.id=? AND c.funcionario_id=? AND c.tipo=\'juridica\''.$this->scope,[$id,$owner])->fetch();
+            WHERE x.id=? AND '.\App\Services\AccesoSql::condition('c',false).' AND c.tipo=\'juridica\''.$this->scope,[$id,$owner])->fetch();
         return $row?$this->decode($row):null;
     }
 
@@ -51,7 +51,7 @@ class ExogenaRecords
             $group=$code==='shared'?' GROUP BY x.formato':'';
             $parts[]='SELECT '.$select.' AS formato, COUNT(*) AS total FROM '.$table.' x
                 JOIN contribuyentes c ON c.id=x.contribuyente_id
-                WHERE c.id=? AND x.anio=? AND c.funcionario_id=? AND c.tipo=\'juridica\''.$group;
+                WHERE c.id=? AND x.anio=? AND '.\App\Services\AccesoSql::condition('c',false).' AND c.tipo=\'juridica\''.$group;
             array_push($values,$company,$year,$owner);
         }
         return $this->query(implode(' UNION ALL ',$parts),$values)->fetchAll(\PDO::FETCH_KEY_PAIR);
@@ -68,12 +68,12 @@ class ExogenaRecords
             if ($this->shared) { $values[]=$this->code; }
             array_push($values,$company,$owner);
             $query=$this->query('INSERT INTO '.$this->table.' (contribuyente_id,anio,estructura,datos'.$extraColumn.')
-                SELECT id,?,?,?'.$extraValue.' FROM contribuyentes WHERE id=? AND funcionario_id=? AND tipo=\'juridica\'',
+                SELECT id,?,?,?'.$extraValue.' FROM contribuyentes WHERE id=? AND '.\App\Services\AccesoSql::condition('contribuyentes',true).' AND tipo=\'juridica\'',
                 $values);
             if ($query->rowCount()!==1) { throw new \DomainException('Empresa no disponible.'); }
         } else {
             $this->query('UPDATE '.$this->table.' x JOIN contribuyentes c ON c.id=x.contribuyente_id
-                SET x.anio=?,x.datos=? WHERE x.id=? AND c.id=? AND c.funcionario_id=? AND c.tipo=\'juridica\'
+                SET x.anio=?,x.datos=? WHERE x.id=? AND c.id=? AND '.\App\Services\AccesoSql::condition('c',true).' AND c.tipo=\'juridica\'
                 AND x.estructura=?'.$this->scope,[$record['anio'],$json,$id,$company,$owner,$this->structure]);
         }
     }

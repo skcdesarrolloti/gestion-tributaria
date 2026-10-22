@@ -16,20 +16,20 @@ final class Ingreso
     public function profiles(int $taxpayer, int $owner): array
     {
         return $this->query('SELECT p.* FROM perfiles_renta p JOIN contribuyentes c ON c.id=p.contribuyente_id
-            WHERE c.id=? AND c.funcionario_id=? ORDER BY p.anio DESC', [$taxpayer,$owner])->fetchAll();
+            WHERE c.id=? AND '.\App\Services\AccesoSql::condition('c',false).' ORDER BY p.anio DESC', [$taxpayer,$owner])->fetchAll();
     }
 
     public function profileFor(int $id, int $owner): ?array
     {
-        return $this->query('SELECT p.*, c.nombre FROM perfiles_renta p JOIN contribuyentes c ON c.id=p.contribuyente_id
-            WHERE p.id=? AND c.funcionario_id=?', [$id,$owner])->fetch() ?: null;
+        return $this->query('SELECT p.*, c.nombre,c.funcionario_id FROM perfiles_renta p JOIN contribuyentes c ON c.id=p.contribuyente_id
+            WHERE p.id=? AND '.\App\Services\AccesoSql::condition('c',false), [$id,$owner])->fetch() ?: null;
     }
 
     public function createProfile(array $record, array $taxpayer, int $owner): int
     {
         $form = $taxpayer['tipo'] !== 'juridica' && $record['residencia'] === 'residente' ? '210' : '110';
         $this->query('INSERT INTO perfiles_renta (contribuyente_id,anio,tipo,residencia,regimen,servicios,soporte_perfil,formulario,version)
-            SELECT id,?,?,?,?,?,?,?,? FROM contribuyentes WHERE id=? AND funcionario_id=?',
+            SELECT id,?,?,?,?,?,?,?,? FROM contribuyentes WHERE id=? AND '.\App\Services\AccesoSql::condition('contribuyentes',true),
             [$record['anio'],$taxpayer['tipo'],$record['residencia'],$record['regimen'],$record['servicios'],
                 $record['soporte_perfil'],$form,'2026-10',$taxpayer['id'],$owner]);
         return (int) $this->database->connection()->lastInsertId();
@@ -65,7 +65,7 @@ final class Ingreso
     {
         return $this->query('SELECT m.*, k.casilla, k.nombre FROM movimientos_ingresos m
             JOIN perfiles_renta p ON p.id=m.perfil_id JOIN contribuyentes c ON c.id=p.contribuyente_id
-            JOIN conceptos_ingresos k ON k.id=m.concepto_id WHERE p.id=? AND c.funcionario_id=? ORDER BY m.fecha,m.id',
+            JOIN conceptos_ingresos k ON k.id=m.concepto_id WHERE p.id=? AND '.\App\Services\AccesoSql::condition('c',false).' ORDER BY m.fecha,m.id',
             [$profile,$owner])->fetchAll();
     }
 
@@ -91,12 +91,12 @@ final class Ingreso
         if ($id === null) {
             $sql = 'INSERT INTO movimientos_ingresos ('.implode(',',self::MOVEMENT_FIELDS).',perfil_id)
                 SELECT '.implode(',',array_fill(0,count($values),'?')).',p.id FROM perfiles_renta p
-                JOIN contribuyentes c ON c.id=p.contribuyente_id WHERE p.id=? AND c.funcionario_id=?';
+                JOIN contribuyentes c ON c.id=p.contribuyente_id WHERE p.id=? AND '.\App\Services\AccesoSql::condition('c',true);
             array_push($values,$profile,$owner);
         } else {
             $set = implode(',',array_map(static fn ($field) => "m.$field=?", self::MOVEMENT_FIELDS));
             $sql = "UPDATE movimientos_ingresos m JOIN perfiles_renta p ON p.id=m.perfil_id
-                JOIN contribuyentes c ON c.id=p.contribuyente_id SET $set WHERE m.id=? AND p.id=? AND c.funcionario_id=?";
+                JOIN contribuyentes c ON c.id=p.contribuyente_id SET $set WHERE m.id=? AND p.id=? AND ".\App\Services\AccesoSql::condition('c',true);
             array_push($values,$id,$profile,$owner);
         }
         $this->query($sql,$values);
@@ -105,7 +105,7 @@ final class Ingreso
     private function lockedProfile(int $id, int $owner): ?array
     {
         return $this->query('SELECT p.* FROM perfiles_renta p JOIN contribuyentes c ON c.id=p.contribuyente_id
-            WHERE p.id=? AND c.funcionario_id=? FOR UPDATE',[$id,$owner])->fetch() ?: null;
+            WHERE p.id=? AND '.\App\Services\AccesoSql::condition('c',true).' FOR UPDATE',[$id,$owner])->fetch() ?: null;
     }
 
     private function query(string $sql, array $values): \PDOStatement

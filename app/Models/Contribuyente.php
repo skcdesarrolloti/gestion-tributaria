@@ -12,7 +12,7 @@ final class Contribuyente
     public function listFor(int $owner): array
     {
         $query = $this->database->connection()->prepare(
-            'SELECT * FROM contribuyentes WHERE funcionario_id = ? ORDER BY nombre, id'
+            'SELECT * FROM contribuyentes WHERE '.\App\Services\AccesoSql::condition('contribuyentes',false).' ORDER BY nombre, id'
         );
         $query->execute([$owner]);
         return array_map([$this, 'decode'], $query->fetchAll());
@@ -20,7 +20,7 @@ final class Contribuyente
 
     public function findFor(int $id, int $owner): ?array
     {
-        $query = $this->database->connection()->prepare('SELECT * FROM contribuyentes WHERE id = ? AND funcionario_id = ?');
+        $query = $this->database->connection()->prepare('SELECT * FROM contribuyentes WHERE id = ? AND '.\App\Services\AccesoSql::condition('contribuyentes',false));
         $query->execute([$id, $owner]);
         $row = $query->fetch();
         return $row ? $this->decode($row) : null;
@@ -34,7 +34,7 @@ final class Contribuyente
     public function findFromRutFor(array $parsed, int $owner): ?array
     {
         $identity=$parsed['fields']['identificacion'];
-        $q=$this->database->connection()->prepare('SELECT * FROM contribuyentes WHERE funcionario_id=? AND
+        $q=$this->database->connection()->prepare('SELECT * FROM contribuyentes WHERE '.\App\Services\AccesoSql::condition('contribuyentes',false).' AND
             ((documento_tipo="NIT" AND documento_numero=?) OR (documento_tipo=? AND documento_numero=?))
             ORDER BY (documento_tipo="NIT") DESC,id LIMIT 1');
         $q->execute([$owner,$parsed['nit'],$identity['identificacion_tipo']??'',$identity['identificacion_numero']??'']);
@@ -46,12 +46,14 @@ final class Contribuyente
         $values = [$data['nombre'], $data['tipo'], $data['documento_tipo'], $data['documento_numero'],
             $data['dv'] === '' ? null : $data['dv'], json_encode(array_values(array_unique($data['fuentes'])), JSON_THROW_ON_ERROR)];
         if ($id === null) {
+            $q=$this->database->connection()->prepare("SELECT 1 FROM accesos_tributarios WHERE funcionario_id=? AND perfil='socio' AND activo=1");
+            $q->execute([$owner]); if (!$q->fetchColumn()) { throw new \DomainException('Solo un Socio puede registrar contribuyentes.'); }
             $sql = 'INSERT INTO contribuyentes (nombre, tipo, documento_tipo, documento_numero, dv, fuentes, funcionario_id)
                     VALUES (?, ?, ?, ?, ?, ?, ?)';
             $values[] = $owner;
         } else {
             $sql = 'UPDATE contribuyentes SET nombre = ?, tipo = ?, documento_tipo = ?, documento_numero = ?, dv = ?,
-                    fuentes = ? WHERE id = ? AND funcionario_id = ?';
+                    fuentes = ? WHERE id = ? AND '.\App\Services\AccesoSql::condition('contribuyentes',true);
             array_push($values, $id, $owner);
         }
         $this->database->connection()->prepare($sql)->execute($values);

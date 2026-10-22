@@ -28,6 +28,6 @@ $tabsQuery->execute([$tabsId,'relacionados']);$scopeRows=json_decode($tabsQuery-
 $scopeDependent=array_values(array_filter($scopeRows,static fn($r)=>$r['rol']==='dependiente'))[0];
 verify(count($scopeRows)===4 && $scopeDependent['dependencia']==='Certificado ficticio' && $scopeDependent['reclamado']==='no','Conserva soporte de beneficio, socios, contador y representación al editar al familiar');
 verify(request($client,$base,$scopeProfile.'&tab=familia',$scopePost)[0]===409,'Los dos componentes comparten control de revisión y rechazan una edición antigua');
-verify(request($client,$base,'planeacion/datos&id='.$otherId.'&tab=seguridad')[0]===404,'Los componentes trasladados mantienen privacidad por contribuyente');
+verify(request($client,$base,'planeacion/datos&id='.$otherId.'&tab=seguridad')[0]===200,'Socio consulta componentes de todos los contribuyentes');
 [$s,$html]=request($client,$base,$scopeProfile.'&tab=fiscal');
 verify(!str_contains($html,'name="campos[obligacion_renta]"') && str_contains($html,'name="campos[residencia]"'),'El perfil distingue residencia de la revisión anual de declaración');

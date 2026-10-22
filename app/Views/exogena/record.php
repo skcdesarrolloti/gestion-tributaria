@@ -10,6 +10,8 @@
     <?php require __DIR__.'/notice.php'; ?>
     <?php if ($errors): ?><div role="alert" class="bg-primary-container rounded-xl p-4"><ul class="space-y-space-sm"><?php foreach ($errors as $error): ?><li><?= e($error) ?></li><?php endforeach; ?></ul></div><?php endif; ?>
     <form method="post" action="<?= e(url($config,'exogena/5247/registro').($id===null?'&contribuyente='.$company['id']:'&id='.$id)) ?>" class="space-y-space-lg">
+        <fieldset <?= $readOnly?'disabled':'' ?> class="space-y-space-md">
+        <?php if ($readOnly): ?><legend>Solo consulta: no se guardan cambios en esta ficha.</legend><?php endif; ?>
         <?php require __DIR__.'/../partials/csrf.php'; ?>
         <section class="bg-surface-container-lowest rounded-2xl border border-surface-container p-space-xl">
             <label class="text-body-md">Año gravable *
@@ -37,6 +39,7 @@
         <p class="text-body-md text-secondary">No se calculan retenciones automáticamente. Los importes se escriben en pesos enteros sin puntos ni comas; cero es un dato explícito. Los códigos se guardan como texto y requieren revisión del catálogo aplicable.</p>
         <button class="rounded-xl bg-inverse-surface text-on-secondary px-4 py-2" type="submit">Guardar borrador 5247</button>
         <a class="text-secondary underline" href="<?= e(url($config,'exogena/5247').'&contribuyente='.$company['id'].'&anio='.$record['anio']) ?>">Volver a los registros</a>
+        </fieldset>
     </form>
 </main>
 <?php require __DIR__.'/../partials/footer.php'; ?>

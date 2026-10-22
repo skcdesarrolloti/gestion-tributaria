@@ -1,4 +1,6 @@
         <form method="post" action="<?= e($profileAction) ?>" class="space-y-space-md">
+        <fieldset <?= $readOnly?'disabled':'' ?> class="space-y-space-md">
+        <?php if ($readOnly): ?><legend>Solo consulta: no se guardan cambios en esta ficha.</legend><?php endif; ?>
             <?php require __DIR__.'/../partials/csrf.php'; ?>
             <div class="profile-grid">
                 <?php foreach (\App\Services\PerfilGuidance::fields($taxpayer['tipo']) as $field=>$definition): ?>
@@ -18,4 +20,5 @@
             <p class="text-body-md text-secondary">Indica referencias del RUT y del análisis de residencia. Es una referencia documental, no una carga de archivos. La elección de tratamiento no acredita por sí sola un beneficio.</p>
             <p id="regimen-availability" class="text-body-md text-secondary" role="status">El régimen ordinario tiene depuración inicial disponible. Las otras opciones se ofrecen para consultar su definición y alcance.</p>
             <button id="create-profile" class="rounded-xl bg-inverse-surface text-on-secondary px-4 py-2" type="submit"><?= e($profileButton) ?></button>
+        </fieldset>
         </form>

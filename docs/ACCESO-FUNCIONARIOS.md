@@ -1,5 +1,10 @@
 # Acceso con los funcionarios existentes
 
+Gestión Tributaria añade perfiles **Socio / Usuario** y asignaciones de contribuyente
+en su propia base. Ver [PERFILES-Y-ACCESOS.md](PERFILES-Y-ACCESOS.md). Esto no crea
+cuentas locales: el login continúa comprobando las cuentas centrales. Una cuenta
+central activa sin asignación no obtiene expedientes tributarios.
+
 Ambos proyectos usan las cuentas ya definidas en wp_jet_cct_funcionarios de la base central u350704768_M4FvI, igual que Control de Servicios Comerciales.
 
 ## Qué escribe el funcionario en el login

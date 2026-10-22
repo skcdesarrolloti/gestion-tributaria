@@ -65,6 +65,7 @@ final class ExogenaController
         if ($id!==null && (!$found || $found['estructura']!==$structure)) { $this->missing(); return; }
         $company=$this->company($found?(int)$found['contribuyente_id']:$this->id('contribuyente'),(int)$user['_ID']);
         if (!$company) { $this->missing(); return; }
+        if ($_SERVER['REQUEST_METHOD']==='POST' && !\App\Services\AccesoRoles::writable($user,$company)) { return; }
         $record=$this->readRecord($found?array_merge($found['datos'],['anio'=>(string)$found['anio']]):
             ['anio'=>\input($_GET,'anio',$defaultYear)]);
         $errors=[];

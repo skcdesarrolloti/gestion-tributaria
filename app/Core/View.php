@@ -10,6 +10,8 @@ final class View
     public function render(string $template, array $data = []): void
     {
         $config = $this->config;
+        $subject=$data['profile']??$data['taxpayer']??$data['company']??null;
+        $readOnly=$data['readOnly']??($subject && isset($data['user']) && !\App\Services\AccesoRoles::edit($data['user'],$subject));
         extract($data, EXTR_SKIP);
         require $this->directory . '/' . $template . '.php';
     }

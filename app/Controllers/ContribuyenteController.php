@@ -29,12 +29,14 @@ final class ContribuyenteController
         $owner = (int) $user['_ID'];
         $id = null;
         $record = ContribuyenteData::read([]);
+        if (!array_key_exists('id',$_GET) && !\App\Services\AccesoRoles::socio($user)) { http_response_code(403); echo 'Tu ficha debe ser asignada por un Socio; no puedes registrar otros contribuyentes.'; return; }
         if (array_key_exists('id', $_GET)) {
             $raw = \input($_GET, 'id');
             if (!preg_match('/^[1-9][0-9]{0,9}$/D', $raw)) { $this->notFound(); return; }
             $id = (int) $raw;
             $record = $this->model->findFor($id, $owner);
             if (!$record) { $this->notFound(); return; }
+            if ($_SERVER['REQUEST_METHOD']==='POST' && !\App\Services\AccesoRoles::writable($user,$record)) { return; }
             if ($_SERVER['REQUEST_METHOD']==='GET') {
                 $year=\input($_GET,'anio'); $yearQuery=in_array($year,['2025','2026'],true)?'&anio='.$year:'';
                 header('Location: '.\url($this->config,'contribuyentes/perfil').'&id='.$id.$yearQuery.'&tab=identificacion',true,303); return;
@@ -90,7 +92,6 @@ final class ContribuyenteController
     {
         $user = $this->auth->user();
         if (!$user) { \redirect($this->config, 'login'); }
-        // Política inicial: todo funcionario activo gestiona exclusivamente sus propios registros.
         return $user;
     }
 

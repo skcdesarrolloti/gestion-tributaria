@@ -28,6 +28,7 @@ final class SimuladorController
         $errors=[]; $result=null;
         if ($_SERVER['REQUEST_METHOD']==='POST') {
             if (!$profile) { $this->missing(); return; }
+            if (!\App\Services\AccesoRoles::writable($user,$profile)) { return; }
             $record=SimuladorFields::read($_POST);
             if (!Csrf::valid(\input($_POST,'_csrf_token'))) { http_response_code(419); $errors[]='Formulario vencido; recarga antes de guardar.'; }
             else {

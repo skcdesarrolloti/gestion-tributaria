@@ -2,6 +2,11 @@
 
 Base: **u350704768_tributaria**. No importar scripts manualmente ni entrar a phpMyAdmin.
 
+Migraciones 018–020: perfiles Socio/Usuario, autorización inicial explícita y
+auditoría de asignaciones. Solo datos de permisos en la base propia; no crean
+cuentas ni modifican `auth_database`. Ver docs/PERFILES-Y-ACCESOS.md. Conservar
+los propietarios e identificadores de las fichas existentes.
+
 En cada arranque, Migrator toma un bloqueo por base, lee schema_migrations y ejecuta los scripts pendientes en orden. Registra versión y SHA-256 tras comprobar el resultado. Si una migración ya aplicada cambia, la aplicación se detiene: hay que recuperar el archivo original y crear una versión nueva.
 
 ## Archivos

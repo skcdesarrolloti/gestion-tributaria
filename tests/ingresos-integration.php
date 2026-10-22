@@ -68,15 +68,15 @@ verify(request($client,$base,$profileRoute,$updatedProfile)[0]===303, 'Con movim
 verify(str_contains(request($client,$base,$route)[1],'Evidencia &lt;b&gt;actualizada&lt;/b&gt;'), 'Resumen escapa la evidencia y conserva cambios');
 verify((int)$db->query('SELECT COUNT(*) FROM movimientos_ingresos WHERE perfil_id='.$profileId)->fetchColumn()===2,
     'Editar perfil no borra ni duplica movimientos');
-verify(request($client,$base,'ingresos&contribuyente='.$otherId)[0]===404, 'No crea perfiles para contribuyentes ajenos');
+verify(request($client,$base,'ingresos&contribuyente='.$otherId)[0]===200, 'Socio consulta los años de otro contribuyente');
 $otherProfile=$db->prepare("INSERT INTO perfiles_renta (contribuyente_id,anio,tipo,residencia,regimen,servicios,soporte_perfil,formulario,version)
     VALUES (?,2025,'natural','residente','ordinario','pendiente','Prueba','210','2026-10')");
 $otherProfile->execute([$otherId]);$otherProfileId=(int)$db->lastInsertId();
-verify(request($client,$base,'ingresos/detalle&id='.$otherProfileId)[0]===404, 'Perfil ajeno permanece privado');
-verify(request($client,$base,'proyeccion&id='.$otherProfileId)[0]===404, 'Proyección ajena permanece privada');
+verify(request($client,$base,'ingresos/detalle&id='.$otherProfileId)[0]===200, 'Socio consulta ingresos de otro contribuyente');
+verify(request($client,$base,'proyeccion&id='.$otherProfileId)[0]===200, 'Socio consulta la proyección de otro contribuyente');
 verify(request($client,$base,'proyeccion&id[]=1')[0]===404, 'Proyección rechaza identificador inválido');
-verify(request($client,$base,'ingresos/perfil&id='.$otherProfileId,$annual)[0]===404, 'No puede editar perfil ajeno');
-verify(request($client,$base,'ingresos/movimiento&id='.$otherProfileId,$movement)[0]===404, 'No escribe movimientos en perfil ajeno');
+verify(request($client,$base,'ingresos/perfil&id='.$otherProfileId,$annual)[0]===403, 'No puede editar perfil ajeno');
+verify(request($client,$base,'ingresos/movimiento&id='.$otherProfileId,$movement)[0]===403, 'No escribe movimientos en perfil ajeno');
 verify(request($client,$base,$movementRoute.'&movimiento=999999',$movement)[0]===404, 'No crea mediante una edición inexistente');
 foreach ([['juridica','residente','110'],['sucesion','no_residente','110']] as [$type,$residence,$form]) {
     $entityId=(int)$db->query("SELECT id FROM contribuyentes WHERE tipo='$type' AND funcionario_id=100")->fetchColumn();

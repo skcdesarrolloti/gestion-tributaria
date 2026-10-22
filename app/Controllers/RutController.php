@@ -18,6 +18,7 @@ final class RutController
         $user=$this->user(); $owner=(int)$user['_ID']; $raw=\input($_GET,'id'); $year=\input($_GET,'anio','2026');
         $taxpayer=preg_match('/^[1-9][0-9]{0,9}$/D',$raw)?$this->taxpayers->findFor((int)$raw,$owner):null;
         if (!$taxpayer) { http_response_code(404); echo 'Contribuyente no encontrado.'; return; }
+        if (!\App\Services\AccesoRoles::writable($user,$taxpayer)) { return; }
         if (!in_array($year,['2025','2026'],true)) { http_response_code(422); echo 'Revisa el año seleccionado.'; return; }
         $schemas=CaracterizacionSchema::all($this->profiles->catalogs());
         $blocks=$this->profiles->blocksFor((int)$raw,$owner,(int)$year); $errors=[];

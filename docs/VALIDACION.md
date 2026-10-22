@@ -4,6 +4,18 @@ Verificación local realizada el 13 de octubre de 2026 con PHP 8.2.12, MariaDB 1
 
 ## Resultado
 
+### Perfiles Socio y Usuario · 22/10/2026
+
+Sintaxis, unitarias e integración completa en bases aleatorias correctas. Se
+comprobaron migraciones 018–020, vinculación inicial explícita, asignación,
+consulta global de Socio, edición propia, usuario con una sola ficha, rechazo
+de IDs y descargas ajenas, importación RUT, escenario propio, Exógena,
+reasignación y suspensión en sesión abierta, CSRF, concurrencia, último Socio
+y auditoría. No se modificaron cuentas ni contraseñas de producción.
+Revisión de navegación y formularios en Edge a 1440px y 390px, sin desbordamiento.
+La activación y asignaciones de las cuentas reales deben comprobarse en su sesión
+después de publicar. Ver [PERFILES-Y-ACCESOS.md](PERFILES-Y-ACCESOS.md).
+
 - Sintaxis PHP y límite de 250 líneas: correctos.
 - Pruebas unitarias de CSRF, escape HTML y límite de intentos: correctas.
 - 30 comprobaciones de integración: login directo sin instalador, dos bases aisladas, credenciales institucionales heredadas y con hash, rechazo de cuentas locales, sesión, perfil, logout, cuenta inactiva y migraciones de columnas.

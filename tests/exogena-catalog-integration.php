@@ -28,15 +28,15 @@ foreach (App\Services\ExogenaSchemas::all() as $code=>$schema) {
         "$code mantiene un solo registro propio");
     $foreign=$db->prepare('INSERT INTO exogena_registros (contribuyente_id,formato,anio,estructura,datos) VALUES (?,?,2025,?,?)');
     $foreign->execute([$otherCompanyId,(string)$code,$schema['structure'],json_encode($saved)]);$foreignId=(int)$db->lastInsertId();
-    verify(request($client,$base,$prefix.'/registro&id='.$foreignId)[0]===404, "$code no lee registros ajenos");
-    verify(request($client,$base,$prefix.'/registro&id='.$foreignId,$fixture)[0]===404, "$code no modifica registros ajenos");
-    verify(request($client,$base,$prefix.'&contribuyente='.$otherCompanyId)[0]===404, "$code oculta clientes ajenos");
+    verify(request($client,$base,$prefix.'/registro&id='.$foreignId)[0]===200, "$code consulta de Socio restringe el editor ajeno");
+    verify(request($client,$base,$prefix.'/registro&id='.$foreignId,$fixture)[0]===403, "$code no modifica registros ajenos");
+    verify(request($client,$base,$prefix.'&contribuyente='.$otherCompanyId)[0]===200, "$code permite consultar clientes como Socio");
     verify(request($client,$base,$prefix.'/registro&contribuyente='.$taxpayerId,$fixture)[0]===404, "$code conserva alcance de informante jurídico");
     verify(request($client,$base,$prefix.'/registro&id=999999',$fixture)[0]===404, "$code rechaza edición inexistente");
 }
 verify(request($client,$base,'exogena/1005/registro&id='.$firstCatalogId)[0]===404, 'Un ID de 1003 no se abre como 1005');
 verify(request($client,$base,'exogena/1003&anio=2026')[0]===422, 'Consulta distingue versiones por año');
-verify(request($client,$base,'exogena&contribuyente='.$otherCompanyId)[0]===404, 'Panel de cliente también verifica propietario');
+verify(request($client,$base,'exogena&contribuyente='.$otherCompanyId)[0]===200, 'Socio puede consultar el panel de todas las empresas');
 [$status,$workspaceHtml]=request($client,$base,'exogena&contribuyente='.$companyId);
 verify($status===200 && str_contains($workspaceHtml,'Contratos de colaboración')
     && str_contains($workspaceHtml,'Rentas de trabajo y pensiones')

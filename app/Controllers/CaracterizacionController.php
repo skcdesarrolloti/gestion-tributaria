@@ -17,6 +17,8 @@ final class CaracterizacionController
         $owner=(int)$user['_ID']; $raw=\input($_GET,'id'); $year=\input($_GET,'anio','2026');
         $taxpayer=preg_match('/^[1-9][0-9]{0,9}$/D',$raw)?$this->taxpayers->findFor((int)$raw,$owner):null;
         if (!$taxpayer) { http_response_code(404); echo 'Contribuyente no encontrado.'; return; }
+        $readOnly=!\App\Services\AccesoRoles::edit($user,$taxpayer);
+        if ($_SERVER['REQUEST_METHOD']==='POST' && !\App\Services\AccesoRoles::writable($user,$taxpayer)) { return; }
         if (!array_key_exists('anio',$_GET)) { $year=(string)$this->model->latestYearFor((int)$raw,$owner); }
         $component=\input($_GET,'route')==='planeacion/datos';
         $schemas=CaracterizacionSchema::all($this->model->catalogs()); $tabs=$component?PerfilAlcance::components():PerfilContribuyente::tabs($taxpayer['tipo']);
@@ -73,6 +75,6 @@ final class CaracterizacionController
             }
         } elseif (\input($_GET,'guardado')==='1') { $notice='Información guardada.'; }
         $documents=$this->documents->listFor((int)$raw,$owner,(int)$year);
-        $this->view->render('caracterizacion/index',compact('user','taxpayer','year','tab','tabs','block','roles','schemas','blocks','record','identity','revision','errors','notice','documents','component'));
+        $this->view->render('caracterizacion/index',compact('user','taxpayer','year','tab','tabs','block','roles','schemas','blocks','record','identity','revision','errors','notice','documents','component','readOnly'));
     }
 }

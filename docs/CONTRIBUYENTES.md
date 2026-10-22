@@ -60,8 +60,9 @@ Los bloques JSON históricos se reutilizan: no hace falta crear nuevamente perso
 importar SQL o borrar sus respuestas. La migración 017 conserva los soportes RUT.
 Ver [IMPORTACION-RUT.md](IMPORTACION-RUT.md) para lectura de hojas 1–7 y límites.
 
-Cada consulta y POST verifica sesión y funcionario propietario. No se pueden ver,
-modificar o importar datos de otro funcionario mediante un ID o pestaña alterados.
+Cada consulta y POST verifica sesión y [perfil de acceso](PERFILES-Y-ACCESOS.md).
+El Socio consulta todas las fichas; el Usuario solo la que se le asignó. La consulta
+global no permite editar fichas ajenas. Un ID o pestaña alterados no amplía permisos.
 El guardado exige CSRF, validación de campos y revisión vigente.
 
 Las pestañas de representantes, socios, junta y profesionales usan el bloque

@@ -41,8 +41,10 @@ $users = new App\Models\Funcionario($authDatabase);
 $authSource = hash('sha256', json_encode([
     $config['auth_database']['host'], $config['auth_database']['port'], $config['auth_database']['name'],
 ]));
-$auth = new App\Services\AuthService($users, $config['auth_allow_legacy_passwords'], $authSource);
+$access=new App\Models\AccesoTributario($database);
+$auth = new App\Services\AuthService($users, $config['auth_allow_legacy_passwords'], $authSource, $access);
 $view = new App\Core\View(dirname(__DIR__) . '/app/Views', $config);
+$accesoController=new App\Controllers\AccesoController($auth,$access,$users,new App\Models\Contribuyente($database),$view,$config);
 $limiter = new App\Services\LoginLimiter(($config['storage_path'] ?? dirname(__DIR__) . '/storage') . '/rate-limits');
 $authController = new App\Controllers\AuthController($auth, $view, $limiter, $config);
 $homeController = new App\Controllers\HomeController($auth, $view, $config);

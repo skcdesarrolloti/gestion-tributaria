@@ -1,0 +1,1 @@
+SELECT COUNT(*)=6 FROM information_schema.columns WHERE table_schema=DATABASE() AND table_name='historial_accesos' AND column_name IN ('id','actor_id','funcionario_id','anterior','nuevo','created_at');

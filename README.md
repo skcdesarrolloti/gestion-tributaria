@@ -3,6 +3,12 @@
 Proyecto MVC en PHP 8.2+, ya publicado en Hostinger y conectado con Git. Continuar el desarrollo sobre esta estructura.
 Base asignada: **u350704768_tributaria**.
 
+**Accesos: Socio y Usuario.** El Socio consulta toda la información; el Usuario
+solo ve y completa el contribuyente que se le asigna. La cuenta inicial autorizada
+se vincula al identificador central al entrar. Los Socios administran asignaciones
+desde **Usuarios y accesos**, sin crear cuentas ni cambiar contraseñas centrales.
+Ver [perfiles y permisos](docs/PERFILES-Y-ACCESOS.md).
+
 **Inicio y menú principal conservan todos los módulos.** Accesos en filas a
 Contribuyentes, Hoja de planeación, Deducciones y beneficios (52 fichas con sus
 fuentes) y Exógena como módulo independiente. Los menús Planeación y Exógena

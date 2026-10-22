@@ -9,6 +9,7 @@
     <?php if ($roles && !$record['filas']) { $missing=[]; } ?>
     <?php if ($missing): ?><details><summary class="text-secondary underline"><?= count($missing) ?> <?= count($missing)===1?'dato pendiente':'datos pendientes' ?></summary><ul class="list-disc pl-4"><?php foreach ($missing as $item): ?><li><?= e($item) ?></li><?php endforeach; ?></ul></details><?php endif; ?>
     <form id="caracterizacion-form" method="post" action="<?= e($formAction) ?>" class="space-y-space-md">
+        <fieldset <?= $readOnly?'disabled':'' ?> class="space-y-space-md">
         <?php require __DIR__.'/../partials/csrf.php'; ?>
         <input type="hidden" name="revision" value="<?= e($revision) ?>">
         <?php if ($block==='identificacion'): $identityPrefix='identidad['; $identitySuffix=']'; require __DIR__.'/../contribuyentes/identity-fields.php'; endif; ?>
@@ -33,6 +34,7 @@
         <?php endif; ?>
         <?php require __DIR__.'/metadata.php'; ?>
         <p role="status" id="profile-save-status">Se guarda esta pestaña. Puedes continuar después.</p>
-        <button type="submit" class="rounded-xl bg-inverse-surface text-on-secondary px-4 py-2">Guardar información</button>
+        <?php if (!$readOnly): ?><button type="submit" class="rounded-xl bg-inverse-surface text-on-secondary px-4 py-2">Guardar información</button><?php endif; ?>
+        </fieldset>
     </form>
 </section>

@@ -17,6 +17,7 @@ final class IngresoController
         $user = $this->user();
         $taxpayer = $this->taxpayers->findFor($this->id('contribuyente'), (int) $user['_ID']);
         if (!$taxpayer) { $this->missing(); return; }
+        if ($_SERVER['REQUEST_METHOD']==='POST' && !\App\Services\AccesoRoles::writable($user,$taxpayer)) { return; }
         $record = IngresoData::read($_POST, Ingreso::PROFILE_FIELDS);
         $errors = [];
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -58,6 +59,7 @@ final class IngresoController
         $user=$this->user();
         $profile=$this->model->profileFor($this->id('id'),(int)$user['_ID']);
         if (!$profile) { $this->missing(); return; }
+        if ($_SERVER['REQUEST_METHOD']==='POST' && !\App\Services\AccesoRoles::writable($user,$profile)) { return; }
         $taxpayer=['id'=>$profile['contribuyente_id'],'tipo'=>$profile['tipo'],'nombre'=>$profile['nombre']];
         $record=[];
         foreach (Ingreso::PROFILE_FIELDS as $field) { $record[$field]=(string)$profile[$field]; }
@@ -90,6 +92,7 @@ final class IngresoController
         $user = $this->user();
         $profile = $this->model->profileFor($this->id('id'),(int) $user['_ID']);
         if (!$profile) { $this->missing(); return; }
+        if ($_SERVER['REQUEST_METHOD']==='POST' && !\App\Services\AccesoRoles::writable($user,$profile)) { return; }
         $concepts = $this->model->concepts($profile);
         $id = array_key_exists('movimiento',$_GET) ? $this->id('movimiento') : null;
         $record = IngresoData::read([],Ingreso::MOVEMENT_FIELDS);

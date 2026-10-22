@@ -28,12 +28,12 @@ verify($status===200 && str_contains($simHtml,'Escenario &lt;b&gt;ficticio&lt;/b
     && str_contains($simHtml,'data-base-tax="'.$stored['impuesto_neto'].'"'),'Carga y compara versión propia escapando nombres');
 $simDraft=array_replace($simPost,['elegibilidad'=>'']);
 verify(request($client,$base,$simRoute,$simDraft)[0]===303,'Permite conservar borradores pendientes');
-verify(request($client,$base,'simulador&id='.$otherProfileId)[0]===404,'No abre perfil ajeno en simulador');
-verify(request($client,$base,'simulador/calcular&id='.$otherProfileId,$simPost)[0]===404,'No calcula perfil ajeno');
-verify(request($client,$base,'simulador&id='.$otherProfileId,$simPost)[0]===404,'No guarda en perfil ajeno');
+verify(request($client,$base,'simulador&id='.$otherProfileId)[0]===200,'Socio consulta el perfil ajeno en el simulador');
+verify(request($client,$base,'simulador/calcular&id='.$otherProfileId,$simPost)[0]===200,'Socio explora cálculos sin persistir cambios ajenos');
+verify(request($client,$base,'simulador&id='.$otherProfileId,$simPost)[0]===403,'No guarda en perfil ajeno');
 $foreignSim=$db->prepare('INSERT INTO escenarios_renta (perfil_id,nombre,version,entradas,resultado) VALUES (?,?,?,?,?)');
 $foreignSim->execute([$otherProfileId,'Ajeno',\App\Services\SimuladorFields::VERSION,json_encode($simPost),json_encode($stored)]);
 $foreignSimId=(int)$db->lastInsertId();
-verify(request($client,$base,'simulador&escenario='.$foreignSimId)[0]===404,'No lee versiones ajenas');
+verify(request($client,$base,'simulador&escenario='.$foreignSimId)[0]===200,'Socio consulta las versiones de otros titulares');
 verify(request($client,$base,$simRoute.'&base='.$foreignSimId)[0]===404,'No compara contra versiones ajenas');
 verify(request($client,$base,'simulador&escenario=999999')[0]===404,'Versión inexistente no crea datos');

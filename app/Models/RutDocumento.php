@@ -12,14 +12,14 @@ final class RutDocumento
     public function listFor(int $id, int $owner, int $year): array
     {
         $q=$this->database->connection()->prepare('SELECT d.id,d.titulo,d.sha256,d.created_at,d.metadatos FROM rut_documentos d
-            JOIN contribuyentes c ON c.id=d.contribuyente_id WHERE c.id=? AND c.funcionario_id=? AND d.anio=? ORDER BY d.id DESC LIMIT 10');
+            JOIN contribuyentes c ON c.id=d.contribuyente_id WHERE c.id=? AND '.\App\Services\AccesoSql::condition('c',false).' AND d.anio=? ORDER BY d.id DESC LIMIT 10');
         $q->execute([$id,$owner,$year]); return $q->fetchAll();
     }
 
     public function findFor(int $id, int $owner): ?array
     {
         $q=$this->database->connection()->prepare('SELECT d.* FROM rut_documentos d JOIN contribuyentes c ON c.id=d.contribuyente_id
-            WHERE d.id=? AND c.funcionario_id=?');
+            WHERE d.id=? AND '.\App\Services\AccesoSql::condition('c',false));
         $q->execute([$id,$owner]); return $q->fetch()?:null;
     }
 
@@ -28,7 +28,7 @@ final class RutDocumento
         $db=$this->database->connection(); $ownsTransaction=!$db->inTransaction();
         if ($ownsTransaction) { $db->beginTransaction(); }
         try {
-            $q=$db->prepare('SELECT * FROM contribuyentes WHERE id=? AND funcionario_id=? FOR UPDATE'); $q->execute([$id,$owner]);
+            $q=$db->prepare('SELECT * FROM contribuyentes WHERE id=? AND '.\App\Services\AccesoSql::condition('contribuyentes',true).' FOR UPDATE'); $q->execute([$id,$owner]);
             $taxpayer=$q->fetch();
             if (!$taxpayer) { throw new \RuntimeException('Contribuyente no disponible.'); }
             $taxpayer['dv']??=''; RutImportPlan::matchIdentity($preview['file']['parsed'],$taxpayer);

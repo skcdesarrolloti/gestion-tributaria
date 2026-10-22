@@ -12,7 +12,7 @@ require __DIR__.'/../partials/head.php';
         <h1 class="text-headline-md font-semibold taxpayer-name"><?= e($taxpayer['nombre']) ?></h1>
         <p><?= e(\App\Services\ContribuyenteData::TIPOS[$taxpayer['tipo']].' · '.$taxpayer['documento_tipo'].' '.$taxpayer['documento_numero']) ?> · <?= $component?'Planeación':'Perfil' ?> <?= e($year) ?></p>
         <div class="flex items-center gap-space-md flex-wrap">
-            <?php if (!$component): ?><a class="rounded-xl bg-primary-container text-on-surface px-4 py-2" href="<?= e($base.'&tab=documentos') ?>">Subir o actualizar RUT</a><?php endif; ?>
+            <?php if (!$component): ?><a class="rounded-xl bg-primary-container text-on-surface px-4 py-2" href="<?= e($base.'&tab=documentos') ?>"><?= $readOnly?'Consultar RUT y documentos':'Subir o actualizar RUT' ?></a><?php endif; ?>
             <form method="get" action="<?= e($config['base_path'].'/index.php') ?>">
                 <input type="hidden" name="route" value="<?= $component?'planeacion/datos':'contribuyentes/perfil' ?>"><input type="hidden" name="id" value="<?= e($taxpayer['id']) ?>"><input type="hidden" name="tab" value="<?= e($tab) ?>">
                 <label for="perfil-anio">Año del perfil</label>
@@ -22,6 +22,7 @@ require __DIR__.'/../partials/head.php';
         </div>
     </section>
     <?php if ($notice!==''): ?><p role="status" class="bg-primary-container rounded-xl p-3"><?= e($notice) ?></p><?php endif; ?>
+    <?php if ($readOnly): ?><p role="status" class="bg-primary-container rounded-xl p-3">Consulta global de Socio. Esta ficha y sus documentos se muestran en modo de solo lectura.</p><?php endif; ?>
     <p id="tabs-ayuda" class="contribuyente-tab-hint text-body-md text-secondary">Desliza las pestañas para ver más secciones.</p>
     <nav class="contribuyente-tabs border-b border-surface-container" aria-label="Información del contribuyente" aria-describedby="tabs-ayuda">
         <?php foreach ($tabs as $key=>$definition): ?><a class="<?= $key===$tab?'bg-inverse-surface text-on-secondary':'bg-surface-container-low text-secondary' ?> rounded-xl px-3 py-2" href="<?= e($base.'&tab='.$key) ?>" <?= $key===$tab?'aria-current="page"':'' ?>><?= e($definition[0]) ?></a><?php endforeach; ?>

@@ -18,6 +18,10 @@ final class Funcionario
     {
         return $this->find('_ID', $id);
     }
+    public function activeDirectory(): array
+    {
+        return $this->database->connection()->query("SELECT _ID,nombre,user_others_apss FROM wp_jet_cct_funcionarios WHERE activo='Si' AND user_others_apss IS NOT NULL AND user_others_apss<>'' ORDER BY nombre,_ID")->fetchAll();
+    }
 
     private function find(string $column, string|int $value): ?array
     {

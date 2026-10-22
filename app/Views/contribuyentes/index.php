@@ -15,11 +15,13 @@ $title = 'Contribuyentes'; require __DIR__ . '/../partials/head.php';
         <p role="status" class="bg-primary-container rounded-xl p-3"><?= e($notice) ?></p>
     <?php endif; ?>
     <section class="bg-surface-container-lowest rounded-2xl border border-surface-container p-space-xl space-y-space-md">
-        <h2 class="text-headline-md font-semibold">Mis contribuyentes (<?= count($rows) ?>)</h2>
-        <p class="text-body-md text-secondary">Puedes consultar y editar los registros que creaste con tu cuenta.</p>
+        <h2 class="text-headline-md font-semibold"><?= \App\Services\AccesoRoles::socio($user)?'Todos los contribuyentes':'Mi contribuyente' ?> (<?= count($rows) ?>)</h2>
+        <p class="text-body-md text-secondary"><?= \App\Services\AccesoRoles::socio($user)?'Puedes consultar todos los contribuyentes. Conservas la edición de los que creaste y de tu ficha asignada.':'Aquí aparece únicamente tu contribuyente asignado. Puedes completar sus datos y documentación.' ?></p>
+        <?php if (\App\Services\AccesoRoles::socio($user)): ?>
         <a class="inline-block rounded-xl bg-inverse-surface text-on-secondary px-4 py-2" href="<?= e(url($config, 'contribuyentes/formulario')) ?>">Registrar contribuyente</a>
+        <?php endif; ?>
         <?php if (!$rows): ?>
-            <p class="text-body-md text-secondary">Todavía no tienes contribuyentes registrados. Comienza subiendo su RUT o registrando su identificación.</p>
+            <p class="text-body-md text-secondary">Todavía no tienes contribuyentes disponibles. <?= \App\Services\AccesoRoles::socio($user)?'Comienza subiendo su RUT o registrando su identificación.':'Solicita a un Socio que te asigne tu ficha desde Usuarios y accesos.' ?></p>
         <?php endif; ?>
         <div class="space-y-space-md">
             <?php foreach ($rows as $row): ?>

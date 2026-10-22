@@ -14,6 +14,7 @@ final class AuthService
         private Funcionario $users,
         private bool $allowLegacyPasswords,
         private string $sourceId,
+        private ?\App\Models\AccesoTributario $access=null,
     ) {}
 
     public function attempt(string $login, string $password): bool
@@ -52,6 +53,7 @@ final class AuthService
         }
         $_SESSION['last_activity'] = time();
         unset($user['pass_others_apss']);
+        $user['_acceso']=$this->access?->forUser($user)??[];
         return $user;
     }
 

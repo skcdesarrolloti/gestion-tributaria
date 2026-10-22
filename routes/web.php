@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 $router->add('GET', 'inicio', [$homeController, 'index']);
 $router->add('GET', 'perfil', [$homeController, 'profile']);
+$router->add('GET', 'accesos', [$accesoController, 'index']);
+$router->add('POST', 'accesos', [$accesoController, 'index']);
 $router->add('GET', 'beneficios', [$beneficioController, 'index']);
 $router->add('GET', 'seguridad-social', [$seguridadSocialController, 'index']);
 $router->add('GET', 'planeacion/datos', [$caracterizacionController, 'index']);

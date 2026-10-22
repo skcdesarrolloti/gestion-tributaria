@@ -37,7 +37,7 @@
             <?php require __DIR__.'/basic.php'; ?>
             <?php require __DIR__.'/benefits.php'; ?>
             <?php require __DIR__.'/confirmations.php'; ?>
-            <button class="rounded-xl bg-inverse-surface text-on-secondary px-4 py-2" type="submit">Guardar nueva versión</button>
+            <?php if (!$readOnly): ?><button class="rounded-xl bg-inverse-surface text-on-secondary px-4 py-2" type="submit">Guardar nueva versión</button><?php else: ?><p>Consulta de Socio: puedes explorar el cálculo, pero no guardar cambios en la ficha de otro titular.</p><?php endif; ?>
             <p class="text-label-sm">Se guarda una copia con fecha, entradas y resultado. Las versiones anteriores se conservan, incluso cuando el resultado está pendiente.</p>
         </form>
         <?php require __DIR__.'/results.php'; ?>

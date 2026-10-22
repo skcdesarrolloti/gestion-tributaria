@@ -81,6 +81,10 @@ try {
     $insertUser->execute(['Cuenta con hash', 'hash-user', $hash]);
     $db = new PDO(sprintf('mysql:host=%s;port=%d;dbname=%s;charset=utf8mb4', $dbConfig['host'], $dbConfig['port'], $name),
         $dbConfig['username'], $dbConfig['password'], [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
+    // Sustituye únicamente en la base aleatoria la autorización inicial por un Socio sintético.
+    $db->exec('DELETE FROM accesos_tributarios WHERE funcionario_id=0');
+    $grant=$db->prepare("INSERT INTO accesos_tributarios (funcionario_id,login_hash,perfil) VALUES (100,?,'socio')");
+    $grant->execute([hash('sha256','admin')]);
     $migrationCount = count(glob($root . '/database/migrations/[0-9]*.sql'));
     verify((int) $db->query('SELECT COUNT(*) FROM schema_migrations')->fetchColumn() === $migrationCount, 'Migraciones registradas una vez');
     $localUser = $db->prepare('INSERT INTO wp_jet_cct_funcionarios (nombre, user_others_apss, pass_others_apss) VALUES (?, ?, ?)');
@@ -123,6 +127,7 @@ try {
     require __DIR__ . '/exogena-1007-integration.php';
     require __DIR__ . '/exogena-1001-integration.php';
     require __DIR__ . '/exogena-catalog-integration.php';
+    require __DIR__ . '/accesos-integration.php';
     verify(request($client, $base, 'logout')[0] === 405, 'Logout rechaza GET');
     verify(request($client, $base, 'logout', ['_csrf_token' => ''])[0] === 419, 'Logout exige CSRF');
     verify(request($client, $base, 'logout', ['_csrf_token' => token($html)])[0] === 303, 'Logout termina sesión');
