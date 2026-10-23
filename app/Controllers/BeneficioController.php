@@ -31,4 +31,12 @@ final class BeneficioController
         $counts=array_count_values(array_column(BeneficioCatalog::all(),'group'));
         $this->view->render('beneficios/index',compact('user','year','group','query','groups','parameters','items','showItems','total','pages','page','counts'));
     }
+    public function article(): void
+    {
+        if (!$this->auth->user()) { \redirect($this->config,'login'); }
+        header('Content-Type: application/json; charset=UTF-8');
+        $article=\App\Services\NormaCatalog::read(\input($_GET,'articulo'));
+        if (!$article) { http_response_code(404);echo json_encode(['error'=>'Artículo no disponible en la colección de consulta.']);return; }
+        echo json_encode($article,JSON_UNESCAPED_UNICODE|JSON_THROW_ON_ERROR);
+    }
 }

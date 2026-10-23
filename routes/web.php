@@ -14,6 +14,7 @@ $router->add('POST', 'activar', [$activacionController, 'index']);
 $router->add('GET', 'accesos', [$accesoController, 'index']);
 $router->add('POST', 'accesos', [$accesoController, 'index']);
 $router->add('GET', 'beneficios', [$beneficioController, 'index']);
+$router->add('GET', 'beneficios/articulo', [$beneficioController, 'article']);
 $router->add('GET', 'seguridad-social', [$seguridadSocialController, 'index']);
 $router->add('GET', 'planeacion/datos', [$caracterizacionController, 'index']);
 $router->add('POST', 'planeacion/datos', [$caracterizacionController, 'index']);

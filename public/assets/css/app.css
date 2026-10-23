@@ -29,6 +29,9 @@ button, a { touch-action: manipulation; }
     .exogena-format-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 .taxpayer-name { overflow-wrap: anywhere; }
+.norma-texto { max-height: 24rem; overflow-y: auto; overscroll-behavior: contain; padding: .5rem; }
+.norma-consulta > details { min-width: 0; }
+.beneficios-grid { align-items: start; }
 .profile-field-label, [data-profile-field], .profile-basic-field { position: relative; }
 .profile-basic-field > label { display: inline; }
 .profile-field-label { display: flex; align-items: baseline; gap: .4rem; }

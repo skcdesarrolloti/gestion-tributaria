@@ -104,6 +104,7 @@ try {
     verify(request($client, $base, 'contribuyentes/rut&id=1')[0] === 303, 'Carga RUT exige autenticación');
     verify(request($client, $base, 'contribuyentes/rut/documento&documento=1')[0] === 303, 'Descarga RUT exige autenticación');
     verify(request($client, $base, 'beneficios')[0] === 303, 'Catálogo de beneficios exige sesión');
+    verify(request($client, $base, 'beneficios/articulo&articulo=et-107')[0] === 303, 'Texto de artículos exige sesión');
     verify(request($client, $base, 'seguridad-social')[0] === 303, 'Revisión de seguridad social exige sesión');
     verify(request($client, $base, 'simulador')[0] === 303, 'Hoja de planeación exige sesión');
     verify(request($client, $base, 'simulador/calcular&id=1',[])[0] === 303, 'API de simulación exige sesión');

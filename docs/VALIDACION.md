@@ -4,6 +4,17 @@ Verificación local realizada el 13 de octubre de 2026 con PHP 8.2.12, MariaDB 1
 
 ## Resultado
 
+### Artículos dentro de las fichas · 22/10/2026
+
+Colección generada desde Normograma DIAN: 66 artículos del ET y cinco de leyes
+citadas, con fecha y fuente. Unitarias e integración aislada completas correctas:
+cobertura de referencias, expansión de rangos sin confundir numerales, separación
+de artículos, conservación de tablas/textos tachados, ruta con sesión y rechazo
+de rutas arbitrarias. No cambian fórmulas fiscales ni tablas de la base.
+Edge a 1440px y 390px: carga solo al elegir artículo, misma URL sin pestañas nuevas,
+cierre y reutilización del texto, scroll interno y reintento tras fallo simulado;
+sin desbordamiento ni errores JavaScript. Ver ARTICULOS-EN-FICHAS.md.
+
 ### Menú y registro de información · 22/10/2026
 
 Menús ordenados por el recorrido solicitado, con Exógena independiente y sin

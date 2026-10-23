@@ -22,6 +22,12 @@ verify($status===200 && str_contains($benefitHtml,'&lt;script&gt;')
 verify(request($client,$base,'beneficios&anio=2027')[0]===422,'No supone reglas de un año sin soporte');
 verify(request($client,$base,'beneficios&grupo=../config/local')[0]===422,'No admite rutas como grupos');
 verify(request($client,$base,'beneficios&pagina=-1')[0]===422,'Rechaza páginas inválidas');
+[$status,$articleJson]=request($client,$base,'beneficios/articulo&articulo=et-107');
+$inlineArticle=json_decode($articleJson,true);
+verify($status===200 && $inlineArticle['id']==='et-107' && count($inlineArticle['paragraphs'])===3,'Artículo oficial se consulta dentro de la sesión sin abrir otro sitio');
+verify(request($client,$base,'beneficios/articulo&articulo=../config/local')[0]===404,'El visor no lee rutas arbitrarias');
+[$status,$inlineCards]=request($client,$base,'beneficios&grupo=costos&pagina=2');
+verify(str_contains($inlineCards,'Consultar artículos aquí') && str_contains($inlineCards,'articulo=et-118-1') && !str_contains($inlineCards,'Consultar norma oficial'),'Ficha ofrece todos sus artículos y sustituye el enlace externo');
 verify(request($client,$base,'beneficios',[])[0]===405,'Catálogo de consulta no ofrece escritura');
 [$status,$reviewHtml]=request($client,$base,'seguridad-social');
 verify($status===200 && str_contains($reviewHtml,'La calculadora necesita ajustes antes de integrarse')

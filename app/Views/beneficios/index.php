@@ -25,7 +25,7 @@
         <p><?= e($total) ?> fichas encontradas · Página <?= e($page) ?> de <?= e($pages) ?> · Hasta nueve por página</p>
         <p class="text-body-md text-secondary">Abre cada ficha para ver alcance y soportes. Referencias revisadas: <?= e(\App\Services\BeneficioCatalog::REVIEWED) ?>. Destino por bloque del formulario 210; la casilla exacta se confirmará con su versión e instructivo antes de calcular.</p>
         <?php if (!$items): ?><p role="status">No se encontraron conceptos. Prueba otra búsqueda o selecciona todos los grupos.</p><?php endif; ?>
-        <div class="exogena-format-grid">
+        <div class="exogena-format-grid beneficios-grid">
             <?php foreach ($items as $item): ?>
                 <?php require __DIR__.'/card.php'; ?>
             <?php endforeach; ?>
@@ -34,4 +34,5 @@
     </section>
     <?php endif; ?>
 </main>
+<script src="<?= e(asset($config,'js/normas.js').'?v='.filemtime(dirname(__DIR__,3).'/public/assets/js/normas.js')) ?>" defer></script>
 <?php require __DIR__.'/../partials/footer.php'; ?>

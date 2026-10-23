@@ -9,6 +9,6 @@
         <p class="text-body-md"><strong>Qué debes conservar:</strong> <?= e($item['evidence']) ?></p>
         <p class="text-body-md"><strong>Acción antes del cierre:</strong> <?= e($item['action']) ?></p>
         <p class="text-label-sm">Aplicación individual y casilla: pendientes de validar. La Hoja de planeación identifica la cobertura de cálculo de cada ficha; el PDF revisado no contiene todas estas reglas.</p>
-        <a class="text-secondary underline" href="<?= e($item['source']) ?>" target="_blank" rel="noopener noreferrer">Consultar norma oficial</a>
     </details>
+    <?php require __DIR__.'/articles.php'; ?>
 </article>
