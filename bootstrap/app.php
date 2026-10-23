@@ -59,7 +59,7 @@ $accesoController=new App\Controllers\AccesoController($auth,$access,$users,new 
 $limiter = new App\Services\LoginLimiter(($config['storage_path'] ?? dirname(__DIR__) . '/storage') . '/rate-limits');
 $authController = new App\Controllers\AuthController($auth, $view, $limiter, $config);
 $homeController = new App\Controllers\HomeController($auth, $view, $config);
-$registroController=new App\Controllers\RegistroController($auth,new App\Models\Contribuyente($database),new App\Models\Ingreso($database),$view,$config);
+$registroController=new App\Controllers\RegistroController($auth,new App\Models\Contribuyente($database),new App\Models\Ingreso($database),$view,$config,new App\Models\Caracterizacion($database));
 $beneficioController = new App\Controllers\BeneficioController($auth, $view, $config);
 $seguridadSocialController = new App\Controllers\SeguridadSocialController($auth, $view, $config);
 $simuladorController = new App\Controllers\SimuladorController($auth, new App\Models\Ingreso($database), new App\Models\EscenarioRenta($database), $view, $config);
@@ -76,7 +76,7 @@ $rutController = new App\Controllers\RutController(
 );
 $router = new App\Core\Router();
 $ingresoController = new App\Controllers\IngresoController(
-    $auth, new App\Models\Contribuyente($database), new App\Models\Ingreso($database), $view, $config
+    $auth, new App\Models\Contribuyente($database), new App\Models\Ingreso($database), $view, $config,new App\Models\Caracterizacion($database)
 );
 $proyeccionController = new App\Controllers\ProyeccionController(
     $auth, new App\Models\Ingreso($database), $view, $config

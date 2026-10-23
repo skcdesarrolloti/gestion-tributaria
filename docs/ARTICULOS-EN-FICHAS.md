@@ -9,11 +9,16 @@ reutiliza en la página. Los filtros, año, página y posición del catálogo se
 
 ## Textos y alcance
 
-La colección versionada contiene 71 artículos distintos: 66 del Estatuto y cinco
+La colección versionada contiene 131 artículos distintos: 126 del Estatuto y cinco
 de las leyes 361/1997, 1715/2014, 814/2003 y 2380/2024, consultados en el Normograma
 DIAN. Todos los artículos citados del ET están disponibles; un rango 125-1 a 125-3
 incluye también 125-2. Los numerales 336.4 o 206.10 abren su artículo completo,
 no se confunden con artículos 4 o 10. La ficha conserva la referencia precisa.
+La ampliación a Ingresos incluye artículos de año, residencia, régimen, servicios,
+dividendos y ganancias ocasionales. Las ayudas de opciones muestran los artículos
+de la opción seleccionada dentro del mismo cuadro; se actualizan al cambiarla.
+Los términos «numeral» y «parágrafo» no crean artículos adicionales; los rangos
+de artículos se expanden para poder consultar sus textos completos.
 La mención de una ley modificatoria no crea un artículo nuevo si no cita su número.
 
 Los JSON de resources/normas son archivos **generados** de texto legal público,

@@ -11,13 +11,14 @@
                         <option value="">Selecciona una opción</option>
                         <?php foreach ($options as $key=>$option): ?><option value="<?= e($key) ?>" <?= (string)$record[$field]===(string)$key?'selected':'' ?>><?= e($option['label']) ?></option><?php endforeach; ?>
                     </select>
+                    <?php if (isset($profileOrigins[$field])): ?><p class="text-label-sm text-secondary mt-2"><?= e($profileOrigins[$field]) ?></p><?php endif; ?>
                     <?php require __DIR__.'/option-help.php'; ?>
                 </div>
                 <?php endforeach; ?>
             </div>
-            <label class="block text-body-md" for="soporte_perfil">Evidencia del perfil fiscal *</label>
+            <label class="block text-body-md" for="soporte_perfil">Referencia del RUT y soportes del año *</label>
             <textarea class="w-full px-3 py-2.5 bg-surface-container-low rounded-xl" id="soporte_perfil" name="soporte_perfil" maxlength="500" rows="3" required><?= e($record['soporte_perfil']) ?></textarea>
-            <p class="text-body-md text-secondary">Indica referencias del RUT y del análisis de residencia. Es una referencia documental, no una carga de archivos. La elección de tratamiento no acredita por sí sola un beneficio.</p>
+            <p class="text-body-md text-secondary">Aquí se recupera la referencia del RUT cuando está guardada. Añade, si falta, el soporte de residencia del año y de tu elección de servicios personales. Ejemplo: «RUT registrado; residencia 2025 revisada con movimientos migratorios; sin servicios personales». Es una referencia, no una carga de archivos.</p>
             <p id="regimen-availability" class="text-body-md text-secondary" role="status">El régimen ordinario tiene depuración inicial disponible. Las otras opciones se ofrecen para consultar su definición y alcance.</p>
             <button id="create-profile" class="rounded-xl bg-inverse-surface text-on-secondary px-4 py-2" type="submit"><?= e($profileButton) ?></button>
         </fieldset>

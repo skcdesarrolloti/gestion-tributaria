@@ -40,3 +40,4 @@ try {
     verify(request($registered,$base,'registro&contribuyente='.$otherId)[0]===404 && request($registered,$base,'analisis&contribuyente='.$otherId)[0]===404,'Los menús nuevos no amplían permisos sobre otras fichas');
 } finally { curl_close($registered); }
 require __DIR__.'/registro-cedulas-integration.php';
+require __DIR__.'/perfil-anual-sugerencias-integration.php';

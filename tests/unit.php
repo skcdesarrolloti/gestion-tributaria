@@ -43,6 +43,7 @@ try {
 }
 require __DIR__ . '/contribuyentes-unit.php';
 require __DIR__ . '/ingresos-unit.php';
+require __DIR__ . '/perfil-anual-sugerencias-unit.php';
 require __DIR__ . '/proyeccion-unit.php';
 require __DIR__ . '/exogena-unit.php';
 require __DIR__ . '/exogena-1007-unit.php';

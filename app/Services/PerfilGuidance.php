@@ -37,7 +37,7 @@ final class PerfilGuidance
         }
         $regimes = [
             'ordinario'=>self::item('Ordinario', 'Renta bajo las reglas generales aplicables al contribuyente.',
-                'Disponible: depuración inicial 210/110. No calcula todavía el impuesto final ni certifica beneficios.', 'ET 26; 240 o 241 según corresponda'),
+                'Disponible: depuración inicial 210/110. No calcula todavía el impuesto final ni certifica beneficios.', 'ET 26, 240 o 241 según corresponda'),
             'simple'=>self::item('SIMPLE — consulta; cálculo pendiente', 'Impuesto unificado sujeto a requisitos de inscripción y permanencia.',
                 'Referencia: formulario 260. Revisar elegibilidad, exclusiones y RUT; no aplicar las deducciones y tarifas del ordinario. No permite crear perfil en esta etapa.', 'ET 903, 905 y 906'),
         ];
@@ -56,7 +56,7 @@ final class PerfilGuidance
             'costos'=>self::item('Costos en lugar de exención del art. 206.10', 'Elección de costos y gastos procedentes para servicios personales sin relación laboral.',
                 'Habilita 43–45 en el 210. Exige relación con la actividad y soportes; no se acumula la exención del 206.10 para esos mismos ingresos.', 'ET 107, 206 numeral 10 y 336'),
             'exencion'=>self::item('Exención art. 206.10, si procede', 'Renta exenta del 25% sujeta a depuración, condiciones y topes legales.',
-                'Para los mismos servicios personales no se toman simultáneamente sus costos. En esta etapa se orienta la elección: todavía no se calcula la exención.', 'ET 206 numeral 10 y parágrafo 5; 336'),
+                'Para los mismos servicios personales no se toman simultáneamente sus costos. En esta etapa se orienta la elección: todavía no se calcula la exención.', 'ET 206 numeral 10 y parágrafo 5, 336'),
         ];
         if ($type === 'juridica') { unset($services['costos'], $services['exencion']); }
         return [

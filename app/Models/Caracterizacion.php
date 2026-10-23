@@ -34,6 +34,13 @@ final class Caracterizacion
         $q->execute([$id,$owner]); return (int)($q->fetchColumn()?:2026);
     }
 
+    public function latestRutYearFor(int $id,int $owner): ?int
+    {
+        $q=$this->database->connection()->prepare('SELECT d.anio FROM rut_documentos d
+            JOIN contribuyentes c ON c.id=d.contribuyente_id WHERE c.id=? AND '.\App\Services\AccesoSql::condition('c',false).' ORDER BY d.id DESC LIMIT 1');
+        $q->execute([$id,$owner]);$year=$q->fetchColumn();return $year===false?null:(int)$year;
+    }
+
     public function incomeProfileFor(int $id, int $owner, int $year): ?array
     {
         $q=$this->database->connection()->prepare('SELECT p.residencia,p.regimen,p.formulario FROM perfiles_renta p

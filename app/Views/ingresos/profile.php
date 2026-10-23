@@ -18,5 +18,5 @@
         <a class="text-secondary underline" href="<?= e(url($config,'ingresos').'&contribuyente='.$profile['contribuyente_id']) ?>">Volver a los perfiles guardados</a>
     </section>
 </main>
-<script src="<?= e(asset($config,'js/ingresos-guidance.js')) ?>" defer></script>
+<script src="<?= e(asset($config,'js/ingresos-guidance.js').'?v='.filemtime(dirname(__DIR__,3).'/public/assets/js/ingresos-guidance.js')) ?>" defer></script>
 <?php require __DIR__.'/../partials/footer.php'; ?>

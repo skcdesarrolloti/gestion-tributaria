@@ -1,5 +1,32 @@
 # Ingresos: primera etapa operativa
 
+## Preparación con el RUT ya registrado · 22/10/2026
+
+Registro recupera los datos mediante PerfilAnualSugerencias, también reutilizado
+por la entrada histórica de perfiles anuales. No crea perfiles ni escribe por GET.
+
+- Usa residencia y régimen ya declarados en Condiciones tributarias del mismo año.
+- Consulta la información del RUT guardada: número, fecha, actividades y
+  responsabilidades. Si no está en ese año, busca el perfil del último PDF
+  importado; sin PDF, usa la última caracterización disponible. Expone año y
+  procedencia, sin copiar la residencia de otro año ni certificar vigencia DIAN.
+- Responsabilidad 05 propone Ordinario y 47 propone SIMPLE (continúa bloqueado
+  para cálculo). Código 04 requiere confirmar modalidad; no se convierte en ESAL
+  ni en Ordinario automáticamente. Las discrepancias se muestran para revisión.
+- Jurídicas: servicios personales No aplica. En naturales se reutiliza únicamente
+  la respuesta explícita del mismo año de que no hay honorarios. Actividad 0020
+  explica condición de pensionado, sin presumir ausencia de otras fuentes.
+- Precarga la referencia documental y explica debajo de cada campo su origen o
+  lo que falta confirmar. Las condiciones personales no contenidas en el RUT
+  requieren respaldo del año y elección del titular; no se inventan desde la dirección.
+- Preparación, movimiento y consulta de casillas usan «?» y el visor de artículos
+  interno. Se retiraron enlaces externos de esas ayudas. La información queda
+  plegada hasta consultarla y no abre pestañas nuevas. Fuentes dentro del visor
+  se muestran como texto, junto a la fecha de consulta y límites de vigencia.
+
+Los valores se guardan solo al confirmar el formulario, con los permisos y CSRF
+existentes. No se sobrescriben condiciones anuales o movimientos ya guardados.
+
 ## Captura organizada por año y formulario · 22/10/2026
 
 Entrada principal: **Registro de información → Ingresos**. Selecciona contribuyente

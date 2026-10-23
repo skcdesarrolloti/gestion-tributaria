@@ -4,6 +4,20 @@ Verificación local realizada el 13 de octubre de 2026 con PHP 8.2.12, MariaDB 1
 
 ## Resultado
 
+### Preparación anual desde el RUT y ayudas internas · 22/10/2026
+
+Unitarias: RUT con código 05/47/04, responsabilidades contradictorias, condición
+de pensionado sin presumir otras fuentes, residencia solo del año solicitado,
+No aplica explícito y entidad jurídica, y artículos internos de todas las opciones.
+Integración aislada: carga responsabilidad del RUT y residencia anual guardadas,
+no crea perfil por GET, conserva permisos y sirve artículos 10 y 595 con sesión.
+Edge 1440px/390px: régimen, residencia y servicios precargados según sus fuentes,
+referencia documental completada, advertencia RUT de otro año, artículo 10 dentro
+del mismo cuadro, cambio dinámico de ayuda y guardado del perfil. Sin enlaces
+externos en preparación, nuevas pestañas, errores JS ni desbordamiento de página.
+Colección legal generada desde DIAN con 126 artículos ET y cinco de otras leyes.
+No hay cambios de esquema. Pendiente validación autenticada en producción.
+
 ### Ingresos por año y sección DIAN · 22/10/2026
 
 Migraciones 022/023 y pruebas completas en base aislada correctas. Pensiones

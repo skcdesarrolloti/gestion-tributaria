@@ -25,4 +25,4 @@ $tableConcepts=$primary;$tableTitle=$title.' de esta sección';require __DIR__.'
 </section>
 <details class="border border-surface-container rounded-xl p-4"><summary class="font-semibold">Consultar o corregir movimientos de esta sección (<?= count($movements) ?>)</summary><?php $registration=$state;require __DIR__.'/../ingresos/movements.php'; ?></details>
 <?php endif; ?>
-</main><?php require __DIR__.'/../partials/footer.php'; ?>
+</main><?php if ($profile): ?><script src="<?= e(asset($config,'js/normas.js')) ?>" defer></script><?php endif; ?><?php require __DIR__.'/../partials/footer.php'; ?>

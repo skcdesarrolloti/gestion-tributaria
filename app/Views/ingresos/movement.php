@@ -82,5 +82,5 @@ require __DIR__.'/../partials/head.php';
         <a class="text-secondary underline" href="<?= e($registration?url($config,'registro').\App\Services\RegistroNavegacion::query($registration,(int)$profile['contribuyente_id']):url($config,'ingresos/detalle').'&id='.$profile['id']) ?>">Volver al registro</a>
     </section>
 </main>
-<script src="<?= e(asset($config,'js/ingresos-guidance.js')) ?>" defer></script>
+<script src="<?= e(asset($config,'js/ingresos-guidance.js').'?v='.filemtime(dirname(__DIR__,3).'/public/assets/js/ingresos-guidance.js')) ?>" defer></script>
 <?php require __DIR__.'/../partials/footer.php'; ?>

@@ -6,7 +6,7 @@
 <thead><tr><th scope="col">Casilla y concepto DIAN</th><th scope="col">Real registrado (COP)</th><th scope="col">Proyectado adicional (COP)</th><th scope="col">Registro</th></tr></thead>
 <tbody><?php foreach ($tableConcepts as $concept): $values=$totals[(int)$concept['casilla']]; ?>
 <tr><th scope="row"><?= e($concept['casilla'].' · '.$concept['nombre']) ?>
-<details><summary class="text-secondary underline">? · Qué registrar y soporte</summary><p><?= e($concept['explicacion']) ?></p><p>Fundamento: <?= e($concept['fundamento']) ?></p><p>Soportes: <?= e($concept['soportes']) ?></p></details></th>
+<details><summary class="text-secondary underline">? · Qué registrar y soporte</summary><p><?= e($concept['explicacion']) ?></p><p>Fundamento: <?= e($concept['fundamento']) ?></p><p>Soportes: <?= e($concept['soportes']) ?></p><?php $item=['id'=>'','norm'=>$concept['fundamento']];require __DIR__.'/../beneficios/articles.php'; ?></details></th>
 <td>$<?= e(number_format($values['real'],0,',','.')) ?></td><td>$<?= e(number_format($values['proyectado'],0,',','.')) ?></td>
 <td><a class="inline-block rounded-xl bg-inverse-surface text-on-secondary px-4 py-2" href="<?= e(url($config,'ingresos/movimiento').'&id='.$profile['id'].'&concepto='.$concept['id'].'&origen=registro'.$contextQuery) ?>">Registrar valor · <?= e($concept['casilla']) ?></a></td></tr>
 <?php endforeach; ?></tbody></table></div>

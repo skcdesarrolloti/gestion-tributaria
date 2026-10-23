@@ -4,13 +4,13 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use App\Core\View;
-use App\Models\{Contribuyente, Ingreso};
+use App\Models\{Contribuyente, Ingreso,Caracterizacion};
 use App\Services\{AuthService, Csrf, IngresoData, IngresoSummary};
 
 final class IngresoController
 {
     public function __construct(private AuthService $auth, private Contribuyente $taxpayers,
-        private Ingreso $model, private View $view, private array $config) {}
+        private Ingreso $model, private View $view, private array $config,private Caracterizacion $characterization) {}
 
     public function index(): void
     {
@@ -24,7 +24,12 @@ final class IngresoController
         if (!$taxpayer) { $this->missing(); return; }
         if ($_SERVER['REQUEST_METHOD']==='POST' && !\App\Services\AccesoRoles::writable($user,$taxpayer)) { return; }
         $record = IngresoData::read($_POST, Ingreso::PROFILE_FIELDS);
-        if ($_SERVER['REQUEST_METHOD']==='GET' && in_array(\input($_GET,'anio'),['2025','2026'],true)) { $record['anio']=\input($_GET,'anio'); }
+        $profileOrigins=[];
+        if ($_SERVER['REQUEST_METHOD']==='GET') {
+            $year=in_array(\input($_GET,'anio'),['2025','2026'],true)?\input($_GET,'anio'):'2026';
+            $preparation=\App\Services\PerfilAnualSugerencias::stored($this->characterization,$taxpayer,(int)$user['_ID'],$year);
+            $record=$preparation['record'];$profileOrigins=$preparation['origins'];
+        }
         $errors = [];
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $errors = $this->csrfErrors();
@@ -45,7 +50,7 @@ final class IngresoController
             }
         }
         $profiles = $this->model->profiles((int) $taxpayer['id'],(int) $user['_ID']);
-        $this->view->render('ingresos/index',compact('user','taxpayer','profiles','record','errors','registration'));
+        $this->view->render('ingresos/index',compact('user','taxpayer','profiles','record','errors','registration','profileOrigins'));
     }
 
     public function detail(): void

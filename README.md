@@ -27,6 +27,12 @@ ayudas «?» plegadas y ganancias ocasionales separadas. Incluye registro bruto
 de pensiones y dividendos; no completa sus depuraciones ni el impuesto final.
 Ver [captura y fuentes DIAN](docs/INGRESOS.md).
 
+Al preparar el año, Ingresos recupera el régimen propuesto por el RUT, las
+condiciones anuales ya guardadas y la referencia documental. Cada campo indica
+su origen o qué confirmar; no deduce residencia fiscal desde la dirección.
+Las ayudas y artículos se consultan dentro de la misma pantalla, sin enlaces
+externos ni pestañas adicionales.
+
 **Recorrido actual: Inicio → Contribuyentes → Abrir perfil.** Una sola ficha con
 pestañas por naturaleza de información, carga del RUT que completa vacíos y edición
 de identificación en el mismo lugar. Socios, junta, representantes y profesionales

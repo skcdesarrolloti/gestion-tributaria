@@ -10,10 +10,12 @@
             if (selected) {
                 help.querySelector('[data-help-definition]').textContent = selected.definicion;
                 help.querySelector('[data-help-scope]').textContent = selected.alcance;
-                const link = help.querySelector('[data-help-source]');
-                link.textContent = selected.norma;
-                link.href = selected.url;
+                help.querySelector('[data-help-source]').textContent = selected.norma;
             }
+            help.querySelectorAll('[data-help-articles]').forEach(panel => {
+                panel.hidden = panel.dataset.helpArticles !== select.value;
+                if (panel.hidden) panel.querySelectorAll('details[open]').forEach(detail => {detail.open = false;});
+            });
             if (select.id === 'regimen') {
                 const blocked = Boolean(select.value && select.value !== 'ordinario');
                 document.getElementById('create-profile').disabled = blocked;

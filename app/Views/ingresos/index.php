@@ -41,5 +41,5 @@
         <a class="text-secondary underline" href="<?= e(url($config,'contribuyentes')) ?>">Volver a contribuyentes</a>
     </details>
 </main>
-<script src="<?= e(asset($config,'js/ingresos-guidance.js')) ?>" defer></script>
+<script src="<?= e(asset($config,'js/ingresos-guidance.js').'?v='.filemtime(dirname(__DIR__,3).'/public/assets/js/ingresos-guidance.js')) ?>" defer></script>
 <?php require __DIR__.'/../partials/footer.php'; ?>

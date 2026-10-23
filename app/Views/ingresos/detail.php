@@ -37,15 +37,17 @@
                 <details>
                     <summary class="text-body-md underline">Explicación, artículos y soportes</summary>
                     <p class="text-body-md mt-2"><?= e($concept['explicacion']) ?></p>
-                    <p class="text-body-md mt-2"><strong>Fundamento inicial:</strong> <a class="underline" href="https://normograma.dian.gov.co/dian/compilacion/docs/estatuto_tributario.htm" target="_blank" rel="noopener noreferrer"><?= e($concept['fundamento']) ?></a></p>
+                    <p class="text-body-md mt-2"><strong>Fundamento inicial:</strong> <?= e($concept['fundamento']) ?></p>
+                    <?php $item=['id'=>'','norm'=>$concept['fundamento']];require __DIR__.'/../beneficios/articles.php'; ?>
                     <p class="text-body-md mt-2"><strong>Ejemplo:</strong> <?= e($concept['ejemplo']) ?></p>
                     <p class="text-body-md mt-2"><strong>Soportes:</strong> <?= e($concept['soportes']) ?></p>
                     <?php if ($concept['formula']!==''): ?><p class="text-body-md mt-2"><strong>Operación de esta etapa:</strong> <?= e($concept['formula']) ?></p><?php endif; ?>
-                    <p class="text-body-md mt-2"><a class="underline" href="<?= e('https://www.dian.gov.co/atencionciudadano/formulariosinstructivos/Formularios/2026/Formulario_'.$profile['formulario'].'_2026.pdf') ?>" target="_blank" rel="noopener noreferrer">Consultar instructivo DIAN</a> · Revisión inicial: 14/10/2026. Verificar norma particular y vigencia antes de presentar.</p>
+                    <p class="text-body-md mt-2">Referencia: instructivo DIAN del formulario <?= e($profile['formulario']) ?> publicado en 2026. Verificar norma particular y vigencia antes de presentar.</p>
                 </details>
             </article>
         <?php endforeach; ?>
     </section>
     <?php require __DIR__.'/movements.php'; ?>
 </main>
+<script src="<?= e(asset($config,'js/normas.js')) ?>" defer></script>
 <?php require __DIR__.'/../partials/footer.php'; ?>
