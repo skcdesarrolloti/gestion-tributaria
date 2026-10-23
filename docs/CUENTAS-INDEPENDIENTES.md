@@ -51,6 +51,12 @@ Cambiar una clave invalida las demás sesiones, conservando la sesión que la ca
 Si la persona olvidó su clave: el Socio abre su asignación, despliega **Restablecer
 contraseña**, confirma su propia clave y establece una temporal para el interesado.
 Se invalidan todas las sesiones del destinatario y se exige cambiarla al ingresar.
+Por instrucción del responsable, un Socio autenticado con cambio inicial pendiente
+puede abrir Usuarios y accesos y restablecer otra cuenta sin cambiar su propia
+contraseña. La excepción habilita `accesos`, `usuarios/crear` y `usuarios/restablecer`; conserva
+CSRF, confirmación de clave actual, permisos y auditoría. Los demás módulos siguen
+sujetos al cambio pendiente, igual que los Usuarios. No se limpia ese estado ni
+se cambia la contraseña del Socio como efecto de recuperar a otro titular.
 No se recuperan ni muestran contraseñas anteriores. Suspender acceso también
 invalida la sesión; no se puede suspender ni degradar al último Socio activo.
 

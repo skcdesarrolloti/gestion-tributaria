@@ -11,7 +11,12 @@
                 <div><dt class="text-secondary text-label-sm"><?= e($label) ?></dt><dd class="font-semibold mt-1"><?= e($user[$key] ?: 'Sin asignar') ?></dd></div>
             <?php endforeach; ?>
         </dl>
-        <?php if ($user['cambiar_clave']): ?><p role="status" class="bg-primary-container rounded-xl p-4 mt-2">Antes de continuar, cambia tu contraseña inicial por una personal.</p><?php endif; ?>
+        <?php if ($user['cambiar_clave']): ?>
+            <?php if (\App\Services\AccesoRoles::socio($user)): ?>
+                <p role="status" class="bg-primary-container rounded-xl p-4 mt-2">Tu cambio de contraseña inicial está pendiente. Puedes abrir Usuarios y accesos para restablecer la contraseña de otra cuenta sin cambiar ahora la tuya.</p>
+                <a class="inline-block rounded-xl bg-inverse-surface text-on-secondary px-4 py-2 mt-2" href="<?= e(url($config,'accesos')) ?>">Abrir Usuarios y accesos</a>
+            <?php else: ?><p role="status" class="bg-primary-container rounded-xl p-4 mt-2">Antes de continuar, cambia tu contraseña inicial por una personal.</p><?php endif; ?>
+        <?php endif; ?>
         <?php if (input($_GET,'guardado')==='1'): ?><p role="status" class="bg-primary-container rounded-xl p-4 mt-2">Contraseña actualizada. Las demás sesiones anteriores quedan invalidadas.</p><?php endif; ?>
         <?php foreach ($errors as $error): ?><p role="alert" class="bg-error-container text-on-error-container rounded-xl p-4 mt-2"><?= e($error) ?></p><?php endforeach; ?>
         <h2 class="text-headline-md font-semibold mt-6">Cambiar mi contraseña</h2>

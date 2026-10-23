@@ -48,7 +48,12 @@ $activacionController=new App\Controllers\ActivacionController($users,$activatio
 if (!$users->exists() && input($_GET,'route')!=='activar') { redirect($config,'activar'); }
 if ($users->exists() && input($_GET,'route')!=='activar') {
     $currentUser=$auth->user();
-    if ($currentUser && $currentUser['cambiar_clave'] && !in_array(input($_GET,'route'),['perfil','logout'],true)) { redirect($config,'perfil'); }
+    $allowedBeforeChange=['perfil','logout'];
+    if ($currentUser && App\Services\AccesoRoles::socio($currentUser)) {
+        // El Socio puede recuperar otra cuenta sin cambiar ahora su propia contraseña.
+        array_push($allowedBeforeChange,'accesos','usuarios/crear','usuarios/restablecer');
+    }
+    if ($currentUser && $currentUser['cambiar_clave'] && !in_array(input($_GET,'route'),$allowedBeforeChange,true)) { redirect($config,'perfil'); }
 }
 $accesoController=new App\Controllers\AccesoController($auth,$access,$users,new App\Models\Contribuyente($database),$view,$config);
 $limiter = new App\Services\LoginLimiter(($config['storage_path'] ?? dirname(__DIR__) . '/storage') . '/rate-limits');

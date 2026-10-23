@@ -142,6 +142,7 @@ try {
     require __DIR__ . '/accesos-integration.php';
     require __DIR__ . '/socio-total-integration.php';
     require __DIR__ . '/cuentas-integration.php';
+    require __DIR__ . '/socio-recuperacion-integration.php';
     require __DIR__ . '/registro-integration.php';
     [, $html]=request($client,$base,'perfil');
     verify(request($client, $base, 'logout')[0] === 405, 'Logout rechaza GET');

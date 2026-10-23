@@ -4,6 +4,17 @@ Verificación local realizada el 13 de octubre de 2026 con PHP 8.2.12, MariaDB 1
 
 ## Resultado
 
+### Recuperación desde otro Socio · 22/10/2026
+
+Por instrucción del responsable, el cambio inicial pendiente de un Socio permite
+abrir Usuarios y accesos, crear cuentas y restablecer otra contraseña. El resto
+de módulos conserva el bloqueo pendiente. La recuperación sigue exigiendo
+sesión de Socio, clave actual y CSRF, sin alterar el hash ni el estado de cambio
+de contraseña del Socio que ayuda. Prueba aislada en socio-recuperacion-integration.php.
+Integración completa, sintaxis y unitarias correctas. Edge verifica entrada con
+clave pendiente, enlace directo desde Mi perfil, restablecimiento de otra cuenta
+y nuevo ingreso con la misma clave del Socio auxiliar; móvil a 390px sin desbordamiento.
+
 ### Artículos dentro de las fichas · 22/10/2026
 
 Colección generada desde Normograma DIAN: 66 artículos del ET y cinco de leyes
