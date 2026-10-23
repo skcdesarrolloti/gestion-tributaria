@@ -6,7 +6,7 @@ $rutMultiPath=tempnam(sys_get_temp_dir(),'rut-multi-');
 try {
     file_put_contents($rutMultiPath,rutMultiFixture());
     $pdf=RutPdfForm::extract(RutPdfReader::read($rutMultiPath));
-    check(count($pdf['lectura_hojas'])===6 && array_column($pdf['lectura_hojas'],'hoja')===[2,3,4,5,6,7],'Recorre todas las hojas por su número real, no por su posición.');
+    check(count($pdf['lectura_hojas'])===7 && array_column($pdf['lectura_hojas'],'hoja')===[1,2,3,4,5,6,7],'Recorre todas las hojas incluida la principal, por su número real y no por su posición.');
     check(array_column($pdf['rows']['relacionados'],'rol')===['representante','socio_junta','contador'],'Lee representantes, hoja de socios/junta y contador sin inventar la calidad ambigua.');
     check($pdf['rows']['relacionados'][2]['documento']==='555666777' && $pdf['rows']['relacionados'][2]['tarjeta']==='12345','El contador de la tercera sección conserva su identificación y tarjeta.');
     check($pdf['fields']['entidad']['vigencia_hasta']==='3000-12-31' && str_contains($pdf['fields']['entidad']['estados_rut'],'2021-01-01'),'Conserva vigencia de entidad y estados de hojas 2 y 7 sin tratarlos como estado DIAN en línea.');

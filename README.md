@@ -33,6 +33,12 @@ su origen o qué confirmar; no deduce residencia fiscal desde la dirección.
 Las ayudas y artículos se consultan dentro de la misma pantalla, sin enlaces
 externos ni pestañas adicionales.
 
+**Preguntas pendientes:** Ingresos confirma las fuentes del año por tres grupos
+plegables, con Sí/No/Pendiente, ayuda y guardado independiente. Recupera respuestas
+existentes sin inferir ingresos por un código del RUT. **RUT y documentos** permite
+contrastar el PDF con el perfil y ver diferencias y páginas leídas, también cuando
+el documento está guardado en otro año; no exige volver a cargarlo.
+
 **Recorrido actual: Inicio → Contribuyentes → Abrir perfil.** Una sola ficha con
 pestañas por naturaleza de información, carga del RUT que completa vacíos y edición
 de identificación en el mismo lugar. Socios, junta, representantes y profesionales

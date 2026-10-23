@@ -1,5 +1,30 @@
 # Ingresos: primera etapa operativa
 
+## Cuestionario anual de fuentes · 22/10/2026
+
+En Registro de información → Ingresos, la sección Fuentes de ingresos pregunta
+lo que no está respondido en el bloque anual `ingresos` de caracterización. Se
+reutiliza ese bloque, sin crear un catálogo paralelo ni una segunda identidad.
+
+Tres grupos plegables, con un grupo abierto a la vez: actividad/trabajo/pensión,
+capital/participaciones y operaciones especiales/exterior. Naturales y sucesiones
+tienen 13 preguntas; jurídicas 11, sin salarios ni pensión personal. Cada respuesta
+admite Sí, No o Pendiente por confirmar. Vacío nunca significa No. Se abre primero
+el grupo con faltantes; al completar todo, el cuestionario queda plegado.
+
+Guardar un grupo conserva respuestas, notas y campos de los demás grupos.
+Revisión optimista impide perder cambios de otra pestaña; CSRF, sesión y permisos
+se verifican en POST `registro/fuentes`. No crea importes, no modifica el RUT ni
+cambia condiciones fiscales con movimientos. Las respuestas del año no se copian
+a otro año. El bloque queda en borrador tras editarlo, sin certificación documental
+automática. La preparación inicial reutiliza la ausencia explícita de honorarios;
+se rechaza guardar un tratamiento personal contrario a la respuesta del mismo año.
+
+El RUT y las fuentes generales de la ficha orientan la revisión, pero no prueban
+qué ingresos existieron en cada año. Exterior, activos, criptoactivos, ECE y otros
+casos sin clasificar requieren revisión específica; no se asignan silenciosamente
+a No laborales ni se habilitan deducciones por contestar Sí.
+
 ## Preparación con el RUT ya registrado · 22/10/2026
 
 Registro recupera los datos mediante PerfilAnualSugerencias, también reutilizado

@@ -75,6 +75,14 @@ final class CaracterizacionController
             }
         } elseif (\input($_GET,'guardado')==='1') { $notice='Información guardada.'; }
         $documents=$this->documents->listFor((int)$raw,$owner,(int)$year);
-        $this->view->render('caracterizacion/index',compact('user','taxpayer','year','tab','tabs','block','roles','schemas','blocks','record','identity','revision','errors','notice','documents','component','readOnly'));
+        $documentYear=$year;$documentBlocks=$blocks;
+        if (!$documents && !$component && $tab==='documentos') {
+            $referenceYear=$this->model->latestRutYearFor((int)$raw,$owner);
+            if ($referenceYear && (string)$referenceYear!==$year) {
+                $documents=$this->documents->listFor((int)$raw,$owner,$referenceYear);$documentYear=(string)$referenceYear;
+                $documentBlocks=$this->model->blocksFor((int)$raw,$owner,$referenceYear);
+            }
+        }
+        $this->view->render('caracterizacion/index',compact('user','taxpayer','year','tab','tabs','block','roles','schemas','blocks','record','identity','revision','errors','notice','documents','component','readOnly','documentYear','documentBlocks'));
     }
 }

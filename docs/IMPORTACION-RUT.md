@@ -1,5 +1,30 @@
 # Importación del RUT · 21/10/2026
 
+## Contraste del PDF con el perfil · 22/10/2026
+
+Contribuyentes → Abrir perfil → RUT y documentos incorpora **Revisar RUT frente
+al perfil**. Compara los valores reconocidos del último PDF del año con campos y
+renglones guardados, por naturaleza de información. Distingue Coincide, Completar
+o revisar y Dato diferente. Conserva las ediciones manuales; el contraste es de
+solo lectura y no cambia información en DIAN. Los códigos incluyen descripción
+del catálogo cuando está disponible. Un cero real se muestra como cero, no vacío.
+
+Si el año seleccionado no tiene PDF, muestra el último RUT disponible del mismo
+contribuyente y el contraste con los datos de su año original. Indica expresamente
+ese año, sin exigir otra carga, sin comparar con vacíos del año equivocado y sin
+copiar residencia, fuentes o importes entre períodos. Se mantienen los permisos
+de consulta del contribuyente y del documento.
+
+La cobertura incluye la primera página y las hojas adicionales reconocidas.
+Documentos anteriores sin informe de primera página también pueden contrastarse
+desde sus metadatos guardados. El informe muestra páginas no identificadas para
+revisión manual. No se presenta un porcentaje de lectura completa: solo compara
+lo reconocido. Campos en blanco, firmas, QR y autenticidad no se certifican, ni
+se confunde el contraste con una consulta oficial de vigencia.
+
+Se contrastó localmente el documento facilitado para esta revisión, sin incorporarlo
+al repositorio ni a las pruebas. Los ensayos automatizados usan solo PDF sintéticos.
+
 ## Uso
 
 ### Recorrido actual: ficha por pestañas

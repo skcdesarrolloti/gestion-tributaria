@@ -35,6 +35,7 @@ final class IngresoController
             $errors = $this->csrfErrors();
             if (!$errors) {
                 $errors = IngresoData::profileErrors($record,$taxpayer['tipo']);
+                if (!$errors) { $blocks=$this->characterization->blocksFor((int)$taxpayer['id'],(int)$user['_ID'],(int)$record['anio']);$errors=\App\Services\IngresoPreguntas::profileErrors($record,$blocks['ingresos']['datos']['campos']??[],$taxpayer['tipo']); }
                 if (!$errors) {
                     try {
                         $id = $this->model->createProfile($record,$taxpayer,(int) $user['_ID']);
@@ -81,6 +82,7 @@ final class IngresoController
             if (!$errors) {
                 $record=IngresoData::read($_POST,Ingreso::PROFILE_FIELDS);
                 $errors=IngresoData::profileErrors($record,$profile['tipo']);
+                if (!$errors) { $blocks=$this->characterization->blocksFor((int)$profile['contribuyente_id'],(int)$user['_ID'],(int)$record['anio']);$errors=\App\Services\IngresoPreguntas::profileErrors($record,$blocks['ingresos']['datos']['campos']??[],$profile['tipo']); }
                 if (!$errors) {
                     try {
                         $this->model->updateProfile($record,(int)$profile['id'],(int)$user['_ID']);

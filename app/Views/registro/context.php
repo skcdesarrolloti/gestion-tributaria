@@ -8,4 +8,4 @@
 </form>
 <?php if (!$rows): ?><p>No tienes un contribuyente asignado. Un Socio debe crear o asignar tu ficha.</p><?php endif; ?>
 </section>
-<?php if ($taxpayer && !$profile): require __DIR__.'/configurar-anio.php'; endif; ?>
+<?php if ($taxpayer && !$profile && $contextRoute!=='registro'): require __DIR__.'/configurar-anio.php'; endif; ?>

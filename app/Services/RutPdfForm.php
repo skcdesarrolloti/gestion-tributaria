@@ -64,7 +64,8 @@ final class RutPdfForm
         }
         $details=RutPdfDetails::extract($pdf['sheets']??[],$nit,$form);
         $fields=array_replace_recursive($fields,$details['fields']);
-        return ['nit'=>$nit,'dv'=>$dv,'formulario'=>$form,'generado'=>$generated,'formalizado'=>$formalized,'lectura_hojas'=>$details['report'],
+        $report=array_merge([['pagina'=>1,'hoja'=>1,'resultado'=>'Datos de la hoja principal reconocidos y formato de NIT/DV comprobado; contrastar campos con el documento']],$details['report']);
+        return ['nit'=>$nit,'dv'=>$dv,'formulario'=>$form,'generado'=>$generated,'formalizado'=>$formalized,'lectura_hojas'=>$report,
             'pages'=>$pdf['pages'],'reader'=>$pdf['reader'],'fields'=>$fields,'rows'=>[
                 'responsabilidades'=>array_map(static fn($v)=>['codigo'=>$v],$responsibilities),
                 'aduanas'=>array_map(static fn($v)=>['codigo'=>$v],array_unique($customs)),

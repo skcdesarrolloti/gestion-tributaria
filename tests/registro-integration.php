@@ -41,3 +41,4 @@ try {
 } finally { curl_close($registered); }
 require __DIR__.'/registro-cedulas-integration.php';
 require __DIR__.'/perfil-anual-sugerencias-integration.php';
+require __DIR__.'/ingreso-preguntas-integration.php';

@@ -4,6 +4,22 @@ Verificación local realizada el 13 de octubre de 2026 con PHP 8.2.12, MariaDB 1
 
 ## Resultado
 
+### Contraste RUT y preguntas anuales de ingresos · 22/10/2026
+
+Sintaxis y unitarias correctas. Integración aislada completa: respuestas por
+grupos, convivencia de salario/pensión/capital, vacíos pendientes, persistencia
+por año, conservación de otros grupos, conflicto 409 de revisión, CSRF 419,
+aislamiento de Usuario y rechazo de tratamiento contradictorio de honorarios.
+Documentos muestra contraste y cobertura; un RUT de otro año se consulta sin
+volver a subirlo ni compararlo contra campos del año equivocado.
+RutPdfForm informa ahora hoja 1 y hojas 2–7; pruebas multipágina actualizadas.
+RutRevision compara datos sin sobrescribir diferencias y trata cero como valor.
+Edge 1440px/390px: guardado de actividad, apertura del siguiente grupo pendiente,
+años separados, carga real de PDF sintético y comparación de su actividad y hoja
+principal. Sin errores JS ni desbordamiento de página. CSS recompilado sin cambios
+al tema. Sin migraciones nuevas ni datos privados en Git. Pendiente verificar
+el recorrido autenticado en producción.
+
 ### Preparación anual desde el RUT y ayudas internas · 22/10/2026
 
 Unitarias: RUT con código 05/47/04, responsabilidades contradictorias, condición

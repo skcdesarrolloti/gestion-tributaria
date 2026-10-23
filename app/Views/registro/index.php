@@ -4,6 +4,7 @@
 <main class="portal-container py-8 space-y-space-lg">
 <section class="bg-inverse-surface text-on-secondary rounded-2xl p-4"><p>3 · Registro de información</p><h1 class="text-headline-lg font-semibold"><?= e($title) ?></h1><p>Contribuyente → año gravable → sección → registrar valores.</p></section>
 <?php $contextRoute='registro';require __DIR__.'/context.php'; ?>
+<?php if ($taxpayer): if ($state['componente']==='ingresos') { require __DIR__.'/preguntas.php'; } if (!$profile) { require __DIR__.'/configurar-anio.php'; } endif; ?>
 <?php if ($profile): ?>
 <section class="bg-surface-container-lowest border border-surface-container rounded-xl p-4 space-y-space-md">
 <h2 class="text-headline-md font-semibold"><?= e($profile['nombre'].' · Año gravable '.$profile['anio']) ?></h2>
