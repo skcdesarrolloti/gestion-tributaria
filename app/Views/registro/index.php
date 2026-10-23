@@ -1,26 +1,28 @@
-<?php $title='Registro de información';require __DIR__.'/../partials/head.php'; ?>
+<?php $title=$state['componente']==='ingresos'?'Ingresos':'Costos y gastos';require __DIR__.'/../partials/head.php'; ?>
 <body class="bg-background min-h-screen font-body-md text-on-surface antialiased">
 <?php require __DIR__.'/../partials/header.php'; ?>
 <main class="portal-container py-8 space-y-space-lg">
-<section class="bg-inverse-surface text-on-secondary rounded-2xl p-4"><h1 class="text-headline-lg font-semibold">3 · Registro de información</h1><p>Selecciona contribuyente y año. Registra ingresos, costos y gastos en sus pestañas, con sus soportes.</p></section>
+<section class="bg-inverse-surface text-on-secondary rounded-2xl p-4"><p>3 · Registro de información</p><h1 class="text-headline-lg font-semibold"><?= e($title) ?></h1><p>Contribuyente → año gravable → sección → registrar valores.</p></section>
 <?php $contextRoute='registro';require __DIR__.'/context.php'; ?>
 <?php if ($profile): ?>
 <section class="bg-surface-container-lowest border border-surface-container rounded-xl p-4 space-y-space-md">
-<h2 class="text-headline-md font-semibold"><?= e($profile['nombre'].' · '.$profile['anio']) ?></h2>
+<h2 class="text-headline-md font-semibold"><?= e($profile['nombre'].' · Año gravable '.$profile['anio']) ?></h2>
+<p><?= e($profile['tipo']==='juridica'?'Persona jurídica':($profile['tipo']==='sucesion'?'Sucesión ilíquida':'Persona natural')) ?> · Formulario <?= e($profile['formulario']) ?> · <?= e($profile['residencia']==='residente'?'Condición fiscal nacional / residente':'No residente') ?></p>
 <?php require __DIR__.'/tabs.php'; ?>
-<div class="scenario-settings-grid">
-<?php foreach ($concepts as $concept): $values=$totals[(int)$concept['casilla']]; ?>
-<article class="border border-surface-container rounded-xl p-4 space-y-space-sm">
-<h3 class="font-semibold"><?= e($concept['casilla'].' · '.$concept['nombre']) ?></h3>
-<p>Real: $<?= e(number_format($values['real'],0,',','.')) ?> · Proyectado adicional: $<?= e(number_format($values['proyectado'],0,',','.')) ?></p>
-<details><summary class="text-secondary underline">? · Definición, alcance y soportes</summary><p><?= e($concept['explicacion']) ?></p><p><?= e($concept['fundamento']) ?></p><p><?= e($concept['soportes']) ?></p></details>
-<?php if (\App\Services\IngresoData::allowed($concept,$profile)): ?><a class="inline-block rounded-xl bg-inverse-surface text-on-secondary px-4 py-2" href="<?= e(url($config,'ingresos/movimiento').'&id='.$profile['id'].'&concepto='.$concept['id'].'&origen=registro'.$contextQuery) ?>">Registrar valor</a><?php else: ?><p>Revisa el tratamiento de servicios personales en el perfil fiscal antes de registrar este concepto.</p><?php endif; ?>
-</article>
-<?php endforeach; ?></div>
-<?php if (!$concepts): ?><p role="status"><?php if ($profile['formulario']==='210' && $state['cedula']!=='general'): ?>El detalle de movimientos de esta cédula aún está pendiente. No se asignan sus valores a otra cédula ni se habilitan costos automáticamente.<?php else: ?>No hay casillas de captura habilitadas para esta combinación de componente y renta. Revisa el apartado que corresponda a tu operación y su tratamiento fiscal; no registres el valor en otra categoría solo para guardarlo.<?php endif; ?></p><?php endif; ?>
-<a class="text-secondary underline" href="<?= e(url($config,'ingresos/perfil').'&id='.$profile['id']) ?>">Revisar perfil fiscal guardado</a>
+<details><summary class="text-secondary underline">? · Formulario, año y clasificación</summary>
+<p><?= $profile['formulario']==='210'?'El 210 corresponde a naturales y sucesiones residentes. General reúne trabajo, capital y no laborales; el trabajo sin relación laboral con opción de costos tiene su bloque específico. Pensiones y Dividendos son cédulas separadas. Ganancias ocasionales no es una cuarta cédula.':'El 110 corresponde a personas jurídicas y a naturales o sucesiones no residentes. Sus ingresos se organizan por las secciones del formulario, sin aplicar cédulas de personas naturales residentes.' ?></p>
+<p>La estructura se contrastó con los instructivos DIAN publicados en 2026. El año gravable identifica las operaciones; no es el año de publicación del formulario. Para proyectar 2026 se usa esta estructura de referencia, sujeta a revisión al publicarse el formulario aplicable.</p>
+<p>La captura acumula valores con soporte; las exenciones, tarifas y el impuesto final se revisan en Análisis y acciones. No se presenta una declaración a la DIAN desde esta pantalla.</p>
+</details>
+<?php
+$primary=array_values(array_filter($concepts,static fn($c)=>$state['componente']==='costos'||$c['clase']==='ingreso'));
+$adjustments=array_values(array_filter($concepts,static fn($c)=>$state['componente']==='ingresos'&&$c['clase']==='reduccion'));
+$tableConcepts=$primary;$tableTitle=$title.' de esta sección';require __DIR__.'/casillas.php';
+?>
+<?php if ($adjustments): ?><details><summary class="text-secondary underline">Ajustes de estos ingresos · devoluciones e ingresos no constitutivos</summary><p>Se registran por separado con fundamento y soporte; no son ingresos adicionales ni costos y gastos.</p><?php $tableConcepts=$adjustments;$tableTitle='Ajustes de ingresos';require __DIR__.'/casillas.php'; ?></details><?php endif; ?>
+<?php if (!$concepts): ?><p role="status">No hay casillas de captura para esta combinación. Pensiones y dividendos tienen tratamiento propio; no se habilitan costos de la cédula general en estas cédulas. Si elegiste trabajo sin relación laboral, comprueba la opción de costos del año.</p><?php endif; ?>
+<details><summary class="text-secondary underline">Condiciones fiscales guardadas para <?= e($state['anio']) ?></summary><p>Régimen: <?= e($profile['regimen']) ?>. Tratamiento de servicios: <?= e($profile['servicios']) ?>.</p><a class="text-secondary underline" href="<?= e(url($config,'ingresos/perfil').'&id='.$profile['id']) ?>">Consultar condiciones del año</a></details>
 </section>
-<details class="border border-surface-container rounded-xl p-4"><summary class="font-semibold">Movimientos de esta pestaña (<?= count($movements) ?>)</summary><?php $registration=$state;require __DIR__.'/../ingresos/movements.php'; ?></details>
-<a class="text-secondary underline" href="<?= e(url($config,'analisis').$contextQuery) ?>">Continuar a Análisis y acciones</a>
+<details class="border border-surface-container rounded-xl p-4"><summary class="font-semibold">Consultar o corregir movimientos de esta sección (<?= count($movements) ?>)</summary><?php $registration=$state;require __DIR__.'/../ingresos/movements.php'; ?></details>
 <?php endif; ?>
 </main><?php require __DIR__.'/../partials/footer.php'; ?>

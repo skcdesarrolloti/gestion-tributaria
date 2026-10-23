@@ -20,8 +20,7 @@
                 <?php endforeach; ?>
                 <p class="text-body-md"><strong>Evidencia guardada:</strong> <?= e($p['soporte_perfil']) ?></p>
                 <div class="flex items-center gap-space-md flex-wrap">
-                    <a class="rounded-xl bg-inverse-surface text-on-secondary px-4 py-2" href="<?= e(url($config,'proyeccion').'&id='.$p['id']) ?>">Proyección anual de <?= e($p['anio']) ?></a>
-                    <a class="rounded-xl bg-inverse-surface text-on-secondary px-4 py-2" href="<?= e(url($config,'ingresos/detalle').'&id='.$p['id']) ?>">Abrir ingresos de <?= e($p['anio']) ?></a>
+                    <a class="rounded-xl bg-inverse-surface text-on-secondary px-4 py-2" href="<?= e(url($config,'registro').\App\Services\RegistroNavegacion::query(\App\Services\RegistroNavegacion::state(['anio'=>(string)$p['anio']]),(int)$taxpayer['id'])) ?>">Abrir ingresos de <?= e($p['anio']) ?></a>
                     <a class="text-secondary underline" href="<?= e(url($config,'ingresos/perfil').'&id='.$p['id']) ?>">Ver o editar perfil</a>
                 </div>
             </article>

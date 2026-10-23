@@ -1,5 +1,12 @@
 # Migraciones automáticas
 
+022 incorpora 15 conceptos de ingresos faltantes de 210/110 (pensiones,
+dividendos y ganancias ocasionales); 023 actualiza únicamente la fórmula de
+ingresos brutos 58 del 110 para incluir dividendos 49–56. No modifica ni elimina
+movimientos, perfiles o identificadores. Comprobaciones del mismo nombre y
+pruebas en base aislada. Si se revierte la interfaz, conservar estos catálogos
+y movimientos: no borrar casillas con registros ni modificar migraciones aplicadas.
+
 **Acceso actual (22/10/2026):** 021 crea `usuarios_tributarios` en la base propia.
 No existe conexión a funcionarios. Los párrafos sobre `auth_database` que siguen
 describen el historial de 001–020 y no son instrucciones de configuración actual.

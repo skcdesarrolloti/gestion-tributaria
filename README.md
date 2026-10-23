@@ -21,6 +21,12 @@ independiente. Registro selecciona contribuyente y año 2025/2026 y muestra Ingr
 o Costos y gastos en pestañas, reutilizando los movimientos existentes. Las 52
 fichas y la hoja de cálculos se conservan. Ver [recorrido y alcance](docs/MENU-Y-REGISTRO.md).
 
+**Ingresos por año:** el 210 muestra General, Pensiones y Dividendos; el 110
+organiza ingresos por sus secciones, sin cédulas. Captura compacta por filas,
+ayudas «?» plegadas y ganancias ocasionales separadas. Incluye registro bruto
+de pensiones y dividendos; no completa sus depuraciones ni el impuesto final.
+Ver [captura y fuentes DIAN](docs/INGRESOS.md).
+
 **Recorrido actual: Inicio → Contribuyentes → Abrir perfil.** Una sola ficha con
 pestañas por naturaleza de información, carga del RUT que completa vacíos y edición
 de identificación en el mismo lugar. Socios, junta, representantes y profesionales

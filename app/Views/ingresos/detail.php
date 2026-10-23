@@ -11,7 +11,7 @@
     <section class="bg-primary-container rounded-2xl p-space-xl space-y-space-sm">
         <h2 class="text-headline-sm font-semibold">Depuración preliminar de los movimientos registrados</h2>
         <p class="text-body-md">No calcula impuesto, exenciones personales, pérdidas fiscales ni UGPP. Las referencias normativas no validan automáticamente las partidas registradas.</p>
-        <p class="text-body-md"><?= $profile['formulario']==='210'?'Alcance: primera depuración de trabajo, servicios personales, capital y no laborales. Pensiones, dividendos y ECE quedan pendientes.':'Alcance: ingresos ordinarios, financieros, otros y costos/gastos. Dividendos de las casillas 49–56 y tratamientos especiales quedan pendientes; los totales de ingresos son parciales.' ?></p>
+        <p class="text-body-md">La captura bruta incluye pensiones, dividendos y ganancias ocasionales en sus secciones. Su depuración especial, ECE, exenciones y tarifas requieren revisión; estos importes no representan una declaración liquidada.</p>
         <p class="text-body-md">Los valores son pesos fiscales sin redondeo de presentación DIAN. Los totales negativos requieren revisión; no son pérdidas fiscales aceptadas.</p>
     </section>
     <div class="flex items-center gap-space-md flex-wrap">

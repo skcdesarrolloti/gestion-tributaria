@@ -31,3 +31,12 @@ check(IngresoData::profileErrors(array_replace($annual,['servicios'=>'costos']),
 check(isset(PerfilGuidance::fields('natural')['regimen']['options']['simple']), 'SIMPLE visible como consulta.');
 check(isset(PerfilGuidance::fields('juridica')['regimen']['options']['especial']), 'RTE visible para entidades.');
 check(!isset(PerfilGuidance::fields('sucesion')['regimen']['options']['simple']), 'No ofrece SIMPLE a sucesiones por defecto.');
+$entity=['formulario'=>'110','tipo'=>'juridica','residencia'=>'residente'];
+check(!IngresoData::allowed(['clase'=>'ingreso','casilla'=>52],$entity), 'Sociedad no captura dividendos exclusivos de persona natural no residente.');
+check(!IngresoData::allowed(['clase'=>'ingreso','casilla'=>54],$entity), 'Sociedad residente no recibe casilla de receptor extranjero.');
+check(IngresoData::allowed(['clase'=>'ingreso','casilla'=>52],['formulario'=>'110','tipo'=>'natural','residencia'=>'no_residente']), 'No residente natural mantiene su casilla 52.');
+$all110=array_map(static fn($code)=>['casilla'=>$code,'clase'=>'ingreso','formula'=>''],range(47,57));
+$all110[]=['casilla'=>58,'clase'=>'calculado','formula'=>'47+48+49+50+51+52+53+54+55+56+57'];
+$all110[]=['casilla'=>80,'clase'=>'ingreso','formula'=>''];
+$sum110=IngresoSummary::build($all110,[['casilla'=>49,'estado'=>'real','valor_cop'=>100],['casilla'=>80,'estado'=>'real','valor_cop'=>900]]);
+check($sum110[58]['real']===100, 'Total bruto 110 incorpora dividendos y separa ganancias ocasionales.');

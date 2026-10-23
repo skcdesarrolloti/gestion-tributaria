@@ -1,5 +1,39 @@
 # Ingresos: primera etapa operativa
 
+## Captura organizada por año y formulario · 22/10/2026
+
+Entrada principal: **Registro de información → Ingresos**. Selecciona contribuyente
+y año 2025/2026. Si falta el perfil fiscal anual, se confirma en ese mismo registro.
+Los perfiles y movimientos anteriores se conservan. Los accesos desde los años
+guardados y desde Proyección abren esta captura, sin confundirla con el análisis.
+
+- 210: General (Trabajo, Trabajo sin relación laboral con opción de costos,
+  Capital, No laborales), Pensiones y Dividendos. Ganancias ocasionales es una
+  sección independiente y no una cuarta cédula.
+- 110: Actividades ordinarias, Financieros, Dividendos, Otros y Ganancias
+  ocasionales. No muestra cédulas del 210. Naturales y sucesiones no residentes
+  usan el 110 conforme a su perfil, no el 210 por el solo hecho de ser naturales.
+- Se muestran filas con casilla, nombre, real, proyectado adicional y Registrar.
+  Las ayudas de finalidad, norma y soporte se despliegan con «?»; los ajustes
+  existentes de devoluciones e ingresos no constitutivos quedan plegados.
+- 022 amplía el catálogo con 15 casillas: 210 (99,104,107,108,109,112),
+  110 (49–56,80). 023 incluye 49–56 en el total bruto 58 del 110. No cambia
+  identificadores ni importes existentes; no añade costos ni exenciones automáticas.
+- El servidor limita el formulario al año y sección, incluidos POST manipulados.
+  52/53 del 110 son exclusivas de naturales no residentes; 54/55 no se ofrecen
+  al residente; 50 se reserva a entidades. Los supuestos especiales CHC y
+  megainversión requieren evidencia y revisión particular, no se validan solos.
+
+Fuentes contrastadas: [DIAN 210 e instructivo publicado en 2026](https://www.dian.gov.co/atencionciudadano/formulariosinstructivos/Formularios/2026/Formulario_210_2026.pdf)
+y [DIAN 110 e instructivo publicado en 2026](https://www.dian.gov.co/atencionciudadano/formulariosinstructivos/Formularios/2026/Formulario_110_2026.pdf).
+El instructivo 210 indica año gravable 2023 y siguientes. Publicación 2026 no
+equivale a año gravable 2026: este último se presenta como proyección con estructura
+de referencia, pendiente de contrastar contra el formulario que corresponda al
+presentar. El registro bruto no completa el cálculo de exenciones, tarifas,
+ECE, dividendos ni ganancias ocasionales; la hoja de escenarios sigue separada.
+
+Las secciones siguientes documentan la primera etapa y sus rutas históricas.
+
 ## Cómo comprobar el flujo
 
 1. Inicia sesión y entra a **Contribuyentes**.

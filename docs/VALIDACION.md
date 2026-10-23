@@ -4,6 +4,19 @@ Verificación local realizada el 13 de octubre de 2026 con PHP 8.2.12, MariaDB 1
 
 ## Resultado
 
+### Ingresos por año y sección DIAN · 22/10/2026
+
+Migraciones 022/023 y pruebas completas en base aislada correctas. Pensiones
+99, Dividendos 104/107/108/109 y Ganancias ocasionales 112 se capturan por
+separado. 110 organiza ingresos y dividendos propios, sin cédulas ni casillas
+exclusivas de naturales para sociedades. POST de otra cédula se rechaza;
+guardado vuelve al mismo año/sección; repetir migraciones conserva movimientos.
+Unitarias y sintaxis correctas; CSS recompilado con el tema existente.
+Edge 1440px y 390px: registro real de pensión, retorno, año 2026 sin importes
+2025, cuatro filas de dividendos, sociedad y configuración anual dentro de
+Registro. Sin errores JS ni desbordamiento de página; tablas con scroll propio.
+Pendiente validación autenticada en producción.
+
 ### Entrada a Ingresos desde el contribuyente · 22/10/2026
 
 El menú conserva contribuyente y año al abrir Ingresos o Costos y gastos.

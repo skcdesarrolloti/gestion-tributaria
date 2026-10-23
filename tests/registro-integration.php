@@ -14,7 +14,7 @@ verify($s===200 && ($incomeQuery['route']??'')==='registro' && (int)($incomeQuer
 [$s,$fromMenu]=request($client,$base,substr((string)parse_url($incomeUrl,PHP_URL_QUERY),6));
 verify($s===200 && str_contains($fromMenu,'3 · Registro de información') && !str_contains($fromMenu,'Completar campos faltantes del RUT'),'El enlace real del menú abre captura sin desviar al perfil del RUT');
 verify(!str_contains(request($client,$base,str_replace('anio=2025','anio=2026',$registrationRoute))[1],'Movimiento corregido'),'Cambiar año no muestra movimientos del otro perfil');
-verify(str_contains(request($client,$base,str_replace('cedula=general','cedula=pensiones',$registrationRoute))[1],'esta cédula aún está pendiente'),'Pensiones no se presenta como captura ya implementada');
+verify(!str_contains(request($client,$base,str_replace('cedula=general','cedula=pensiones',$registrationRoute))[1],'60 · Costos'),'Pensiones no recibe costos de capital');
 verify(request($client,$base,'registro&anio=2027')[0]===422 && request($client,$base,'registro&componente=desconocido')[0]===422,'Registro valida año y componente');
 $registrationMovement='ingresos/movimiento&id='.$profileId.'&concepto='.$codeId('210',60).'&origen=registro&anio=2025&componente=costos&cedula=general&renta=capital';
 [$s,$registrationForm]=request($client,$base,$registrationMovement);
@@ -39,3 +39,4 @@ try {
     verify(request($registered,$base,$registrationRoute)[0]===200,'Usuario usa el registro de su ficha asignada');
     verify(request($registered,$base,'registro&contribuyente='.$otherId)[0]===404 && request($registered,$base,'analisis&contribuyente='.$otherId)[0]===404,'Los menús nuevos no amplían permisos sobre otras fichas');
 } finally { curl_close($registered); }
+require __DIR__.'/registro-cedulas-integration.php';

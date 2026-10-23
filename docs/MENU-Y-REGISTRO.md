@@ -33,15 +33,23 @@ Costos y deducciones para 110; el resto de partidas no calculadas se muestra en
 Ingresos. No se cambian reglas fiscales, fórmulas ni clasificación almacenada.
 Los conceptos de servicios personales respetan el tratamiento del perfil.
 
-Cada tarjeta muestra sus valores reales y proyectados y ayuda desplegable de
+Cada fila muestra sus valores reales y proyectados y ayuda desplegable de
 definición, norma y soportes. Registrar valor reutiliza el formulario de movimientos
 con su casilla seleccionada. Después de guardar regresa al contexto de origen;
 editar desde el detalle plegable conserva también ese contexto.
 
-**Alcance pendiente:** el catálogo actual no captura movimientos detallados de
-Pensiones y Dividendos; sus pestañas lo indican expresamente y no reclasifican
-valores como General. Tampoco se habilitan costos genéricos para toda cédula.
-Este cambio organiza las funciones existentes, no completa el motor tributario.
+**Actualización de ingresos:** captura por filas y sección, con ayudas plegadas.
+Pensiones admite ingreso bruto 99; Dividendos separa 104, 107, 108 y 109.
+Ganancias ocasionales se presenta como sección independiente (112 en 210,
+80 en 110). No se habilitan costos genéricos en esas secciones. Las exenciones,
+tarifas y depuraciones especiales no se calculan por el hecho de registrar un ingreso.
+El 110 separa actividades ordinarias, financieros, dividendos (49–56 según el
+tipo/condición), otros y ganancias ocasionales. Ver INGRESOS.md.
+
+Cuando falta el perfil del año, sus condiciones se confirman en el mismo Registro;
+el guardado reutiliza el controlador existente y vuelve al año y sección elegidos.
+El formulario de movimiento limita las opciones a esa sección y rechaza por POST
+una casilla de otra sección. No mezcla las operaciones de años distintos.
 
 ## Análisis y acciones
 
@@ -51,6 +59,6 @@ natural residente. La hoja mantiene valores independientes y no importa
 automáticamente los movimientos del registro. Seguridad social sigue disponible
 como revisión del aplicativo recibido. No se prometen acciones automatizadas.
 
-Sin migraciones nuevas. Probar sintaxis, unitarias y registro-integration.php
+La ampliación de ingresos utiliza migraciones 022/023. Probar sintaxis, unitarias y registro-integration.php
 dentro de la integración completa: años separados, filtro de costos, casilla
 preseleccionada, retorno después de guardar y rechazo de fichas ajenas.

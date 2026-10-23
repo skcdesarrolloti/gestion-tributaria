@@ -29,6 +29,12 @@ final class IngresoData
     public static function allowed(array $concept, array $profile): bool
     {
         if ($concept['clase'] === 'calculado') { return false; }
+        if ($profile['formulario']==='110') {
+            $code=(int)$concept['casilla'];
+            if (in_array($code,[52,53],true) && (($profile['tipo']??'')!=='natural' || ($profile['residencia']??'')!=='no_residente')) { return false; }
+            if ($code===50 && ($profile['tipo']??'')!=='juridica') { return false; }
+            if (in_array($code,[54,55],true) && ($profile['residencia']??'')==='residente') { return false; }
+        }
         return $profile['formulario'] !== '210' || !in_array((int) $concept['casilla'], [43,44,45], true)
             || $profile['servicios'] === 'costos';
     }

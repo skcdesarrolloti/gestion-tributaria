@@ -107,6 +107,7 @@ final class IngresoController
         if (\input($_GET,'origen')==='registro') {
             try { $registration=\App\Services\RegistroNavegacion::state($_GET);$registration['anio']=(string)$profile['anio']; }
             catch (\InvalidArgumentException $e) { http_response_code(422);echo \e($e->getMessage());return; }
+            $concepts=\App\Services\RegistroNavegacion::concepts($concepts,$profile,$registration);
         }
         foreach ($concepts as $concept) { if ((int)$concept['id']===$this->id('concepto') && IngresoData::allowed($concept,$profile)) { $record['concepto_id']=(string)$concept['id']; } }
         if ($id !== null) {
@@ -114,6 +115,7 @@ final class IngresoController
                 static fn ($row) => (int) $row['id'] === $id);
             if (!$found) { $this->missing(); return; }
             $record = reset($found);
+            if ($registration && !in_array((int)$record['concepto_id'],array_map('intval',array_column($concepts,'id')),true)) { $this->missing();return; }
             $record['valor_original'] = $record['moneda'] === 'COP' ? (string) $record['valor_cop'] : $record['valor_original'];
         }
         $errors = [];
