@@ -7,6 +7,5 @@
 <div><button class="rounded-xl bg-inverse-surface text-on-secondary px-4 py-2">Abrir año</button></div>
 </form>
 <?php if (!$rows): ?><p>No tienes un contribuyente asignado. Un Socio debe crear o asignar tu ficha.</p><?php endif; ?>
-<?php if ($taxpayer): ?><a class="text-secondary underline" href="<?= e(url($config,'contribuyentes/perfil').'&id='.$taxpayer['id'].'&anio='.$state['anio']) ?>">Completar campos faltantes del RUT</a><?php endif; ?>
 </section>
 <?php if ($taxpayer && !$profile): ?><section class="bg-primary-container rounded-xl p-4 space-y-space-sm"><p>No hay un perfil fiscal guardado para <?= e($state['anio']) ?>. Confírmalo antes de registrar valores de ese año; no se copiarán importes del otro año.</p><a class="text-secondary underline" href="<?= e(url($config,'ingresos').'&origen=registro'.\App\Services\RegistroNavegacion::query($state,(int)$taxpayer['id'])) ?>">Configurar perfil de <?= e($state['anio']) ?></a></section><?php endif; ?>

@@ -4,6 +4,14 @@ Verificación local realizada el 13 de octubre de 2026 con PHP 8.2.12, MariaDB 1
 
 ## Resultado
 
+### Entrada a Ingresos desde el contribuyente · 22/10/2026
+
+El menú conserva contribuyente y año al abrir Ingresos o Costos y gastos.
+Se retiró del registro el enlace para completar el RUT. Integración aislada
+completa correcta: se extrae el enlace real del menú de una ficha 2025, se abre
+y se comprueba que devuelve Registro de información, sin redirección al RUT.
+Sintaxis y unitarias correctas. Pendiente comprobarlo en la sesión de producción.
+
 ### Recuperación desde otro Socio · 22/10/2026
 
 Por instrucción del responsable, el cambio inicial pendiente de un Socio permite

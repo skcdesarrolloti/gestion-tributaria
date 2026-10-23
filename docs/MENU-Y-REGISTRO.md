@@ -16,6 +16,9 @@ Contribuyentes. No se elimina información ni se cambia la política Socio/Usuar
 
 Ruta `registro`, atendida por RegistroController. Seleccionar contribuyente y
 2025 o 2026. Solo se consultan fichas autorizadas con los modelos existentes.
+Al abrir Ingresos o Costos y gastos desde una ficha, el menú conserva su
+contribuyente y año. Registro no muestra el enlace para completar el RUT:
+esa edición permanece en Contribuyentes, separada de la captura de valores.
 Si falta el perfil fiscal del año, se enlaza su formulario existente con el año
 preseleccionado. Guardarlo devuelve al registro. No se crean perfiles mediante GET
 ni se copian valores entre años.
