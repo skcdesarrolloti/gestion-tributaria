@@ -10,6 +10,9 @@ button, a { touch-action: manipulation; }
 .scenario-settings-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem; align-items: start; }
 .scenario-settings-grid > * { min-width: 0; }
 .renta-sheet-scroll { max-width: 100%; overflow-x: auto; }
+[data-nomina-upload] input[type="file"] { display: block; width: 100%; max-width: 100%; min-width: 0; }
+.nomina-monthly-table th:first-child { min-width: 250px; }
+.nomina-monthly-table td { white-space: nowrap; }
 .renta-sheet-table { width: 100%; min-width: 800px; border-collapse: collapse; text-align: left; }
 .renta-sheet-table th, .renta-sheet-table td { padding: .75rem; vertical-align: top; border-bottom: 1px solid currentColor; }
 .renta-sheet-table input[inputmode="numeric"] { min-width: 110px; }

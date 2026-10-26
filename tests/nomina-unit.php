@@ -1,0 +1,23 @@
+<?php
+declare(strict_types=1);
+use App\Services\NominaData;
+$payValues=array_fill_keys(NominaData::FIELDS,0);
+$payValues=array_replace($payValues,['salario'=>1000000000,'comisiones'=>100000000,'devengado'=>1100000000,
+    'salud'=>40000000,'pension'=>40000000,'retencion'=>50000000,'deducido'=>130000000,'neto'=>970000000]);
+$payInput=['documento'=>'999111222','empleador_documento'=>'999888777','empleador'=>'Empresa ficticia',
+    'inicio'=>'2025-01-01','fin'=>'2025-01-15','archivo'=>'nomina-ficticia.xls','hoja'=>'Enero 1',
+    'archivo_sha'=>str_repeat('a',64),'valores'=>$payValues];
+$payTax=['id'=>9,'tipo'=>'natural','documento_numero'=>'999111222'];
+$payProfile=['id'=>7,'anio'=>'2025','formulario'=>'210','regimen'=>'ordinario'];
+$payRead=NominaData::read($payInput,$payTax,$payProfile);
+$payAmount=NominaData::amounts($payRead['valores']);
+check($payAmount['aportes']===80000000 && $payAmount['neto_calculado']===970000000 && $payAmount['liquida']===1020000000,'Nómina: retención es pago anticipado y no reduce 34.');
+$renamed=array_replace($payRead,['archivo'=>'copia.xls','hoja'=>'Copia']);
+check(NominaData::fingerprint($renamed)===$payRead['huella'],'Nómina: renombrar el archivo no crea otro ingreso.');
+$month=NominaData::monthly([['inicio'=>'2025-01-01','datos'=>$payRead],['inicio'=>'2025-01-16','datos'=>$payRead]]);
+check($month[1]['registros']===2 && $month[1]['devengado']===2200000000 && $month[2]===[],'Nómina: suma quincenas sin convertir un mes ausente en cero.');
+foreach ([['documento'=>'999111223'],['fin'=>'2025-02-15'],['inicio'=>'2025-02-30'],['valores'=>array_replace($payValues,['neto'=>1])],['valores'=>array_replace($payValues,['salud'=>'40000000'])],['valores'=>array_replace($payValues,['pension'=>-1])]] as $bad) {
+    $caught=false;try { NominaData::read(array_replace($payInput,$bad),$payTax,$payProfile); } catch (DomainException) { $caught=true; }
+    check($caught,'Nómina rechaza identificación, período, importe o conciliación inválidos.');
+}
+check(!isset($month[1]['basico']),'Nómina: básico mensual no se suma como pago de quincena.');

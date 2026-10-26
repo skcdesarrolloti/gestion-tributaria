@@ -63,11 +63,13 @@ final class Ingreso
 
     public function movements(int $profile, int $owner): array
     {
-        return $this->query('SELECT m.*, k.casilla, k.nombre FROM movimientos_ingresos m
+        return $this->query('SELECT m.*, k.casilla, k.nombre, (SELECT n.id FROM nominas_laborales n WHERE n.ingreso_id=m.id OR n.aporte_id=m.id LIMIT 1) AS nomina_id FROM movimientos_ingresos m
             JOIN perfiles_renta p ON p.id=m.perfil_id JOIN contribuyentes c ON c.id=p.contribuyente_id
             JOIN conceptos_ingresos k ON k.id=m.concepto_id WHERE p.id=? AND '.\App\Services\AccesoSql::condition('c',false).' ORDER BY m.fecha,m.id',
             [$profile,$owner])->fetchAll();
     }
+
+    public function payroll(int $profile,int $owner): array { return (new NominaLaboral($this->database))->rows($profile,$owner); }
 
     public function saveMovement(array $record, int $profile, int $owner, ?int $id): void
     {
@@ -76,10 +78,17 @@ final class Ingreso
         try {
             $current=$this->lockedProfile($profile,$owner);
             if (!$current) { throw new \DomainException('Perfil no encontrado.'); }
+            if ($id && $this->query('SELECT id FROM nominas_laborales WHERE ingreso_id=? OR aporte_id=?',[$id,$id])->fetchColumn()) {
+                throw new \DomainException('Este movimiento procede de nómina. Corrige su archivo desde Subir nómina para mantener la conciliación.');
+            }
             $concept=$this->query('SELECT * FROM conceptos_ingresos WHERE id=? AND formulario=? AND version=?',
                 [$record['concepto_id'],$current['formulario'],$current['version']])->fetch() ?: null;
             $errors=\App\Services\IngresoData::movementErrors($record,$current,$concept);
             if ($errors) { throw new \DomainException(implode(' ',$errors)); }
+            if (in_array((int)$concept['casilla'],[32,33],true) && $record['estado']==='real'
+                && $this->query('SELECT id FROM nominas_laborales WHERE perfil_id=? AND DATE_FORMAT(inicio,"%Y-%m")=? LIMIT 1',[$profile,substr($record['fecha'],0,7)])->fetchColumn()) {
+                throw new \DomainException('Este mes tiene nómina importada. No dupliques sus importes con captura manual: corrige o completa las quincenas desde Subir nómina.');
+            }
             $this->writeMovement($record,$profile,$owner,$id);
             $db->commit();
         } catch (\Throwable $error) { $db->rollBack(); throw $error; }

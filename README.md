@@ -27,6 +27,13 @@ ayudas «?» plegadas y ganancias ocasionales separadas. Incluye registro bruto
 de pensiones y dividendos; no completa sus depuraciones ni el impuesto final.
 Ver [captura y fuentes DIAN](docs/INGRESOS.md).
 
+**Ingresos laborales:** Registro → Subir nómina laboral permite seleccionar
+hojas de XLS/XLSX, vincular por identificación exacta, revisar y confirmar.
+Suma quincenas por mes y alimenta 32/33 sin duplicar el devengado con su detalle;
+muestra retenciones laborales 132 aparte. Solo guarda filas autorizadas elegidas,
+no el libro completo. Correcciones con historial y bloqueo de duplicados.
+Ver [alcance de nómina y casillas](docs/NOMINA-LABORAL.md).
+
 Al preparar el año, Ingresos recupera el régimen propuesto por el RUT, las
 condiciones anuales ya guardadas y la referencia documental. Cada campo indica
 su origen o qué confirmar; no deduce residencia fiscal desde la dirección.

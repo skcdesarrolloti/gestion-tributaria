@@ -4,6 +4,22 @@ Verificación local realizada el 13 de octubre de 2026 con PHP 8.2.12, MariaDB 1
 
 ## Resultado
 
+### Nómina laboral · 26/10/2026
+
+Migraciones 024/025 probadas automáticamente en base aleatoria aislada. Sintaxis
+y unitarias PHP correctas; adaptador JS con cambio de columnas, retroactivos
+duplicados, básico excluido, identidad exacta y omisión de hojas de otro diseño.
+Integración completa: CSRF, vista previa sin escritura, dos quincenas a 32/33,
+34 sin descontar retenciones, copia renombrada, corrección expresa con historial,
+revisión concurrente, períodos superpuestos y reversión atómica de lote fallido,
+bloqueo de edición de movimiento derivado y duplicación manual, años separados,
+aislamiento de Usuario y acceso revocado entre vista previa y confirmación.
+Edge a 1440px/390px con libro XLS sintético: lectura, pagador, preselección enero,
+confirmación, consulta mensual y repetición sin duplicado. Sin errores JS ni
+desbordamiento de página; tablas con desplazamiento horizontal propio.
+No se importaron nóminas reales en la base de pruebas ni se cambiaron cuentas
+reales. La comprobación autenticada en Hostinger queda pendiente tras publicar.
+
 ### Contraste RUT y preguntas anuales de ingresos · 22/10/2026
 
 Sintaxis y unitarias correctas. Integración aislada completa: respuestas por

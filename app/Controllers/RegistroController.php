@@ -38,7 +38,7 @@ final class RegistroController
         $taxpayer=$id?$this->taxpayers->findFor($id,$owner):null;
         if (array_key_exists('contribuyente',$_GET) && !$taxpayer) { http_response_code(404);echo 'Contribuyente no encontrado.';return; }
         if (!$taxpayer && count($rows)===1) { $taxpayer=$rows[0]; }
-        $profile=null;$concepts=[];$movements=[];$totals=[];$preparation=null;$questions=null;
+        $profile=null;$concepts=[];$movements=[];$totals=[];$preparation=null;$questions=null;$payroll=[];
         if ($taxpayer) {
             $blocks=$this->characterization->blocksFor((int)$taxpayer['id'],$owner,(int)$state['anio']);
             $questions=\App\Services\IngresoPreguntas::prepare($blocks['ingresos']??[],$taxpayer['tipo']);
@@ -46,12 +46,13 @@ final class RegistroController
             if ($profile) {
                 $all=$this->incomes->concepts($profile);$allMovements=$this->incomes->movements((int)$profile['id'],$owner);
                 $totals=IngresoSummary::build($all,$allMovements);
+                $payroll=$this->incomes->payroll((int)$profile['id'],$owner);
                 $concepts=RegistroNavegacion::concepts($all,$profile,$state);$ids=array_column($concepts,'id');
                 $movements=array_values(array_filter($allMovements,static fn($m)=>in_array($m['concepto_id'],$ids)));
             } else {
                 $preparation=\App\Services\PerfilAnualSugerencias::stored($this->characterization,$taxpayer,$owner,$state['anio']);
             }
         }
-        $this->view->render($template,compact('user','rows','taxpayer','profile','state','concepts','movements','totals','preparation','questions'));
+        $this->view->render($template,compact('user','rows','taxpayer','profile','state','concepts','movements','totals','preparation','questions','payroll'));
     }
 }

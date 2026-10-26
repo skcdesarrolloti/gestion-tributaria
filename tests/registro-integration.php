@@ -42,3 +42,4 @@ try {
 require __DIR__.'/registro-cedulas-integration.php';
 require __DIR__.'/perfil-anual-sugerencias-integration.php';
 require __DIR__.'/ingreso-preguntas-integration.php';
+require __DIR__.'/nomina-integration.php';

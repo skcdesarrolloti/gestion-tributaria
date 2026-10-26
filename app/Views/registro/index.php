@@ -10,6 +10,7 @@
 <h2 class="text-headline-md font-semibold"><?= e($profile['nombre'].' · Año gravable '.$profile['anio']) ?></h2>
 <p><?= e($profile['tipo']==='juridica'?'Persona jurídica':($profile['tipo']==='sucesion'?'Sucesión ilíquida':'Persona natural')) ?> · Formulario <?= e($profile['formulario']) ?> · <?= e($profile['residencia']==='residente'?'Condición fiscal nacional / residente':'No residente') ?></p>
 <?php require __DIR__.'/tabs.php'; ?>
+<?php if ($profile['formulario']==='210' && $profile['tipo']==='natural' && $state['componente']==='ingresos' && $state['cedula']==='general' && $state['renta']==='trabajo'): require __DIR__.'/../nomina/monthly.php'; endif; ?>
 <details><summary class="text-secondary underline">? · Formulario, año y clasificación</summary>
 <p><?= $profile['formulario']==='210'?'El 210 corresponde a naturales y sucesiones residentes. General reúne trabajo, capital y no laborales; el trabajo sin relación laboral con opción de costos tiene su bloque específico. Pensiones y Dividendos son cédulas separadas. Ganancias ocasionales no es una cuarta cédula.':'El 110 corresponde a personas jurídicas y a naturales o sucesiones no residentes. Sus ingresos se organizan por las secciones del formulario, sin aplicar cédulas de personas naturales residentes.' ?></p>
 <p>La estructura se contrastó con los instructivos DIAN publicados en 2026. El año gravable identifica las operaciones; no es el año de publicación del formulario. Para proyectar 2026 se usa esta estructura de referencia, sujeta a revisión al publicarse el formulario aplicable.</p>

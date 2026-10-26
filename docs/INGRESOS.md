@@ -1,5 +1,17 @@
 # Ingresos: primera etapa operativa
 
+## Nómina laboral · 26/10/2026
+
+Registro → Ingresos → Trabajo muestra tabla mensual y acceso a Subir nómina.
+El lector XLS/XLSX permite escoger hojas y personas autorizadas, con vista previa
+y confirmación. Se conserva detalle en centavos; dos movimientos derivados a
+pesos por quincena alimentan 32/33 y su cálculo 34. La retención laboral 132 se
+muestra separada en nómina. No se descuenta como reducción del ingreso.
+Repeticiones, correcciones con historial y captura manual se concilian antes de
+sumar. Las hojas de primas con otro diseño requieren un adaptador posterior.
+Ver [NOMINA-LABORAL.md](NOMINA-LABORAL.md). La autenticación sigue siendo propia,
+sin conectar con funcionarios; el Excel compartido solo es una fuente de datos.
+
 ## Cuestionario anual de fuentes · 22/10/2026
 
 En Registro de información → Ingresos, la sección Fuentes de ingresos pregunta

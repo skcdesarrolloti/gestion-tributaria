@@ -1,0 +1,20 @@
+CREATE TABLE nominas_laborales (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    perfil_id INT UNSIGNED NOT NULL,
+    empleador_documento VARCHAR(20) NOT NULL,
+    inicio DATE NOT NULL,
+    fin DATE NOT NULL,
+    datos LONGTEXT NOT NULL,
+    huella CHAR(64) NOT NULL,
+    revision INT UNSIGNED NOT NULL DEFAULT 1,
+    ingreso_id INT UNSIGNED NULL,
+    aporte_id INT UNSIGNED NULL,
+    actor_id INT UNSIGNED NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    UNIQUE KEY nomina_periodo (perfil_id,empleador_documento,inicio,fin),
+    CONSTRAINT nomina_perfil_fk FOREIGN KEY (perfil_id) REFERENCES perfiles_renta(id),
+    CONSTRAINT nomina_ingreso_fk FOREIGN KEY (ingreso_id) REFERENCES movimientos_ingresos(id),
+    CONSTRAINT nomina_aporte_fk FOREIGN KEY (aporte_id) REFERENCES movimientos_ingresos(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
