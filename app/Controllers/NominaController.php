@@ -32,7 +32,8 @@ final class NominaController
                         if (!$staged || $staged['owner']!==$owner || $staged['year']!==$year || $staged['expires']<time()
                             || !hash_equals($staged['token'],\input($_POST,'preview_token'))) { throw new \DomainException('La vista previa venció. Selecciona de nuevo las hojas.'); }
                         $replace=\input($_POST,'reemplazar')==='1';
-                        $notice=$this->model->save($staged['records'],$owner,$replace);unset($_SESSION['nomina_preview']);
+                        $preview=$staged;
+                        $notice=$this->model->save($staged['records'],$owner,$replace);unset($_SESSION['nomina_preview']);$preview=null;
                     } else {
                         $staged=$_SESSION['nomina_preview']??null;unset($_SESSION['nomina_preview']);$json=\input($_POST,'filas');
                         if (strlen($json)>600000) { throw new \DomainException('La selección es demasiado grande. Importa menos períodos.'); }
@@ -64,6 +65,10 @@ final class NominaController
                     }
                 } catch (\JsonException) { http_response_code(422);$errors[]='No fue posible leer la selección. Vuelve a elegir las hojas del Excel.'; }
                 catch (\DomainException $e) { http_response_code(422);$errors[]=$e->getMessage(); }
+                catch (\Throwable $e) {
+                    error_log((string)$e);
+                    http_response_code(500);$errors[]=\App\Services\NominaFailure::message($e);
+                }
             }
         }
         $this->view->render('nomina/index',compact('user','year','targets','employers','errors','preview','notice'));

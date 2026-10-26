@@ -36,3 +36,7 @@ check(count(\App\Services\NominaPreview::groups([$visual,$other]))===2,'Vista pr
 $corrected=NominaData::read(array_replace($payInput,['inicio'=>'2025-06-01','fin'=>'2025-06-15','periodo_origen'=>'2025-06-01 a 2025-06-16']),$payTax,$payProfile);
 check($corrected['fin']==='2025-06-15' && $corrected['periodo_origen']==='2025-06-01 a 2025-06-16'
     && $corrected['valores']===$payValues,'Corrección de encabezado conserva fechas originales e importes sin trasladarlos.');
+$storageError=new PDOException('SQL y credenciales privadas que no deben publicarse');$storageError->errorInfo=['HY000',1364,'detalle privado'];
+$safeMessage=\App\Services\NominaFailure::message($storageError);
+check(str_contains($safeMessage,'NOM-DB-1364') && !str_contains($safeMessage,'credenciales') && !str_contains($safeMessage,'detalle privado'),
+    'Error controlado de nómina muestra solo código, nunca SQL ni datos privados.');
