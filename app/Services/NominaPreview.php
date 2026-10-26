@@ -11,6 +11,7 @@ final class NominaPreview
 
     public static function groups(array $records): array
     {
+        foreach ($records as $i=>&$record) { $record['indice_preview']=$i; }unset($record);
         usort($records,static fn(array $a,array $b): int =>
             [$a['nombre'],$a['empleador_documento'],$a['inicio'],$a['fin']] <=>
             [$b['nombre'],$b['empleador_documento'],$b['inicio'],$b['fin']]);

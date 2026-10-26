@@ -17,6 +17,14 @@ ese subtotal al importar. Salud, pensión y solidaridad aparecen separadas; orig
 conceptos y comparación del neto se despliegan dentro de cada quincena. Nombre y
 pagador se muestran una sola vez por grupo, no se repiten en cada fila. El nombre
 del libro puede decir septiembre aunque sus hojas contengan otros meses.
+En «Ver origen y detalle» se pueden corregir fechas erradas del encabezado antes
+de confirmar. Se conserva el período original en el JSON privado; se validan de
+nuevo identidad, permisos, año, importes y fechas. No se cambia el Excel original.
+Cada ajuste renueva el token de vista previa, sin guardar movimientos todavía.
+Después de guardar, Ingresos → Trabajo muestra un resumen por mes, devengado
+acumulado y casillas reales 32/33/34, con el aporte de nómina a retenciones 132.
+El detalle con centavos se conserva plegado; las casillas muestran movimientos
+en pesos por quincena y pueden incluir otras capturas de trabajo del mismo año.
 
 ## Adaptador y privacidad
 

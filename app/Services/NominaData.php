@@ -39,6 +39,12 @@ final class NominaData
             if (!$d || $d->format('Y-m-d')!==$r[$k] || $d->format('Y')!==(string)$profile['anio'] || !in_array($d->format('Y'),['2025','2026'],true)) { throw new \DomainException('El período no corresponde al año seleccionado.'); }
         }
         if ($r['inicio']>$r['fin'] || substr($r['inicio'],0,7)!==substr($r['fin'],0,7) || $r['fin']>date('Y-m-d')) { throw new \DomainException('Selecciona un período cerrado, dentro de un mismo mes.'); }
+        if (isset($raw['periodo_origen'])) {
+            if (!is_string($raw['periodo_origen']) || !preg_match('/^\d{4}-\d{2}-\d{2} a \d{4}-\d{2}-\d{2}$/D',$raw['periodo_origen'])) {
+                throw new \DomainException('La referencia del período original no es válida.');
+            }
+            $r['periodo_origen']=$raw['periodo_origen'];
+        }
         if (!isset($raw['valores']) || !is_array($raw['valores'])) { throw new \DomainException('Falta el detalle de importes de la nómina.'); }
         foreach (self::FIELDS as $k) {
             $v=$raw['valores'][$k]??null;

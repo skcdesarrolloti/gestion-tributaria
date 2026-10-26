@@ -33,3 +33,6 @@ check(array_column($january['filas'],'inicio')===['2025-01-01','2025-01-16']
     'Vista previa: dos quincenas, subtotal correcto y filas de importación intactas.');
 $other=array_replace($visual,['empleador_documento'=>'999777666']);
 check(count(\App\Services\NominaPreview::groups([$visual,$other]))===2,'Vista previa: no mezcla pagadores.');
+$corrected=NominaData::read(array_replace($payInput,['inicio'=>'2025-06-01','fin'=>'2025-06-15','periodo_origen'=>'2025-06-01 a 2025-06-16']),$payTax,$payProfile);
+check($corrected['fin']==='2025-06-15' && $corrected['periodo_origen']==='2025-06-01 a 2025-06-16'
+    && $corrected['valores']===$payValues,'Corrección de encabezado conserva fechas originales e importes sin trasladarlos.');

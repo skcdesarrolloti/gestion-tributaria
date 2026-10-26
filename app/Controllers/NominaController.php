@@ -34,9 +34,19 @@ final class NominaController
                         $replace=\input($_POST,'reemplazar')==='1';
                         $notice=$this->model->save($staged['records'],$owner,$replace);unset($_SESSION['nomina_preview']);
                     } else {
-                        unset($_SESSION['nomina_preview']);$json=\input($_POST,'filas');
+                        $staged=$_SESSION['nomina_preview']??null;unset($_SESSION['nomina_preview']);$json=\input($_POST,'filas');
                         if (strlen($json)>600000) { throw new \DomainException('La selección es demasiado grande. Importa menos períodos.'); }
-                        $raw=json_decode($json,true,32,JSON_THROW_ON_ERROR);
+                        if (\input($_POST,'accion')==='ajustar_periodo') {
+                            if (!$staged || $staged['owner']!==$owner || $staged['year']!==$year || $staged['expires']<time()
+                                || !hash_equals($staged['token'],\input($_POST,'preview_token'))) {
+                                throw new \DomainException('La vista previa venció. Selecciona de nuevo las hojas.');
+                            }
+                            $index=filter_var(\input($_POST,'fila'),FILTER_VALIDATE_INT);
+                            if ($index===false || !isset($staged['records'][$index])) { throw new \DomainException('Selecciona la quincena que deseas corregir.'); }
+                            $raw=$staged['records'];
+                            $raw[$index]['periodo_origen']=$raw[$index]['periodo_origen']??($raw[$index]['inicio'].' a '.$raw[$index]['fin']);
+                            $raw[$index]['inicio']=\input($_POST,'inicio');$raw[$index]['fin']=\input($_POST,'fin');
+                        } else { $raw=json_decode($json,true,32,JSON_THROW_ON_ERROR); }
                         if (!is_array($raw) || !array_is_list($raw) || !$raw || count($raw)>150) { throw new \DomainException('Selecciona entre una y 150 filas de nómina.'); }
                         $records=[];$seen=[];
                         foreach ($raw as $entry) {

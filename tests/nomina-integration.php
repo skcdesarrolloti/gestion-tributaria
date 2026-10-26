@@ -18,8 +18,15 @@ $nomCommit=static function(string $html,bool $replace=false) use($client,$base):
 };
 verify(request($client,$base,'nomina&anio=2025',['accion'=>'revisar','filas'=>json_encode([$nomRow])])[0]===419,'Nómina: vista previa exige CSRF');
 $nomSecond=array_replace($nomRow,['inicio'=>'2025-01-16','fin'=>'2025-01-31']);
-[$s,$nomHtml]=$nomPreview([$nomRow,$nomSecond]);
+[$s,$nomHtml]=$nomPreview([array_replace($nomRow,['fin'=>'2025-01-16']),$nomSecond]);
 verify($s===200 && str_contains($nomHtml,'Vista previa · aún no guardada') && !(bool)$db->query('SELECT 1 FROM nominas_laborales LIMIT 1')->fetchColumn(),'Nómina: revisar no guarda movimientos');
+preg_match('/name="preview_token" value="([a-f0-9]+)"/',$nomHtml,$nomPeriodToken);
+$nomAdjust=['_csrf_token'=>token($nomHtml),'accion'=>'ajustar_periodo','preview_token'=>$nomPeriodToken[1],
+    'fila'=>'0','inicio'=>'2025-01-01','fin'=>'2025-01-15'];
+verify(request($client,$base,'nomina&anio=2025',array_replace($nomAdjust,['_csrf_token'=>'incorrecto']))[0]===419,'Nómina: corregir fecha exige CSRF');
+[$s,$nomHtml]=request($client,$base,'nomina&anio=2025',$nomAdjust);
+verify($s===200 && str_contains($nomHtml,'Período del encabezado original: 2025-01-01 a 2025-01-16')
+    && !(bool)$db->query('SELECT 1 FROM nominas_laborales LIMIT 1')->fetchColumn(),'Nómina: ajusta encabezado sin guardar y conserva fecha original');
 verify($nomCommit($nomHtml)[0]===200 && (int)$db->query('SELECT COUNT(*) FROM nominas_laborales')->fetchColumn()===2,'Nómina: importa dos quincenas con confirmación');
 $getNom=static fn()=> $db->query('SELECT * FROM nominas_laborales WHERE perfil_id='.$nomProfile.' ORDER BY inicio')->fetchAll();
 verify((int)$db->query('SELECT SUM(valor_cop) FROM movimientos_ingresos m JOIN conceptos_ingresos k ON k.id=m.concepto_id WHERE m.perfil_id='.$nomProfile.' AND k.casilla=32')->fetchColumn()===2400000,'Nómina: dos quincenas suman una sola vez en casilla 32');
