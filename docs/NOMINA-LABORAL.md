@@ -5,6 +5,11 @@ desde el mismo menú. Seleccionar 2025/2026, archivos XLS/XLSX, NIT del pagador,
 hojas y empleados. Revisar antes de confirmar. Enero se preselecciona para la
 revisión inicial solicitada; no se cambia el período que trae cada hoja.
 Seleccionar un solo empleador por carga para confirmar un NIT de pagador.
+Tras leer el archivo, marcar las personas y elegir «Todos los períodos
+disponibles del año» permite seleccionar sus quincenas en conjunto. Se informa
+el número elegido; los meses sin datos no se completan ni se suponen cero.
+Las filas sin perfil anual preparado quedan deshabilitadas. Versiones distintas
+del mismo período siguen requiriendo elegir una sola; no se marcan ambas.
 
 ## Adaptador y privacidad
 

@@ -5,9 +5,23 @@
   const results=document.querySelector('#nomina-hojas'), status=document.querySelector('#nomina-estado'), button=form.querySelector('[data-preview]');
   const entries=[], money=n=>(n/100).toLocaleString('es-CO',{minimumFractionDigits:2,maximumFractionDigits:2});
   const td=(tr,text)=>{const e=document.createElement('td');e.textContent=text;tr.append(e);return e;};
+  const selection=document.querySelector('#nomina-seleccion'), people=document.querySelector('#nomina-personas');
+  const periodsSelect=form.querySelector('[data-nomina-periodos]'), selectedStatus=document.querySelector('#nomina-seleccion-estado');
+  function selectionCount() {
+    selectedStatus.textContent=`${results.querySelectorAll('input:checked').length} quincenas seleccionadas. Los meses y quincenas que falten quedarán pendientes.`;
+  }
+  function selectPeriods() {
+    const selected=new Set([...people.querySelectorAll('input:checked')].map(c=>Number(c.value)));
+    for (const c of results.querySelectorAll('input')) {
+      const r=entries[Number(c.dataset.index)];
+      c.checked=!c.disabled && !r.conflict && selected.has(r.contribuyente_id) && (periodsSelect.value==='todos' || r.month===1);
+    }
+    selectionCount();
+  }
+  people.addEventListener('change',selectPeriods);periodsSelect.addEventListener('change',selectPeriods);results.addEventListener('change',selectionCount);
   let reading=false;
   files.addEventListener('change',async()=>{
-    results.replaceChildren();entries.length=0;button.disabled=true;reading=true;const seenFiles=new Set(),seenRows=new Set(),periods=new Set();
+    results.replaceChildren();people.replaceChildren();selection.hidden=true;entries.length=0;button.disabled=true;reading=true;const seenFiles=new Set(),seenRows=new Set(),periods=new Set();
     let repeats=0, omitted=0;
     try {
       if (!files.files.length || files.files.length>6) throw Error('Selecciona entre uno y seis archivos XLS o XLSX.');
@@ -31,7 +45,7 @@
             const signature=JSON.stringify([NominaParser.norm(employer),r.contribuyente_id,r.inicio,r.fin,r.valores]);
             if (seenRows.has(signature)) {repeats++;continue;}seenRows.add(signature);
             const period=`${NominaParser.norm(employer)}|${r.contribuyente_id}|${r.inicio}|${r.fin}`, conflict=periods.has(period);periods.add(period);
-            const record={...r,empleador:String(employer).trim(),archivo:file.name,hoja:name,archivo_sha:sha};entries.push(record);
+            const record={...r,conflict,empleador:String(employer).trim(),archivo:file.name,hoja:name,archivo_sha:sha};entries.push(record);
             const tr=document.createElement('tr'), check=document.createElement('input');check.type='checkbox';check.dataset.index=String(entries.length-1);
             check.checked=!conflict && r.month===1 && r.perfil_id>0;check.disabled=r.perfil_id===0;
             td(tr,'').append(check);check.setAttribute('aria-label',`${r.nombre}, ${r.inicio} a ${r.fin}`);
@@ -41,9 +55,14 @@
         }
       }
       if (!entries.length) throw Error('No hay filas reconocidas para contribuyentes autorizados en este año. Verifica identificación y encabezado.');
-      status.textContent=`${entries.length} filas disponibles. ${repeats} archivos/filas repetidos omitidos. ${omitted} hojas sin coincidencia o de otro formato/año. Enero está preseleccionado; revisa antes de continuar.`;
+      for (const t of config.targets.filter(t=>entries.some(r=>r.contribuyente_id===t.id))) {
+        const label=document.createElement('label'), c=document.createElement('input');c.type='checkbox';c.value=String(t.id);c.checked=t.perfil>0;c.disabled=t.perfil===0;
+        label.className='block';label.append(c,document.createTextNode(` ${t.nombre}${t.perfil?'':' · Prepara su año en Ingresos'}`));people.append(label);
+      }
+      selection.hidden=false;selectPeriods();
+      status.textContent=`${entries.length} filas disponibles. ${repeats} archivos/filas repetidos omitidos. ${omitted} hojas sin coincidencia o de otro formato/año. Puedes seleccionar enero o todo lo disponible.`;
       button.disabled=false;
-    } catch(e) {status.textContent=e.message;results.replaceChildren();entries.length=0;}
+    } catch(e) {status.textContent=e.message;results.replaceChildren();selection.hidden=true;entries.length=0;}
     finally {reading=false;}
   });
   form.addEventListener('submit',e=>{

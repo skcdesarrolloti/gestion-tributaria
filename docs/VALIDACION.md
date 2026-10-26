@@ -6,6 +6,11 @@ Verificación local realizada el 13 de octubre de 2026 con PHP 8.2.12, MariaDB 1
 
 ### Nómina laboral · 26/10/2026
 
+Selección por persona y alcance: en Edge, «Todos los períodos disponibles del
+año» marca las quincenas reconocidas, quitar una persona desmarca sus filas y
+volver a enero conserva solo ese mes. Se verificó con XLS y XLSX sintéticos,
+en escritorio y móvil. No amplía permisos ni activa perfiles faltantes.
+
 Migraciones 024/025 probadas automáticamente en base aleatoria aislada. Sintaxis
 y unitarias PHP correctas; adaptador JS con cambio de columnas, retroactivos
 duplicados, básico excluido, identidad exacta y omisión de hojas de otro diseño.

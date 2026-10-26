@@ -29,6 +29,7 @@ Ver [captura y fuentes DIAN](docs/INGRESOS.md).
 
 **Ingresos laborales:** Registro → Subir nómina laboral permite seleccionar
 hojas de XLS/XLSX, vincular por identificación exacta, revisar y confirmar.
+Permite seleccionar personas y todos los períodos disponibles del año a la vez.
 Suma quincenas por mes y alimenta 32/33 sin duplicar el devengado con su detalle;
 muestra retenciones laborales 132 aparte. Solo guarda filas autorizadas elegidas,
 no el libro completo. Correcciones con historial y bloqueo de duplicados.
