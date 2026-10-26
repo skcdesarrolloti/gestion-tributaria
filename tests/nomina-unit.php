@@ -21,3 +21,15 @@ foreach ([['documento'=>'999111223'],['fin'=>'2025-02-15'],['inicio'=>'2025-02-3
     check($caught,'Nómina rechaza identificación, período, importe o conciliación inválidos.');
 }
 check(!isset($month[1]['basico']),'Nómina: básico mensual no se suma como pago de quincena.');
+$visual=array_replace($payRead,['nombre'=>'Persona ficticia','estado'=>'Nueva']);
+$visualRows=[array_replace($visual,['inicio'=>'2025-02-01','fin'=>'2025-02-15']),
+    array_replace($visual,['inicio'=>'2025-01-16','fin'=>'2025-01-31']),$visual];
+$groups=\App\Services\NominaPreview::groups($visualRows);
+check(count($groups)===1 && array_keys($groups[0]['meses'])===['2025-01','2025-02'],
+    'Vista previa: una persona/pagador y meses cronológicos aunque el origen venga desordenado.');
+$january=$groups[0]['meses']['2025-01'];
+check(array_column($january['filas'],'inicio')===['2025-01-01','2025-01-16']
+    && $january['totales']['devengado']===2200000000 && count($visualRows)===3,
+    'Vista previa: dos quincenas, subtotal correcto y filas de importación intactas.');
+$other=array_replace($visual,['empleador_documento'=>'999777666']);
+check(count(\App\Services\NominaPreview::groups([$visual,$other]))===2,'Vista previa: no mezcla pagadores.');

@@ -49,12 +49,19 @@
             const tr=document.createElement('tr'), check=document.createElement('input');check.type='checkbox';check.dataset.index=String(entries.length-1);
             check.checked=!conflict && r.month===1 && r.perfil_id>0;check.disabled=r.perfil_id===0;
             td(tr,'').append(check);check.setAttribute('aria-label',`${r.nombre}, ${r.inicio} a ${r.fin}`);
-            td(tr,r.nombre);td(tr,`${r.inicio} a ${r.fin}`);td(tr,`${file.name} · ${name}`);td(tr,money(r.valores.devengado));td(tr,money(r.valores.neto));
+            td(tr,r.nombre);td(tr,`${r.inicio} a ${r.fin}`);
+            const source=td(tr,''), detail=document.createElement('details'), summary=document.createElement('summary'), filename=document.createElement('p');
+            summary.textContent=`Hoja: ${name}`;filename.textContent=file.name;detail.append(summary,filename);source.append(detail);
+            td(tr,money(r.valores.devengado));td(tr,money(r.valores.neto));
             td(tr,!r.perfil_id?'Prepara el año en Ingresos':conflict?'Otra versión: elige solo una':'Disponible');results.append(tr);
           }
         }
       }
       if (!entries.length) throw Error('No hay filas reconocidas para contribuyentes autorizados en este año. Verifica identificación y encabezado.');
+      const ordered=[...results.children].sort((a,b)=>{
+        const ra=entries[Number(a.querySelector('input').dataset.index)], rb=entries[Number(b.querySelector('input').dataset.index)];
+        return ra.nombre.localeCompare(rb.nombre,'es') || ra.inicio.localeCompare(rb.inicio) || ra.fin.localeCompare(rb.fin);
+      });results.replaceChildren(...ordered);
       for (const t of config.targets.filter(t=>entries.some(r=>r.contribuyente_id===t.id))) {
         const label=document.createElement('label'), c=document.createElement('input');c.type='checkbox';c.value=String(t.id);c.checked=t.perfil>0;c.disabled=t.perfil===0;
         label.className='block';label.append(c,document.createTextNode(` ${t.nombre}${t.perfil?'':' · Prepara su año en Ingresos'}`));people.append(label);

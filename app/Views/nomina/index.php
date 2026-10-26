@@ -18,7 +18,7 @@
 <p id="nomina-estado" role="status" aria-live="polite">Selecciona los archivos. Revisaremos las hojas internas, no solo el nombre del archivo.</p>
 <fieldset id="nomina-seleccion" hidden class="space-y-space-sm"><legend class="font-semibold">Seleccionar personas y períodos</legend>
 <div id="nomina-personas"></div>
-<label>Períodos <select data-nomina-periodos class="bg-surface-container-low rounded-xl p-2"><option value="enero">Solo enero</option><option value="todos">Todos los períodos disponibles del año</option></select></label>
+<label>Períodos <select data-nomina-periodos class="bg-surface-container-low rounded-xl p-2"><option value="todos">Todos los períodos disponibles del año</option><option value="enero">Solo enero</option></select></label>
 <p id="nomina-seleccion-estado" role="status" aria-live="polite"></p>
 </fieldset>
 <div class="renta-sheet-scroll" role="region" aria-label="Hojas y filas reconocidas" tabindex="0"><table class="renta-sheet-table"><thead><tr><th>Elegir</th><th>Contribuyente</th><th>Período</th><th>Origen</th><th>Devengado</th><th>Neto listado</th><th>Estado</th></tr></thead><tbody id="nomina-hojas"></tbody></table></div>

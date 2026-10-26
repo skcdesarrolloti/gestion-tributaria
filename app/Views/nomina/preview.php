@@ -1,12 +1,7 @@
 <section class="bg-surface-container-lowest border border-surface-container rounded-xl p-4 space-y-space-md">
 <h2 class="text-headline-md font-semibold">Vista previa · aún no guardada</h2>
-<p>Comprueba empleado, empleador, quincena y valores. Cada fila es una quincena. La declaración acumula sus importes; no repitas estos valores como captura manual.</p>
-<div class="renta-sheet-scroll" role="region" aria-label="Vista previa de nómina" tabindex="0"><table class="renta-sheet-table"><thead><tr><th>Persona y período</th><th>Pagador y origen</th><th>32 · Bruto</th><th>33 · Aportes</th><th>132 · Retención</th><th>Otros descuentos</th><th>Neto calculado</th><th>Neto listado</th><th>Estado</th></tr></thead><tbody>
-<?php $corrections=false;foreach ($preview['records'] as $r): $a=\App\Services\NominaData::amounts($r['valores']);$corrections=$corrections||$r['estado']==='Corrección'; ?>
-<tr><th scope="row"><?= e($r['nombre']) ?><br><?= e($r['inicio'].' a '.$r['fin']) ?></th><td><?= e($r['empleador'].' · NIT '.$r['empleador_documento']) ?><br><?= e($r['archivo'].' · '.$r['hoja']) ?></td>
-<?php foreach (['devengado','aportes','retencion','otros_descuentos','neto_calculado','neto'] as $k): ?><td>$<?= e(number_format($a[$k]/100,2,',','.')) ?></td><?php endforeach; ?><td><?= e($r['estado']) ?></td></tr>
-<?php endforeach; ?></tbody></table></div>
-<details><summary class="text-secondary underline">? · Ver conceptos de cada quincena</summary><?php foreach ($preview['records'] as $r): ?><details><summary><?= e($r['nombre'].' · '.$r['inicio'].' · '.$r['hoja']) ?></summary><dl><?php foreach ($r['valores'] as $k=>$v): ?><dt><?= e(\App\Services\NominaData::LABELS[$k][0]) ?></dt><dd>$<?= e(number_format($v/100,2,',','.')) ?></dd><?php endforeach; ?></dl></details><?php endforeach; ?></details>
+<p>Revisión por persona → mes → quincena. Salud, pensión y solidaridad componen la casilla 33. Retención corresponde a 132. El nombre del archivo no determina el mes: se usa el período de cada hoja.</p>
+<?php $corrections=in_array('Corrección',array_column($preview['records'],'estado'),true);require __DIR__.'/preview-months.php'; ?>
 <form method="post" action="<?= e(url($config,'nomina').'&anio='.$year) ?>">
 <?php require __DIR__.'/../partials/csrf.php'; ?><input type="hidden" name="accion" value="guardar"><input type="hidden" name="preview_token" value="<?= e($preview['token']) ?>">
 <?php if ($corrections): ?><label class="block"><input type="checkbox" name="reemplazar" value="1" required> Confirmo reemplazar las quincenas marcadas «Corrección», conservando su historial y sin sumar ambas versiones.</label><?php endif; ?>

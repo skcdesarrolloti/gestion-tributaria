@@ -2,14 +2,21 @@
 
 Registro de información → Ingresos → Trabajo → **Subir nómina**, o acceso directo
 desde el mismo menú. Seleccionar 2025/2026, archivos XLS/XLSX, NIT del pagador,
-hojas y empleados. Revisar antes de confirmar. Enero se preselecciona para la
-revisión inicial solicitada; no se cambia el período que trae cada hoja.
+hojas y empleados. Revisar antes de confirmar. Se seleccionan todos los períodos
+disponibles del año; se puede limitar a enero. No se cambia el período de cada hoja.
 Seleccionar un solo empleador por carga para confirmar un NIT de pagador.
 Tras leer el archivo, marcar las personas y elegir «Todos los períodos
 disponibles del año» permite seleccionar sus quincenas en conjunto. Se informa
 el número elegido; los meses sin datos no se completan ni se suponen cero.
 Las filas sin perfil anual preparado quedan deshabilitadas. Versiones distintas
 del mismo período siguen requiriendo elegir una sola; no se marcan ambas.
+
+La vista previa agrupa por persona y pagador, luego por mes en orden cronológico.
+Cada mes muestra sus quincenas y un subtotal de la selección, sin volver a sumar
+ese subtotal al importar. Salud, pensión y solidaridad aparecen separadas; origen,
+conceptos y comparación del neto se despliegan dentro de cada quincena. Nombre y
+pagador se muestran una sola vez por grupo, no se repiten en cada fila. El nombre
+del libro puede decir septiembre aunque sus hojas contengan otros meses.
 
 ## Adaptador y privacidad
 
