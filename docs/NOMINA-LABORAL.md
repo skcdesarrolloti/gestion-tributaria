@@ -94,3 +94,10 @@ Reversión: conservar tablas, historial, catálogos y movimientos. No deshacer
 Pruebas: sintaxis PHP, unitarias PHP, tests/nomina-parser.cjs, integración aislada
 y navegador con fixtures ficticios. La consulta autenticada de producción debe
 comprobarse después del despliegue; no importar las nóminas reales en pruebas.
+
+Validación del 26/10/2026: reproducido el error 1267 con conexión unicode y
+parámetros general; integración aislada comprueba el guardado y el bloqueo de
+duplicación manual bajo esa configuración. Después del despliegue se confirmó
+en Hostinger el guardado del lote autorizado y la lectura persistida de sus
+meses y casillas 32/33/34, con retenciones de nómina aparte. Las pruebas locales
+usaron únicamente fixtures ficticios; la importación autorizada se hizo por la UI.
