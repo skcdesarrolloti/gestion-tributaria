@@ -85,8 +85,10 @@ final class Ingreso
                 [$record['concepto_id'],$current['formulario'],$current['version']])->fetch() ?: null;
             $errors=\App\Services\IngresoData::movementErrors($record,$current,$concept);
             if ($errors) { throw new \DomainException(implode(' ',$errors)); }
+            $monthStart=substr($record['fecha'],0,7).'-01';
+            $nextMonth=(new \DateTimeImmutable($monthStart))->modify('+1 month')->format('Y-m-d');
             if (in_array((int)$concept['casilla'],[32,33],true) && $record['estado']==='real'
-                && $this->query('SELECT id FROM nominas_laborales WHERE perfil_id=? AND DATE_FORMAT(inicio,"%Y-%m")=? LIMIT 1',[$profile,substr($record['fecha'],0,7)])->fetchColumn()) {
+                && $this->query('SELECT id FROM nominas_laborales WHERE perfil_id=? AND inicio>=? AND inicio<? LIMIT 1',[$profile,$monthStart,$nextMonth])->fetchColumn()) {
                 throw new \DomainException('Este mes tiene nómina importada. No dupliques sus importes con captura manual: corrige o completa las quincenas desde Subir nómina.');
             }
             $this->writeMovement($record,$profile,$owner,$id);

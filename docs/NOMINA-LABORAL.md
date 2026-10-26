@@ -82,6 +82,9 @@ cuenta/año y permisos comprobados nuevamente al confirmar.
 Una captura manual laboral del mismo mes exige revisión antes de importar;
 después de importar se bloquea la captura real manual de 32/33 en ese mes para
 evitar sumas duplicadas. Las correcciones se hacen desde el archivo de origen.
+La búsqueda del mes usa fechas desde su primer día hasta el primer día del mes
+siguiente (exclusivo), sin convertirlas a texto. Así no depende de la colación
+de la conexión ni falla con el error 1267 de servidores con configuraciones distintas.
 No borrar automáticamente movimientos existentes. Para casos mixtos manuales
 y nómina habrá que definir una conciliación por pagador antes de habilitarlos.
 

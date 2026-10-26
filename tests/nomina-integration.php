@@ -64,7 +64,19 @@ try {
     verify(!str_contains($nomOwn,'Titular nómina ficticio') && request($nomUser,$base,'nomina&anio=2025',['_csrf_token'=>token($nomOwn),'accion'=>'revisar','filas'=>json_encode([$nomRow])])[0]===422,'Nómina: Usuario no ve ni importa filas de otra persona');
 } finally { curl_close($nomUser); }
 [$s,$nomRevoked]=$nomPreview([$nomFeb]);
+$nomPortableDatabase=new App\Core\Database($dbConfig);
+$nomPortableDatabase->connection()->exec('SET collation_connection=utf8mb4_unicode_ci');
+$nomPortableModel=new App\Models\NominaLaboral($nomPortableDatabase);
+$nomPortableRow=App\Services\NominaData::read($nomFeb,['id'=>$nomTax,'tipo'=>'natural','documento_numero'=>'999111222'],
+    ['id'=>$nomProfile,'anio'=>'2025','formulario'=>'210','regimen'=>'ordinario']);
+$nomPortableRow['revision']=0;
+verify($nomPortableModel->save([$nomPortableRow],100,false)['guardadas']===1,
+    'Nómina: guarda con colación de conexión distinta a la de los parámetros sin error 1267');
+$nomPortableIncome=new App\Models\Ingreso($nomPortableDatabase);
+$nomPortableManual=array_replace($nomManual,['fecha'=>'2025-02-20']);
+$nomPortableDenied=false;try { $nomPortableIncome->saveMovement($nomPortableManual,$nomProfile,100,null); } catch (DomainException) { $nomPortableDenied=true; }
+verify($nomPortableDenied,'Nómina: protección contra captura manual funciona con colaciones distintas');
 $db->exec('UPDATE accesos_tributarios SET activo=0 WHERE funcionario_id=100');
-verify($nomCommit($nomRevoked)[0]===303 && count($getNom())===2,'Nómina: revocar acceso invalida confirmación abierta');
+verify($nomCommit($nomRevoked)[0]===303 && count($getNom())===3,'Nómina: revocar acceso invalida confirmación abierta');
 $db->exec('UPDATE accesos_tributarios SET activo=1 WHERE funcionario_id=100');
 [, $nomLogin]=request($client,$base,'login');request($client,$base,'login',['_csrf_token'=>token($nomLogin),'username'=>'admin','password'=>'Prueba-segura-2026']);

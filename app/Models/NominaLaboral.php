@@ -39,9 +39,11 @@ final class NominaLaboral
                 $overlap=$this->q('SELECT id FROM nominas_laborales WHERE perfil_id=? AND empleador_documento=? AND inicio<=? AND fin>=? AND id<>?',
                     [$r['perfil_id'],$r['empleador_documento'],$r['fin'],$r['inicio'],$old['id']??0])->fetchColumn();
                 if ($overlap) { throw new \DomainException('Este período se superpone con otra nómina del mismo empleador. No se sumará dos veces.'); }
+                $monthStart=substr($r['inicio'],0,7).'-01';
+                $nextMonth=(new \DateTimeImmutable($monthStart))->modify('+1 month')->format('Y-m-d');
                 $manual=$this->q('SELECT m.id FROM movimientos_ingresos m JOIN conceptos_ingresos k ON k.id=m.concepto_id
-                    WHERE m.perfil_id=? AND m.estado="real" AND k.casilla IN (32,33) AND DATE_FORMAT(m.fecha,"%Y-%m")=?
-                    AND NOT EXISTS (SELECT 1 FROM nominas_laborales n WHERE n.ingreso_id=m.id OR n.aporte_id=m.id) LIMIT 1',[$p['id'],substr($r['inicio'],0,7)])->fetchColumn();
+                    WHERE m.perfil_id=? AND m.estado="real" AND k.casilla IN (32,33) AND m.fecha>=? AND m.fecha<?
+                    AND NOT EXISTS (SELECT 1 FROM nominas_laborales n WHERE n.ingreso_id=m.id OR n.aporte_id=m.id) LIMIT 1',[$p['id'],$monthStart,$nextMonth])->fetchColumn();
                 if ($manual) { throw new \DomainException('Ya hay captura manual laboral en ese mes. Revisa esos movimientos antes de sumar la nómina para evitar duplicados.'); }
                 $amounts=NominaData::amounts($r['valores']);
                 $income=$this->movement($p,$r,32,$r['valores']['devengado'],$old['ingreso_id']??null);
