@@ -1,5 +1,11 @@
 # Migraciones automáticas
 
+026 conserva extractos bancarios privados por contribuyente/año/mes/cuenta,
+con huella única y sin sustituir soportes existentes. 027 agrega lectura JSON
+nullable, compatible con documentos pendientes. Respaldar junto con la base
+storage/extractos-bancarios. No borrar soportes ni modificar estas versiones
+para revertir la interfaz. Ver docs/EXTRACTOS-BANCARIOS.md.
+
 022 incorpora 15 conceptos de ingresos faltantes de 210/110 (pensiones,
 dividendos y ganancias ocasionales); 023 actualiza únicamente la fórmula de
 ingresos brutos 58 del 110 para incluir dividendos 49–56. No modifica ni elimina

@@ -27,6 +27,14 @@ ayudas «?» plegadas y ganancias ocasionales separadas. Incluye registro bruto
 de pensiones y dividendos; no completa sus depuraciones ni el impuesto final.
 Ver [captura y fuentes DIAN](docs/INGRESOS.md).
 
+**Extractos bancarios:** Registro → Subir o consultar extractos bancarios conserva
+PDF privados por persona, año, banco, cuenta y mes, con visor interno y control
+de meses faltantes. El formato mensual BBVA reconocido detecta mes, lee todas
+las páginas, concilia saldos y acumula pensión neta, rendimientos y GMF neto de
+reintegros. Permite buscar pagos y consultar el PDF dentro del aplicativo. Otros
+formatos/cifrados quedan pendientes; aún no traslada importes a casillas DIAN.
+Ver [alcance y continuidad](docs/EXTRACTOS-BANCARIOS.md).
+
 **Ingresos laborales:** Registro → Subir nómina laboral permite seleccionar
 hojas de XLS/XLSX, vincular por identificación exacta, revisar y confirmar.
 Permite seleccionar personas y todos los períodos disponibles del año a la vez.

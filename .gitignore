@@ -10,6 +10,7 @@
 !/database/private/.gitkeep
 /dist/
 /storage/rut-importaciones/
+/storage/extractos-bancarios/
 /storage/activacion-inicial.json
 /.idea/
 /.vscode/

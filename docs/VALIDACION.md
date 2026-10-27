@@ -4,6 +4,22 @@ Verificación local realizada el 13 de octubre de 2026 con PHP 8.2.12, MariaDB 1
 
 ## Resultado
 
+### Extractos bancarios · 26/10/2026
+
+Sintaxis, unitarias e integración en base aleatoria: carga HTTP de PDF,
+conservación privada íntegra, CSRF, documentos ajenos, permisos revalidados al
+guardar, copia renombrada, período repetido, años separados y visor inline del
+propio origen. Migraciones 026/027 automáticas sin alterar las anteriores.
+PDF sintético de dos páginas: mes detectado, titular y cuenta contrastados,
+saldos conciliados, GMF/reintegros, rendimientos, pensión y búsqueda por comercio.
+Páginas incompletas/repetidas no concilian; ningún dato real se copia al ensayo.
+Pruebas de lectura local sin escritura con copias legibles del formato BBVA
+confirman enero, febrero, agosto y septiembre; se detecta devolución de GMF y
+se evita tomar otros abonos como pensión. PDF cifrados quedan pendientes.
+Chrome con datos ficticios: calendario, acumulado, búsqueda de un comercio y
+visor PDF de dos páginas dentro de la misma pantalla correctos. La validación
+autenticada en producción se documentará al comprobar la publicación.
+
 ### Nómina laboral · 26/10/2026
 
 Selección por persona y alcance: en Edge, «Todos los períodos disponibles del

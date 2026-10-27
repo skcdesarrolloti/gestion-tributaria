@@ -1,0 +1,20 @@
+CREATE TABLE extractos_bancarios (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    contribuyente_id INT UNSIGNED NOT NULL,
+    anio SMALLINT UNSIGNED NOT NULL,
+    mes TINYINT UNSIGNED NOT NULL,
+    banco VARCHAR(80) NOT NULL,
+    cuenta VARCHAR(4) NOT NULL,
+    titulo VARCHAR(160) NOT NULL,
+    archivo CHAR(68) NOT NULL,
+    sha256 CHAR(64) NOT NULL,
+    bytes INT UNSIGNED NOT NULL,
+    actor_id INT UNSIGNED NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    UNIQUE KEY extracto_huella (contribuyente_id,sha256),
+    UNIQUE KEY extracto_periodo (contribuyente_id,anio,mes,banco,cuenta),
+    CONSTRAINT extracto_contribuyente_fk FOREIGN KEY (contribuyente_id) REFERENCES contribuyentes(id),
+    CONSTRAINT extracto_mes CHECK (mes BETWEEN 1 AND 12),
+    CONSTRAINT extracto_anio CHECK (anio IN (2025,2026))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

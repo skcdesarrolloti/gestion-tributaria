@@ -133,6 +133,7 @@ try {
     require __DIR__ . '/contribuyentes-integration.php';
     require __DIR__ . '/caracterizacion-integration.php';
     require __DIR__ . '/rut-integration.php';
+    require __DIR__ . '/extractos-integration.php';
     require __DIR__ . '/ingresos-integration.php';
     require __DIR__ . '/simulador-integration.php';
     require __DIR__ . '/exogena-integration.php';

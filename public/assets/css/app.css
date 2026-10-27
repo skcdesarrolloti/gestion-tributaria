@@ -68,3 +68,4 @@ button, a { touch-action: manipulation; }
     .exogena-nav-panel { left: 0; right: 0; width: auto; }
 }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; } }
+.bank-document { display: block; width: 100%; height: 75vh; min-height: 360px; margin-top: 1rem; }
