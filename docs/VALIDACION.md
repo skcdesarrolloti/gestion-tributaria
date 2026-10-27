@@ -17,8 +17,11 @@ Pruebas de lectura local sin escritura con copias legibles del formato BBVA
 confirman enero, febrero, agosto y septiembre; se detecta devolución de GMF y
 se evita tomar otros abonos como pensión. PDF cifrados quedan pendientes.
 Chrome con datos ficticios: calendario, acumulado, búsqueda de un comercio y
-visor PDF de dos páginas dentro de la misma pantalla correctos. La validación
-autenticada en producción se documentará al comprobar la publicación.
+visor PDF de dos páginas dentro de la misma pantalla correctos. Publicación
+932efbb comprobada en sesión autenticada de producción: abre Extractos por
+contribuyente/año, muestra selector automático de mes y formulario de carga,
+sin error de migraciones. No se cargaron soportes reales como prueba en el sitio;
+su primer guardado en Hostinger sigue pendiente de la carga del responsable.
 
 ### Nómina laboral · 26/10/2026
 
