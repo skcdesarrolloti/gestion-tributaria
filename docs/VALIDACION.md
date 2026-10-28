@@ -9,6 +9,9 @@ Verificación local realizada el 13 de octubre de 2026 con PHP 8.2.12, MariaDB 1
 Sintaxis y unitarias correctas. Renderizado local de trece rutas: exactamente
 una sección activa, Configuración resaltada en su ruta y salida secundaria.
 Se conservan los permisos del menú, destinos, POST y CSRF de Cerrar sesión.
+Publicación f427b1d verificada con sesión autenticada: Configuración es el único
+elemento marcado como actual y tiene fondo azul; Cerrar sesión presenta borde
+sin fondo azul. Se comprobó visualmente sin modificar parámetros ni cerrar sesión.
 
 ### Consulta compacta de retención en la nómina · 28/10/2026
 
