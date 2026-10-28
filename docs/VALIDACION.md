@@ -17,6 +17,12 @@ y la explicación P1 expandida: tabla de pasos, detalle de aportes, UVT, tramo,
 excedente y operación hasta el redondeo. El detalle se abre bajo el mes a todo
 el ancho, sin desbordamiento horizontal de página en escritorio. La base y el
 servidor temporales se retiraron al terminar; las capturas usan datos ficticios.
+Publicación 7b94043 comprobada en Hostinger con sesión autenticada: Configuración
+abre los valores iniciales de 2026 y su fuente; la simulación conserva nóminas y
+abre la explicación completa de enero a todo el ancho. Se comprobaron los aportes
+de origen, la operación del tramo y el redondeo sin publicar parámetros ni
+confirmar revisiones reales. El guardado y la concurrencia se probaron solo en
+la base aislada; no se cambiaron valores oficiales para ensayar en producción.
 
 ### Simulación provisional de procedimiento 1 · 28/10/2026
 
