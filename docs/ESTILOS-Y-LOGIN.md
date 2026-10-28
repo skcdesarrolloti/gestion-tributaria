@@ -5,6 +5,11 @@ Commit de referencia inicial: e4c134c7a7ec75431c15b078ab3c9707e680c0bf.
 
 ## Estilos
 
+El menú principal resalta en azul únicamente la sección de la ruta actual.
+Los enlaces usan aria-current="page" y los grupos desplegables aria-current="true".
+«Cerrar sesión» mantiene su operación POST/CSRF, pero se presenta como acción
+secundaria con borde, sin el fondo reservado a la sección activa.
+
 Se copia el tema de tailwind.config.cjs a resources/theme/comerciales.cjs y se utiliza desde la configuración local. resources/css/tailwind.css conserva la fuente original. public/assets/css/tailwind.css contiene el resultado listo para hosting. app.css solo agrega distribución y accesibilidad; no redefine la identidad visual.
 
 El login conserva el HTML y las clases del formulario actual de public/login.php de referencia: tarjeta, Poppins, iconos Material Symbols, azul y amarillo del tema. El antiguo archivo login.css de referencia no es usado por ese formulario actual y no se adopta como tema alternativo.

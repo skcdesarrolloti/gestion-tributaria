@@ -1,3 +1,18 @@
+<?php
+$menuRoute=input($_GET,'route','inicio');
+$menuActive=match (true) {
+    $menuRoute==='' || $menuRoute==='inicio'=>'inicio',
+    $menuRoute==='accesos' || str_starts_with($menuRoute,'usuarios/')=>'accesos',
+    str_starts_with($menuRoute,'contribuyentes') || $menuRoute==='planeacion/datos'=>'contribuyentes',
+    str_starts_with($menuRoute,'beneficios') || $menuRoute==='seguridad-social'=>'beneficios',
+    in_array($menuRoute,['registro','registro/fuentes','nomina','retenciones','extractos'],true) || str_starts_with($menuRoute,'ingresos/') || $menuRoute==='ingresos'=>'registro',
+    $menuRoute==='analisis' || $menuRoute==='simulador' || str_starts_with($menuRoute,'renta')=>'analisis',
+    str_starts_with($menuRoute,'exogena')=>'exogena',
+    $menuRoute==='perfil'=>'perfil',$menuRoute==='configuracion'=>'configuracion',default=>'',
+};
+$menuStyle=static fn(string $section)=>$menuActive===$section?'bg-inverse-surface text-on-secondary':'text-secondary';
+$menuLink=static fn(string $section)=>'class="rounded-xl px-3 py-2.5 '.$menuStyle($section).'"'.($menuActive===$section?' aria-current="page"':'');
+?>
 <header id="menu-principal" class="bg-surface-container-lowest border-b border-surface-container">
     <div class="portal-header">
         <a href="<?= e(url($config)) ?>" class="flex items-center gap-space-sm">
@@ -5,15 +20,15 @@
             <span><strong class="block">SuCasa Inmobiliaria</strong><span class="text-secondary text-label-sm"><?= e($config['name']) ?></span></span>
         </a>
         <nav aria-label="Navegación principal" class="flex items-center gap-space-md flex-wrap">
-            <a href="<?= e(url($config)) ?>" class="text-secondary">Inicio</a>
-            <?php if (\App\Services\AccesoRoles::socio($user)): ?><a href="<?= e(url($config,'accesos')) ?>" class="text-secondary">Usuarios y accesos</a><?php endif; ?>
-            <a href="<?= e(url($config, 'contribuyentes')) ?>" class="text-secondary">Contribuyentes</a>
+            <a href="<?= e(url($config)) ?>" <?= $menuLink('inicio') ?>>Inicio</a>
+            <?php if (\App\Services\AccesoRoles::socio($user)): ?><a href="<?= e(url($config,'accesos')) ?>" <?= $menuLink('accesos') ?>>Usuarios y accesos</a><?php endif; ?>
+            <a href="<?= e(url($config, 'contribuyentes')) ?>" <?= $menuLink('contribuyentes') ?>>Contribuyentes</a>
             <?php require __DIR__.'/trabajo-menu.php'; require __DIR__.'/exogena-menu.php'; ?>
-            <a href="<?= e(url($config, 'perfil')) ?>" class="text-secondary">Mi perfil</a>
-            <?php if (\App\Services\AccesoRoles::socio($user)): ?><a href="<?= e(url($config,'configuracion')) ?>" class="text-secondary">Configuración</a><?php endif; ?>
+            <a href="<?= e(url($config, 'perfil')) ?>" <?= $menuLink('perfil') ?>>Mi perfil</a>
+            <?php if (\App\Services\AccesoRoles::socio($user)): ?><a href="<?= e(url($config,'configuracion')) ?>" <?= $menuLink('configuracion') ?>>Configuración</a><?php endif; ?>
             <form method="post" action="<?= e(url($config, 'logout')) ?>">
                 <?php require __DIR__ . '/csrf.php'; ?>
-                <button class="rounded-xl bg-inverse-surface text-on-secondary px-4 py-2" type="submit">Cerrar sesión</button>
+                <button class="rounded-xl border border-surface-container text-secondary px-4 py-2" type="submit">Cerrar sesión</button>
             </form>
         </nav>
     </div>

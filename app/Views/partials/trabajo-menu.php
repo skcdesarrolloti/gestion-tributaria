@@ -4,13 +4,13 @@ $menuYear=(string)($state['anio']??$year??$profile['anio']??'2026');
 $menuContext=$menuTaxpayer?'&'.http_build_query(['contribuyente'=>$menuTaxpayer,'anio'=>$menuYear]):'';
 ?>
 <details class="exogena-nav" data-portal-menu>
-<summary class="flex items-center gap-space-sm rounded-xl px-3 py-2.5 bg-surface-container-low text-secondary"><span class="font-semibold">Beneficios tributarios</span><span aria-hidden="true" class="material-symbols-outlined exogena-nav-chevron">expand_more</span></summary>
+<summary <?= $menuActive==='beneficios'?'aria-current="true"':'' ?> class="flex items-center gap-space-sm rounded-xl px-3 py-2.5 <?= $menuActive==='beneficios'?$menuStyle('beneficios'):'bg-surface-container-low text-secondary' ?>"><span class="font-semibold">Beneficios tributarios</span><span aria-hidden="true" class="material-symbols-outlined exogena-nav-chevron">expand_more</span></summary>
 <div class="exogena-nav-panel bg-surface-container-lowest border border-surface-container rounded-2xl shadow-card p-4 space-y-space-sm">
 <a class="block px-3 py-2.5 text-secondary" href="<?= e(url($config,'beneficios')) ?>">Ver categorías y buscar</a>
 <?php foreach (\App\Services\BeneficioCatalog::groups() as $key=>$label): ?><a class="block px-3 py-2.5 text-secondary" href="<?= e(url($config,'beneficios').'&grupo='.$key) ?>"><?= e($label) ?></a><?php endforeach; ?>
 </div></details>
 <details class="exogena-nav" data-portal-menu>
-<summary class="flex items-center gap-space-sm rounded-xl px-3 py-2.5 bg-surface-container-low text-secondary"><span class="font-semibold">Registro de información</span><span aria-hidden="true" class="material-symbols-outlined exogena-nav-chevron">expand_more</span></summary>
+<summary <?= $menuActive==='registro'?'aria-current="true"':'' ?> class="flex items-center gap-space-sm rounded-xl px-3 py-2.5 <?= $menuActive==='registro'?$menuStyle('registro'):'bg-surface-container-low text-secondary' ?>"><span class="font-semibold">Registro de información</span><span aria-hidden="true" class="material-symbols-outlined exogena-nav-chevron">expand_more</span></summary>
 <div class="exogena-nav-panel bg-surface-container-lowest border border-surface-container rounded-2xl shadow-card p-4 space-y-space-sm">
 <p>Selecciona contribuyente y año 2025 o 2026 dentro del registro.</p>
 <a class="block px-3 py-2.5 text-secondary" href="<?= e(url($config,'registro').'&componente=ingresos'.$menuContext) ?>">Ingresos</a>
@@ -18,4 +18,4 @@ $menuContext=$menuTaxpayer?'&'.http_build_query(['contribuyente'=>$menuTaxpayer,
 <a class="block px-3 py-2.5 text-secondary" href="<?= e(url($config,'nomina').'&anio='.$menuYear) ?>">Subir nómina laboral</a>
 <a class="block px-3 py-2.5 text-secondary" href="<?= e(url($config,'registro').'&componente=costos'.$menuContext) ?>">Costos y gastos</a>
 </div></details>
-<a class="text-secondary" href="<?= e(url($config,'analisis')) ?>">Análisis y acciones</a>
+<a <?= $menuLink('analisis') ?> href="<?= e(url($config,'analisis')) ?>">Análisis y acciones</a>

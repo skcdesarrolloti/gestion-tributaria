@@ -4,6 +4,12 @@ Verificación local realizada el 13 de octubre de 2026 con PHP 8.2.12, MariaDB 1
 
 ## Resultado
 
+### Sección activa del menú · 28/10/2026
+
+Sintaxis y unitarias correctas. Renderizado local de trece rutas: exactamente
+una sección activa, Configuración resaltada en su ruta y salida secundaria.
+Se conservan los permisos del menú, destinos, POST y CSRF de Cerrar sesión.
+
 ### Consulta compacta de retención en la nómina · 28/10/2026
 
 Unitarias e integración aislada correctas: diferencia y explicación plegada

@@ -1,6 +1,6 @@
-<?php $exogenaActive=str_starts_with(input($_GET,'route'),'exogena'); ?>
+<?php $exogenaActive=$menuActive==='exogena'; ?>
 <details class="exogena-nav" data-exogena-menu>
-    <summary class="flex items-center gap-space-sm rounded-xl px-3 py-2.5 <?= $exogenaActive?'bg-inverse-surface text-on-secondary':'bg-surface-container-low text-secondary' ?>">
+    <summary <?= $exogenaActive?'aria-current="true"':'' ?> class="flex items-center gap-space-sm rounded-xl px-3 py-2.5 <?= $exogenaActive?'bg-inverse-surface text-on-secondary':'bg-surface-container-low text-secondary' ?>">
         <span aria-hidden="true" class="material-symbols-outlined">folder_open</span>
         <span class="font-semibold">Exógena</span>
         <span aria-hidden="true" class="material-symbols-outlined exogena-nav-chevron">expand_more</span>
