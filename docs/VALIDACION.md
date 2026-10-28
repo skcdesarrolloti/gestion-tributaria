@@ -4,6 +4,18 @@ Verificación local realizada el 13 de octubre de 2026 con PHP 8.2.12, MariaDB 1
 
 ## Resultado
 
+### Extractos sin clave y reintegros de GMF · 28/10/2026
+
+Sintaxis, unitarias, apertura QPDF WASM e integración en base aislada correctas.
+Se prueba PDF sin contraseña, AES-256, contraseña incorrecta, anulación explícita
+«ANU. COM DECRETO», abonos desconocidos rechazados en conciliación, guardado sin
+revisión visual y conservación de ese estado. Si el detalle falla, se conserva
+el período reconocido sin publicar importes y se siguen rechazando cuenta o mes
+contradictorios. CSRF, permisos, duplicados y limpieza de copias siguen pasando.
+El archivo señalado por el responsable se inspeccionó localmente, sin subirlo a
+servicios externos ni copiarlo a Git o a la base de pruebas: abre sin contraseña
+y concilia sus dos páginas con el reconocimiento del reintegro corregido.
+
 ### Parámetros anuales y desglose P1 · 28/10/2026
 
 Unitarias: UVT y topes por año, tabla parametrizada realmente usada en el motor,

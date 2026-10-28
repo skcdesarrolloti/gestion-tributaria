@@ -9,15 +9,16 @@
 <label>Últimos cuatro dígitos de la cuenta <input name="cuenta" value="<?= e($form['cuenta']) ?>" required pattern="[0-9]{4}" maxlength="4" inputmode="numeric" autocomplete="off" class="w-full rounded-xl bg-surface-container-low p-3"></label>
 </div>
 <label class="block">PDF completo del mes · máximo 10 MB <input type="file" name="extracto_pdf" accept="application/pdf,.pdf" required class="block w-full"></label>
-<label class="block"><input type="checkbox" data-pdf-unlock checked> Abrir PDF protegido antes de detectar el mes</label>
+<label class="block"><input type="checkbox" data-pdf-unlock checked> Preparar lectura automática del PDF, con o sin contraseña</label>
 <label class="block"><input type="checkbox" data-pdf-custom> Usar otra contraseña del PDF (distinta al documento de esta ficha)</label>
 <label class="block">Contraseña del PDF (opcional si corresponde a tu documento)
 <input type="password" data-pdf-password autocomplete="new-password" disabled maxlength="128" data-lpignore="true" class="w-full rounded-xl bg-surface-container-low p-3">
 </label>
-<p class="text-secondary text-body-md">Si dejas la clave vacía, se intentará con el número de documento de esta ficha, sin puntos ni dígito de verificación. La clave se usa en tu navegador y no se envía ni guarda. Se conserva el original y una copia privada de lectura para consultar el PDF sin volver a abrirlo con clave.</p>
+<p class="text-secondary text-body-md">No se necesita firma digital. Si el PDF abre sin contraseña, no tienes que escribir ninguna. Si está protegido, se intentará con el documento de esta ficha, sin puntos ni dígito de verificación; marca «Usar otra contraseña» solo si el banco usa una diferente. La clave se usa en tu navegador y no se envía ni guarda. Se conservan el original y una copia privada de lectura.</p>
 <input type="file" name="extracto_lectura" hidden accept="application/pdf">
 <p role="status" aria-live="polite" data-pdf-status></p>
-<label class="block"><input type="checkbox" name="titular_confirmado" value="1" required> Revisé que el titular del PDF es <?= e($taxpayer['nombre']) ?> y que corresponde al año y cuenta seleccionados; el mes será el impreso en el PDF o el elegido manualmente.</label>
+<label class="block"><input type="checkbox" name="titular_confirmado" value="1" <?= input($_POST,'titular_confirmado')==='1'?'checked':'' ?>> Ya revisé el titular, el año y la cuenta del PDF (opcional).</label>
+<p class="text-secondary text-body-md">Puedes guardar sin marcarla: quedará pendiente tu revisión visual. El sistema seguirá comprobando los datos que pueda leer contra <?= e($taxpayer['nombre']) ?>, el año y la cuenta elegidos. Esta casilla no abre ni firma el documento.</p>
 <details><summary class="text-secondary underline">? · Qué se hará con este soporte</summary>
 <p>El PDF queda privado y se consulta desde Ingresos y desde Costos y gastos. No necesitas subir una copia por cada uso. El mismo archivo, aunque cambies su nombre, no se vuelve a guardar para este contribuyente.</p>
 <p>El formato mensual BBVA Colombia reconocido se lee completo y se comprueban los saldos de cada movimiento contra el resumen. Los escaneos y otros diseños quedan pendientes, sin inventar importes. El banco debe indicarse como BBVA para este formato.</p>

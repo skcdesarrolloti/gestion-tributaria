@@ -11,7 +11,7 @@ final class ExtractoBbva
         return (int)str_replace([',','.'],'',$value);
     }
 
-    public static function parse(string $text, array $pages): array
+    public static function metadata(string $text, array $pages): array
     {
         if (!str_contains(mb_strtoupper($text),'BBVA') || !preg_match('/PERIODO DESDE:\s*(\d{2}-\d{2}-\d{4})\s+HASTA:\s*(\d{2}-\d{2}-\d{4})/u',$text,$dates)) {
             throw new \InvalidArgumentException('Formato pendiente.');
@@ -27,6 +27,13 @@ final class ExtractoBbva
             if (preg_match('/^[0-9]{18}$/D',$c['text'])) { $account=substr($c['text'],-4); }
         }
         if (!$holder || !$account) { throw new \InvalidArgumentException('No se reconoció la identidad de la cuenta.'); }
+        return ['titular'=>$holder,'cuenta'=>$account,'inicio'=>$start->format('Y-m-d'),'fin'=>$end->format('Y-m-d'),'paginas'=>count($pages)];
+    }
+
+    public static function parse(string $text, array $pages): array
+    {
+        $metadata=self::metadata($text,$pages);$first=$pages[0];
+        $start=new \DateTimeImmutable($metadata['inicio']);$end=new \DateTimeImmutable($metadata['fin']);
         $summary=self::summary($first);$rows=[];
         foreach ($pages as $p=>$cells) {
             foreach ($cells as $c) {
@@ -62,15 +69,14 @@ final class ExtractoBbva
             || $totals['gmf']-$totals['gmf_reintegro']!==$summary['gmf'] || $totals['rendimientos']!==$summary['intereses']) {
             throw new \InvalidArgumentException('Totales no concilian con el resumen.');
         }
-        return ['estado'=>'leido','version'=>'bbva-mensual-v1','titular'=>$holder,'cuenta'=>$account,'inicio'=>$start->format('Y-m-d'),
-            'fin'=>$end->format('Y-m-d'),'paginas'=>count($pages),'resumen'=>$summary,'totales'=>$totals,'movimientos'=>$rows];
+        return $metadata+['estado'=>'leido','version'=>'bbva-mensual-v2','resumen'=>$summary,'totales'=>$totals,'movimientos'=>$rows];
     }
 
     private static function category(array $row): string
     {
         $t=mb_strtoupper($row['descripcion']);
         if ($row['abono']>0) {
-            if ($t==='CORRECCION IMPTO DECRETO') { return 'gmf_reintegro'; }
+            if (in_array($t,['CORRECCION IMPTO DECRETO','ANU. COM DECRETO'],true)) { return 'gmf_reintegro'; }
             if (str_starts_with($t,'ABONO MESADA PENSIONAL')) { return 'pension'; }
             if (str_starts_with($t,'ABONO POR INTERESES DE CUENTA')) { return 'rendimientos'; }
             return 'otros_abonos';

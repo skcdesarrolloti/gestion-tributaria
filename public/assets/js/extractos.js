@@ -18,7 +18,7 @@
         const original=input.files[0];
         if (!original || original.size>10485760) { status.textContent='Selecciona un PDF de hasta 10 MB.';return; }
         if (custom.checked && !password.value) { status.textContent='Escribe la otra contraseña del PDF o desmarca esa opción para usar el documento de la ficha.';return; }
-        busy=true;submit.disabled=true;status.textContent='Abriendo el PDF protegido antes de leer el mes…';
+        busy=true;submit.disabled=true;status.textContent='Preparando el PDF antes de leer el mes…';
         let worker;
         try {
             const bytes=await original.arrayBuffer();
@@ -37,7 +37,7 @@
             transfer.items.add(new File([result.bytes],'lectura.pdf',{type:'application/pdf'}));
             decoded.files=transfer.files;ready=true;
             status.textContent='PDF abierto. Guardando y detectando el mes…';
-        } catch (_) { status.textContent='No fue posible preparar la lectura. Vuelve a intentar; si el PDF no tiene clave, desmarca la apertura protegida.'; }
+        } catch (_) { status.textContent='No fue posible preparar la lectura. Vuelve a intentar; si el PDF abre sin clave, desmarca «Preparar lectura automática» para enviar el original.'; }
         finally { if (worker) worker.terminate();busy=false;submit.disabled=false; }
         if (ready) form.requestSubmit(submit);
     });

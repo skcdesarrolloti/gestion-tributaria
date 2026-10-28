@@ -8,6 +8,10 @@ check(count($bankReading['movimientos'])===6 && $bankReading['paginas']===2 && $
     && $bankReading['totales']['rendimientos']===1000 && $bankReading['totales']['gmf']-$bankReading['totales']['gmf_reintegro']===100,
     'Extractos lee todas las páginas y concilia pensión, rendimientos y GMF neto de reintegros.');
 check($bankReading['totales']['otros_abonos']===10000 && $bankReading['totales']['otros_debitos']===50000,'Extractos no supone que una transferencia sea pensión ni un pago sea deducible.');
+$annulledBank=App\Services\ExtractoBbva::parse($bankText,bankFixtureCells('ANU. COM DECRETO'));
+check($annulledBank['totales']===$bankReading['totales'],'Extractos concilia la anulación BBVA del GMF sin tratarla como ingreso.');
+$unknownRefund=false;try { App\Services\ExtractoBbva::parse($bankText,bankFixtureCells('ABONO DESCONOCIDO')); } catch (InvalidArgumentException) { $unknownRefund=true; }
+check($unknownRefund,'Extractos no supone que todo abono desconocido sea un reintegro del GMF.');
 foreach ([[$bankCells[0]],[$bankCells[0],$bankCells[0]]] as $incompleteBank) {
     $rejected=false;try { App\Services\ExtractoBbva::parse($bankText,$incompleteBank); } catch (InvalidArgumentException) { $rejected=true; }
     check($rejected,'Extractos no acepta páginas omitidas o repetidas cuyos saldos no concilian.');
@@ -23,14 +27,23 @@ check($rejected,'Extractos rechaza PDF leído de otro titular.');
 $bankInput=['mes'=>'6','banco'=>' Banco   ficticio ','cuenta'=>'0012','titular_confirmado'=>'1'];
 $bankData=ExtractoData::read($bankInput,'2026');
 check($bankData['banco']==='BANCO FICTICIO' && $bankData['cuenta']==='0012' && $bankData['mes']===6,'Extractos conserva ceros de cuenta y normaliza banco.');
-foreach ([['mes'=>'13'],['mes'=>'0'],['cuenta'=>'123456'],['banco'=>''],['titular_confirmado'=>'0']] as $badBank) {
+check(ExtractoData::read(array_replace($bankInput,['titular_confirmado'=>'0']),'2026')['titular_confirmado']===false,'Extractos permite guardar sin declarar revisión visual.');
+foreach ([['mes'=>'13'],['mes'=>'0'],['cuenta'=>'123456'],['banco'=>'']] as $badBank) {
     $rejected=false;try { ExtractoData::read(array_replace($bankInput,$badBank),'2026'); } catch (InvalidArgumentException) { $rejected=true; }
-    check($rejected,'Extractos rechaza período/cuenta/titular sin confirmar.');
+    check($rejected,'Extractos rechaza período o cuenta inválidos.');
 }
 $bankCalendar=ExtractoData::calendar([['mes'=>6,'banco'=>'BANCO FICTICIO','cuenta'=>'0012'],['mes'=>7,'banco'=>'OTRO','cuenta'=>'0012']],'BANCO FICTICIO','0012');
 check(count($bankCalendar)===12 && count($bankCalendar[6])===1 && !$bankCalendar[7],'Extractos muestra doce meses y separa bancos aunque coincidan últimos dígitos.');
 $bankFile=tempnam(sys_get_temp_dir(),'bank-unit-');
 try {
+    file_put_contents($bankFile,str_replace('(1.00)','(2.00)',bankFixturePdf()));
+    $pendingBank=App\Services\ExtractoPdfReader::read($bankFile);
+    check($pendingBank['estado']==='pendiente' && $pendingBank['inicio']==='2025-06-01' && !isset($pendingBank['totales'],$pendingBank['movimientos']),
+        'Extractos conserva mes e identidad reconocidos sin publicar importes si no concilia.');
+    $rejected=false;try { ExtractoData::match($pendingBank,array_replace($bankMatch,['mes'=>7]),['nombre'=>'Titular banco ficticio']); } catch (InvalidArgumentException) { $rejected=true; }
+    check($rejected,'Extractos pendiente también impide guardar en un mes distinto del impreso.');
+    file_put_contents($bankFile,bankFixturePdf('ANU. COM DECRETO'));
+    check(App\Services\ExtractoPdfReader::read($bankFile)['estado']==='leido','Extractos sin contraseña reconoce período y concilia reintegros del banco.');
     file_put_contents($bankFile,'<script>PDF falso</script>');$rejected=false;
     try { ExtractoUpload::validate($bankFile); } catch (InvalidArgumentException) { $rejected=true; }
     check($rejected,'Extractos rechaza contenido no PDF aunque su nombre termine en PDF.');

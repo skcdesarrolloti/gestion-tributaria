@@ -24,7 +24,11 @@ final class ExtractoPdfReader
                 }
                 $sheets[]=$cells;
             }
-            return ExtractoBbva::parse($text,$sheets);
+            $metadata=ExtractoBbva::metadata($text,$sheets);
+            try { return ExtractoBbva::parse($text,$sheets); }
+            catch (\InvalidArgumentException) {
+                return $metadata+['estado'=>'pendiente','motivo'=>'Se reconocieron el titular, la cuenta y el mes, pero no se pudo conciliar todo el detalle. El PDF se conserva para revisión; no se han extraído importes.'];
+            }
         } catch (\Throwable) {
             return ['estado'=>'pendiente','motivo'=>'PDF cifrado, escaneado o formato no reconocido. Se conserva íntegro para consulta; no se han extraído importes.'];
         }

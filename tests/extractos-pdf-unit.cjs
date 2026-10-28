@@ -13,6 +13,9 @@ async function engine() {
     const fixture=path.join(__dirname,'extractos-fixtures.php').replaceAll('\\','/');
     const bytes=cp.execFileSync('php',['-r','require '+JSON.stringify(fixture)+';echo bankFixturePdf();']);
     const e=await engine();e.FS.writeFile('/base.pdf',bytes);
+    const unprotected=await engine();unprotected.FS.writeFile('/in.pdf',bytes);
+    assert.equal(unprotected.callMain(['--password=Documento-ficticio','--decrypt','/in.pdf','/out.pdf']),0);
+    assert.ok(unprotected.FS.readFile('/out.pdf').length>0);
     assert.equal(e.callMain(['--encrypt','Clave-solo-prueba','Propietario-prueba','256','--','/base.pdf','/seguro.pdf']),0);
     const encrypted=e.FS.readFile('/seguro.pdf');
     const wrong=await engine();wrong.FS.writeFile('/in.pdf',encrypted);
@@ -29,5 +32,5 @@ async function engine() {
         assert.equal(result.estado,'leido');assert.equal(result.inicio,'2025-06-01');assert.equal(result.paginas,2);
         assert.equal(result.totales.pension,100000);
     } finally {fs.rmSync(tmp,{recursive:true,force:true});}
-    console.log('Apertura WASM: clave incorrecta rechazada; PDF AES-256 abierto y dos páginas conciliadas sin guardar claves.');
+    console.log('Apertura WASM: PDF sin clave preparado; clave incorrecta rechazada; PDF AES-256 abierto y dos páginas conciliadas sin guardar claves.');
 })().catch(()=>{console.error('Falló la prueba de apertura PDF.');process.exitCode=1;});

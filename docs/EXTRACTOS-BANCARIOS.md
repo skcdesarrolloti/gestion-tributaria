@@ -27,10 +27,16 @@ los documentos ni sus lecturas existentes.
 Seleccionar año, banco y últimos cuatro dígitos de la cuenta. El mes se detecta
 desde el PDF reconocido; también puede elegirse manualmente para un soporte
 pendiente de lectura. Un año o mes elegido que contradiga el PDF se rechaza.
-Confirmar titular y período al cargar el PDF completo (máximo 10 MB, sujeto al
+La revisión visual del titular, año y cuenta es opcional al cargar: sin marcar
+la casilla, el PDF se guarda con esa revisión pendiente. Se registra el estado
+en la lectura JSON, sin alterar soportes anteriores ni afirmar revisiones antiguas.
+Las comprobaciones automáticas de identidad, período y cuenta siguen siendo
+obligatorias cuando esos datos se reconocen, incluso si el detalle no concilia.
+Cargar el PDF completo (máximo 10 MB, sujeto al
 límite PHP del servidor). Las páginas del archivo original se conservan intactas.
 Se almacenan el PDF, sus referencias y la lectura conciliada, sin conservar claves.
-La opción «Abrir PDF protegido» utiliza QPDF WebAssembly 0.0.2 en un Worker del
+No se exige firma digital. «Preparar lectura automática» admite PDF con o sin
+contraseña y utiliza QPDF WebAssembly 0.0.2 en un Worker del
 propio sitio. Usa el documento de la ficha (sin DV) por defecto. «Usar otra
 contraseña del PDF» habilita expresamente el campo alternativo, desactivado al
 abrir la página para evitar que Chrome rellene una clave del aplicativo. La
@@ -67,7 +73,12 @@ El detalle conserva fecha operación/valor, concepto original, cargo, abono,
 saldo, página y categoría propuesta. Se busca por comercio/concepto sin salir.
 Las devoluciones de compras y transferencias no se clasifican como pensiones.
 La corrección explícita de GMF del formato reconocido se concilia como reintegro,
-no como rendimiento. PDF no desbloqueado, escaneado, incompleto o desconocido queda
+no como rendimiento. Se admiten «CORRECCION IMPTO DECRETO» y «ANU. COM DECRETO»;
+se mantienen la conciliación exacta de cada saldo y los totales netos del resumen.
+Si se reconocen identidad y período mensual, pero falla el detalle, se conserva
+ese mes automáticamente y el PDF queda pendiente, sin importes parciales. El
+mensaje diferencia esa situación de no poder leer el período. No se infiere el
+mes del nombre del archivo. PDF no desbloqueado, escaneado, incompleto o desconocido queda
 pendiente, sin importes parciales. No se afecta todavía ninguna casilla DIAN ni
 el cálculo de deducciones: confirmar bruto/retenciones y soporte tributario antes
 de hacer el traslado sin duplicar movimientos.

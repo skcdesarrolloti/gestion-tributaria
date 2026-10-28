@@ -8,10 +8,11 @@ $bankPath=$temp.'/extracto-sintetico.pdf';file_put_contents($bankPath,rutFixture
 $bankPost=['_csrf_token'=>token($bankHtml),'mes'=>'6','banco'=>'Banco prueba','cuenta'=>'0012','titular_confirmado'=>'1',
     'extracto_pdf'=>new CURLFile($bankPath,'application/pdf','extracto-prueba.pdf')];
 verify(rutRequest($client,$base,$bankRoute,array_replace($bankPost,['_csrf_token'=>'']))[0]===419,'Extractos: exige CSRF antes de almacenar PDF');
-verify(rutRequest($client,$base,$bankRoute,array_replace($bankPost,['titular_confirmado'=>'0']))[0]===422,'Extractos: exige comprobar titular y período');
-[$s,,$bankHeaders]=rutRequest($client,$base,$bankRoute,$bankPost);
+verify(rutRequest($client,$base,$bankRoute,array_replace($bankPost,['mes'=>'auto']))[0]===422,'Extractos: no inventa un mes si el PDF no contiene un período reconocido');
+[$s,,$bankHeaders]=rutRequest($client,$base,$bankRoute,array_replace($bankPost,['titular_confirmado'=>'0']));
 verify($s===303 && str_contains($bankHeaders,'guardado=1'),'Extractos: guarda PDF mediante carga HTTP real');
 $bankDoc=$db->query('SELECT * FROM extractos_bancarios LIMIT 1')->fetch();$bankDocId=(int)$bankDoc['id'];
+verify(json_decode($bankDoc['lectura'],true)['titular_confirmado']===false,'Extractos: guarda sin casilla y conserva revisión visual pendiente');
 verify(is_file($temp.'/extractos-bancarios/'.$bankDoc['archivo']) && $bankDoc['sha256']===hash_file('sha256',$bankPath),'Extractos: conserva PDF privado íntegro');
 [$s,$bankHtml]=request($client,$base,$bankRoute.'&documento='.$bankDocId);
 verify($s===200 && str_contains($bankHtml,'1/12 meses con PDF') && str_contains($bankHtml,'Lectura y clasificación pendientes')
@@ -61,3 +62,12 @@ verify(!str_contains($readBankHtml,'name="pdf_password"') && str_contains($readB
 $beforeCopies=count(glob($temp.'/extractos-bancarios/*.pdf'));
 verify(rutRequest($client,$base,$readBankRoute,$readBankPost)[0]===409 && count(glob($temp.'/extractos-bancarios/*.pdf'))===$beforeCopies,'Extractos: repetición limpia ambas copias nuevas sin duplicar documento');
 require __DIR__.'/pensiones-navigation-integration.php';
+$db->exec("INSERT INTO contribuyentes (funcionario_id,tipo,documento_tipo,documento_numero,nombre,fuentes) VALUES (100,'natural','CC','987001235','Titular banco ficticio','[]')");
+$pendingBankTax=(int)$db->lastInsertId();$pendingBankRoute='extractos&contribuyente='.$pendingBankTax.'&anio=2025';
+file_put_contents($bankPath,str_replace('(1.00)','(2.00)',bankFixturePdf()));
+$pendingBankPost=array_replace($readBankPost,['mes'=>'auto','titular_confirmado'=>'0']);
+verify(rutRequest($client,$base,$pendingBankRoute,array_replace($pendingBankPost,['cuenta'=>'9999']))[0]===422,'Extractos: PDF pendiente conserva comprobación de cuenta antes de guardar');
+verify(rutRequest($client,$base,$pendingBankRoute,$pendingBankPost)[0]===303,'Extractos: detecta mes y guarda soporte sin conciliación ni revisión visual');
+$pendingBankMeta=json_decode($db->query('SELECT lectura FROM extractos_bancarios WHERE contribuyente_id='.$pendingBankTax)->fetchColumn(),true);
+verify($pendingBankMeta['estado']==='pendiente' && $pendingBankMeta['inicio']==='2025-06-01' && !isset($pendingBankMeta['totales']),
+    'Extractos: conciliación fallida no publica importes ni borra el período leído');

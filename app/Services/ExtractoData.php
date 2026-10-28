@@ -18,10 +18,8 @@ final class ExtractoData
         if (!$bank || mb_strlen($bank)>80 || preg_match('/[\x00-\x1f<>]/u',$bank) || !preg_match('/^[0-9]{4}$/D',$account)) {
             throw new \InvalidArgumentException('Indica el banco y únicamente los últimos cuatro dígitos de la cuenta.');
         }
-        if (\input($source,'titular_confirmado')!=='1') {
-            throw new \InvalidArgumentException('Confirma que el titular y el período del PDF corresponden al contribuyente y mes elegidos.');
-        }
-        return ['anio'=>(int)$year,'mes'=>$month,'banco'=>mb_strtoupper($bank),'cuenta'=>$account];
+        return ['anio'=>(int)$year,'mes'=>$month,'banco'=>mb_strtoupper($bank),'cuenta'=>$account,
+            'titular_confirmado'=>\input($source,'titular_confirmado')==='1'];
     }
 
     public static function calendar(array $documents, string $bank, string $account): array
@@ -43,7 +41,7 @@ final class ExtractoData
 
     public static function match(array $reading, array $data, array $taxpayer): void
     {
-        if (($reading['estado']??'')!=='leido') { return; }
+        if (!isset($reading['inicio'],$reading['cuenta'],$reading['titular'])) { return; }
         if (substr($reading['inicio'],0,4)!==(string)$data['anio'] || (int)substr($reading['inicio'],5,2)!==$data['mes']
             || $reading['cuenta']!==$data['cuenta'] || $data['banco']!=='BBVA') {
             throw new \InvalidArgumentException('El PDF leído no coincide con el año, mes, banco o cuenta elegidos. Revisa el período impreso en el documento.');

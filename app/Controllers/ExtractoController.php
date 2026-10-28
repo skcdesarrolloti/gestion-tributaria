@@ -34,10 +34,11 @@ final class ExtractoController
                     if ($automatic) { $posted['mes']='1'; }
                     $data=ExtractoData::read($posted,$year);$file=$this->files->receive($_FILES['extracto_pdf']??[],$_FILES['extracto_lectura']??[]);
                     if ($automatic) {
-                        if (($file['lectura']['estado']??'')!=='leido') { throw new \InvalidArgumentException('No se pudo detectar el mes. Revisa la apertura y el formato del PDF; puedes seleccionar el mes manualmente para conservar el soporte pendiente de lectura.'); }
+                        if (!isset($file['lectura']['inicio'])) { throw new \InvalidArgumentException('No se pudo leer el período impreso en el PDF. No se exige firma digital. Si el documento abre y el período se ve, selecciona el mes manualmente para guardarlo pendiente de lectura.'); }
                         $data['mes']=(int)substr($file['lectura']['inicio'],5,2);
                     }
                     ExtractoData::match($file['lectura'],$data,$taxpayer);
+                    $file['lectura']['titular_confirmado']=$data['titular_confirmado'];
                     $documentId=$this->documents->saveFor($id,$owner,$data,$file);
                     $pensionOrigin=\input($_GET,'origen')==='pensiones';
                     $destination=\url($this->config,$pensionOrigin?'registro':'extractos').'&contribuyente='.$id.'&anio='.$year;
