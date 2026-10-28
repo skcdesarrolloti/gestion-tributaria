@@ -84,3 +84,34 @@ check($retZeroAnnual['revisados']===1 && $retZeroAnnual['pendientes']===0 && $re
     'Esperado confirmado cero se distingue de dato pendiente.');
 check(count(RetencionTarifa::BRACKETS)===7 && RetencionTarifa::BRACKETS[6]===[2300,null,39,770],
     'Tabla visible y motor comparten los siete rangos del artículo 383.');
+$trialSource=$retAnnualGroups;
+$trial=App\Services\RetencionSimulacion::build($retAnnualGroups,2026,'999888777');
+check($trial['calculados']===1 && $trial['excluidos']===1 && $trial['simulada']===36564900
+    && $trial['real']===30000000 && $trial['meses'][1]['simulada']===null,
+    'Simulación P1: calcula mes completo, excluye parcial y compara los mismos meses del pagador.');
+check($retAnnualGroups===$trialSource && !isset($trial['estado']) && !isset($trial['meses'][0]['estado']),
+    'Simulación no modifica origen ni genera validación OK.');
+$trialMissing=App\Services\RetencionSimulacion::build($retMissingGroups,2026,'999888777');
+check($trialMissing['calculados']===1 && $trialMissing['meses'][2]['simulada']===null
+    && str_contains($trialMissing['meses'][2]['motivo'],'mes anterior'),'Hueco anterior detiene simulación sin inventar cupo consumido.');
+$trialHighGroups=[];
+for ($trialMonth=1;$trialMonth<=3;$trialMonth++) {
+    $trialHigh=array_replace($retGroups['1-999888777'],['mes'=>$trialMonth]);
+    $trialHigh['valores']=array_map(static fn($v)=>0,$trialHigh['valores']);
+    $trialHigh['valores']['devengado']=$trialHigh['valores']['salario']=10000000000;
+    $trialHighGroups[$trialMonth.'-999888777']=$trialHigh;
+}
+$trialHighResult=App\Services\RetencionSimulacion::build($trialHighGroups,2026,'999888777');
+check(array_sum(array_column($trialHighResult['meses'],'beneficios'))===790*$retUvt*100
+    && $trialHighResult['meses'][0]['beneficios']===2500000000 && $trialHighResult['meses'][2]['beneficios']===0,
+    'Simulación arrastra consumo anual 25% y no reinicia ni divide el tope entre doce.');
+check($trialHighResult['simulada']===array_sum(array_column($trialHighResult['meses'],'simulada'))
+    && $trialHighResult['meses'][1]['acumulado']===$trialHighResult['meses'][0]['simulada']+$trialHighResult['meses'][1]['simulada'],
+    'Acumulados provisionales suman las retenciones mensuales redondeadas.');
+$trialRetroGroups=$trialHighGroups;$trialRetroGroups['2-999888777']['valores']['retroactivos']=100;
+$trialRetro=App\Services\RetencionSimulacion::build($trialRetroGroups,2026,'999888777');
+check($trialRetro['calculados']===1 && $trialRetro['excluidos']===2,'Retroactivos impiden simular como pagos ordinarios.');
+$trialZero=App\Services\RetencionSimulacion::build(['1-999888777'=>$retZeroGroup],2026,'999888777');
+check($trialZero['simulada']===0 && $trialZero['calculados']===1,'Simulación cero calculado se distingue de no calculado.');
+check(App\Services\RetencionSimulacion::build($retGroups,2025,'999888777')['simulada']!==$trial['simulada'],
+    'Simulación usa la UVT del año solicitado.');

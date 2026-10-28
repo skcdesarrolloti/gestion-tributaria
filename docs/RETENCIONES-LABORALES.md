@@ -11,6 +11,19 @@ de período sin regresar al listado. Los enlaces anteriores conservan su ruta.
 
 ## Captura guiada para quien no es contador
 
+**Ver simulación provisional P1** muestra una hipótesis automática, sin guardar
+supuestos ni alterar la revisión del contador. Usa pagos/aportes del empleador,
+procedimiento 1, pagos ordinarios, redondeo al peso y sin dependientes, vivienda,
+prepagada, AFC ni aportes voluntarios. Supone ausencia de otros pagos que consuman
+cupos. Reutiliza RetencionEjemplo/RetencionLaboral y arrastra el beneficio aplicado
+entre meses consecutivos desde enero. No reinicia ni divide topes anuales.
+Retroactivos, meses incompletos o huecos excluyen ese mes y los posteriores.
+El acumulado compara descuentos y simulación de exactamente los mismos meses;
+los excluidos conservan visible su descuento real, fuera de ese subtotal.
+No genera OK, casillas DIAN, pagos ni cambios de procedimiento. La tabla se
+recalcula al consultar, a partir de los datos autorizados actuales. No estima
+el impuesto anual ni confirma cuánto estaba obligado a retener el empleador.
+
 En **Validar retención mensual** se ve la tabla del artículo 383 en UVT y en
 pesos del año seleccionado. Comparte los rangos con el motor de cálculo.
 Solo marca «Tu rango» con una revisión vigente de procedimiento 1; para el 2

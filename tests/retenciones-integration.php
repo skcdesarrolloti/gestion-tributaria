@@ -7,8 +7,19 @@ verify($retXpath->query('//a[contains(@href,"vista=reserva") and not(ancestor::d
     'Reserva: botón visible fuera de paneles cerrados y enlaces de empleador válidos');
 verify($retXpath->query('//a[normalize-space(.)="Validar retención mensual" and not(ancestor::details)]')->length===1,
     'Retención: acceso visible junto al registro de nómina');
+$trialStoredBefore=$db->query('SELECT * FROM caracterizaciones_tributarias ORDER BY id')->fetchAll();
+$trialMovementsBefore=$db->query('SELECT id,valor_cop FROM movimientos_ingresos ORDER BY id')->fetchAll();
 [$s,$retPage]=request($client,$base,$retRoute);
+verify($db->query('SELECT * FROM caracterizaciones_tributarias ORDER BY id')->fetchAll()===$trialStoredBefore
+    && $db->query('SELECT id,valor_cop FROM movimientos_ingresos ORDER BY id')->fetchAll()===$trialMovementsBefore,
+    'Consultar simulación conserva revisiones, supuestos guardados y movimientos de ingresos');
 verify($s===200 && str_contains($retPage,'Pendiente de soporte'),'Retención: importar no marca OK sin soporte');
+$trialDom=new DOMDocument();@$trialDom->loadHTML($retPage);$trialXpath=new DOMXPath($trialDom);
+$trialSection=$trialXpath->query('//*[@id="simulacion-retencion"]')->item(0);
+verify($trialSection && str_contains($trialSection->textContent,'Simulación provisional')
+    && str_contains($trialSection->textContent,'procedimiento 1') && str_contains($trialSection->textContent,'No calculado')
+    && !str_contains($trialSection->textContent,'OK') && $trialXpath->query('//*[@id="simulacion-retencion"]//form')->length===0,
+    'Simulación: tabla provisional visible y mes parcial excluido, sin formulario ni validación OK');
 verify(str_contains($retPage,'aria-label="Tabla de retención laboral artículo 383"') && str_contains($retPage,'$4.730.905')
     && str_contains($retPage,'Total que debieron retener hasta el corte: pendiente.') && !str_contains($retPage,'Tu rango ·'),
     'Retención: tabla en pesos del año y acumulado pendiente sin inventar un rango personal');

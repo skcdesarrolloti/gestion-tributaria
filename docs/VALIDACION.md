@@ -4,6 +4,16 @@ Verificación local realizada el 13 de octubre de 2026 con PHP 8.2.12, MariaDB 1
 
 ## Resultado
 
+### Simulación provisional de procedimiento 1 · 28/10/2026
+
+Unitarias: cálculo por pagador y año, acumulados de los mismos meses completos,
+consumo cronológico del cupo anual, exclusión de períodos parciales/retroactivos,
+bloqueo tras un hueco, cero calculado distinto de pendiente y origen intacto.
+La simulación no devuelve estado OK ni reutiliza revisiones como hechos.
+Integración aislada comprueba tabla provisional visible, ausencia de formularios
+de confirmación en la simulación y conservación de movimientos y revisiones
+al consultarla. No se escribe en la base real para probar la hipótesis.
+
 ### Tabla laboral y comparación acumulada · 28/10/2026
 
 Sintaxis, unitarias e integración aislada correctas. La tabla visible comparte
