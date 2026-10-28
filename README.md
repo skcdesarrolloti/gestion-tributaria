@@ -19,7 +19,7 @@ y topes laborales por año, con historial y sin modificar años anteriores.
 La cuenta provisional explica paso a paso el origen de cada valor y la tabla
 aplicada. Ver [configuración y alcance](docs/PARAMETROS-ANUALES.md).
 
-**Registro de información → Pensiones y extractos** abre directamente los
+**Registro de información → Ingresos → Pensiones** abre los
 meses y PDF bancarios guardados, sin pasar por el perfil anual. Ver
 [consulta y carga mensual](docs/EXTRACTOS-BANCARIOS.md).
 

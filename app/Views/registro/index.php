@@ -4,14 +4,14 @@
 <main class="portal-container py-8 space-y-space-lg">
 <section class="bg-inverse-surface text-on-secondary rounded-2xl p-4"><p>3 · Registro de información</p><h1 class="text-headline-lg font-semibold"><?= e($title) ?></h1><p><?= $pensionView?'Selecciona la persona y el año. Aquí encuentras los meses guardados, sus movimientos y el PDF.':'Contribuyente → año gravable → sección → registrar valores.' ?></p></section>
 <?php $contextRoute='registro';require __DIR__.'/context.php'; ?>
-<?php if ($taxpayer): if ($pensionView) { require __DIR__.'/pensiones.php'; } else { require __DIR__.'/extractos.php'; } endif; ?>
+<?php if ($taxpayer): if ($pensionView) { require __DIR__.'/pensiones.php'; } elseif ($state['componente']==='costos') { require __DIR__.'/extractos.php'; } endif; ?>
 <?php if ($pensionView && $taxpayer): ?><details><summary class="text-secondary underline">Casillas DIAN de pensiones · bruto, ajustes y condiciones del año</summary><p>Los extractos guardados se muestran arriba. El abono bancario es neto; la casilla 99 requiere la pensión bruta y sus descuentos verificados. Un valor $0 en esa casilla no borra ni representa la cantidad de PDF guardados.</p><?php endif; ?>
 <?php if ($taxpayer): if ($state['componente']==='ingresos' && !$pensionView) { require __DIR__.'/preguntas.php'; } if (!$profile) { require __DIR__.'/configurar-anio.php'; } endif; ?>
 <?php if ($profile): ?>
 <section class="bg-surface-container-lowest border border-surface-container rounded-xl p-4 space-y-space-md">
 <h2 class="text-headline-md font-semibold"><?= e($profile['nombre'].' · Año gravable '.$profile['anio']) ?></h2>
 <p><?= e($profile['tipo']==='juridica'?'Persona jurídica':($profile['tipo']==='sucesion'?'Sucesión ilíquida':'Persona natural')) ?> · Formulario <?= e($profile['formulario']) ?> · <?= e($profile['residencia']==='residente'?'Condición fiscal nacional / residente':'No residente') ?></p>
-<?php require __DIR__.'/tabs.php'; ?>
+<?php if ($state['componente']==='costos'): require __DIR__.'/tabs.php'; endif; ?>
 <?php if ($profile['formulario']==='210' && $profile['tipo']==='natural' && $state['componente']==='ingresos' && $state['cedula']==='general' && $state['renta']==='trabajo'): require __DIR__.'/../nomina/monthly.php'; endif; ?>
 <details><summary class="text-secondary underline">? · Formulario, año y clasificación</summary>
 <p><?= $profile['formulario']==='210'?'El 210 corresponde a naturales y sucesiones residentes. General reúne trabajo, capital y no laborales; el trabajo sin relación laboral con opción de costos tiene su bloque específico. Pensiones y Dividendos son cédulas separadas. Ganancias ocasionales no es una cuarta cédula.':'El 110 corresponde a personas jurídicas y a naturales o sucesiones no residentes. Sus ingresos se organizan por las secciones del formulario, sin aplicar cédulas de personas naturales residentes.' ?></p>

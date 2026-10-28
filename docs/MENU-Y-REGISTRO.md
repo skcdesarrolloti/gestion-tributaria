@@ -14,11 +14,23 @@ Contribuyentes. No se elimina información ni se cambia la política Socio/Usuar
 
 ## Registro de información
 
-Dentro de Registro permanece una barra de pestañas: **Ingresos**, **Pensiones
-y extractos**, **Subir nómina** y **Costos y gastos**. La pestaña actual se
-resalta en azul. La barra sigue visible al desplazarse y permite cambiar de
-sección sin abrir el menú desplegable. En pantallas estrechas se desliza
-horizontalmente, sin desbordar la página.
+Registro tiene solo dos categorías: **Ingresos** y **Costos y gastos**, tanto
+en el desplegable como en las pestañas persistentes. Dentro de Ingresos se
+reutilizan las cédulas del perfil 210: General, Pensiones y Dividendos, con
+Ganancias ocasionales como sección independiente. General muestra sus rentas
+de Trabajo, Capital y No laborales, y Servicios personales cuando el perfil
+permite esa opción. Para el 110 se conservan sus secciones de ingresos, sin
+atribuir cédulas a sociedades o no residentes.
+
+Las cédulas y rentas de Ingresos están debajo de la categoría, visibles antes
+del contenido y persistentes al desplazarse. Se reutiliza tabs.php; no se
+duplican debajo de las preguntas. Las filas se deslizan horizontalmente en
+pantallas estrechas y el nivel seleccionado se resalta en azul. El año se
+selecciona en el contexto, sin añadir otra fila a la barra.
+
+Subir nómina es una herramienta de Trabajo; los extractos se consultan dentro
+de Pensiones. No son categorías ni cédulas. El cambio solo reorganiza Ingresos:
+no añade campos, reglas o cálculos de costos ni modifica sus datos existentes.
 
 Los destinos conservan contribuyente y año. Subir nómina también conserva ese
 contexto al cambiar año, revisar y confirmar la importación; la selección de

@@ -6,7 +6,7 @@ body { font-family: Poppins, system-ui, sans-serif; }
 .portal-location > div { display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; padding-block: .6rem; font-size: .875rem; }
 .registro-section-tabs { display: flex; gap: .5rem; overflow-x: auto; padding-block: .5rem; }
 .registro-section-tabs a { flex: 0 0 auto; white-space: nowrap; text-decoration: none; }
-.portal-location:has(.registro-section-tabs) ~ main [id] { scroll-margin-top: 10rem; }
+.portal-location:has(.registro-section-tabs) ~ main [id] { scroll-margin-top: 15rem; }
 .portal-container [id] { scroll-margin-top: 5rem; }
 .profile-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; }
 :focus-visible { outline: 3px solid #735c00; outline-offset: 3px; }

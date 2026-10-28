@@ -1,6 +1,6 @@
 # Extractos por mes y cuenta
 
-Acceso directo: **Registro de información → Pensiones y extractos**. Elegir
+Acceso: **Registro de información → Ingresos → Pensiones**. Elegir
 contribuyente y año muestra de inmediato los PDF guardados, el control de meses
 y los acumulados bancarios. Inicio también incluye ese acceso. La pestaña
 Pensiones de Ingresos presenta la misma información, antes de las casillas

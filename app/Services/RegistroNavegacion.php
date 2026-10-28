@@ -10,15 +10,9 @@ final class RegistroNavegacion
     private const BLOCKS=['trabajo'=>'Trabajo','servicios'=>'Servicios personales con costos','capital'=>'Capital','no_laborales'=>'No laborales'];
     public static function menu(string $route,array $source,int $taxpayer,string $year): array
     {
-        $active=match (true) {
-            $route==='nomina'=>'nomina',
-            $route==='extractos' || ($route==='registro' && \input($source,'componente','ingresos')==='ingresos' && \input($source,'cedula')==='pensiones')=>'pensiones',
-            $route==='registro' && \input($source,'componente')==='costos'=>'costos',default=>'ingresos',
-        };
+        $active=$route==='registro' && \input($source,'componente')==='costos'?'costos':'ingresos';
         $context=['anio'=>$year]+($taxpayer>0?['contribuyente'=>$taxpayer]:[]);
         $items=['ingresos'=>['Ingresos','registro',['componente'=>'ingresos','cedula'=>'general']],
-            'pensiones'=>['Pensiones y extractos','registro',['componente'=>'ingresos','cedula'=>'pensiones']],
-            'nomina'=>['Subir nómina','nomina',[]],
             'costos'=>['Costos y gastos','registro',['componente'=>'costos','cedula'=>'general']]];
         $tabs=[];
         foreach ($items as $key=>[$label,$target,$query]) {

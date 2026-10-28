@@ -3,6 +3,16 @@ declare(strict_types=1);
 $pensionRoute='registro&contribuyente='.$taxpayerId.'&anio=2025&cedula=pensiones';
 [$s,$pensionHtml]=request($client,$base,$pensionRoute);
 verify($s===200 && str_contains($pensionHtml,'99 · Ingresos brutos por rentas de pensiones') && !str_contains($pensionHtml,'58 · Ingresos brutos'),'Pensiones muestra sus ingresos y no los de capital');
+$incomeHierarchyDom=new DOMDocument();@$incomeHierarchyDom->loadHTML($pensionHtml);$incomeHierarchyXpath=new DOMXPath($incomeHierarchyDom);
+verify($incomeHierarchyXpath->query('//nav[@aria-label="Orientación y regreso"]//nav[@aria-label="Cédulas del formulario 210"]//a[@aria-current="page" and normalize-space(.)="Pensiones"]')->length===1
+    && $incomeHierarchyXpath->query('//nav[@aria-label="Secciones de Registro de información"]//a')->length===2
+    && $incomeHierarchyXpath->query('//nav[@aria-label="Secciones de Registro de información"]//a[contains(@href,"nomina")]')->length===0,
+    'Ingresos: cédulas persistentes debajo de la categoría; nómina y extractos no son cédulas ni categorías');
+[, $generalHierarchy]=request($client,$base,'registro&contribuyente='.$taxpayerId.'&anio=2025&componente=ingresos&cedula=general');
+$incomeHierarchyDom=new DOMDocument();@$incomeHierarchyDom->loadHTML($generalHierarchy);$incomeHierarchyXpath=new DOMXPath($incomeHierarchyDom);
+verify($incomeHierarchyXpath->query('//nav[@aria-label="Orientación y regreso"]//nav[@aria-label="Rentas de la cédula general"]')->length===1
+    && strpos($generalHierarchy,'aria-label="Cédulas del formulario 210"')<strpos($generalHierarchy,'id="fuentes"'),
+    'Ingresos: rentas de la cédula general disponibles antes de las preguntas y del contenido');
 $pensionMovement='ingresos/movimiento&id='.$profileId.'&origen=registro&anio=2025&cedula=pensiones';
 [$s,$pensionForm]=request($client,$base,$pensionMovement);
 verify($s===200 && str_contains($pensionForm,'value="'.$codeId('210',99).'"') && !str_contains($pensionForm,'value="'.$codeId('210',58).'"'),'El formulario de pensiones limita las opciones a su sección');

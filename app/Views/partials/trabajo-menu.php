@@ -14,8 +14,6 @@ $menuContext=$menuTaxpayer?'&'.http_build_query(['contribuyente'=>$menuTaxpayer,
 <div class="exogena-nav-panel bg-surface-container-lowest border border-surface-container rounded-2xl shadow-card p-4 space-y-space-sm">
 <p>Selecciona contribuyente y año 2025 o 2026 dentro del registro.</p>
 <a class="block px-3 py-2.5 text-secondary" href="<?= e(url($config,'registro').'&componente=ingresos'.$menuContext) ?>">Ingresos</a>
-<a class="block px-3 py-2.5 text-secondary" href="<?= e(url($config,'registro').'&componente=ingresos&cedula=pensiones'.$menuContext) ?>">Pensiones y extractos</a>
-<a class="block px-3 py-2.5 text-secondary" href="<?= e(url($config,'nomina').'&anio='.$menuYear.($menuTaxpayer?'&contribuyente='.$menuTaxpayer:'')) ?>">Subir nómina laboral</a>
 <a class="block px-3 py-2.5 text-secondary" href="<?= e(url($config,'registro').'&componente=costos'.$menuContext) ?>">Costos y gastos</a>
 </div></details>
 <a <?= $menuLink('analisis') ?> href="<?= e(url($config,'analisis')) ?>">Análisis y acciones</a>

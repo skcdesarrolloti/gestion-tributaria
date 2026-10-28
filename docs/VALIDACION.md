@@ -4,6 +4,16 @@ Verificación local realizada el 13 de octubre de 2026 con PHP 8.2.12, MariaDB 1
 
 ## Resultado
 
+### Jerarquía de Ingresos · 28/10/2026
+
+Sintaxis, unitarias e integración aislada correctas. Registro queda dividido
+en Ingresos / Costos y gastos. Las cédulas del 210 y
+sus rentas se reutilizan como niveles persistentes dentro de Ingresos; el 110
+conserva sus secciones, sin cédulas. Nómina y extractos dejan de ser categorías.
+No se añaden cálculos ni campos de costos. La verificación comprueba contexto
+de persona/año, herramientas dentro de Trabajo, orden antes de las preguntas,
+lecturas bancarias intactas y ausencia de cédulas 210 en personas jurídicas.
+
 ### Pestañas persistentes de Registro · 28/10/2026
 
 Sintaxis, unitarias e integración aislada correctas. Las cuatro pestañas conservan

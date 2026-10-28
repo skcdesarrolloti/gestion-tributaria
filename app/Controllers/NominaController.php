@@ -14,7 +14,7 @@ final class NominaController
         $user=$this->auth->user();if (!$user) { \redirect($this->config,'login'); }
         $owner=(int)$user['_ID'];$year=\input($_GET,'anio','2026');
         if (!in_array($year,['2025','2026'],true)) { http_response_code(422);echo 'Selecciona 2025 o 2026.';return; }
-        $rows=$this->taxpayers->listFor($owner);$targets=[];$employers=[];$errors=[];$preview=null;$notice=null;$taxpayer=null;
+        $rows=$this->taxpayers->listFor($owner);$targets=[];$employers=[];$errors=[];$preview=null;$notice=null;$taxpayer=null;$profile=null;
         $navigationId=filter_var(\input($_GET,'contribuyente'),FILTER_VALIDATE_INT,['options'=>['min_range'=>1]])?:0;
         foreach ($rows as $t) {
             if ((int)$t['id']===$navigationId) { $taxpayer=$t; }
@@ -22,6 +22,7 @@ final class NominaController
             if ($t['tipo']!=='natural') { continue; }
             $profiles=$this->incomes->profiles((int)$t['id'],$owner);$p=null;
             foreach ($profiles as $candidate) { if ((string)$candidate['anio']===$year) { $p=$candidate;break; } }
+            if ((int)$t['id']===$navigationId && $p) { $profile=$p+['nombre'=>$t['nombre']]; }
             $targets[]=['id'=>(int)$t['id'],'documento'=>$t['documento_numero'],'nombre'=>$t['nombre'],
                 'perfil'=>$p && $p['formulario']==='210' && $p['regimen']==='ordinario'?(int)$p['id']:0];
         }
@@ -74,6 +75,6 @@ final class NominaController
                 }
             }
         }
-        $this->view->render('nomina/index',compact('user','year','taxpayer','targets','employers','errors','preview','notice'));
+        $this->view->render('nomina/index',compact('user','year','taxpayer','profile','targets','employers','errors','preview','notice'));
     }
 }
