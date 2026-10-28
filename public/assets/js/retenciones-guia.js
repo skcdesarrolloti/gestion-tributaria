@@ -6,8 +6,8 @@
         if (!control) return;
         let options;
         try { options=JSON.parse(panel.dataset.retencionOptions); } catch { return; }
-        const update=()=> { panel.textContent=options[control.value]||'Selecciona una opción para ver qué significa. Si no conoces el dato, consulta la ayuda antes de confirmar.'; };
-        control.addEventListener('change',update); update();
+        const update=()=> { panel.textContent=options[control.value]||'Selecciona una opción: aquí aparecerá su explicación automáticamente.'; };
+        control.addEventListener('change',update);control.addEventListener('input',update);update();
     });
     document.querySelectorAll('[data-retencion-form]').forEach(form => {
         const unsaved=form.querySelector('[data-retencion-unsaved]');

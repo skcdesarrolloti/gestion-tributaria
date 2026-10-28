@@ -48,6 +48,10 @@ verify(request($client,$base,$reserveRoute,$reservePost)[0]===303,'Reserva: hip�
 [, $reserveSaved]=request($client,$base,$reserveRoute);
 verify(str_contains($reserveSaved,'Reserva sugerida por cuota') && str_contains($reserveSaved,'Saldo completo pendiente'),'Reserva: muestra faltante y alcance salarial provisional');
 verify((bool)preg_match('/name="futuro_bruto"[^>]*value="60000000"/',$reserveSaved),'Reserva: recarga los supuestos guardados dentro del formulario');
+$reserveDom=new DOMDocument();@$reserveDom->loadHTML($reserveSaved);$reserveXpath=new DOMXPath($reserveDom);
+$selectedGuide=$reserveXpath->query('//select[@name="declaraciones"]/parent::label/following-sibling::*[1][@data-retencion-guide="declaraciones"]');
+verify($selectedGuide->length===1 && str_contains($selectedGuide->item(0)->textContent,'Tercera o posterior:')
+    && !$selectedGuide->item(0)->hasAttribute('hidden'),'Reserva: explicación seleccionada visible inmediatamente debajo del selector incluso antes de ejecutar JavaScript');
 [, $retStill]=request($client,$base,$retRoute);
 verify(str_contains($retStill,'Certificado ficticio'),'Reserva: conserva revisión mensual al guardar otro grupo');
 $retNewPost=array_replace($retPost,['revision'=>$retHidden($retStill,'revision'),'huella'=>$retHidden($retStill,'huella')]);

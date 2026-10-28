@@ -100,3 +100,11 @@ Originales y movimientos permanecen intactos. Usuario solo ficha asignada,
 Socio todos. Nunca se guardan claves ni se modifican cuentas para estas pruebas.
 
 Pruebas: tests/retenciones-unit.php y tests/retenciones-integration.php.
+
+## Explicación al elegir una opción
+
+En la revisión mensual y en la reserva, cada selector muestra su explicación
+automáticamente en un recuadro justo debajo. Cambia al elegir otra opción, sin
+abrir ayudas ni guardar el formulario. Al volver a abrir valores guardados, su
+explicación aparece desde la carga inicial, también antes de ejecutar JavaScript.
+
