@@ -10,9 +10,20 @@ desde el PDF reconocido; también puede elegirse manualmente para un soporte
 pendiente de lectura. Un año o mes elegido que contradiga el PDF se rechaza.
 Confirmar titular y período al cargar el PDF completo (máximo 10 MB, sujeto al
 límite PHP del servidor). Las páginas del archivo original se conservan intactas.
-Se almacenan el PDF, sus referencias y la lectura conciliada, sin pedir claves.
-El visor permite consultarlo en la misma pantalla; un PDF cifrado puede pedir
-su clave al navegador. No se guarda esa contraseña.
+Se almacenan el PDF, sus referencias y la lectura conciliada, sin conservar claves.
+La opción «Abrir PDF protegido» utiliza QPDF WebAssembly 0.0.2 en un Worker del
+propio sitio. Intenta con el documento de la ficha (sin DV) cuando no se escribe
+otra clave en el campo opcional. La clave no tiene nombre de envío, no pasa a
+PHP ni se guarda en sesión, base, logs o almacenamiento del navegador. El worker
+se termina tras cada intento y se borra el campo. Clave incorrecta: no se envía
+el PDF ni se guarda el mes. No se adivinan claves ni se consultan servicios externos.
+
+Se suben el original y una copia abierta para lectura/consulta, ambos privados y
+con huellas. La referencia de consulta se guarda en el JSON existente; no cambia
+el esquema. El visor abre esa copia sin pedir otra vez la clave. La comprobación
+de saldos acredita coherencia de los datos leídos, no autenticidad bancaria de un
+PDF: los soportes siguen sujetos a revisión. El servidor valida permisos, tipo,
+tamaño y titular/período, y retira ambas copias ante un rechazo.
 
 Cada cuenta muestra doce meses: leído y conciliado, PDF pendiente de lectura,
 falta PDF o por recibir. Un mes sin lectura no equivale a cero. El formato
@@ -35,7 +46,7 @@ El detalle conserva fecha operación/valor, concepto original, cargo, abono,
 saldo, página y categoría propuesta. Se busca por comercio/concepto sin salir.
 Las devoluciones de compras y transferencias no se clasifican como pensiones.
 La corrección explícita de GMF del formato reconocido se concilia como reintegro,
-no como rendimiento. PDF cifrado, escaneado, incompleto o desconocido queda
+no como rendimiento. PDF no desbloqueado, escaneado, incompleto o desconocido queda
 pendiente, sin importes parciales. No se afecta todavía ninguna casilla DIAN ni
 el cálculo de deducciones: confirmar bruto/retenciones y soporte tributario antes
 de hacer el traslado sin duplicar movimientos.
@@ -57,3 +68,6 @@ tabla y archivos; nunca borrar soportes ni editar la migración aplicada.
 
 Pruebas: tests/extractos-unit.php y tests/extractos-integration.php incluidos en
 las suites generales. Usar exclusivamente PDF sintéticos y base aleatoria.
+`node tests/extractos-pdf-unit.cjs` comprueba apertura AES-256, rechazo de clave
+incorrecta y lectura conciliada de las dos páginas. Node solo se usa para probar;
+Hostinger sirve los archivos estáticos del motor, con licencia y versión fijada.

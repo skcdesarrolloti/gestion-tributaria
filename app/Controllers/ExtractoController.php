@@ -32,9 +32,9 @@ final class ExtractoController
                 try {
                     $posted=$_POST;$automatic=\input($_POST,'mes')==='auto';
                     if ($automatic) { $posted['mes']='1'; }
-                    $data=ExtractoData::read($posted,$year);$file=$this->files->receive($_FILES['extracto_pdf']??[]);
+                    $data=ExtractoData::read($posted,$year);$file=$this->files->receive($_FILES['extracto_pdf']??[],$_FILES['extracto_lectura']??[]);
                     if ($automatic) {
-                        if (($file['lectura']['estado']??'')!=='leido') { throw new \InvalidArgumentException('No se pudo detectar el mes. Selecciónalo manualmente para conservar el soporte pendiente de lectura, o usa un PDF legible sin contraseña.'); }
+                        if (($file['lectura']['estado']??'')!=='leido') { throw new \InvalidArgumentException('No se pudo detectar el mes. Revisa la apertura y el formato del PDF; puedes seleccionar el mes manualmente para conservar el soporte pendiente de lectura.'); }
                         $data['mes']=(int)substr($file['lectura']['inicio'],5,2);
                     }
                     ExtractoData::match($file['lectura'],$data,$taxpayer);
@@ -43,7 +43,7 @@ final class ExtractoController
                 } catch (\InvalidArgumentException $e) { http_response_code(422);$errors[]=$e->getMessage(); }
                 catch (\DomainException $e) { http_response_code(409);$errors[]=$e->getMessage(); }
                 catch (\Throwable $e) { error_log((string)$e);http_response_code(500);$errors[]='No fue posible guardar el extracto. El registro privado conserva el diagnóstico; vuelve a intentar.'; }
-                if ($file) { $this->files->remove($file['archivo']); }
+                if ($file) { $this->files->discard($file); }
             }
         }
         $documents=$taxpayer?$this->documents->listFor($id,$owner,(int)$year):[];
@@ -58,7 +58,8 @@ final class ExtractoController
         $user=$this->user();$id=filter_var(\input($_GET,'documento'),FILTER_VALIDATE_INT)?:0;
         $document=$this->documents->findFor($id,(int)$user['_ID']);
         if (!$document) { http_response_code(404);echo 'Documento no encontrado.';return; }
-        $path=$this->files->path($document['archivo']);
+        $reading=ExtractoData::reading($document);
+        $path=$this->files->path($reading['archivo_consulta']??$document['archivo']);
         if (!is_file($path)) { http_response_code(404);echo 'Soporte no disponible.';return; }
         header('Content-Type: application/pdf');header('Content-Disposition: inline; filename="extracto-bancario.pdf"');
         header('X-Frame-Options: SAMEORIGIN');header('X-Content-Type-Options: nosniff');header('Cache-Control: private, no-store');

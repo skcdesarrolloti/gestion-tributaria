@@ -43,7 +43,8 @@ require_once __DIR__.'/extractos-fixtures.php';
 $db->exec("INSERT INTO contribuyentes (funcionario_id,tipo,documento_tipo,documento_numero,nombre,fuentes) VALUES (100,'natural','CC','987001234','Titular banco ficticio','[]')");
 $readBankTax=(int)$db->lastInsertId();$readBankRoute='extractos&contribuyente='.$readBankTax.'&anio=2025';
 file_put_contents($bankPath,bankFixturePdf());
-$readBankPost=array_replace($bankPost,['mes'=>'6','banco'=>'BBVA','cuenta'=>'1234']);
+$readBankPost=array_replace($bankPost,['mes'=>'6','banco'=>'BBVA','cuenta'=>'1234',
+    'extracto_lectura'=>new CURLFile($bankPath,'application/pdf','lectura.pdf')]);
 verify(rutRequest($client,$base,$readBankRoute,array_replace($readBankPost,['mes'=>'7']))[0]===422,'Extractos: período leído impide asignar el PDF al mes incorrecto');
 verify(rutRequest($client,$base,$readBankRoute,array_replace($readBankPost,['mes'=>'auto']))[0]===303,'Extractos: detecta mes desde PDF sintético multipágina y guarda lectura conciliada');
 $readBankId=(int)$db->query('SELECT MAX(id) FROM extractos_bancarios')->fetchColumn();
@@ -52,3 +53,10 @@ verify($s===200 && str_contains($readBankHtml,'Leído y conciliado · 2 páginas
     && str_contains($readBankHtml,'$10,00') && str_contains($readBankHtml,'$1,00') && str_contains($readBankHtml,'1 movimientos encontrados.'),
     'Extractos: acumulado mensual y búsqueda de gastos usan lectura guardada sin duplicar casillas');
 verify(str_contains($readBankHtml,'PAGO COMERCIO FICTICIO') && !str_contains($readBankHtml,'<th scope="row">TRANSFERENCIA POR ACLARAR</th>'),'Extractos: búsqueda conserva el pago consultado y filtra los demás conceptos');
+$readBankRecord=$db->query('SELECT * FROM extractos_bancarios WHERE id='.$readBankId)->fetch();
+$readBankMeta=json_decode($readBankRecord['lectura'],true);
+verify(isset($readBankMeta['archivo_consulta']) && is_file($temp.'/extractos-bancarios/'.$readBankMeta['archivo_consulta'])
+    && is_file($temp.'/extractos-bancarios/'.$readBankRecord['archivo']),'Extractos: conserva original y copia de lectura privados sin guardar claves');
+verify(!str_contains($readBankHtml,'name="pdf_password"') && str_contains($readBankHtml,'data-pdf-password') && str_contains($readBankHtml,'Detectar mes desde el PDF'),'Extractos: clave de apertura sin nombre de envío y selector automático presentes');
+$beforeCopies=count(glob($temp.'/extractos-bancarios/*.pdf'));
+verify(rutRequest($client,$base,$readBankRoute,$readBankPost)[0]===409 && count(glob($temp.'/extractos-bancarios/*.pdf'))===$beforeCopies,'Extractos: repetición limpia ambas copias nuevas sin duplicar documento');

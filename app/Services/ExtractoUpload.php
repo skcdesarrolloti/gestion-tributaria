@@ -29,7 +29,7 @@ final class ExtractoUpload
         }
     }
 
-    public function receive(array $file): array
+    public function receive(array $file, array $decoded=[]): array
     {
         if (!isset($file['error'],$file['tmp_name'],$file['name']) || $file['error']!==UPLOAD_ERR_OK
             || !is_string($file['tmp_name']) || !is_string($file['name']) || !is_uploaded_file($file['tmp_name'])
@@ -41,12 +41,31 @@ final class ExtractoUpload
         $key=bin2hex(random_bytes(32)).'.pdf';$path=$this->path($key);
         if (!move_uploaded_file($file['tmp_name'],$path)) { throw new \RuntimeException('No se pudo conservar el documento.'); }
         chmod($path,0600);
-        return ['archivo'=>$key,'titulo'=>mb_substr(basename(str_replace('\\','/',$file['name'])),0,160),
-            'sha256'=>hash_file('sha256',$path),'bytes'=>filesize($path),'lectura'=>ExtractoPdfReader::read($path)];
+        $consult=null;
+        try {
+            if (isset($decoded['error']) && $decoded['error']!==UPLOAD_ERR_NO_FILE) {
+                if ($decoded['error']!==UPLOAD_ERR_OK || !is_string($decoded['tmp_name']??null) || !is_uploaded_file($decoded['tmp_name'])) {
+                    throw new \InvalidArgumentException('No se recibió la copia de lectura. Revisa el límite de carga del servidor.');
+                }
+                self::validate($decoded['tmp_name']);$consult=bin2hex(random_bytes(32)).'.pdf';
+                if (!move_uploaded_file($decoded['tmp_name'],$this->path($consult))) { throw new \RuntimeException('No se pudo conservar la copia de lectura.'); }
+                chmod($this->path($consult),0600);
+            }
+            $reading=ExtractoPdfReader::read($consult?$this->path($consult):$path);
+            if ($consult) { $reading['archivo_consulta']=$consult;$reading['sha256_consulta']=hash_file('sha256',$this->path($consult)); }
+            return ['archivo'=>$key,'titulo'=>mb_substr(basename(str_replace('\\','/',$file['name'])),0,160),
+                'sha256'=>hash_file('sha256',$path),'bytes'=>filesize($path),'lectura'=>$reading];
+        } catch (\Throwable $e) { $this->remove($key);if ($consult) { $this->remove($consult); }throw $e; }
     }
 
     public function remove(string $key): void
     {
         $path=$this->path($key);if (is_file($path)) { unlink($path); }
+    }
+
+    public function discard(array $file): void
+    {
+        $this->remove($file['archivo']);
+        if (isset($file['lectura']['archivo_consulta'])) { $this->remove($file['lectura']['archivo_consulta']); }
     }
 }

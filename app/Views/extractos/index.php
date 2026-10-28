@@ -29,9 +29,9 @@
 <section id="documento" class="bg-surface-container-lowest border border-surface-container rounded-xl p-4">
 <h2 class="text-headline-md font-semibold"><?= e($selected['banco'].' · Cuenta terminada en '.$selected['cuenta'].' · '.\App\Services\ExtractoData::MONTHS[(int)$selected['mes']].' '.$year) ?></h2>
 <p><?= e($selected['titulo']) ?> · Cargado <?= e($selected['created_at']) ?></p>
-<p>Consulta el PDF aquí. Si tiene contraseña, el visor puede pedirla; no se guarda tu clave bancaria.</p>
+<p>Consulta el PDF aquí. Si abriste el documento protegido al subirlo, se muestra su copia privada de lectura. El original también se conserva; la clave no se guarda.</p>
 <object class="bank-document" data="<?= e(url($config,'extractos/documento').'&documento='.(int)$selected['id']) ?>" type="application/pdf" aria-label="Extracto bancario guardado"><p>Este navegador no permite mostrar el PDF integrado. Usa un navegador con visor PDF para consultarlo aquí.</p></object>
 </section>
 <?php endif; ?>
 <?php else: ?><p>Selecciona un contribuyente para subir y consultar únicamente sus extractos.</p><?php endif; ?>
-</main><?php require __DIR__.'/../partials/footer.php'; ?>
+</main><script src="<?= e(asset($config,'js/extractos.js')) ?>" defer></script><?php require __DIR__.'/../partials/footer.php'; ?>

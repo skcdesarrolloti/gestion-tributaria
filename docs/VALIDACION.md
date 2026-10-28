@@ -4,6 +4,23 @@ Verificación local realizada el 13 de octubre de 2026 con PHP 8.2.12, MariaDB 1
 
 ## Resultado
 
+### Apertura de extractos protegidos · 28/10/2026
+
+El navegador abre el PDF con el documento de la ficha o clave opcional, sin
+enviarla al servidor. QPDF WebAssembly fijado en 0.0.2, assets del mismo sitio,
+Worker aislado y terminado después de cada intento. Original y copia de lectura
+privados; se retiran ambas copias ante error/duplicado. Sin cambios de esquema.
+Prueba Node: AES-256 sintético, clave errónea rechazada y lectura de dos páginas
+conciliada con mes automático. PHP sintaxis/unitarias/integración aislada pasan,
+incluyendo envío de original/copia, persistencia, duplicados y limpieza.
+Lectura local del original BBVA autorizado con RC4-128 y clave suministrada por
+el responsable confirma septiembre 2026 y dos páginas conciliadas; sin datos ni
+claves reales en Git o fixtures. Chrome con fixture cifrado AES-256: el Worker
+abre el documento y la lectura PHP devuelve julio 2025 y dos páginas conciliadas.
+La carga HTTP de ambas copias pasa en la integración aislada. La automatización
+del selector de archivos de Chrome requiere permiso de la extensión; no se
+activó ese permiso ni se usó para subir documentos reales. Publicación pendiente.
+
 ### Extractos bancarios · 26/10/2026
 
 Sintaxis, unitarias e integración en base aleatoria: carga HTTP de PDF,

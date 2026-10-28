@@ -32,7 +32,9 @@ PDF privados por persona, año, banco, cuenta y mes, con visor interno y control
 de meses faltantes. El formato mensual BBVA reconocido detecta mes, lee todas
 las páginas, concilia saldos y acumula pensión neta, rendimientos y GMF neto de
 reintegros. Permite buscar pagos y consultar el PDF dentro del aplicativo. Otros
-formatos/cifrados quedan pendientes; aún no traslada importes a casillas DIAN.
+formatos quedan pendientes; aún no traslada importes a casillas DIAN. Los PDF con
+contraseña se abren en el navegador con el documento de la ficha o la clave
+opcional, sin enviar ni guardar la contraseña, y se detecta el mes desde el PDF.
 Ver [alcance y continuidad](docs/EXTRACTOS-BANCARIOS.md).
 
 **Ingresos laborales:** Registro → Subir nómina laboral permite seleccionar
