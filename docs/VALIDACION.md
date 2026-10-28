@@ -16,6 +16,10 @@ Chrome con PDF ficticio de dos páginas: menú, calendario, consulta mensual,
 búsqueda y regreso al calendario correctos, sin desbordamiento de página en
 escritorio. La comprobación autenticada previa en Hostinger localizó seis
 soportes de 2026; no se cargaron ni modificaron archivos reales para el ensayo.
+Publicación f372a93 comprobada en Hostinger con sesión autenticada: el enlace
+real del menú abre Pensiones y muestra los seis soportes existentes; abrir
+enero conserva sus movimientos y visor, y «Volver a los meses guardados»
+regresa al calendario sin cambiar de persona/año ni salir de Pensiones.
 
 ### Retención mensual y reserva salarial · 28/10/2026
 
