@@ -2,12 +2,12 @@
 declare(strict_types=1);
 namespace App\Controllers;
 use App\Core\View;
-use App\Models\{Contribuyente,Ingreso,Caracterizacion};
+use App\Models\{Contribuyente,Ingreso,Caracterizacion,ExtractoBancario};
 use App\Services\{AuthService,RegistroNavegacion,IngresoSummary};
 
 final class RegistroController
 {
-    public function __construct(private AuthService $auth,private Contribuyente $taxpayers,private Ingreso $incomes,private View $view,private array $config,private Caracterizacion $characterization) {}
+    public function __construct(private AuthService $auth,private Contribuyente $taxpayers,private Ingreso $incomes,private View $view,private array $config,private Caracterizacion $characterization,private ExtractoBancario $bankDocuments) {}
     public function index(): void { $this->show('registro/index'); }
     public function analysis(): void { $this->show('registro/analysis'); }
     public function sources(): void
@@ -39,7 +39,15 @@ final class RegistroController
         if (array_key_exists('contribuyente',$_GET) && !$taxpayer) { http_response_code(404);echo 'Contribuyente no encontrado.';return; }
         if (!$taxpayer && count($rows)===1) { $taxpayer=$rows[0]; }
         $profile=null;$concepts=[];$movements=[];$totals=[];$preparation=null;$questions=null;$payroll=[];$retentionData=[];
+        $pensionView=$template==='registro/index' && $state['componente']==='ingresos' && $state['cedula']==='pensiones';
+        $pensionDocuments=[];$pensionDocument=null;
         if ($taxpayer) {
+            if ($pensionView) {
+                $pensionDocuments=$this->bankDocuments->listFor((int)$taxpayer['id'],$owner,(int)$state['anio']);
+                $documentId=filter_var(\input($_GET,'documento'),FILTER_VALIDATE_INT,['options'=>['min_range'=>1]])?:0;
+                foreach ($pensionDocuments as $document) { if ((int)$document['id']===$documentId) { $pensionDocument=$document;break; } }
+                if (isset($_GET['documento']) && !$pensionDocument) { http_response_code(404);echo 'Extracto no encontrado en este contribuyente y año.';return; }
+            }
             $blocks=$this->characterization->blocksFor((int)$taxpayer['id'],$owner,(int)$state['anio']);
             $retentionData=$blocks['retenciones_laborales']['datos']??[];
             $questions=\App\Services\IngresoPreguntas::prepare($blocks['ingresos']??[],$taxpayer['tipo']);
@@ -54,6 +62,6 @@ final class RegistroController
                 $preparation=\App\Services\PerfilAnualSugerencias::stored($this->characterization,$taxpayer,$owner,$state['anio']);
             }
         }
-        $this->view->render($template,compact('user','rows','taxpayer','profile','state','concepts','movements','totals','preparation','questions','payroll','retentionData'));
+        $this->view->render($template,compact('user','rows','taxpayer','profile','state','concepts','movements','totals','preparation','questions','payroll','retentionData','pensionView','pensionDocuments','pensionDocument'));
     }
 }

@@ -1,11 +1,12 @@
-<?php $title=$state['componente']==='ingresos'?'Ingresos':'Costos y gastos';require __DIR__.'/../partials/head.php'; ?>
+<?php $title=$pensionView?'Pensiones y extractos':($state['componente']==='ingresos'?'Ingresos':'Costos y gastos');require __DIR__.'/../partials/head.php'; ?>
 <body class="bg-background min-h-screen font-body-md text-on-surface antialiased">
 <?php require __DIR__.'/../partials/header.php'; ?>
 <main class="portal-container py-8 space-y-space-lg">
-<section class="bg-inverse-surface text-on-secondary rounded-2xl p-4"><p>3 · Registro de información</p><h1 class="text-headline-lg font-semibold"><?= e($title) ?></h1><p>Contribuyente → año gravable → sección → registrar valores.</p></section>
+<section class="bg-inverse-surface text-on-secondary rounded-2xl p-4"><p>3 · Registro de información</p><h1 class="text-headline-lg font-semibold"><?= e($title) ?></h1><p><?= $pensionView?'Selecciona la persona y el año. Aquí encuentras los meses guardados, sus movimientos y el PDF.':'Contribuyente → año gravable → sección → registrar valores.' ?></p></section>
 <?php $contextRoute='registro';require __DIR__.'/context.php'; ?>
-<?php if ($taxpayer): require __DIR__.'/extractos.php'; endif; ?>
-<?php if ($taxpayer): if ($state['componente']==='ingresos') { require __DIR__.'/preguntas.php'; } if (!$profile) { require __DIR__.'/configurar-anio.php'; } endif; ?>
+<?php if ($taxpayer): if ($pensionView) { require __DIR__.'/pensiones.php'; } else { require __DIR__.'/extractos.php'; } endif; ?>
+<?php if ($pensionView && $taxpayer): ?><details><summary class="text-secondary underline">Casillas DIAN de pensiones · bruto, ajustes y condiciones del año</summary><p>Los extractos guardados se muestran arriba. El abono bancario es neto; la casilla 99 requiere la pensión bruta y sus descuentos verificados. Un valor $0 en esa casilla no borra ni representa la cantidad de PDF guardados.</p><?php endif; ?>
+<?php if ($taxpayer): if ($state['componente']==='ingresos' && !$pensionView) { require __DIR__.'/preguntas.php'; } if (!$profile) { require __DIR__.'/configurar-anio.php'; } endif; ?>
 <?php if ($profile): ?>
 <section class="bg-surface-container-lowest border border-surface-container rounded-xl p-4 space-y-space-md">
 <h2 class="text-headline-md font-semibold"><?= e($profile['nombre'].' · Año gravable '.$profile['anio']) ?></h2>
@@ -28,4 +29,5 @@ $tableConcepts=$primary;$tableTitle=$title.' de esta sección';require __DIR__.'
 </section>
 <details class="border border-surface-container rounded-xl p-4"><summary class="font-semibold">Consultar o corregir movimientos de esta sección (<?= count($movements) ?>)</summary><?php $registration=$state;require __DIR__.'/../ingresos/movements.php'; ?></details>
 <?php endif; ?>
-</main><?php if ($profile): ?><script src="<?= e(asset($config,'js/normas.js')) ?>" defer></script><?php endif; ?><?php require __DIR__.'/../partials/footer.php'; ?>
+<?php if ($pensionView && $taxpayer): ?></details><details><summary class="text-secondary underline">Revisar otras fuentes de ingresos del año</summary><?php require __DIR__.'/preguntas.php'; ?></details><?php endif; ?>
+</main><?php if ($profile): ?><script src="<?= e(asset($config,'js/normas.js')) ?>" defer></script><?php endif; ?><?php if ($pensionView && $taxpayer): ?><script src="<?= e(asset($config,'js/extractos.js').'?v='.filemtime(dirname(__DIR__,3).'/public/assets/js/extractos.js')) ?>" defer></script><?php endif; ?><?php require __DIR__.'/../partials/footer.php'; ?>

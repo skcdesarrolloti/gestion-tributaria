@@ -60,3 +60,4 @@ verify(isset($readBankMeta['archivo_consulta']) && is_file($temp.'/extractos-ban
 verify(!str_contains($readBankHtml,'name="pdf_password"') && str_contains($readBankHtml,'data-pdf-password') && str_contains($readBankHtml,'Detectar mes desde el PDF'),'Extractos: clave de apertura sin nombre de envío y selector automático presentes');
 $beforeCopies=count(glob($temp.'/extractos-bancarios/*.pdf'));
 verify(rutRequest($client,$base,$readBankRoute,$readBankPost)[0]===409 && count(glob($temp.'/extractos-bancarios/*.pdf'))===$beforeCopies,'Extractos: repetición limpia ambas copias nuevas sin duplicar documento');
+require __DIR__.'/pensiones-navigation-integration.php';

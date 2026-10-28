@@ -14,6 +14,10 @@ Ver [perfiles y permisos](docs/PERFILES-Y-ACCESOS.md).
 Ingresos laborales incluye control mensual de retención por empleador y una
 reserva salarial provisional al corte. Ver [alcance y comprobación](docs/RETENCIONES-LABORALES.md).
 
+**Registro de información → Pensiones y extractos** abre directamente los
+meses y PDF bancarios guardados, sin pasar por el perfil anual. Ver
+[consulta y carga mensual](docs/EXTRACTOS-BANCARIOS.md).
+
 En Beneficios tributarios, **Consultar artículos aquí** permite leer las normas
 dentro de cada ficha, sin abrir páginas adicionales. La colección DIAN muestra
 fecha y fuente de consulta. Ver [alcance del visor](docs/ARTICULOS-EN-FICHAS.md).

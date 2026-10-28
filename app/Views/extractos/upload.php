@@ -1,4 +1,4 @@
-<details class="bg-surface-container-lowest border border-surface-container rounded-xl p-4" <?= !$documents||$errors?'open':'' ?>>
+<details id="subir-extracto" class="bg-surface-container-lowest border border-surface-container rounded-xl p-4" <?= !$documents||$errors||input($_GET,'subir')==='1'?'open':'' ?>>
 <summary class="text-headline-md font-semibold">Subir extracto bancario en PDF</summary>
 <p><?= e($taxpayer['nombre']) ?> · <?= e($year) ?>. Sube el PDF del banco; el mes se obtiene del período impreso en el documento.</p>
 <form method="post" enctype="multipart/form-data" class="space-y-space-md" data-extracto-form data-documento="<?= e($taxpayer['documento_numero']) ?>" data-worker="<?= e(asset($config,'js/extracto-worker.js')) ?>" action="<?= e(url($config,'extractos').$extractQuery) ?>">

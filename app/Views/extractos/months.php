@@ -1,5 +1,5 @@
 <?php use App\Services\ExtractoData; ?>
-<section class="bg-surface-container-lowest border border-surface-container rounded-xl p-4 space-y-space-md">
+<section id="meses" class="bg-surface-container-lowest border border-surface-container rounded-xl p-4 space-y-space-md">
 <h2 class="text-headline-md font-semibold">Control de meses · <?= e($year) ?></h2>
 <p>Acumulados bancarios de los PDF leídos y conciliados. La pensión recibida es el abono neto; falta contrastar bruto, salud y retenciones con su comprobante. Los importes aún no se trasladan a casillas DIAN.</p>
 <?php if (!$documents): ?><p>Aún no hay extractos de este año. Al guardar el primero verás enero a diciembre para esa cuenta.</p><?php endif; ?>
@@ -16,7 +16,7 @@ if ($ok) { $read++;foreach ($sum as $key=>$unused) { $sum[$key]+=$reading['total
 <td><?= $ok?e(ExtractoData::money($reading['totales']['pension'])):'—' ?></td>
 <td><?= $ok?e(ExtractoData::money($reading['totales']['rendimientos'])):'—' ?></td>
 <td><?= $ok?e(ExtractoData::money($reading['totales']['gmf']-$reading['totales']['gmf_reintegro'])):'—' ?></td>
-<td><?php if ($doc): ?><a class="text-secondary underline" href="<?= e(url($config,'extractos').$extractQuery.'&documento='.(int)$doc['id'].'#detalle') ?>">Ver movimientos y PDF aquí</a><?php endif; ?></td></tr>
+<td><?php if ($doc): ?><a class="text-secondary underline" href="<?= e(($extractBrowseUrl??url($config,'extractos').$extractQuery).'&documento='.(int)$doc['id'].'#detalle') ?>">Ver movimientos y PDF aquí</a><?php else: ?><a class="text-secondary underline" href="<?= e(($extractBrowseUrl??url($config,'extractos').$extractQuery).'&subir=1#subir-extracto') ?>">Subir PDF</a><?php endif; ?></td></tr>
 <?php endforeach; ?></tbody>
 <?php if ($read): ?><tfoot><tr><th scope="row">Acumulado leído</th><td><?= $read ?> meses conciliados de <?= $received ?> recibidos</td><td><?= e(ExtractoData::money($sum['pension'])) ?></td><td><?= e(ExtractoData::money($sum['rendimientos'])) ?></td><td><?= e(ExtractoData::money($sum['gmf']-$sum['gmf_reintegro'])) ?></td><td>Clasificación fiscal pendiente</td></tr></tfoot><?php endif; ?>
 </table></div>

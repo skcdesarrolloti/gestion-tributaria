@@ -28,6 +28,7 @@
         <h2 class="text-headline-md font-semibold mt-4">Paso 3 · Registro de información</h2>
         <p class="text-body-md text-secondary mt-2">Selecciona 2025 o 2026 y registra Ingresos o Costos y gastos por cédula, conservando sus movimientos y soportes.</p>
         <a class="inline-block mt-4 rounded-xl bg-inverse-surface text-on-secondary px-4 py-2" href="<?= e(url($config,'registro')) ?>">Registrar información del año</a>
+        <a class="inline-block mt-4 text-secondary underline" href="<?= e(url($config,'registro').'&componente=ingresos&cedula=pensiones') ?>">Pensiones y extractos por mes</a>
     </section>
     <section class="bg-surface-container-lowest rounded-2xl border border-surface-container p-4">
         <h2 class="text-headline-md font-semibold">Paso 4 · Análisis y acciones</h2><p class="text-secondary mt-2">Revisa la proyección anual y abre la hoja de cálculos para comparar escenarios.</p><a class="inline-block mt-4 rounded-xl bg-inverse-surface text-on-secondary px-4 py-2" href="<?= e(url($config,'analisis')) ?>">Abrir análisis y acciones</a>

@@ -1,9 +1,28 @@
 # Extractos por mes y cuenta
 
-Registro de información → elegir contribuyente y año → **Subir o consultar
-extractos bancarios**. El mismo acceso aparece en Ingresos y en Costos y gastos.
+Acceso directo: **Registro de información → Pensiones y extractos**. Elegir
+contribuyente y año muestra de inmediato los PDF guardados, el control de meses
+y los acumulados bancarios. Inicio también incluye ese acceso. La pestaña
+Pensiones de Ingresos presenta la misma información, antes de las casillas
+fiscales y las preguntas de otras fuentes, que quedan plegadas.
+
+Desde cada mes se abre el detalle y el PDF dentro de Pensiones; la búsqueda
+conserva persona, año y sección. «Volver a los meses guardados» regresa al
+calendario. «Subir PDF» en un mes faltante abre la carga; después de guardar
+desde Pensiones se regresa al documento en esa misma sección. El lector, sus
+permisos y las copias privadas son los mismos; no se duplican datos.
+
+El acceso **Subir o consultar extractos bancarios** también permanece en los
+demás ingresos y en Costos y gastos.
 No exige volver a crear el contribuyente ni preparar un perfil de renta para
 conservar el soporte. Permisos: Socio global; Usuario solo su ficha asignada.
+
+La cantidad de PDF guardados y los abonos bancarios se muestran por separado
+de las casillas fiscales. Un valor pendiente o $0 en casilla 99 no significa
+ausencia de extractos: el abono neto todavía requiere conciliar bruto, salud y
+retenciones con el comprobante del pagador. No se trasladan abonos netos como
+pensión bruta automáticamente. Esta mejora de navegación no altera el esquema,
+los documentos ni sus lecturas existentes.
 
 Seleccionar año, banco y últimos cuatro dígitos de la cuenta. El mes se detecta
 desde el PDF reconocido; también puede elegirse manualmente para un soporte

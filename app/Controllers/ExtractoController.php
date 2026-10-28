@@ -39,7 +39,10 @@ final class ExtractoController
                     }
                     ExtractoData::match($file['lectura'],$data,$taxpayer);
                     $documentId=$this->documents->saveFor($id,$owner,$data,$file);
-                    header('Location: '.\url($this->config,'extractos').'&contribuyente='.$id.'&anio='.$year.'&documento='.$documentId.'&guardado=1',true,303);return;
+                    $pensionOrigin=\input($_GET,'origen')==='pensiones';
+                    $destination=\url($this->config,$pensionOrigin?'registro':'extractos').'&contribuyente='.$id.'&anio='.$year;
+                    if ($pensionOrigin) { $destination.='&componente=ingresos&cedula=pensiones'; }
+                    header('Location: '.$destination.'&documento='.$documentId.'&guardado=1#detalle',true,303);return;
                 } catch (\InvalidArgumentException $e) { http_response_code(422);$errors[]=$e->getMessage(); }
                 catch (\DomainException $e) { http_response_code(409);$errors[]=$e->getMessage(); }
                 catch (\Throwable $e) { error_log((string)$e);http_response_code(500);$errors[]='No fue posible guardar el extracto. El registro privado conserva el diagnóstico; vuelve a intentar.'; }

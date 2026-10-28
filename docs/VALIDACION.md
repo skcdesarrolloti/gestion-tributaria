@@ -4,6 +4,19 @@ Verificación local realizada el 13 de octubre de 2026 con PHP 8.2.12, MariaDB 1
 
 ## Resultado
 
+### Acceso directo a Pensiones y extractos · 28/10/2026
+
+Unitarias, sintaxis e integración aislada correctas. Pensiones muestra los
+documentos ya existentes antes de exigir perfil anual, abre su visor y permite
+buscar sin cambiar de sección. Se prueban año vacío, documento de otro año o
+persona, carga con retorno a Pensiones y conservación íntegra de registros,
+huellas y lecturas tras consultar. No modifica esquema ni calcula una pensión
+bruta desde abonos bancarios netos. El acceso general a extractos se conserva.
+Chrome con PDF ficticio de dos páginas: menú, calendario, consulta mensual,
+búsqueda y regreso al calendario correctos, sin desbordamiento de página en
+escritorio. La comprobación autenticada previa en Hostinger localizó seis
+soportes de 2026; no se cargaron ni modificaron archivos reales para el ensayo.
+
 ### Retención mensual y reserva salarial · 28/10/2026
 
 Sintaxis y unitarias correctas: tabla mensual 383 separada de la anual 241,
