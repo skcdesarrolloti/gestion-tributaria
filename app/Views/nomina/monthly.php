@@ -2,7 +2,7 @@
 <section id="nomina" class="bg-surface-container-lowest border border-surface-container rounded-xl p-4 space-y-space-md">
 <h2 class="text-headline-md font-semibold">Ingresos laborales · mes a mes</h2>
 <a class="inline-block rounded-xl bg-inverse-surface text-on-secondary px-4 py-2" href="<?= e(url($config,'nomina').'&anio='.$state['anio']) ?>">Subir nómina y revisar hojas</a>
-<?php if ($payroll): ?><a class="inline-block rounded-xl bg-inverse-surface text-on-secondary px-4 py-2" href="<?= e(url($config,'retenciones').'&id='.$profile['id']) ?>">Validar retención mensual</a><p>Revisa lo que te descontaron y abre la explicación de cada campo. En la revisión puedes cambiar de mes y empleador.</p><?php endif; ?>
+<?php if ($payroll): ?><a class="inline-block rounded-xl bg-inverse-surface text-on-secondary px-4 py-2" href="<?= e(url($config,'retenciones').'&id='.$profile['id']) ?>">Validar retención mensual</a><p>Allí verás la tabla de retenciones del año, lo descontado por mes y el acumulado esperado según las revisiones confirmadas. Puedes cambiar de mes y empleador.</p><?php endif; ?>
 <p>Real importado de nómina. Un mes vacío está pendiente; no equivale a cero. El número de quincenas no confirma que el mes esté completo. La nómina conserva centavos y alimenta 32 y 33 en pesos enteros. La retención aporta a 132 y no reduce los ingresos.</p>
 <?php if (!$payroll): ?><p>Aún no hay nóminas importadas para esta persona y año. Puedes revisar un ejemplo sin guardarlo.</p><?php endif; ?>
 <?php require __DIR__.'/summary.php'; ?>

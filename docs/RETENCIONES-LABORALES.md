@@ -11,6 +11,21 @@ de período sin regresar al listado. Los enlaces anteriores conservan su ruta.
 
 ## Captura guiada para quien no es contador
 
+En **Validar retención mensual** se ve la tabla del artículo 383 en UVT y en
+pesos del año seleccionado. Comparte los rangos con el motor de cálculo.
+Solo marca «Tu rango» con una revisión vigente de procedimiento 1; para el 2
+muestra el porcentaje confirmado, sin aplicar otra vez la tabla al pago mensual.
+La tabla explica base depurada, tarifa marginal y componente fijo.
+
+**Comparación y acumulados al corte** lista enero hasta el último mes importado
+del empleador elegido. Recupera descuentos reales y revisiones vigentes de cada
+mes. No combina pagadores ni toma meses faltantes, parciales o sin soporte como
+cero esperado. Si hay pendientes, el esperado total queda pendiente; cualquier
+subtotal compara únicamente los mismos meses revisados. Incluye un texto para
+pedir la liquidación al contador sin enviárselo automáticamente. No modifica
+nómina, no descuenta importes ni presenta pagos a la DIAN. Tabla y fuente legal
+contrastadas en DIAN el 28/10/2026 (ET 383/385/386 y resolución 238/2025).
+
 La revisión comienza con datos recuperados del archivo y una explicación de
 retención, ingreso bruto y aportes. Cada campo de revisión y reserva contiene
 una explicación visible y, cuando corresponde, una ayuda desplegable con el

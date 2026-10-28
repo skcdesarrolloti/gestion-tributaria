@@ -4,6 +4,16 @@ Verificación local realizada el 13 de octubre de 2026 con PHP 8.2.12, MariaDB 1
 
 ## Resultado
 
+### Tabla laboral y comparación acumulada · 28/10/2026
+
+Sintaxis, unitarias e integración aislada correctas. La tabla visible comparte
+los siete rangos ET 383 con el motor y convierte a pesos según UVT del año.
+Pruebas: rango personal solo tras revisión vigente del procedimiento 1;
+subtotales con meses comparables; pagadores separados; revisión vencida, huecos
+y meses parciales pendientes; esperado cero confirmado distinto de desconocido.
+No cambia descuentos, movimientos ni reglas de depuración. El texto para el
+contador no se envía y la consulta no guarda ni confirma supuestos del usuario.
+
 ### Ayudas y comparación visible de retención · 28/10/2026
 
 Sintaxis, unitarias e integración aislada correctas: acceso directo al último

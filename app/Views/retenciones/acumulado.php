@@ -1,0 +1,21 @@
+<?php $retSummary=\App\Services\RetencionResumen::build($groups,$settings['meses']??[],(int)$profile['anio'],(string)$group['documento']);
+$retMoney=static fn($v)=>'$'.number_format($v/100,2,',','.'); ?>
+<section id="retenciones-acumuladas" class="bg-surface-container-lowest border border-surface-container rounded-xl p-4 space-y-space-md">
+<h2 class="text-headline-md font-semibold">Cuánto me retuvieron y cuánto correspondía hasta el corte</h2>
+<p><?= e($group['empleador']) ?> · <?= e($profile['anio']) ?> · Corte de información: <?= e(\App\Services\NominaPreview::MONTHS[$retSummary['corte']-1]) ?>, último mes importado de este empleador. Si faltan pagos de ese mes, el corte está incompleto.</p>
+<p><strong>Retención descontada registrada: <?= e($retMoney($retSummary['real'])) ?>.</strong> Suma los descuentos de nómina importados de este empleador, incluso en meses incompletos. No incluye otros pagadores ni pensiones.</p>
+<?php if ($retSummary['pendientes']): ?><p class="bg-primary-container rounded-xl p-3"><strong>Total que debieron retener hasta el corte: pendiente.</strong> Hay <?= e($retSummary['pendientes']) ?> meses sin nómina o sin revisión vigente. Esos meses no se toman como cero.</p><?php endif; ?>
+<?php if ($retSummary['revisados']): ?>
+<p>En los <?= e($retSummary['revisados']) ?> meses revisados: esperado <?= e($retMoney($retSummary['esperada'])) ?>; descontado en esos mismos meses <?= e($retMoney($retSummary['real_comparable'])) ?>; diferencia <?= e($retMoney($retSummary['diferencia'])) ?>. <?= $retSummary['pendientes']?'Es un subtotal, no el total esperado de todo el corte.':'Todos los meses hasta el corte tienen revisión vigente.' ?></p>
+<?php endif; ?>
+<div class="renta-sheet-scroll" role="region" aria-label="Comparación de retenciones por mes" tabindex="0"><table class="renta-sheet-table"><thead><tr><th>Mes</th><th>Retenido en nómina</th><th>Esperado según revisión</th><th>Descontado − esperado</th><th>Revisión</th></tr></thead><tbody>
+<?php foreach ($retSummary['meses'] as $retMonth): ?><tr><th scope="row"><?= e(\App\Services\NominaPreview::MONTHS[$retMonth['mes']-1]) ?></th>
+<td><?= $retMonth['real']===null?'Sin nómina':e($retMoney($retMonth['real'])) ?></td><td><?= $retMonth['esperada']===null?'Pendiente':e($retMoney($retMonth['esperada'])) ?></td>
+<td><?= $retMonth['diferencia']===null?'—':e($retMoney($retMonth['diferencia'])) ?></td>
+<td><?php if ($retMonth['real']!==null): ?><a class="text-secondary underline" href="<?= e(url($config,'retenciones').'&id='.$profile['id'].'&periodo='.rawurlencode($retMonth['key']).'#comparacion-retencion') ?>"><?= e($retMonth['estado']) ?></a><?php else: ?>Sin nómina<?php endif; ?>
+<?php if ($retMonth['esperada']===null): ?><p class="text-body-md text-secondary"><?= e($retMonth['motivo']) ?></p><?php else: ?><p class="text-body-md text-secondary">Procedimiento <?= e($retMonth['procedimiento']) ?></p><?php endif; ?></td></tr><?php endforeach; ?>
+</tbody></table></div>
+<p>Una diferencia negativa indica que se descontó menos; una positiva, más. Revisa cada mes: las diferencias entre meses no se corrigen automáticamente. Pulsa su estado para completar o consultar la liquidación en el aplicativo.</p>
+<details><summary class="text-secondary underline">Qué le puedo pedir al contador</summary><blockquote class="border border-surface-container rounded-xl p-3">Por favor envíame la liquidación mensual de mi retención de <?= e($profile['anio']) ?> hasta <?= e(\App\Services\NominaPreview::MONTHS[$retSummary['corte']-1]) ?>: procedimiento 1 o 2, base depurada, beneficios aplicados y acumulados, valor calculado y valor descontado. Si usas procedimiento 2, incluye el porcentaje certificado de cada semestre y su cálculo. Quiero contrastar cada mes con el artículo 383 y revisar cualquier diferencia antes de hacer ajustes.</blockquote>
+<p>Si deseas aumentar la retención para cubrir mejor el impuesto anual, puedes solicitar por escrito una tarifa superior al pagador (art. 383, parágrafo 3); se aplica desde el mes siguiente a la solicitud. Es una decisión distinta de verificar si la nómina fue calculada correctamente. Primero reúne los demás ingresos para estimar cuánto aumentar.</p></details>
+</section>

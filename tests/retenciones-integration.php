@@ -9,6 +9,9 @@ verify($retXpath->query('//a[normalize-space(.)="Validar retención mensual" and
     'Retención: acceso visible junto al registro de nómina');
 [$s,$retPage]=request($client,$base,$retRoute);
 verify($s===200 && str_contains($retPage,'Pendiente de soporte'),'Retención: importar no marca OK sin soporte');
+verify(str_contains($retPage,'aria-label="Tabla de retención laboral artículo 383"') && str_contains($retPage,'$4.730.905')
+    && str_contains($retPage,'Total que debieron retener hasta el corte: pendiente.') && !str_contains($retPage,'Tu rango ·'),
+    'Retención: tabla en pesos del año y acumulado pendiente sin inventar un rango personal');
 verify(str_contains($retPage,'Resultado de la validación mensual') && str_contains($retPage,'Ejemplo didáctico: no es una validación')
     && preg_match('/name="usado25"[^>]*value="0"/',$retPage),'Retención: comparación visible, ejemplo separado y enero con acumulado anterior cero');
 $guideDom=new DOMDocument();@$guideDom->loadHTML($retPage);$guideXpath=new DOMXPath($guideDom);
@@ -35,6 +38,9 @@ verify(request($client,$base,$retRoute,$retPost)[0]===303,'Retención: guarda re
 [$s,$retSaved]=request($client,$base,$retRoute);
 verify($s===200 && str_contains($retSaved,'Retención esperada:') && str_contains($retSaved,'&lt;script&gt;') && !str_contains($retSaved,'<script>no ejecutar'),
     'Retención: muestra cálculo y escapa referencia del soporte');
+verify(str_contains($retSaved,'Tu rango ·') && str_contains($retSaved,'En los 1 meses revisados:')
+    && str_contains($retSaved,'Es un subtotal, no el total esperado de todo el corte.'),
+    'Retención: marca rango confirmado y solo compara subtotales de los mismos meses');
 verify(request($client,$base,$retRoute,$retPost)[0]===409,'Retención: revisión concurrente no sobrescribe');
 verify($db->query('SELECT id,valor_cop FROM movimientos_ingresos ORDER BY id')->fetchAll()===$retBefore,'Retención: comprobar no cambia importes ni duplica casillas');
 [$s,$retFeb]=request($client,$base,'retenciones&id='.$nomProfile.'&mes=2&empleador=999888777');

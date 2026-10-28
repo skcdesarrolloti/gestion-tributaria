@@ -65,3 +65,22 @@ catch (InvalidArgumentException $error) { $retPendingInput=str_contains($error->
 check($retPendingInput,'No lo sé no se transforma en un procedimiento ni en validación.');
 $retLatestGroups=['1-999888777'=>array_replace($retGroup,['mes'=>1]),'2-999888777'=>array_replace($retGroup,['mes'=>2,'completo'=>false])];
 check(RetencionLaboral::latestKey($retLatestGroups)==='1-999888777','Acceso directo abre último mes completo y no un mes parcial.');
+$retAnnualGroups=$retGroups+['2-999888777'=>array_replace($retGroups['1-999888777'],['mes'=>2,'completo'=>false]),
+    '1-000000000'=>array_replace($retGroups['1-999888777'],['documento'=>'000000000'])];
+$retAnnual=App\Services\RetencionResumen::build($retAnnualGroups,['1-999888777'=>$retReview],2026,'999888777');
+check($retAnnual['corte']===2 && $retAnnual['revisados']===1 && $retAnnual['pendientes']===1
+    && $retAnnual['real']===60000000 && $retAnnual['real_comparable']===30000000 && $retAnnual['esperada']===36564900
+    && $retAnnual['meses'][1]['esperada']===null,'Acumulado separa pagadores, meses pendientes y descuentos comparables.');
+$retStaleReview=array_replace($retReview,['huella'=>'anterior']);
+$retStaleAnnual=App\Services\RetencionResumen::build($retAnnualGroups,['1-999888777'=>$retStaleReview],2026,'999888777');
+check($retStaleAnnual['revisados']===0 && $retStaleAnnual['diferencia']===null,'Revisión vencida no alimenta el esperado acumulado.');
+$retMissingGroups=$retGroups+['3-999888777'=>array_replace($retGroups['1-999888777'],['mes'=>3])];
+$retMissingAnnual=App\Services\RetencionResumen::build($retMissingGroups,[],2026,'999888777');
+check($retMissingAnnual['meses'][1]['real']===null && $retMissingAnnual['meses'][1]['estado']==='Sin nómina',
+    'Un hueco entre meses se muestra sin nómina, no como ingreso ni retención cero.');
+$retZeroGroup=$retGroups['1-999888777'];$retZeroGroup['valores']=array_map(static fn($v)=>0,$retZeroGroup['valores']);
+$retZeroAnnual=App\Services\RetencionResumen::build(['1-999888777'=>$retZeroGroup],['1-999888777'=>$retReview],2026,'999888777');
+check($retZeroAnnual['revisados']===1 && $retZeroAnnual['pendientes']===0 && $retZeroAnnual['meses'][0]['esperada']===0,
+    'Esperado confirmado cero se distingue de dato pendiente.');
+check(count(RetencionTarifa::BRACKETS)===7 && RetencionTarifa::BRACKETS[6]===[2300,null,39,770],
+    'Tabla visible y motor comparten los siete rangos del artículo 383.');
