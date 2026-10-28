@@ -38,9 +38,10 @@ final class RegistroController
         $taxpayer=$id?$this->taxpayers->findFor($id,$owner):null;
         if (array_key_exists('contribuyente',$_GET) && !$taxpayer) { http_response_code(404);echo 'Contribuyente no encontrado.';return; }
         if (!$taxpayer && count($rows)===1) { $taxpayer=$rows[0]; }
-        $profile=null;$concepts=[];$movements=[];$totals=[];$preparation=null;$questions=null;$payroll=[];
+        $profile=null;$concepts=[];$movements=[];$totals=[];$preparation=null;$questions=null;$payroll=[];$retentionData=[];
         if ($taxpayer) {
             $blocks=$this->characterization->blocksFor((int)$taxpayer['id'],$owner,(int)$state['anio']);
+            $retentionData=$blocks['retenciones_laborales']['datos']??[];
             $questions=\App\Services\IngresoPreguntas::prepare($blocks['ingresos']??[],$taxpayer['tipo']);
             foreach ($this->incomes->profiles((int)$taxpayer['id'],$owner) as $p) { if ((string)$p['anio']===$state['anio']) { $profile=$this->incomes->profileFor((int)$p['id'],$owner);break; } }
             if ($profile) {
@@ -53,6 +54,6 @@ final class RegistroController
                 $preparation=\App\Services\PerfilAnualSugerencias::stored($this->characterization,$taxpayer,$owner,$state['anio']);
             }
         }
-        $this->view->render($template,compact('user','rows','taxpayer','profile','state','concepts','movements','totals','preparation','questions','payroll'));
+        $this->view->render($template,compact('user','rows','taxpayer','profile','state','concepts','movements','totals','preparation','questions','payroll','retentionData'));
     }
 }

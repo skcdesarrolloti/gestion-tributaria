@@ -11,6 +11,9 @@ en **Mi perfil**. No existe conexión a funcionarios ni inscripción pública.
 Ver [primera entrada y cuentas independientes](docs/CUENTAS-INDEPENDIENTES.md).
 Ver [perfiles y permisos](docs/PERFILES-Y-ACCESOS.md).
 
+Ingresos laborales incluye control mensual de retención por empleador y una
+reserva salarial provisional al corte. Ver [alcance y comprobación](docs/RETENCIONES-LABORALES.md).
+
 En Beneficios tributarios, **Consultar artículos aquí** permite leer las normas
 dentro de cada ficha, sin abrir páginas adicionales. La colección DIAN muestra
 fecha y fuente de consulta. Ver [alcance del visor](docs/ARTICULOS-EN-FICHAS.md).

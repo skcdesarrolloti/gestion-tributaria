@@ -60,6 +60,7 @@ $limiter = new App\Services\LoginLimiter(($config['storage_path'] ?? dirname(__D
 $authController = new App\Controllers\AuthController($auth, $view, $limiter, $config);
 $homeController = new App\Controllers\HomeController($auth, $view, $config);
 $registroController=new App\Controllers\RegistroController($auth,new App\Models\Contribuyente($database),new App\Models\Ingreso($database),$view,$config,new App\Models\Caracterizacion($database));
+$retencionController=new App\Controllers\RetencionController($auth,new App\Models\Ingreso($database),new App\Models\Caracterizacion($database),$view,$config);
 $extractoController=new App\Controllers\ExtractoController($auth,new App\Models\Contribuyente($database),new App\Models\ExtractoBancario($database),$view,$config);
 $nominaController=new App\Controllers\NominaController($auth,new App\Models\Contribuyente($database),new App\Models\Ingreso($database),new App\Models\NominaLaboral($database),$view,$config);
 $beneficioController = new App\Controllers\BeneficioController($auth, $view, $config);

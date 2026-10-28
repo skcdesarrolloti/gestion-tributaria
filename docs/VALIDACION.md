@@ -4,6 +4,25 @@ Verificación local realizada el 13 de octubre de 2026 con PHP 8.2.12, MariaDB 1
 
 ## Resultado
 
+### Retención mensual y reserva salarial · 28/10/2026
+
+Sintaxis y unitarias correctas: tabla mensual 383 separada de la anual 241,
+base después de aportes/deducciones, topes anuales, porcentaje certificado de
+procedimiento 2, redondeo y períodos completos por pagador. Integración aislada:
+persistencia por contribuyente/año, revisión concurrente, huellas, CSRF,
+conservación de importes, hipótesis y revisiones sin borrarse mutuamente,
+acceso propio del Usuario y rechazo de fichas ajenas. Los acumulados previos
+requieren soporte; no se da OK a una nómina incompleta o sin depuración.
+
+Chrome con datos ficticios: guardar revisión mensual, desplegar Observaciones,
+regresar a acumulados y guardar/reabrir hipótesis anual. Caso de ensayo con
+impuesto $5.983.000, retenido real $30.000, futuro $4.000.000, anticipo $457.000,
+faltante $2.410.000 y seis reservas de $401.667. Alcance salarial provisional
+visible, sin desbordamiento horizontal de página en escritorio. Se corrigieron
+la recarga de supuestos y el cierre HTML del enlace antes de publicar.
+No se cambian ingresos ni cuentas reales. El guardado con datos reales en
+Hostinger queda pendiente de confirmar los soportes del empleador.
+
 ### Apertura de extractos protegidos · 28/10/2026
 
 El navegador abre el PDF con el documento de la ficha o clave opcional, sin

@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 $router->add('GET', 'inicio', [$homeController, 'index']);
 $router->add('GET', 'registro', [$registroController, 'index']);
+$router->add('GET', 'retenciones', [$retencionController, 'index']);
+$router->add('POST', 'retenciones', [$retencionController, 'index']);
 $router->add('GET', 'extractos', [$extractoController, 'index']);
 $router->add('POST', 'extractos', [$extractoController, 'index']);
 $router->add('GET', 'extractos/documento', [$extractoController, 'document']);

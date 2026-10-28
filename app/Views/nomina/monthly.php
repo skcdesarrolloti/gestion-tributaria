@@ -1,10 +1,11 @@
 <?php $payMonths=\App\Services\NominaData::monthly($payroll); ?>
-<section class="bg-surface-container-lowest border border-surface-container rounded-xl p-4 space-y-space-md">
+<section id="nomina" class="bg-surface-container-lowest border border-surface-container rounded-xl p-4 space-y-space-md">
 <h2 class="text-headline-md font-semibold">Ingresos laborales · mes a mes</h2>
 <a class="inline-block rounded-xl bg-inverse-surface text-on-secondary px-4 py-2" href="<?= e(url($config,'nomina').'&anio='.$state['anio']) ?>">Subir nómina y revisar hojas</a>
 <p>Real importado de nómina. Un mes vacío está pendiente; no equivale a cero. El número de quincenas no confirma que el mes esté completo. La nómina conserva centavos y alimenta 32 y 33 en pesos enteros. La retención aporta a 132 y no reduce los ingresos.</p>
 <?php if (!$payroll): ?><p>Aún no hay nóminas importadas para esta persona y año. Puedes revisar un ejemplo sin guardarlo.</p><?php endif; ?>
 <?php require __DIR__.'/summary.php'; ?>
+<?php if ($payroll): require __DIR__.'/retenciones.php'; endif; ?>
 <details><summary class="text-secondary underline">Ver detalle mensual por concepto: salario, salud, pensión y demás descuentos</summary>
 <div class="renta-sheet-scroll" role="region" aria-label="Ingresos laborales por mes" tabindex="0"><table class="renta-sheet-table nomina-monthly-table"><thead><tr><th>Concepto</th><th>DIAN</th><?php foreach (['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'] as $m): ?><th><?= e($m) ?></th><?php endforeach; ?><th>Total importado</th></tr></thead><tbody>
 <tr><th scope="row">Quincenas registradas</th><td>Control</td><?php foreach ($payMonths as $m): ?><td><?= isset($m['registros'])?e($m['registros']):'Pendiente' ?></td><?php endforeach; ?><td><?= count($payroll) ?></td></tr>
