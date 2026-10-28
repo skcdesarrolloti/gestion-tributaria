@@ -14,8 +14,10 @@ final class NominaController
         $user=$this->auth->user();if (!$user) { \redirect($this->config,'login'); }
         $owner=(int)$user['_ID'];$year=\input($_GET,'anio','2026');
         if (!in_array($year,['2025','2026'],true)) { http_response_code(422);echo 'Selecciona 2025 o 2026.';return; }
-        $rows=$this->taxpayers->listFor($owner);$targets=[];$employers=[];$errors=[];$preview=null;$notice=null;
+        $rows=$this->taxpayers->listFor($owner);$targets=[];$employers=[];$errors=[];$preview=null;$notice=null;$taxpayer=null;
+        $navigationId=filter_var(\input($_GET,'contribuyente'),FILTER_VALIDATE_INT,['options'=>['min_range'=>1]])?:0;
         foreach ($rows as $t) {
+            if ((int)$t['id']===$navigationId) { $taxpayer=$t; }
             if ($t['tipo']==='juridica') { $employers[]=['nit'=>$t['documento_numero'],'nombre'=>$t['nombre']];continue; }
             if ($t['tipo']!=='natural') { continue; }
             $profiles=$this->incomes->profiles((int)$t['id'],$owner);$p=null;
@@ -23,6 +25,7 @@ final class NominaController
             $targets[]=['id'=>(int)$t['id'],'documento'=>$t['documento_numero'],'nombre'=>$t['nombre'],
                 'perfil'=>$p && $p['formulario']==='210' && $p['regimen']==='ordinario'?(int)$p['id']:0];
         }
+        if (isset($_GET['contribuyente']) && !$taxpayer) { http_response_code(404);echo 'Contribuyente no encontrado.';return; }
         if ($_SERVER['REQUEST_METHOD']==='POST') {
             if (!Csrf::valid(\input($_POST,'_csrf_token'))) { http_response_code(419);$errors[]='Formulario vencido. Recarga antes de continuar.'; }
             else {
@@ -71,6 +74,6 @@ final class NominaController
                 }
             }
         }
-        $this->view->render('nomina/index',compact('user','year','targets','employers','errors','preview','notice'));
+        $this->view->render('nomina/index',compact('user','year','taxpayer','targets','employers','errors','preview','notice'));
     }
 }

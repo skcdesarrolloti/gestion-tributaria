@@ -7,6 +7,13 @@ $db->prepare("INSERT INTO perfiles_renta (contribuyente_id,anio,tipo,residencia,
 $nomProfile=(int)$db->lastInsertId();
 [$s,$nomPage]=request($client,$base,'nomina&anio=2025');
 verify($s===200 && str_contains($nomPage,'Solo se envían las filas elegidas') && token($nomPage)!=='','Nómina: lector protegido y alcance de privacidad visibles');
+[, $nomContextPage]=request($client,$base,'nomina&anio=2025&contribuyente='.$nomTax);
+$nomContextDom=new DOMDocument();@$nomContextDom->loadHTML($nomContextPage);$nomContextXpath=new DOMXPath($nomContextDom);
+verify($nomContextXpath->query('//nav[@aria-label="Secciones de Registro de información"]//a[@aria-current="page" and normalize-space(.)="Subir nómina"]')->length===1
+    && str_contains($nomContextPage,'name="contribuyente" value="'.$nomTax.'"')
+    && str_contains($nomContextPage,'route=nomina&amp;anio=2025&amp;contribuyente='.$nomTax),
+    'Nómina: pestañas y formularios conservan el contribuyente y año del registro');
+verify(request($client,$base,'nomina&anio=2025&contribuyente=999999999')[0]===404,'Nómina: contexto inexistente no se conserva como si fuera una ficha autorizada');
 $nomValues=array_fill_keys(App\Services\NominaData::FIELDS,0);
 $nomValues=array_replace($nomValues,['salario'=>100000000,'comisiones'=>20000000,'devengado'=>120000000,'salud'=>4000000,'pension'=>4000000,'retencion'=>1000000,'deducido'=>9000000,'neto'=>111000000]);
 $nomRow=['contribuyente_id'=>$nomTax,'perfil_id'=>$nomProfile,'documento'=>'999111222','empleador_documento'=>'999888777','empleador'=>'Empresa ficticia',

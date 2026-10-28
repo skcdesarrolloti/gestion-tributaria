@@ -4,6 +4,14 @@ Verificación local realizada el 13 de octubre de 2026 con PHP 8.2.12, MariaDB 1
 
 ## Resultado
 
+### Pestañas persistentes de Registro · 28/10/2026
+
+Sintaxis, unitarias e integración aislada correctas. Las cuatro pestañas conservan
+persona/año, marcan la sección elegida y permanecen fuera de paneles plegados.
+Subir nómina conserva el contexto en selección de año, carga y confirmación;
+una ficha inexistente se rechaza sin guardar. Se mantienen los controles previos
+de permisos, CSRF, importación repetida y nómina ajena. No se cambia el esquema.
+
 ### Sección activa del menú · 28/10/2026
 
 Sintaxis y unitarias correctas. Renderizado local de trece rutas: exactamente

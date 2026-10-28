@@ -14,6 +14,17 @@ Contribuyentes. No se elimina información ni se cambia la política Socio/Usuar
 
 ## Registro de información
 
+Dentro de Registro permanece una barra de pestañas: **Ingresos**, **Pensiones
+y extractos**, **Subir nómina** y **Costos y gastos**. La pestaña actual se
+resalta en azul. La barra sigue visible al desplazarse y permite cambiar de
+sección sin abrir el menú desplegable. En pantallas estrechas se desliza
+horizontalmente, sin desbordar la página.
+
+Los destinos conservan contribuyente y año. Subir nómina también conserva ese
+contexto al cambiar año, revisar y confirmar la importación; la selección de
+empleados y sus permisos siguen siendo los existentes. Una ficha de navegación
+no autorizada se rechaza. Sin ficha elegida, las pestañas no inventan una.
+
 Ruta `registro`, atendida por RegistroController. Seleccionar contribuyente y
 2025 o 2026. Solo se consultan fichas autorizadas con los modelos existentes.
 Al abrir Ingresos o Costos y gastos desde una ficha, el menú conserva su

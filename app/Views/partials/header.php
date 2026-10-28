@@ -38,5 +38,7 @@ $menuLink=static fn(string $section)=>'class="rounded-xl px-3 py-2.5 '.$menuStyl
 <?php if (isset($profile['contribuyente_id'],$profile['anio'])):
     $returnPayroll=($profile['tipo']??'')==='natural' && ($profile['formulario']??'')==='210'; ?>
 <a class="text-secondary underline" href="<?= e(url($config,'registro').'&contribuyente='.$profile['contribuyente_id'].'&anio='.$profile['anio'].'&componente=ingresos'.($returnPayroll?'&cedula=general&renta=trabajo#nomina':'')) ?>">← Volver a ingresos · <?= e($profile['nombre'].' · '.$profile['anio']) ?></a><?php else: ?><a class="text-secondary underline" href="<?= e(url($config)) ?>">← Inicio</a><?php endif; ?>
-</div></nav>
+</div>
+<?php if ($menuActive==='registro'): require __DIR__.'/../registro/menu.php'; endif; ?>
+</nav>
 <script src="<?= e(asset($config,'js/portal-menu.js').'?v='.filemtime(dirname(__DIR__,3).'/public/assets/js/portal-menu.js')) ?>" defer></script>

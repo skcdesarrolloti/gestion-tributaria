@@ -5,6 +5,14 @@ verify($s===200 && strpos($navigation,'Usuarios y accesos')<strpos($navigation,'
 $registrationRoute='registro&contribuyente='.$taxpayerId.'&anio=2025&componente=costos&cedula=general&renta=capital';
 [$s,$registrationHtml]=request($client,$base,$registrationRoute);
 verify($s===200 && str_contains($registrationHtml,'60 · Costos') && !str_contains($registrationHtml,'58 · Ingresos brutos'),'Costos muestra sus casillas separadas de ingresos');
+$sectionDom=new DOMDocument();@$sectionDom->loadHTML($registrationHtml);$sectionXpath=new DOMXPath($sectionDom);
+$sectionLinks=$sectionXpath->query('//nav[@aria-label="Secciones de Registro de información"]//a');$sectionContext=true;
+foreach ($sectionLinks as $link) {
+    parse_str((string)parse_url($link->getAttribute('href'),PHP_URL_QUERY),$tabContext);
+    if ((int)($tabContext['contribuyente']??0)!==$taxpayerId || ($tabContext['anio']??'')!=='2025') { $sectionContext=false; }
+}
+verify($sectionLinks->length===4 && $sectionContext && $sectionXpath->query('//nav[@aria-label="Secciones de Registro de información"]//a[@aria-current="page" and normalize-space(.)="Costos y gastos"]')->length===1,
+    'Registro: cuatro pestañas visibles conservan persona/año y marcan Costos como sección actual');
 verify(str_contains(request($client,$base,str_replace('componente=costos','componente=ingresos',$registrationRoute))[1],'58 · Ingresos brutos'),'Ingresos de capital tiene pestaña propia');
 [$s,$fromTaxpayer]=request($client,$base,'contribuyentes/perfil&id='.$taxpayerId.'&anio=2025');
 preg_match('/href="([^"]+)">Ingresos<\/a>/', $fromTaxpayer,$incomeMenu);

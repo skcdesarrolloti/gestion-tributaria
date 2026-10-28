@@ -8,6 +8,25 @@ final class RegistroNavegacion
     public const RENTAS=['trabajo'=>'Trabajo','servicios'=>'Servicios personales','capital'=>'Capital','no_laborales'=>'No laborales'];
     public const SECCIONES_110=['ordinarios'=>'Actividades ordinarias','financieros'=>'Ingresos financieros','dividendos'=>'Dividendos y participaciones','otros'=>'Otros ingresos','ganancias'=>'Ganancias ocasionales'];
     private const BLOCKS=['trabajo'=>'Trabajo','servicios'=>'Servicios personales con costos','capital'=>'Capital','no_laborales'=>'No laborales'];
+    public static function menu(string $route,array $source,int $taxpayer,string $year): array
+    {
+        $active=match (true) {
+            $route==='nomina'=>'nomina',
+            $route==='extractos' || ($route==='registro' && \input($source,'componente','ingresos')==='ingresos' && \input($source,'cedula')==='pensiones')=>'pensiones',
+            $route==='registro' && \input($source,'componente')==='costos'=>'costos',default=>'ingresos',
+        };
+        $context=['anio'=>$year]+($taxpayer>0?['contribuyente'=>$taxpayer]:[]);
+        $items=['ingresos'=>['Ingresos','registro',['componente'=>'ingresos','cedula'=>'general']],
+            'pensiones'=>['Pensiones y extractos','registro',['componente'=>'ingresos','cedula'=>'pensiones']],
+            'nomina'=>['Subir nómina','nomina',[]],
+            'costos'=>['Costos y gastos','registro',['componente'=>'costos','cedula'=>'general']]];
+        $tabs=[];
+        foreach ($items as $key=>[$label,$target,$query]) {
+            $tabs[]=['label'=>$label,'route'=>$target,'query'=>'&'.http_build_query($context+$query),'active'=>$key===$active];
+        }
+        return $tabs;
+    }
+
     public static function state(array $source): array
     {
         $state=['anio'=>\input($source,'anio','2026'),'componente'=>\input($source,'componente','ingresos'),

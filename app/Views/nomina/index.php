@@ -1,16 +1,16 @@
-<?php $title='Importar nómina laboral';require __DIR__.'/../partials/head.php'; ?>
+<?php $title='Importar nómina laboral';$nominaQuery='&anio='.$year.($taxpayer?'&contribuyente='.$taxpayer['id']:'');require __DIR__.'/../partials/head.php'; ?>
 <body class="bg-background min-h-screen font-body-md text-on-surface antialiased">
 <?php require __DIR__.'/../partials/header.php'; ?>
 <main class="portal-container py-8 space-y-space-lg">
 <section class="bg-inverse-surface text-on-secondary rounded-2xl p-4"><h1 class="text-headline-lg font-semibold">Subir nómina · <?= e($year) ?></h1><p>Archivo → hojas y empleados → vista previa → confirmar.</p></section>
-<form method="get" action="<?= e($config['base_path'].'/index.php') ?>"><input type="hidden" name="route" value="nomina"><label>Año <select name="anio" class="bg-surface-container-low rounded-xl p-2"><?php foreach (['2025','2026'] as $y): ?><option <?= $y===$year?'selected':'' ?>><?= e($y) ?></option><?php endforeach; ?></select></label> <button class="rounded-xl bg-inverse-surface text-on-secondary px-4 py-2">Abrir</button></form>
+<form method="get" action="<?= e($config['base_path'].'/index.php') ?>"><input type="hidden" name="route" value="nomina"><?php if ($taxpayer): ?><input type="hidden" name="contribuyente" value="<?= (int)$taxpayer['id'] ?>"><?php endif; ?><label>Año <select name="anio" class="bg-surface-container-low rounded-xl p-2"><?php foreach (['2025','2026'] as $y): ?><option <?= $y===$year?'selected':'' ?>><?= e($y) ?></option><?php endforeach; ?></select></label> <button class="rounded-xl bg-inverse-surface text-on-secondary px-4 py-2">Abrir</button></form>
 <?php foreach ($errors as $error): ?><p role="alert" class="bg-error-container text-on-error-container rounded-xl p-4"><?= e($error) ?></p><?php endforeach; ?>
 <?php if ($notice): ?><p role="status" class="bg-primary-container rounded-xl p-4">Guardadas: <?= e($notice['guardadas']) ?>. Repetidas sin volver a sumar: <?= e($notice['duplicadas']) ?>. Abre el contribuyente en Registro → Ingresos → Trabajo para ver los meses y las casillas.</p><?php endif; ?>
 <?php if ($preview): require __DIR__.'/preview.php'; endif; ?>
 <section class="bg-surface-container-lowest border border-surface-container rounded-xl p-4 space-y-space-md">
 <h2 class="text-headline-md font-semibold">Seleccionar archivo y períodos</h2>
 <p>El Excel se lee en tu navegador. Solo se envían las filas elegidas de contribuyentes autorizados; no se guarda el libro completo ni la nómina de los demás empleados. No hay conexión con el sistema de funcionarios.</p>
-<form data-nomina-upload method="post" action="<?= e(url($config,'nomina').'&anio='.$year) ?>" class="space-y-space-md">
+<form data-nomina-upload method="post" action="<?= e(url($config,'nomina').$nominaQuery) ?>" class="space-y-space-md">
 <?php require __DIR__.'/../partials/csrf.php'; ?><input type="hidden" name="accion" value="revisar"><input type="hidden" name="filas" value="">
 <label class="block">NIT del empleador, sin dígito de verificación <input name="empleador_documento" inputmode="numeric" pattern="[0-9]{5,20}" required maxlength="20" class="bg-surface-container-low rounded-xl p-2"></label>
 <p class="text-secondary">Se propone si el nombre del empleador en la hoja coincide con una sociedad registrada. Confírmalo; este NIT identifica al pagador, no a los empleados.</p>
