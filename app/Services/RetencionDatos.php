@@ -20,7 +20,10 @@ final class RetencionDatos
         }
         foreach (['procedimiento'=>['1','2'],'dependientes'=>['si','no'],'redondeo'=>['peso','miles']] as $key=>$allowed) {
             $v[$key]=\input($post,$key);
-            if (!in_array($v[$key],$allowed,true)) { throw new \InvalidArgumentException('Selecciona '.$key.'.'); }
+            if (!in_array($v[$key],$allowed,true)) {
+                $label=['procedimiento'=>'el método del empleador','dependientes'=>'si nómina aplicó el beneficio de dependientes','redondeo'=>'cómo redondeó nómina'][$key];
+                throw new \InvalidArgumentException('Todavía falta confirmar '.$label.'. Consulta la ayuda de ese campo o pide el dato a nómina. No se ha validado ni cambiado el descuento importado.');
+            }
         }
         $percent=\input($post,'porcentaje');
         if ($v['procedimiento']==='2' && (!preg_match('/^(0|[1-9][0-9]?)(\.[0-9]{1,2})?$/D',$percent) || (float)$percent>39)) {

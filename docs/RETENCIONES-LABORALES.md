@@ -5,6 +5,38 @@ general → Trabajo. El resumen mensual añade «Control retención», con OK,
 Revisar o Pendiente de soporte. Las observaciones conservan el detalle.
 «Revisar soportes de retención por mes y empleador» permite reabrir incluso OK.
 
+El botón visible **Validar retención mensual**, junto a Subir nómina, entra al
+último mes completo disponible. El selector «Mes y empleador» permite cambiar
+de período sin regresar al listado. Los enlaces anteriores conservan su ruta.
+
+## Captura guiada para quien no es contador
+
+La revisión comienza con datos recuperados del archivo y una explicación de
+retención, ingreso bruto y aportes. Cada campo de revisión y reserva contiene
+una explicación visible y, cuando corresponde, una ayuda desplegable con el
+origen del dato, ejemplos y significado de cada opción. Hay un texto que puede
+pedirse a nómina; el aplicativo no lo envía a terceros. Los artículos se siguen
+consultando dentro de la aplicación. Una UVT se explica y se muestra en pesos
+para el año elegido; no se pide al usuario calcular límites.
+
+Procedimiento, dependientes y redondeo incluyen «No lo sé todavía». El servidor
+rechaza su confirmación con un mensaje explicativo: no lo transforma en un
+hecho ni en OK. Un campo monetario vacío sigue pendiente. Enero propone 0 en
+acumulados de meses anteriores; desde febrero no se inventan acumulados.
+El porcentaje solo se habilita para procedimiento 2, con ayuda y ejemplo de
+formato. Sin JavaScript las explicaciones y el campo siguen disponibles.
+
+«Resultado de la validación mensual» permanece visible: retención descontada,
+esperada (o motivo del pendiente) y comparación. Tras guardar se llega a ese
+bloque mediante un ancla; la cuenta paso a paso puede desplegarse. Cambiar
+campos avisa que aún no se ha actualizado la comparación guardada.
+
+Un ejemplo didáctico separado reutiliza el motor con supuestos expresos:
+procedimiento 1, sin deducciones adicionales, cupos disponibles y redondeo al
+peso. RetencionEjemplo devuelve únicamente importes, sin estado OK, y no guarda
+ni modifica datos. No se presenta como validación de la nómina. Las ayudas
+se contrastaron con ET 385, 386 y 387 en la compilación DIAN el 28/10/2026.
+
 Se agrupan períodos del mismo empleador, sin compensar diferencias de pagadores
 distintos. La cobertura de fechas debe llegar desde el día 1 hasta el cierre
 de nómina (30 o último día de febrero), sin huecos; además se confirma que no

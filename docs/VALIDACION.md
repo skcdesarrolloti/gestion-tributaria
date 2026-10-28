@@ -4,6 +4,18 @@ Verificación local realizada el 13 de octubre de 2026 con PHP 8.2.12, MariaDB 1
 
 ## Resultado
 
+### Ayudas y comparación visible de retención · 28/10/2026
+
+Sintaxis, unitarias e integración aislada correctas: acceso directo al último
+mes completo, selector limitado a pagadores del perfil, ayuda asociada a cada
+control, opción desconocida rechazada sin confirmar datos, enero con acumulado
+anterior 0 y ejemplo que no devuelve OK ni altera la nómina. Se conservan las
+pruebas de permisos, CSRF, revisión concurrente y movimientos sin duplicados.
+Chrome con datos ficticios: ayuda cambia al seleccionar procedimiento 1/2 o
+desconocido, porcentaje visible solo en 2, aviso de cambios sin comparar y
+guardado que regresa al bloque visible del resultado. No se guardan supuestos
+ni cambios de revisión en las cuentas reales para el ensayo.
+
 ### Acceso directo a Pensiones y extractos · 28/10/2026
 
 Unitarias, sintaxis e integración aislada correctas. Pensiones muestra los

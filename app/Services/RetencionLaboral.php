@@ -31,11 +31,18 @@ final class RetencionLaboral
         }
         return $next>$last;
     }
+    public static function latestKey(array $groups): string
+    {
+        uasort($groups,static fn($a,$b)=>$b['mes']<=>$a['mes']?:strcmp($a['documento'],$b['documento']));
+        foreach ($groups as $key=>$g) { if ($g['completo'] && $g['valores']['retroactivos']===0) { return (string)$key; } }
+        return (string)(array_key_first($groups)??'');
+    }
     public static function check(array $g, array $review, int $year): array
     {
         $pending=static fn($reason)=>['estado'=>'Pendiente de soporte','motivo'=>$reason];
         if (!$g['completo']) { return $pending('Faltan períodos para cubrir el mes de este empleador.'); }
-        if (!$review || ($review['huella']??'')!==$g['huella']) { return $pending('Revisa el procedimiento y los soportes de la nómina actual; una corrección invalida la revisión anterior.'); }
+        if (!$review) { return $pending('La nómina ya está cargada. Falta confirmar el método y los datos que usó tu empleador para calcular el descuento. Completa el paso 2; no tienes que adivinar.'); }
+        if (($review['huella']??'')!==$g['huella']) { return $pending('La nómina cambió desde la última revisión. Confirma otra vez los datos del paso 2 antes de comparar.'); }
         if ($g['valores']['retroactivos']>0) { return $pending('Los retroactivos requieren depuración particular; este control cubre pagos ordinarios.'); }
         $uvt=BeneficioCatalog::year((string)$year)['uvt']*100;$v=$g['valores'];
         $net=max(0,$v['devengado']-$v['aportes']);

@@ -20,7 +20,11 @@ final class RetencionController
         $payroll=$this->incomes->payroll($id,$owner);$groups=RetencionLaboral::groups($payroll);
         $records=$this->blocks->blocksFor((int)$profile['contribuyente_id'],$owner,(int)$profile['anio']);
         $block=$records['retenciones_laborales']??[];$settings=$block['datos']??[];$revision=(int)($block['revision']??0);
-        $key=\input($_GET,'mes').'-'.\input($_GET,'empleador');$group=$groups[$key]??null;
+        $key=\input($_GET,'periodo',\input($_GET,'mes').'-'.\input($_GET,'empleador'));
+        if (!isset($_GET['periodo']) && !isset($_GET['mes']) && !isset($_GET['empleador'])) {
+            $key=RetencionLaboral::latestKey($groups);
+        }
+        $group=$groups[$key]??null;
         $projection=\input($_GET,'vista')==='reserva';
         if (!$projection && !$group) { http_response_code(404);echo 'Mes y empleador no encontrados en la nómina de este perfil.';return; }
         $errors=[];
@@ -42,11 +46,11 @@ final class RetencionController
                 if (!$this->blocks->saveFor((int)$profile['contribuyente_id'],$owner,(int)$profile['anio'],'retenciones_laborales',$settings,$revision)) {
                     http_response_code(409);echo 'La información cambió en otra ventana. Recarga para conservar los cambios.';return;
                 }
-                header('Location: '.\url($this->config,'retenciones').'&id='.$id.($projection?'&vista=reserva':'&mes='.$group['mes'].'&empleador='.rawurlencode($group['documento'])).'&guardado=1',true,303);return;
+                header('Location: '.\url($this->config,'retenciones').'&id='.$id.($projection?'&vista=reserva':'&mes='.$group['mes'].'&empleador='.rawurlencode($group['documento'])).'&guardado=1'.($projection?'':'#comparacion-retencion'),true,303);return;
             } catch (\InvalidArgumentException $e) { http_response_code(422);$errors[]=$e->getMessage(); }
         }
         $review=$group?($settings['meses'][$key]??[]):[];
         $result=$projection?NominaReserva::calculate($payroll,$settings['reserva']??[],$profile):RetencionLaboral::check($group,$review,(int)$profile['anio']);
-        $this->view->render('retenciones/index',compact('user','profile','payroll','group','projection','settings','review','revision','result','errors'));
+        $this->view->render('retenciones/index',compact('user','profile','payroll','groups','group','projection','settings','review','revision','result','errors'));
     }
 }

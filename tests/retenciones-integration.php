@@ -5,8 +5,23 @@ $retRoute='retenciones&id='.$nomProfile.'&mes=1&empleador=999888777';
 $retDom=new DOMDocument();@$retDom->loadHTML($retRegister);$retXpath=new DOMXPath($retDom);
 verify($retXpath->query('//a[contains(@href,"vista=reserva") and not(ancestor::details)]')->length===1,
     'Reserva: botón visible fuera de paneles cerrados y enlaces de empleador válidos');
+verify($retXpath->query('//a[normalize-space(.)="Validar retención mensual" and not(ancestor::details)]')->length===1,
+    'Retención: acceso visible junto al registro de nómina');
 [$s,$retPage]=request($client,$base,$retRoute);
 verify($s===200 && str_contains($retPage,'Pendiente de soporte'),'Retención: importar no marca OK sin soporte');
+verify(str_contains($retPage,'Resultado de la validación mensual') && str_contains($retPage,'Ejemplo didáctico: no es una validación')
+    && preg_match('/name="usado25"[^>]*value="0"/',$retPage),'Retención: comparación visible, ejemplo separado y enero con acumulado anterior cero');
+$guideDom=new DOMDocument();@$guideDom->loadHTML($retPage);$guideXpath=new DOMXPath($guideDom);
+$guideControls=$guideXpath->query('//form[@data-retencion-form]//*[@name and not(@type="hidden")]');$allGuided=true;
+foreach ($guideControls as $control) {
+    $guideId=$control->getAttribute('aria-describedby');
+    if ($guideId==='' || $guideXpath->query('//*[@id="'.$guideId.'"]')->length!==1) { $allGuided=false; }
+}
+verify($allGuided,'Retención: cada campo tiene una explicación asociada accesible');
+[$s,$retDefault]=request($client,$base,'retenciones&id='.$nomProfile);
+verify($s===200 && str_contains($retDefault,'Enero · Empresa ficticia'),'Retención: entrada directa elige último mes completo');
+verify(request($client,$base,'retenciones&id='.$nomProfile.'&periodo=2-999888777')[0]===200
+    && request($client,$base,'retenciones&id='.$nomProfile.'&periodo=1-000000000')[0]===404,'Retención: selector conserva alcance del perfil y del pagador');
 $retHidden=static function(string $html,string $name): string { preg_match('/name="'.preg_quote($name,'/').'" value="([^"]*)"/',$html,$m);return html_entity_decode($m[1]??''); };
 $retPost=['_csrf_token'=>token($retPage),'revision'=>$retHidden($retPage,'revision'),'huella'=>$retHidden($retPage,'huella'),
     'vivienda'=>'0','prepagada'=>'0','usado25'=>'0','usado1340'=>'0','dependientes'=>'no','procedimiento'=>'1','redondeo'=>'peso',
@@ -14,6 +29,8 @@ $retPost=['_csrf_token'=>token($retPage),'revision'=>$retHidden($retPage,'revisi
 $retBefore=$db->query('SELECT id,valor_cop FROM movimientos_ingresos ORDER BY id')->fetchAll();
 verify(request($client,$base,$retRoute,array_replace($retPost,['_csrf_token'=>'']))[0]===419,'Retención: guardar exige CSRF');
 verify(request($client,$base,$retRoute,array_replace($retPost,['verificado'=>'']))[0]===422,'Retención: exige soportes y confirmaciones');
+[$s,$retUnknown]=request($client,$base,$retRoute,array_replace($retPost,['procedimiento'=>'pendiente']));
+verify($s===422 && str_contains($retUnknown,'Todavía falta confirmar el método del empleador'),'Retención: opción desconocida explica el pendiente y no se confirma');
 verify(request($client,$base,$retRoute,$retPost)[0]===303,'Retención: guarda revisión con permisos del Socio');
 [$s,$retSaved]=request($client,$base,$retRoute);
 verify($s===200 && str_contains($retSaved,'Retención esperada:') && str_contains($retSaved,'&lt;script&gt;') && !str_contains($retSaved,'<script>no ejecutar'),

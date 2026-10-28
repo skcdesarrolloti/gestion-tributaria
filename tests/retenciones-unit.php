@@ -49,3 +49,19 @@ check($reserveResult['estado']==='calculado' && $reserveResult['retenido_real']=
 check($reserveResult['reserva']===(int)ceil($reserveResult['saldo_pagar']/6),'Reserva distribuye saldo con anticipo y créditos.');
 $retRows[0]['revision']=5;
 check(NominaReserva::calculate($retRows,$reserve,[])['estado']==='pendiente','Importación corregida exige confirmar proyección.');
+$guide=App\Services\RetencionGuia::field('procedimiento');
+check(isset($guide['choices']['1'],$guide['choices']['2'],$guide['choices']['pendiente']) && str_contains($guide['hint'],'empleador'),
+    'Ayuda explica cada procedimiento y qué hacer si no se conoce.');
+foreach (array_merge(array_keys(RetencionDatos::MONEY),['procedimiento','dependientes','redondeo','porcentaje','soporte','completo','ordinario','verificado'],
+    array_keys(NominaReserva::MONEY),['declaraciones','cuotas','hipotesis']) as $helpKey) {
+    check(App\Services\RetencionGuia::field($helpKey)['hint']!=='','Todo campo de retención y reserva tiene contexto: '.$helpKey);
+}
+$exampleSource=$retGroup;$exampleResult=App\Services\RetencionEjemplo::build($retGroup,2026);
+check($retGroup===$exampleSource && !isset($exampleResult['estado']) && $exampleResult['esperada']===36564900,
+    'Ejemplo calcula sin alterar nómina ni producir un estado OK.');
+$retPendingInput=false;
+try { RetencionDatos::read(array_replace($retPost,['procedimiento'=>'pendiente'])); }
+catch (InvalidArgumentException $error) { $retPendingInput=str_contains($error->getMessage(),'Todavía falta confirmar'); }
+check($retPendingInput,'No lo sé no se transforma en un procedimiento ni en validación.');
+$retLatestGroups=['1-999888777'=>array_replace($retGroup,['mes'=>1]),'2-999888777'=>array_replace($retGroup,['mes'=>2,'completo'=>false])];
+check(RetencionLaboral::latestKey($retLatestGroups)==='1-999888777','Acceso directo abre último mes completo y no un mes parcial.');
