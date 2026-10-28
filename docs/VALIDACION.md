@@ -13,6 +13,11 @@ prioridad sobre P1; sin soporte solo hay hipótesis explícita, nunca OK confirm
 Meses parciales y pagadores permanecen separados. Los acumulados confirmados no
 mezclan simulaciones. Consultar conserva movimientos y revisiones originales.
 La barra de orientación conserva persona/año y acceso al menú principal.
+Publicación 990ac3d comprobada con sesión autenticada: enero muestra diferencia
+provisional y despliega su cuenta bajo la fila; la tabla DIAN abre dentro de la
+misma nómina. «Menú principal» vuelve a la cabecera (posición superior 0) y
+«Volver a ingresos» conserva contribuyente y 2026. No se guardaron supuestos,
+revisiones ni movimientos en producción para esta comprobación.
 
 ### Extractos sin clave y reintegros de GMF · 28/10/2026
 
