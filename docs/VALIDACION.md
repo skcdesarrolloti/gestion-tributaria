@@ -15,6 +15,11 @@ contradictorios. CSRF, permisos, duplicados y limpieza de copias siguen pasando.
 El archivo señalado por el responsable se inspeccionó localmente, sin subirlo a
 servicios externos ni copiarlo a Git o a la base de pruebas: abre sin contraseña
 y concilia sus dos páginas con el reconocimiento del reintegro corregido.
+Publicación d3c97d1 comprobada con sesión autenticada en Hostinger: formulario
+con explicación de PDF sin clave, casilla opcional y siete soportes anteriores
+visibles. La carga del archivo real no se realizó: la extensión de Chrome
+bloquea la selección de archivos locales. Queda pendiente que el responsable
+seleccione ese PDF y guarde; no se marcaron revisiones ni se sustituyeron soportes.
 
 ### Parámetros anuales y desglose P1 · 28/10/2026
 
