@@ -9,10 +9,10 @@ final class RetencionTarifa
     public const BRACKETS=[[0,95,0,0],[95,150,19,0],[150,360,28,10],[360,640,33,69],
         [640,945,35,162],[945,2300,37,268],[2300,null,39,770]];
 
-    public static function calculate(int $base, int $uvt): int
+    public static function calculate(int $base, int $uvt,?array $brackets=null): int
     {
         if ($base<0 || $uvt<=0) { throw new \InvalidArgumentException('Base o UVT inválida.'); }
-        foreach (array_reverse(self::BRACKETS) as [$threshold,$upper,$rate,$fixed]) {
+        foreach (array_reverse($brackets??self::BRACKETS) as [$threshold,$upper,$rate,$fixed]) {
             if ($base>$threshold*$uvt*100) {
                 return intdiv(($base-$threshold*$uvt*100)*$rate+50,100)+$fixed*$uvt*100;
             }

@@ -1,4 +1,5 @@
 <?php $fieldGuide=\App\Services\RetencionGuia::field($field); ?>
+<?php if ($field==='usado25') { $fieldGuide['hint']=str_replace('25%',$yearRules['exencion_pct'].'%',$fieldGuide['hint']); } ?>
 <?php if (!empty($fieldGuide['choices'])):
     $selectedHelp=$fieldGuide['choices'][(string)($values[$field]??'')]??'Selecciona una opción: aquí aparecerá su explicación automáticamente.';
 ?>

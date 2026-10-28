@@ -36,11 +36,14 @@ header('Referrer-Policy: same-origin');
 
 $database = new App\Core\Database($config['database']);
 (new App\Services\Migrator($database->connection(), dirname(__DIR__) . '/database'))->run();
+$parametroModel=new App\Models\ParametroAnual($database);
+App\Services\ParametrosAnuales::load($parametroModel->latest());
 $users = new App\Models\Usuario($database);
 $authSource = hash('sha256','cuentas-tributarias-v1|'.$config['database']['name']);
 $access=new App\Models\AccesoTributario($database);
 $auth = new App\Services\AuthService($users, $authSource, $access);
 $view = new App\Core\View(dirname(__DIR__) . '/app/Views', $config);
+$parametroController=new App\Controllers\ParametroAnualController($auth,$parametroModel,$view,$config);
 $cuentaController=new App\Controllers\CuentaController($auth,$users,$database,$view,$config);
 $activation=new App\Services\ActivacionCuenta($database,($config['storage_path']??dirname(__DIR__).'/storage').'/activacion-inicial.json',$config);
 $activacionController=new App\Controllers\ActivacionController($users,$activation,$view,$config);

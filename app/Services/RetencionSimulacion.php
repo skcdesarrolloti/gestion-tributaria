@@ -31,7 +31,8 @@ final class RetencionSimulacion
             $summary['meses'][]=['mes'=>$month,'real'=>$group['valores']['retencion']??null,'motivo'=>$reason,
                 'simulada'=>$example['esperada']??null,'diferencia'=>$example['diferencia']??null,
                 'acumulado'=>$example?$cumulative:null,'devengado'=>$group['valores']['devengado']??null,
-                'aportes'=>$group['valores']['aportes']??null,'beneficios'=>$example['beneficios']??null,'base'=>$example['base']??null];
+                'aportes'=>$group['valores']['aportes']??null,'beneficios'=>$example['beneficios']??null,'base'=>$example['base']??null,
+                'conceptos'=>$group['valores']??[]];
         }
         return $summary;
     }

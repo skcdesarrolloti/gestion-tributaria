@@ -18,11 +18,8 @@ final class BeneficioCatalog
 
     public static function year(string $year): array
     {
-        return match($year) {
-            '2025'=>['uvt'=>49799,'source'=>'https://normograma.dian.gov.co/dian/compilacion/docs/resolucion_dian_0193_2024.htm'],
-            '2026'=>['uvt'=>52374,'source'=>'https://normograma.dian.gov.co/dian/compilacion/docs/resolucion_dian_0238_2025.htm'],
-            default=>throw new \InvalidArgumentException('Consulta disponible para 2025 o 2026.'),
-        };
+        if (!preg_match('/^[0-9]{4}$/D',$year)) { throw new \InvalidArgumentException('Año inválido.'); }
+        return array_intersect_key(ParametrosAnuales::year((int)$year),['uvt'=>true,'source'=>true]);
     }
 
     public static function all(): array

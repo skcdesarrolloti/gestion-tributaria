@@ -10,6 +10,7 @@
             <a href="<?= e(url($config, 'contribuyentes')) ?>" class="text-secondary">Contribuyentes</a>
             <?php require __DIR__.'/trabajo-menu.php'; require __DIR__.'/exogena-menu.php'; ?>
             <a href="<?= e(url($config, 'perfil')) ?>" class="text-secondary">Mi perfil</a>
+            <?php if (\App\Services\AccesoRoles::socio($user)): ?><a href="<?= e(url($config,'configuracion')) ?>" class="text-secondary">Configuración</a><?php endif; ?>
             <form method="post" action="<?= e(url($config, 'logout')) ?>">
                 <?php require __DIR__ . '/csrf.php'; ?>
                 <button class="rounded-xl bg-inverse-surface text-on-secondary px-4 py-2" type="submit">Cerrar sesión</button>

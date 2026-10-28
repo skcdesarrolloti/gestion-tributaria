@@ -2,6 +2,8 @@
 declare(strict_types=1);
 
 $router->add('GET', 'inicio', [$homeController, 'index']);
+$router->add('GET', 'configuracion', [$parametroController, 'index']);
+$router->add('POST', 'configuracion', [$parametroController, 'index']);
 $router->add('GET', 'registro', [$registroController, 'index']);
 $router->add('GET', 'retenciones', [$retencionController, 'index']);
 $router->add('POST', 'retenciones', [$retencionController, 'index']);

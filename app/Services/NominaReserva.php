@@ -37,6 +37,10 @@ final class NominaReserva
         if (!$rows || !$settings || ($settings['huella']??'')!==self::fingerprint($rows)) {
             return ['estado'=>'pendiente','motivo'=>'Confirma los valores futuros y los saldos anteriores con la nómina actual. Cada importación o corrección exige revisar la proyección.'];
         }
+        $year=(int)$profile['anio'];
+        if (($settings['parametros']??ParametrosAnuales::originalFingerprint($year))!==ParametrosAnuales::fingerprint($year)) {
+            return ['estado'=>'pendiente','motivo'=>'Los parámetros del año cambiaron. Revisa y confirma la hipótesis con la nueva versión antes de calcular.'];
+        }
         $gross=0;$contributions=0;$withheld=0;$cut='';
         foreach ($rows as $r) {
             $v=NominaData::amounts($r['datos']['valores']);$gross+=$v['devengado'];

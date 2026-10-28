@@ -1,5 +1,10 @@
 # Control mensual de retención y reserva salarial
 
+UVT, rangos y topes por año se administran en **Configuración** por un Socio.
+Las cuentas P1 muestran el detalle de origen y la operación de cada tramo dentro
+de **Ver cuenta provisional** o **Ver la cuenta paso a paso**. Ver
+[parámetros anuales, firmas e historial](PARAMETROS-ANUALES.md).
+
 Acceso: Registro de información → Ingresos → contribuyente y año → Cédula
 general → Trabajo. El resumen mensual añade «Control retención», con OK,
 Revisar o Pendiente de soporte. Las observaciones conservan el detalle.

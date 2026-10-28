@@ -9,15 +9,16 @@
 <details><summary class="text-secondary underline">Observaciones</summary><p><?= e($result['motivo']) ?></p>
 <?php if (isset($result['base'])): ?>
 <p>Base gravable mensual calculada: $<?= e(number_format($result['base']/100,2,',','.')) ?>. Retención esperada: $<?= e(number_format($result['esperada']/100,2,',','.')) ?>. Retención registrada: $<?= e(number_format($result['real']/100,2,',','.')) ?>.</p>
-<p>Deducciones antes de límites compartidos: $<?= e(number_format($result['deducciones']/100,2,',','.')) ?>. Exención del 25% antes del límite compartido: $<?= e(number_format($result['exencion25']/100,2,',','.')) ?>. Beneficios finalmente aplicados: $<?= e(number_format($result['beneficios']/100,2,',','.')) ?>.</p>
+<p>Deducciones antes de límites compartidos: $<?= e(number_format($result['deducciones']/100,2,',','.')) ?>. Exención del <?= e($yearRules['exencion_pct']) ?>% antes del límite compartido: $<?= e(number_format($result['exencion25']/100,2,',','.')) ?>. Beneficios finalmente aplicados: $<?= e(number_format($result['beneficios']/100,2,',','.')) ?>.</p>
 <p>Diferencia = registrada − esperada: positiva indica mayor retención; negativa, menor. «OK» admite hasta $1 de diferencia y depende de los soportes confirmados. No valida el impuesto anual.</p>
 <p><?= e('Procedimiento '.$review['procedimiento'].' · '.($review['fecha']??'').' · '.$review['soporte']) ?></p>
 <?php endif; ?></details>
 <?php if (isset($result['base'])): ?><details><summary class="text-secondary underline">? · Ver la cuenta paso a paso</summary>
+<?php if ($review['procedimiento']==='1'): $explain=\App\Services\RetencionDesglose::build($group['valores'],$result,(int)$profile['anio']);require __DIR__.'/cuenta-p1.php';else: ?>
 <p>1. Lo ganado antes de descuentos: $<?= e(number_format($group['valores']['devengado']/100,2,',','.')) ?>.</p>
 <p>2. Restamos aportes obligatorios: $<?= e(number_format($group['valores']['aportes']/100,2,',','.')) ?>.</p>
 <p>3. Restamos beneficios admitidos después de aplicar sus límites: $<?= e(number_format($result['beneficios']/100,2,',','.')) ?>.</p>
 <p>4. Queda la base de cálculo: $<?= e(number_format($result['base']/100,2,',','.')) ?>. Esta base no equivale al dinero que te consignaron.</p>
 <p>5. <?= $review['procedimiento']==='1'?'Aplicamos la tabla mensual del artículo 383.':'Aplicamos el porcentaje fijo certificado: '.e(number_format($review['porcentaje']/100,2,',','.')).'%.' ?> Resultado: $<?= e(number_format($result['esperada']/100,2,',','.')) ?>.</p>
 <p>6. Comparamos con el descuento real. Los préstamos y descuentos personales no se restan automáticamente de esta base.</p>
-</details><?php endif; ?></section>
+<?php endif; ?></details><?php endif; ?></section>

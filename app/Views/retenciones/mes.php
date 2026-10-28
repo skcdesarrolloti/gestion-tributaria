@@ -14,6 +14,7 @@
 <p hidden data-retencion-unsaved role="status" class="bg-primary-container rounded-xl p-3">Los cambios de este formulario todavía no se han comparado. Pulsa «Guardar y comprobar retención» para actualizar el resultado; la comparación anterior, si existe, corresponde a los datos guardados.</p>
 <?php require __DIR__.'/../partials/csrf.php'; ?>
 <input type="hidden" name="revision" value="<?= e($revision) ?>"><input type="hidden" name="huella" value="<?= e($group['huella']) ?>">
+<input type="hidden" name="parametros" value="<?= e(\App\Services\ParametrosAnuales::fingerprint((int)$profile['anio'])) ?>">
 <div class="grid md:grid-cols-2 gap-space-md">
 <?php foreach (['procedimiento'=>['Procedimiento del empleador',['1'=>'1 · Tabla mensual del artículo 383','2'=>'2 · Porcentaje fijo certificado del semestre']],
     'dependientes'=>['Dependientes admisibles con soporte (art. 387)',['si'=>'Sí','no'=>'No']],
@@ -21,13 +22,13 @@
 <div><label><?= e($label) ?><select name="<?= e($field) ?>" required aria-describedby="ayuda-<?= e($field) ?>" class="w-full rounded-xl bg-surface-container-low p-3"><option value="">Selecciona</option><?php foreach ($options as $value=>$text): ?><option value="<?= e($value) ?>" <?= (string)($values[$field]??'')===(string)$value?'selected':'' ?>><?= e($text) ?></option><?php endforeach; ?></select></label><?php require __DIR__.'/ayuda-campo.php'; ?></div>
 <?php endforeach; ?>
 <div data-retencion-percentage><label>Porcentaje fijo del semestre (solo procedimiento 2)<input name="porcentaje" aria-describedby="ayuda-porcentaje" inputmode="decimal" placeholder="Ejemplo: 7.25" value="<?= e($_SERVER['REQUEST_METHOD']==='POST'?input($_POST,'porcentaje'):(isset($review['porcentaje'])?number_format($review['porcentaje']/100,2,'.',''):'')) ?>" class="w-full rounded-xl bg-surface-container-low p-3"></label><?php $field='porcentaje';require __DIR__.'/ayuda-campo.php'; ?></div>
-<?php foreach (\App\Services\RetencionDatos::MONEY as $field=>$label): ?>
+<?php foreach (\App\Services\RetencionDatos::MONEY as $field=>$label): $label=str_replace(['25%','1.340'],[$yearRules['exencion_pct'].'%',number_format($yearRules['conjunto_uvt'],0,',','.')],$label); ?>
 <div><label><?= e($label) ?> (COP)<input name="<?= e($field) ?>" required aria-describedby="ayuda-<?= e($field) ?>" inputmode="numeric" pattern="[0-9]+" value="<?= e($values[$field]??'') ?>" class="w-full rounded-xl bg-surface-container-low p-3"></label><?php require __DIR__.'/ayuda-campo.php'; ?></div>
 <?php endforeach; ?></div>
 <details><summary class="text-secondary underline">? · Por qué se piden estos datos y qué incluye el control</summary>
 <?php $yearUvt=\App\Services\BeneficioCatalog::year((string)$profile['anio'])['uvt']; ?>
 <p>Para <?= e($profile['anio']) ?>, una UVT equivale a $<?= e(number_format($yearUvt,0,',','.')) ?>. El sistema convierte los límites a pesos; tú registras los valores utilizados, no los topes de la norma.</p>
-<p>Vivienda: máximo 100 UVT por mes. Prepagada admisible: máximo 16 UVT por mes. Dependientes: 10% del ingreso bruto del mes, máximo 32 UVT. Se aplica la exención del 25% sobre la base después de aportes y deducciones, hasta el saldo anual de 790 UVT. El conjunto se limita al 40% y al saldo anual de 1.340 UVT. No dividimos estos topes anuales entre doce.</p>
+<p>Vivienda: máximo <?= e($yearRules['vivienda_uvt']) ?> UVT por mes. Prepagada admisible: máximo <?= e($yearRules['prepagada_uvt']) ?> UVT por mes. Dependientes: <?= e($yearRules['dependientes_pct']) ?>% del ingreso bruto del mes, máximo <?= e($yearRules['dependientes_uvt']) ?> UVT. Se aplica la exención del <?= e($yearRules['exencion_pct']) ?>% sobre la base después de aportes y deducciones, hasta el saldo anual de <?= e($yearRules['exencion_uvt']) ?> UVT. El conjunto se limita al <?= e($yearRules['conjunto_pct']) ?>% y al saldo anual de <?= e($yearRules['conjunto_uvt']) ?> UVT. No dividimos estos topes anuales entre doce.</p>
 <p>Los acumulados anteriores deben coincidir con la depuración certificada del empleador; no se deducen de meses sin importar. En enero son 0 si no hubo pagos anteriores del año. Si hay otros empleadores o traslados, pide que se revise su efecto en los límites. No incluyas préstamos ni descuentos personales como deducciones.</p>
 <p>Procedimiento 2: comprobamos la aplicación del porcentaje certificado vigente para enero–junio o julio–diciembre. Su cálculo histórico requiere los pagos de los doce meses anteriores y una auditoría adicional: «OK» no certifica ese cálculo histórico.</p>
 <p>Este control ordinario no incluye AFC, aportes voluntarios, cesantías, primas con tratamiento separado, indemnizaciones, retroactivos ni períodos parciales. Si existen, deja el mes pendiente y solicita la depuración particular.</p>

@@ -1,4 +1,4 @@
-<?php $title=$projection?'Reserva estimada de nómina':'Revisar retención laboral';require __DIR__.'/../partials/head.php'; ?>
+<?php $title=$projection?'Reserva estimada de nómina':'Revisar retención laboral';$yearRules=\App\Services\ParametrosAnuales::year((int)$profile['anio']);require __DIR__.'/../partials/head.php'; ?>
 <body class="bg-background min-h-screen font-body-md text-on-surface antialiased">
 <?php require __DIR__.'/../partials/header.php'; ?>
 <main class="portal-container py-8 space-y-space-lg">

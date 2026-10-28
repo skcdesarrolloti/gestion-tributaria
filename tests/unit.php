@@ -60,4 +60,5 @@ require __DIR__ . '/caracterizacion-unit.php';
 require __DIR__ . '/perfil-alcance-unit.php';
 require __DIR__ . '/rut-unit.php';
 require __DIR__ . '/rut-multi-unit.php';
+require __DIR__.'/parametros-unit.php';
 echo "Pruebas de seguridad y contribuyentes correctas.\n";

@@ -31,6 +31,9 @@ final class RetencionController
         if ($_SERVER['REQUEST_METHOD']==='POST') {
             if (!Csrf::valid(\input($_POST,'_csrf_token'))) { http_response_code(419);echo 'Formulario vencido. Recarga antes de guardar.';return; }
             if (!AccesoRoles::writable($user,$profile)) { return; }
+            if (!hash_equals(\App\Services\ParametrosAnuales::fingerprint((int)$profile['anio']),\input($_POST,'parametros'))) {
+                http_response_code(409);echo 'Los parámetros del año cambiaron o el formulario es anterior. Recarga y revisa sus valores antes de confirmar.';return;
+            }
             try {
                 $posted=filter_var(\input($_POST,'revision'),FILTER_VALIDATE_INT,['options'=>['min_range'=>0]]);
                 if ($posted===false || $posted!==$revision) { http_response_code(409);echo 'La revisión cambió en otra ventana. Recarga antes de guardar.';return; }
@@ -41,7 +44,7 @@ final class RetencionController
                     if (!$group['completo'] || $group['valores']['retroactivos']>0) { throw new \InvalidArgumentException('Completa los períodos y revisa los casos especiales antes de validar.'); }
                     $value=RetencionDatos::read($_POST);
                 }
-                $value+=['huella'=>$hash,'revisado_por'=>$owner,'fecha'=>date('c')];
+                $value+=['huella'=>$hash,'parametros'=>\App\Services\ParametrosAnuales::fingerprint((int)$profile['anio']),'revisado_por'=>$owner,'fecha'=>date('c')];
                 if ($projection) { $settings['reserva']=$value; } else { $settings['meses'][$key]=$value; }
                 if (!$this->blocks->saveFor((int)$profile['contribuyente_id'],$owner,(int)$profile['anio'],'retenciones_laborales',$settings,$revision)) {
                     http_response_code(409);echo 'La información cambió en otra ventana. Recarga para conservar los cambios.';return;

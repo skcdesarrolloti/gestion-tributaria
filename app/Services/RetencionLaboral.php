@@ -43,15 +43,18 @@ final class RetencionLaboral
         if (!$g['completo']) { return $pending('Faltan períodos para cubrir el mes de este empleador.'); }
         if (!$review) { return $pending('La nómina ya está cargada. Falta confirmar el método y los datos que usó tu empleador para calcular el descuento. Completa el paso 2; no tienes que adivinar.'); }
         if (($review['huella']??'')!==$g['huella']) { return $pending('La nómina cambió desde la última revisión. Confirma otra vez los datos del paso 2 antes de comparar.'); }
+        if (($review['parametros']??ParametrosAnuales::originalFingerprint($year))!==ParametrosAnuales::fingerprint($year)) {
+            return $pending('Los parámetros del año cambiaron desde la revisión. Contrasta la nueva versión antes de confirmar otra vez.');
+        }
         if ($g['valores']['retroactivos']>0) { return $pending('Los retroactivos requieren depuración particular; este control cubre pagos ordinarios.'); }
-        $uvt=BeneficioCatalog::year((string)$year)['uvt']*100;$v=$g['valores'];
+        $rules=ParametrosAnuales::year($year);$uvt=$rules['uvt']*100;$v=$g['valores'];
         $net=max(0,$v['devengado']-$v['aportes']);
-        $ded=min($review['vivienda'],100*$uvt)+min($review['prepagada'],16*$uvt);
-        $ded+=$review['dependientes']==='si'?min(intdiv($v['devengado'],10),32*$uvt):0;
-        $ex=min(intdiv(max(0,$net-$ded),4),max(0,790*$uvt-$review['usado25']));
-        $benefits=min($ded+$ex,intdiv($net*40,100),max(0,1340*$uvt-$review['usado1340']));
+        $ded=min($review['vivienda'],$rules['vivienda_uvt']*$uvt)+min($review['prepagada'],$rules['prepagada_uvt']*$uvt);
+        $ded+=$review['dependientes']==='si'?min(intdiv($v['devengado']*$rules['dependientes_pct'],100),$rules['dependientes_uvt']*$uvt):0;
+        $ex=min(intdiv(max(0,$net-$ded)*$rules['exencion_pct'],100),max(0,$rules['exencion_uvt']*$uvt-$review['usado25']));
+        $benefits=min($ded+$ex,intdiv($net*$rules['conjunto_pct'],100),max(0,$rules['conjunto_uvt']*$uvt-$review['usado1340']));
         $base=max(0,$net-$benefits);
-        $expected=$review['procedimiento']==='1'?RetencionTarifa::calculate($base,intdiv($uvt,100)):
+        $expected=$review['procedimiento']==='1'?RetencionTarifa::calculate($base,intdiv($uvt,100),$rules['tramos']):
             intdiv($base*$review['porcentaje']+5000,10000);
         $expected=RetencionTarifa::rounded($expected,$review['redondeo']);
         $difference=$v['retencion']-$expected;

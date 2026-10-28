@@ -1,5 +1,11 @@
 # Migraciones automáticas
 
+028 crea parametros_anuales: publicaciones por año/revisión, datos JSON, autor
+y fecha, con clave única compuesta. No precarga valores futuros ni cambia datos
+existentes. La aplicación conserva los valores iniciales 2025/2026 y cada nueva
+versión. No borrar su historia para revertir una pantalla; respaldar la tabla
+junto con la base. Ver docs/PARAMETROS-ANUALES.md.
+
 026 conserva extractos bancarios privados por contribuyente/año/mes/cuenta,
 con huella única y sin sustituir soportes existentes. 027 agrega lectura JSON
 nullable, compatible con documentos pendientes. Respaldar junto con la base

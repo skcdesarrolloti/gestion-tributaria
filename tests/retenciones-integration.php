@@ -37,11 +37,12 @@ verify($s===200 && str_contains($retDefault,'Enero · Empresa ficticia'),'Retenc
 verify(request($client,$base,'retenciones&id='.$nomProfile.'&periodo=2-999888777')[0]===200
     && request($client,$base,'retenciones&id='.$nomProfile.'&periodo=1-000000000')[0]===404,'Retención: selector conserva alcance del perfil y del pagador');
 $retHidden=static function(string $html,string $name): string { preg_match('/name="'.preg_quote($name,'/').'" value="([^"]*)"/',$html,$m);return html_entity_decode($m[1]??''); };
-$retPost=['_csrf_token'=>token($retPage),'revision'=>$retHidden($retPage,'revision'),'huella'=>$retHidden($retPage,'huella'),
+$retPost=['_csrf_token'=>token($retPage),'revision'=>$retHidden($retPage,'revision'),'huella'=>$retHidden($retPage,'huella'),'parametros'=>$retHidden($retPage,'parametros'),
     'vivienda'=>'0','prepagada'=>'0','usado25'=>'0','usado1340'=>'0','dependientes'=>'no','procedimiento'=>'1','redondeo'=>'peso',
     'completo'=>'1','ordinario'=>'1','verificado'=>'1','soporte'=>'Certificado ficticio <script>no ejecutar</script>'];
 $retBefore=$db->query('SELECT id,valor_cop FROM movimientos_ingresos ORDER BY id')->fetchAll();
 verify(request($client,$base,$retRoute,array_replace($retPost,['_csrf_token'=>'']))[0]===419,'Retención: guardar exige CSRF');
+verify(request($client,$base,$retRoute,array_replace($retPost,['parametros'=>'version-anterior']))[0]===409,'Retención: formulario con parámetros anteriores exige recarga antes de confirmar');
 verify(request($client,$base,$retRoute,array_replace($retPost,['verificado'=>'']))[0]===422,'Retención: exige soportes y confirmaciones');
 [$s,$retUnknown]=request($client,$base,$retRoute,array_replace($retPost,['procedimiento'=>'pendiente']));
 verify($s===422 && str_contains($retUnknown,'Todavía falta confirmar el método del empleador'),'Retención: opción desconocida explica el pendiente y no se confirma');
@@ -58,7 +59,7 @@ verify($db->query('SELECT id,valor_cop FROM movimientos_ingresos ORDER BY id')->
 verify($s===200 && str_contains($retFeb,'Faltan períodos') && !str_contains($retFeb,'Guardar y comprobar retención'),'Retención: mes parcial no habilita validación');
 $reserveRoute='retenciones&id='.$nomProfile.'&vista=reserva';
 [, $reservePage]=request($client,$base,$reserveRoute);
-$reservePost=['_csrf_token'=>token($reservePage),'revision'=>$retHidden($reservePage,'revision'),'huella'=>$retHidden($reservePage,'huella'),
+$reservePost=['_csrf_token'=>token($reservePage),'revision'=>$retHidden($reservePage,'revision'),'huella'=>$retHidden($reservePage,'huella'),'parametros'=>$retHidden($reservePage,'parametros'),
     'futuro_bruto'=>'60000000','futuro_aportes'=>'4800000','futuro_retencion'=>'1000000',
     'anticipo_anterior'=>'0','saldo_favor'=>'0','declaraciones'=>'3','cuotas'=>'6','hipotesis'=>'1'];
 verify(request($client,$base,$reserveRoute,$reservePost)[0]===303,'Reserva: hipótesis persiste sin alterar ingresos');

@@ -21,6 +21,7 @@
 <form method="post" class="space-y-space-md">
 <?php require __DIR__.'/../partials/csrf.php'; ?>
 <input type="hidden" name="revision" value="<?= e($revision) ?>"><input type="hidden" name="huella" value="<?= e(\App\Services\NominaReserva::fingerprint($payroll)) ?>">
+<input type="hidden" name="parametros" value="<?= e(\App\Services\ParametrosAnuales::fingerprint((int)$profile['anio'])) ?>">
 <p>Valores futuros = lo que aún falta por recibir o descontar, incluidas quincenas pendientes de meses ya iniciados. No repitas importes ya importados. Escribe 0 solo cuando corresponda.</p>
 <div class="grid md:grid-cols-2 gap-space-md">
 <?php foreach (\App\Services\NominaReserva::MONEY as $field=>$label): ?><div><label><?= e($label) ?> (COP)<input name="<?= e($field) ?>" required aria-describedby="ayuda-<?= e($field) ?>" inputmode="numeric" pattern="[0-9]+" value="<?= e($values[$field]??'') ?>" class="w-full rounded-xl bg-surface-container-low p-3"></label><?php require __DIR__.'/ayuda-campo.php'; ?></div><?php endforeach; ?>

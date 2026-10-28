@@ -4,6 +4,20 @@ Verificación local realizada el 13 de octubre de 2026 con PHP 8.2.12, MariaDB 1
 
 ## Resultado
 
+### Parámetros anuales y desglose P1 · 28/10/2026
+
+Unitarias: UVT y topes por año, tabla parametrizada realmente usada en el motor,
+invalidez de revisiones con parámetros anteriores y cuenta en pesos con excedente
+y redondeo. Integración aislada: migración 028, Socio activo, CSRF, rechazo de
+terceros, no invención de UVT futura, protección de años anteriores, publicaciones
+concurrentes rechazadas, historial preservado y fuentes escapadas. No se publican
+valores ficticios ni se modifican parámetros reales para el ensayo.
+En Chrome con la base aislada se comprobaron Configuración, sus valores iniciales
+y la explicación P1 expandida: tabla de pasos, detalle de aportes, UVT, tramo,
+excedente y operación hasta el redondeo. El detalle se abre bajo el mes a todo
+el ancho, sin desbordamiento horizontal de página en escritorio. La base y el
+servidor temporales se retiraron al terminar; las capturas usan datos ficticios.
+
 ### Simulación provisional de procedimiento 1 · 28/10/2026
 
 Unitarias: cálculo por pagador y año, acumulados de los mismos meses completos,
