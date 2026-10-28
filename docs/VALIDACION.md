@@ -15,6 +15,11 @@ Chrome con datos ficticios: ayuda cambia al seleccionar procedimiento 1/2 o
 desconocido, porcentaje visible solo en 2, aviso de cambios sin comparar y
 guardado que regresa al bloque visible del resultado. No se guardan supuestos
 ni cambios de revisión en las cuentas reales para el ensayo.
+Publicación 755d685 comprobada en Hostinger: el botón real de nómina abre el
+último mes completo; enero presenta datos recuperados, resultado pendiente y
+ayudas de cada campo. Se desplegó la explicación de procedimientos sin guardar
+ni cambiar opciones en producción. El ejemplo permanece separado del resultado
+confirmado; la comparación real no se certificó con supuestos.
 
 ### Acceso directo a Pensiones y extractos · 28/10/2026
 
