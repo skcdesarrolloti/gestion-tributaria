@@ -6,12 +6,13 @@
 <div class="scenario-settings-grid">
 <label>Mes del extracto <select name="mes" required class="w-full rounded-xl bg-surface-container-low p-3"><option value="auto" <?= $form['mes']==='auto'?'selected':'' ?>>Detectar mes desde el PDF</option><?php foreach (\App\Services\ExtractoData::MONTHS as $n=>$month): ?><option value="<?= $n ?>" <?= (int)$form['mes']===$n?'selected':'' ?>><?= e($month) ?></option><?php endforeach; ?></select></label>
 <label>Banco <input name="banco" value="<?= e($form['banco']) ?>" required maxlength="80" class="w-full rounded-xl bg-surface-container-low p-3"></label>
-<label>Últimos cuatro dígitos de la cuenta <input name="cuenta" value="<?= e($form['cuenta']) ?>" required pattern="[0-9]{4}" maxlength="4" inputmode="numeric" class="w-full rounded-xl bg-surface-container-low p-3"></label>
+<label>Últimos cuatro dígitos de la cuenta <input name="cuenta" value="<?= e($form['cuenta']) ?>" required pattern="[0-9]{4}" maxlength="4" inputmode="numeric" autocomplete="off" class="w-full rounded-xl bg-surface-container-low p-3"></label>
 </div>
 <label class="block">PDF completo del mes · máximo 10 MB <input type="file" name="extracto_pdf" accept="application/pdf,.pdf" required class="block w-full"></label>
 <label class="block"><input type="checkbox" data-pdf-unlock checked> Abrir PDF protegido antes de detectar el mes</label>
+<label class="block"><input type="checkbox" data-pdf-custom> Usar otra contraseña del PDF (distinta al documento de esta ficha)</label>
 <label class="block">Contraseña del PDF (opcional si corresponde a tu documento)
-<input type="password" data-pdf-password autocomplete="off" maxlength="128" class="w-full rounded-xl bg-surface-container-low p-3">
+<input type="password" data-pdf-password autocomplete="new-password" disabled maxlength="128" data-lpignore="true" class="w-full rounded-xl bg-surface-container-low p-3">
 </label>
 <p class="text-secondary text-body-md">Si dejas la clave vacía, se intentará con el número de documento de esta ficha, sin puntos ni dígito de verificación. La clave se usa en tu navegador y no se envía ni guarda. Se conserva el original y una copia privada de lectura para consultar el PDF sin volver a abrirlo con clave.</p>
 <input type="file" name="extracto_lectura" hidden accept="application/pdf">

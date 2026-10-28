@@ -4,10 +4,12 @@
     const input=form.querySelector('[name="extracto_pdf"]');
     const decoded=form.querySelector('[name="extracto_lectura"]');
     const password=form.querySelector('[data-pdf-password]');
+    const custom=form.querySelector('[data-pdf-custom]');
     const unlock=form.querySelector('[data-pdf-unlock]');
     const status=form.querySelector('[data-pdf-status]');
     const submit=form.querySelector('button[type="submit"]');
     let ready=false,busy=false;
+    custom.addEventListener('change',()=>{password.disabled=!custom.checked;password.value='';});
     input.addEventListener('change',()=>{ready=false;decoded.value='';status.textContent='';});
     form.addEventListener('submit',async event => {
         if (ready || !unlock.checked) return;
@@ -15,11 +17,12 @@
         if (busy) return;
         const original=input.files[0];
         if (!original || original.size>10485760) { status.textContent='Selecciona un PDF de hasta 10 MB.';return; }
+        if (custom.checked && !password.value) { status.textContent='Escribe la otra contraseña del PDF o desmarca esa opción para usar el documento de la ficha.';return; }
         busy=true;submit.disabled=true;status.textContent='Abriendo el PDF protegido antes de leer el mes…';
         let worker;
         try {
             const bytes=await original.arrayBuffer();
-            const key=password.value || form.dataset.documento;
+            const key=custom.checked?password.value:form.dataset.documento;
             password.value='';
             const result=await new Promise((resolve,reject)=>{
                 worker=new Worker(form.dataset.worker);

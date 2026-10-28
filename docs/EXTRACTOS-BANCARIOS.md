@@ -12,8 +12,10 @@ Confirmar titular y período al cargar el PDF completo (máximo 10 MB, sujeto al
 límite PHP del servidor). Las páginas del archivo original se conservan intactas.
 Se almacenan el PDF, sus referencias y la lectura conciliada, sin conservar claves.
 La opción «Abrir PDF protegido» utiliza QPDF WebAssembly 0.0.2 en un Worker del
-propio sitio. Intenta con el documento de la ficha (sin DV) cuando no se escribe
-otra clave en el campo opcional. La clave no tiene nombre de envío, no pasa a
+propio sitio. Usa el documento de la ficha (sin DV) por defecto. «Usar otra
+contraseña del PDF» habilita expresamente el campo alternativo, desactivado al
+abrir la página para evitar que Chrome rellene una clave del aplicativo. La
+clave no tiene nombre de envío, no pasa a
 PHP ni se guarda en sesión, base, logs o almacenamiento del navegador. El worker
 se termina tras cada intento y se borra el campo. Clave incorrecta: no se envía
 el PDF ni se guarda el mes. No se adivinan claves ni se consultan servicios externos.
