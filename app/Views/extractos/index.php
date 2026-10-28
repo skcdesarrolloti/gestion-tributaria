@@ -34,4 +34,4 @@
 </section>
 <?php endif; ?>
 <?php else: ?><p>Selecciona un contribuyente para subir y consultar únicamente sus extractos.</p><?php endif; ?>
-</main><script src="<?= e(asset($config,'js/extractos.js')) ?>" defer></script><?php require __DIR__.'/../partials/footer.php'; ?>
+</main><script src="<?= e(asset($config,'js/extractos.js').'?v='.filemtime(dirname(__DIR__,3).'/public/assets/js/extractos.js')) ?>" defer></script><?php require __DIR__.'/../partials/footer.php'; ?>

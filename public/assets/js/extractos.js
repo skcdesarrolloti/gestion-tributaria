@@ -32,6 +32,7 @@
                 worker.postMessage({bytes,password:key},[bytes]);
             });
             if (!result.ok) { status.textContent='No se pudo abrir con esa clave. Escribe la contraseña del PDF y vuelve a guardar. No se ha enviado ni guardado el documento.';return; }
+            if (input.files[0]!==original) { status.textContent='El archivo cambió durante la apertura. Vuelve a guardar el PDF seleccionado.';return; }
             const transfer=new DataTransfer();
             transfer.items.add(new File([result.bytes],'lectura.pdf',{type:'application/pdf'}));
             decoded.files=transfer.files;ready=true;
