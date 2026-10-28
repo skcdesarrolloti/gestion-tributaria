@@ -13,6 +13,12 @@ conserva sus secciones, sin cédulas. Nómina y extractos dejan de ser categorí
 No se añaden cálculos ni campos de costos. La verificación comprueba contexto
 de persona/año, herramientas dentro de Trabajo, orden antes de las preguntas,
 lecturas bancarias intactas y ausencia de cédulas 210 en personas jurídicas.
+Publicación 0a5fcfe comprobada con sesión autenticada: el desplegable Registro
+solo contiene Ingresos y Costos y gastos. Dentro de Ingresos aparecen General,
+Pensiones, Dividendos y la sección independiente de Ganancias; General abre
+Trabajo, Capital y No laborales según el perfil. Capital muestra ingresos 58;
+Pensiones conserva nueve PDF. Los tres niveles siguen visibles con la barra
+superior en posición 0 al bajar. No se guardaron respuestas ni valores reales.
 
 ### Pestañas persistentes de Registro · 28/10/2026
 
