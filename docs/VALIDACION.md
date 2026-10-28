@@ -19,7 +19,10 @@ claves reales en Git o fixtures. Chrome con fixture cifrado AES-256: el Worker
 abre el documento y la lectura PHP devuelve julio 2025 y dos páginas conciliadas.
 La carga HTTP de ambas copias pasa en la integración aislada. La automatización
 del selector de archivos de Chrome requiere permiso de la extensión; no se
-activó ese permiso ni se usó para subir documentos reales. Publicación pendiente.
+activó ese permiso ni se usó para subir documentos reales. Publicación 91994f1
+comprobada en sesión autenticada: aparecen la apertura protegida activada, la
+clave opcional y el mes automático. El primer guardado protegido real en el
+sitio queda para la carga manual del responsable; no se afirma haberlo importado.
 
 ### Extractos bancarios · 26/10/2026
 
