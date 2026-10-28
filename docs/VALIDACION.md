@@ -22,6 +22,10 @@ visible, sin desbordamiento horizontal de página en escritorio. Se corrigieron
 la recarga de supuestos y el cierre HTML del enlace antes de publicar.
 No se cambian ingresos ni cuentas reales. El guardado con datos reales en
 Hostinger queda pendiente de confirmar los soportes del empleador.
+Publicación fa8fa41 comprobada en sesión autenticada de Hostinger: aparecen
+el control en los meses importados y el acceso a reserva abre su formulario
+de 2026. Sin escribir hipótesis ni revisiones ficticias en producción. CSS
+generado con versión por fecha para evitar que la caché oculte clases nuevas.
 
 ### Apertura de extractos protegidos · 28/10/2026
 
