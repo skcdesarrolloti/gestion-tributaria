@@ -5,6 +5,27 @@ namespace App\Services;
 /** Compara meses del mismo pagador; nunca convierte un pendiente en cero esperado. */
 final class RetencionResumen
 {
+    /** Una revisión vigente tiene prioridad sobre la hipótesis P1, sin cambiar la nómina. */
+    public static function controls(array $groups,array $reviews,int $year): array
+    {
+        $trials=[];$months=[];
+        foreach ($groups as $key=>$group) {
+            $document=(string)$group['documento'];
+            if (!isset($trials[$document])) { $trials[$document]=RetencionSimulacion::build($groups,$year,$document); }
+            $review=$reviews[$key]??[];$result=RetencionLaboral::check($group,$review,$year);$provisional=false;
+            if (!isset($result['esperada'])) {
+                $trial=$trials[$document]['meses'][$group['mes']-1];
+                if ($trial['simulada']!==null) {
+                    $provisional=true;
+                    $result=['estado'=>'Provisional P1','base'=>$trial['base'],'beneficios'=>$trial['beneficios'],
+                        'esperada'=>$trial['simulada'],'real'=>$trial['real'],'diferencia'=>$trial['diferencia']];
+                } else { $result['motivo']=$trial['motivo']; }
+            }
+            $months[$group['mes']][$key]=['grupo'=>$group,'revision'=>$review,'resultado'=>$result,'provisional'=>$provisional];
+        }
+        return ['meses'=>$months,'simulaciones'=>$trials];
+    }
+
     public static function build(array $groups,array $reviews,int $year,string $document): array
     {
         $selected=array_filter($groups,static fn($g)=>(string)$g['documento']===$document);

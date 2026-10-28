@@ -2,6 +2,9 @@
 body { font-family: Poppins, system-ui, sans-serif; }
 .portal-container, .portal-header { width: min(1120px, calc(100% - 2rem)); margin-inline: auto; }
 .portal-header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-block: 1rem; flex-wrap: wrap; }
+.portal-location { position: sticky; top: 0; z-index: 25; }
+.portal-location > div { display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; padding-block: .6rem; font-size: .875rem; }
+.portal-container [id] { scroll-margin-top: 5rem; }
 .profile-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; }
 :focus-visible { outline: 3px solid #735c00; outline-offset: 3px; }
 input:focus-visible { outline: 2px solid #735c00; }
@@ -20,7 +23,7 @@ button, a { touch-action: manipulation; }
 .renta-live-summary { position: sticky; top: .5rem; z-index: 20; display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1rem; }
 .renta-live-summary [data-result-key] { overflow-wrap: anywhere; }
 @media print {
-    header, footer, #recalculate-renta, #print-renta, #renta-sheet > button, .renta-live-summary { display: none; }
+    header, footer, .portal-location, #recalculate-renta, #print-renta, #renta-sheet > button, .renta-live-summary { display: none; }
     .renta-sheet-scroll { overflow: visible; }
     .renta-sheet-table { min-width: 0; font-size: 9px; }
     .renta-sheet-table input { min-width: 0 !important; }

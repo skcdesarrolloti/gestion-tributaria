@@ -1,8 +1,21 @@
-<details><summary class="text-secondary underline">Revisar soportes de retención por mes y empleador</summary>
-<p>«OK» confirma el cálculo ordinario con los datos y soportes revisados. Procedimiento 2: comprueba la aplicación del porcentaje certificado, no su cálculo histórico. Una nómina corregida requiere una nueva revisión. Las diferencias de dos empleadores se muestran separadas y no se compensan.</p>
-<?php foreach (\App\Services\RetencionLaboral::groups($payroll) as $group): ?>
-<p><a class="text-secondary underline" href="<?= e(url($config,'retenciones').'&id='.$profile['id'].'&mes='.$group['mes'].'&empleador='.rawurlencode($group['documento'])) ?>">
-<?= e(\App\Services\NominaPreview::MONTHS[$group['mes']-1].' · '.$group['empleador']) ?></a></p>
-<?php endforeach; ?></details>
-<a class="inline-block rounded-xl bg-inverse-surface text-on-secondary px-4 py-2" href="<?= e(url($config,'retenciones').'&id='.$profile['id'].'&vista=reserva') ?>">Ver reserva estimada al corte de nómina</a>
-<p class="text-secondary">La reserva inicial es una hipótesis salarial. El saldo completo requiere integrar pensión y demás ingresos, beneficios y saldos anteriores.</p>
+<?php foreach ($retentionControl['simulaciones'] as $document=>$trial):
+    $trialEmployer=current(array_filter($retentionGroups,static fn($g)=>(string)$g['documento']===(string)$document));
+    $confirmedTotal=\App\Services\RetencionResumen::build($retentionGroups,$retentionData['meses']??[],(int)$profile['anio'],(string)$document);
+    $inlineMoney=static fn($v)=>'$'.number_format($v/100,2,',','.');
+    if ($confirmedTotal['revisados']): ?>
+<p><strong><?= e($trialEmployer['empleador']) ?> · Acumulado de <?= (int)$confirmedTotal['revisados'] ?> meses con revisión:</strong>
+esperado <?= e($inlineMoney($confirmedTotal['esperada'])) ?>; descontado en esos mismos meses <?= e($inlineMoney($confirmedTotal['real_comparable'])) ?>.
+Diferencia <?= e($inlineMoney(abs($confirmedTotal['diferencia']))) ?> <?= $confirmedTotal['diferencia']<0?'de menos':($confirmedTotal['diferencia']>0?'de más':'· coinciden') ?>.
+<?= $confirmedTotal['pendientes']?'Quedan '.(int)$confirmedTotal['pendientes'].' meses pendientes; este subtotal no representa todo el corte.':'' ?></p>
+<?php elseif ($trial['calculados']): ?>
+<p><strong><?= e($trialEmployer['empleador']) ?> · Acumulado provisional P1 hasta <?= e(\App\Services\NominaPreview::MONTHS[$trial['calculados']-1]) ?>:</strong>
+calculado <?= e($inlineMoney($trial['simulada'])) ?>; descontado en esos mismos meses <?= e($inlineMoney($trial['real'])) ?>.
+Diferencia <?= e($inlineMoney(abs($trial['diferencia']))) ?> <?= $trial['diferencia']<0?'de menos':($trial['diferencia']>0?'de más':'· coinciden') ?> en nómina. Solo incluye meses completos consecutivos desde enero; falta confirmar el procedimiento con el contador.</p>
+<?php endif;endforeach; ?>
+<details><summary class="text-secondary underline">Consultar tabla DIAN de retención · <?= e($profile['anio']) ?></summary>
+<?php $inlineTable=true;$yearRules=\App\Services\ParametrosAnuales::year((int)$profile['anio']);$result=[];$review=[];require __DIR__.'/../retenciones/tabla.php';unset($inlineTable); ?></details>
+<details><summary class="text-secondary underline">Opciones para el contador y proyección anual</summary>
+<p>No necesitas estas opciones para consultar la comparación de arriba. Permiten registrar el procedimiento y los soportes cuando el contador los confirme.</p>
+<?php foreach ($retentionGroups as $g): ?><p><a class="text-secondary underline" href="<?= e(url($config,'retenciones').'&id='.$profile['id'].'&mes='.$g['mes'].'&empleador='.rawurlencode($g['documento'])) ?>"><?= e('Confirmar soportes · '.\App\Services\NominaPreview::MONTHS[$g['mes']-1].' · '.$g['empleador']) ?></a></p><?php endforeach; ?>
+<a class="text-secondary underline" href="<?= e(url($config,'retenciones').'&id='.$profile['id'].'&vista=reserva') ?>">Consultar reserva anual estimada</a>
+</details>

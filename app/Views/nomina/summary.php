@@ -5,7 +5,8 @@
 <table class="renta-sheet-table"><thead><tr><th>Mes</th><th>Quincenas</th><th>Devengado del mes · 32</th><th>Aportes del mes · 33</th><th>Retención del mes · 132</th><th>Neto del mes</th><th>Devengado acumulado</th><th>Control retención</th></tr></thead><tbody>
 <?php $running=0;$retention=0;foreach ($payMonths as $i=>$m): if (!$m) { continue; }$running+=$m['devengado'];$retention+=$m['retencion']; ?>
 <tr><th scope="row"><?= e(\App\Services\NominaPreview::MONTHS[$i-1]) ?></th><td><?= e($m['registros']) ?></td>
-<?php foreach ([$m['devengado'],$m['aportes'],$m['retencion'],$m['neto'],$running] as $value): ?><td>$<?= e(number_format($value/100,2,',','.')) ?></td><?php endforeach; ?><td><?php require __DIR__.'/control-retencion.php'; ?></td></tr>
+<?php $monthChecks=$retentionControl['meses'][$i]??[];foreach ([$m['devengado'],$m['aportes'],$m['retencion'],$m['neto'],$running] as $value): ?><td>$<?= e(number_format($value/100,2,',','.')) ?></td><?php endforeach; ?><td><?php require __DIR__.'/control-retencion.php'; ?></td></tr>
+<tr><td colspan="8"><?php require __DIR__.'/explicacion-retencion.php'; ?></td></tr>
 <?php endforeach; ?></tbody></table></div>
 <p>Solo aparecen meses con nómina importada. Una quincena no equivale a un mes completo.</p>
 <h3 class="font-semibold">Casillas DIAN · acumulado real del año</h3>

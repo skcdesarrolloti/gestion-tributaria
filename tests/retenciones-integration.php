@@ -3,10 +3,15 @@
 $retRoute='retenciones&id='.$nomProfile.'&mes=1&empleador=999888777';
 [, $retRegister]=request($client,$base,'registro&contribuyente='.$nomTax.'&anio=2025');
 $retDom=new DOMDocument();@$retDom->loadHTML($retRegister);$retXpath=new DOMXPath($retDom);
-verify($retXpath->query('//a[contains(@href,"vista=reserva") and not(ancestor::details)]')->length===1,
-    'Reserva: botón visible fuera de paneles cerrados y enlaces de empleador válidos');
-verify($retXpath->query('//a[normalize-space(.)="Validar retención mensual" and not(ancestor::details)]')->length===1,
-    'Retención: acceso visible junto al registro de nómina');
+verify($retXpath->query('//a[contains(@href,"vista=reserva") and ancestor::details]')->length===1,
+    'Reserva: opción conservada pero plegada fuera del recorrido de consulta mensual');
+verify($retXpath->query('//details[@data-retencion-inline]')->length===2
+    && $retXpath->query('//details[@data-retencion-inline]//a')->length===0
+    && str_contains($retRegister,'provisional P1') && str_contains($retRegister,'Consultar tabla DIAN de retención'),
+    'Retención: comparación y explicación de cada mes están en la misma nómina sin enlaces a otras pantallas');
+verify($retXpath->query('//details[@data-retencion-inline and @open]')->length===0
+    && $retXpath->query('//nav[@aria-label="Orientación y regreso"]//a[@href="#menu-principal"]')->length===1,
+    'Retención: explicaciones inicialmente cerradas y regreso al menú accesible desde la página');
 $trialStoredBefore=$db->query('SELECT * FROM caracterizaciones_tributarias ORDER BY id')->fetchAll();
 $trialMovementsBefore=$db->query('SELECT id,valor_cop FROM movimientos_ingresos ORDER BY id')->fetchAll();
 [$s,$retPage]=request($client,$base,$retRoute);
@@ -50,6 +55,9 @@ verify(request($client,$base,$retRoute,$retPost)[0]===303,'Retención: guarda re
 [$s,$retSaved]=request($client,$base,$retRoute);
 verify($s===200 && str_contains($retSaved,'Retención esperada:') && str_contains($retSaved,'&lt;script&gt;') && !str_contains($retSaved,'<script>no ejecutar'),
     'Retención: muestra cálculo y escapa referencia del soporte');
+[, $inlineSaved]=request($client,$base,'registro&contribuyente='.$nomTax.'&anio=2025');
+verify(str_contains($inlineSaved,'con los datos confirmados') && str_contains($inlineSaved,'Explicar retención · Enero'),
+    'Retención: la consulta compacta recupera la revisión guardada sin exigir volver al formulario');
 verify(str_contains($retSaved,'Tu rango ·') && str_contains($retSaved,'En los 1 meses revisados:')
     && str_contains($retSaved,'Es un subtotal, no el total esperado de todo el corte.'),
     'Retención: marca rango confirmado y solo compara subtotales de los mismos meses');

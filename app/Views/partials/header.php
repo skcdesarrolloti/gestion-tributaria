@@ -1,4 +1,4 @@
-<header class="bg-surface-container-lowest border-b border-surface-container">
+<header id="menu-principal" class="bg-surface-container-lowest border-b border-surface-container">
     <div class="portal-header">
         <a href="<?= e(url($config)) ?>" class="flex items-center gap-space-sm">
             <span aria-hidden="true" class="material-symbols-outlined bg-primary-container p-2 rounded-xl">domain</span>
@@ -18,4 +18,10 @@
         </nav>
     </div>
 </header>
+<nav class="portal-location bg-surface-container-lowest border-b border-surface-container" aria-label="Orientación y regreso">
+<div class="portal-container"><a class="text-secondary underline" href="#menu-principal">↑ Menú principal</a>
+<?php if (isset($profile['contribuyente_id'],$profile['anio'])):
+    $returnPayroll=($profile['tipo']??'')==='natural' && ($profile['formulario']??'')==='210'; ?>
+<a class="text-secondary underline" href="<?= e(url($config,'registro').'&contribuyente='.$profile['contribuyente_id'].'&anio='.$profile['anio'].'&componente=ingresos'.($returnPayroll?'&cedula=general&renta=trabajo#nomina':'')) ?>">← Volver a ingresos · <?= e($profile['nombre'].' · '.$profile['anio']) ?></a><?php else: ?><a class="text-secondary underline" href="<?= e(url($config)) ?>">← Inicio</a><?php endif; ?>
+</div></nav>
 <script src="<?= e(asset($config,'js/portal-menu.js').'?v='.filemtime(dirname(__DIR__,3).'/public/assets/js/portal-menu.js')) ?>" defer></script>

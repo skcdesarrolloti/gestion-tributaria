@@ -115,3 +115,14 @@ $trialZero=App\Services\RetencionSimulacion::build(['1-999888777'=>$retZeroGroup
 check($trialZero['simulada']===0 && $trialZero['calculados']===1,'Simulación cero calculado se distingue de no calculado.');
 check(App\Services\RetencionSimulacion::build($retGroups,2025,'999888777')['simulada']!==$trial['simulada'],
     'Simulación usa la UVT del año solicitado.');
+$inlineControl=App\Services\RetencionResumen::controls($retAnnualGroups,['1-999888777'=>$retProc2],2026);
+check(!$inlineControl['meses'][1]['1-999888777']['provisional']
+    && $inlineControl['meses'][1]['1-999888777']['resultado']['esperada']===50025000,
+    'Consulta compacta respeta procedimiento 2 confirmado en vez de sustituirlo por la hipótesis P1.');
+check($inlineControl['meses'][1]['1-000000000']['provisional']
+    && !isset($inlineControl['meses'][2]['2-999888777']['resultado']['esperada']),
+    'Consulta compacta separa empleadores y no calcula un mes parcial.');
+$inlineStale=App\Services\RetencionResumen::controls($retGroups,['1-999888777'=>$retStaleReview],2026);
+check($inlineStale['meses'][1]['1-999888777']['provisional']
+    && $inlineStale['meses'][1]['1-999888777']['resultado']['estado']!=='OK',
+    'Revisión vencida solo permite simulación explícita, nunca OK confirmado.');

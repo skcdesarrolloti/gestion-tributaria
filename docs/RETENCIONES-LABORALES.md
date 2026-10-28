@@ -1,5 +1,23 @@
 # Control mensual de retención y reserva salarial
 
+## Consulta sencilla en la nómina
+
+En Ingresos → Trabajo, la misma fila mensual muestra OK (solo con revisión
+vigente), diferencia en pesos o pendiente. Mientras falta confirmar el método,
+se muestra la diferencia **provisional P1** con los supuestos ya autorizados.
+«Explicar retención · [mes]» abre debajo de la fila, a todo el ancho, el descuento,
+el cálculo, su diferencia, la base, UVT y operación del tramo, sin navegar.
+Los pagadores se mantienen separados y los meses incompletos no se calculan.
+Una sola consulta plegada ofrece la tabla DIAN del año en esa misma página.
+El acumulado P1 sigue siendo provisional y compara exactamente los mismos meses.
+
+La confirmación de soportes y la reserva anual quedan en «Opciones para el
+contador y proyección anual», cerrado inicialmente. Se conservan sus rutas,
+datos y permisos. La barra «Menú principal / Volver a ingresos» permanece visible
+al desplazarse; conserva persona y año y no usa el historial del navegador.
+
+Las secciones siguientes documentan las opciones de revisión del contador.
+
 UVT, rangos y topes por año se administran en **Configuración** por un Socio.
 Las cuentas P1 muestran el detalle de origen y la operación de cada tramo dentro
 de **Ver cuenta provisional** o **Ver la cuenta paso a paso**. Ver
@@ -10,9 +28,9 @@ general → Trabajo. El resumen mensual añade «Control retención», con OK,
 Revisar o Pendiente de soporte. Las observaciones conservan el detalle.
 «Revisar soportes de retención por mes y empleador» permite reabrir incluso OK.
 
-El botón visible **Validar retención mensual**, junto a Subir nómina, entra al
-último mes completo disponible. El selector «Mes y empleador» permite cambiar
-de período sin regresar al listado. Los enlaces anteriores conservan su ruta.
+Los enlaces de **Opciones para el contador** abren la revisión del mes elegido.
+La ruta anterior de retenciones sigue abriendo el último mes completo disponible.
+Su selector «Mes y empleador» permite cambiar de período sin regresar al listado.
 
 ## Captura guiada para quien no es contador
 

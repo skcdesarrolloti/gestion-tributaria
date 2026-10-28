@@ -4,6 +4,16 @@ Verificación local realizada el 13 de octubre de 2026 con PHP 8.2.12, MariaDB 1
 
 ## Resultado
 
+### Consulta compacta de retención en la nómina · 28/10/2026
+
+Unitarias e integración aislada correctas: diferencia y explicación plegada
+en cada mes, tabla DIAN dentro de la consulta y opciones de contador/reserva
+conservadas pero plegadas. La revisión vigente, incluido procedimiento 2, tiene
+prioridad sobre P1; sin soporte solo hay hipótesis explícita, nunca OK confirmado.
+Meses parciales y pagadores permanecen separados. Los acumulados confirmados no
+mezclan simulaciones. Consultar conserva movimientos y revisiones originales.
+La barra de orientación conserva persona/año y acceso al menú principal.
+
 ### Extractos sin clave y reintegros de GMF · 28/10/2026
 
 Sintaxis, unitarias, apertura QPDF WASM e integración en base aislada correctas.
