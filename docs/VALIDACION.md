@@ -11,6 +11,11 @@ persona/año, marcan la sección elegida y permanecen fuera de paneles plegados.
 Subir nómina conserva el contexto en selección de año, carga y confirmación;
 una ficha inexistente se rechaza sin guardar. Se mantienen los controles previos
 de permisos, CSRF, importación repetida y nómina ajena. No se cambia el esquema.
+Publicación 44af6c4 comprobada con sesión autenticada: recorrido Pensiones →
+Subir nómina → Costos → Ingresos → Pensiones conserva persona y 2026; los nueve
+PDF existentes siguen visibles. Con desplazamiento de 1.137 px, la barra queda
+en posición superior 0 y las cuatro pestañas permanecen visibles. No se importó
+ni modificó información real durante esta verificación.
 
 ### Sección activa del menú · 28/10/2026
 
