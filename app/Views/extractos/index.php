@@ -17,7 +17,6 @@
 </form>
 <?php if ($errors): ?><div role="alert" class="bg-error-container text-on-error-container rounded-xl p-4"><?php foreach ($errors as $error): ?><p><?= e($error) ?></p><?php endforeach; ?></div><?php endif; ?>
 <?php if ($taxpayer): $extractQuery='&contribuyente='.(int)$taxpayer['id'].'&anio='.$year; ?>
-<?php if ($taxpayer['tipo']==='natural'): ?><p><a class="inline-block rounded-xl bg-inverse-surface text-on-secondary px-4 py-2" href="<?= e(url($config,'nomina').$extractQuery) ?>">Subir nómina Excel</a> <span class="text-secondary">Salarios y descuentos laborales · XLS/XLSX</span></p><?php endif; ?>
 <nav class="contribuyente-tabs" aria-label="Volver a registro">
 <a class="text-secondary underline" href="<?= e(url($config,'registro').$extractQuery.'&componente=ingresos&cedula=pensiones') ?>">Ingresos · Pensiones</a>
 <a class="text-secondary underline" href="<?= e(url($config,'registro').$extractQuery.'&componente=ingresos&cedula=general&renta=capital') ?>">Ingresos · Capital</a>

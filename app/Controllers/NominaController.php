@@ -27,6 +27,7 @@ final class NominaController
                 'perfil'=>$p && $p['formulario']==='210' && $p['regimen']==='ordinario'?(int)$p['id']:0];
         }
         if (isset($_GET['contribuyente']) && !$taxpayer) { http_response_code(404);echo 'Contribuyente no encontrado.';return; }
+        if ($taxpayer) { $targets=array_values(array_filter($targets,static fn($t)=>$t['id']===$navigationId)); }
         if ($_SERVER['REQUEST_METHOD']==='POST') {
             if (!Csrf::valid(\input($_POST,'_csrf_token'))) { http_response_code(419);$errors[]='Formulario vencido. Recarga antes de continuar.'; }
             else {
@@ -35,6 +36,7 @@ final class NominaController
                         $staged=$_SESSION['nomina_preview']??null;
                         if (!$staged || $staged['owner']!==$owner || $staged['year']!==$year || $staged['expires']<time()
                             || !hash_equals($staged['token'],\input($_POST,'preview_token'))) { throw new \DomainException('La vista previa venció. Selecciona de nuevo las hojas.'); }
+                        if ($taxpayer && array_filter($staged['records'],static fn($r)=>(int)$r['contribuyente_id']!==$navigationId)) { throw new \DomainException('La selección pertenece a otra persona. Revisa la nómina del contribuyente elegido.'); }
                         $replace=\input($_POST,'reemplazar')==='1';
                         $preview=$staged;
                         $notice=$this->model->save($staged['records'],$owner,$replace);unset($_SESSION['nomina_preview']);$preview=null;
@@ -56,6 +58,7 @@ final class NominaController
                         $records=[];$seen=[];
                         foreach ($raw as $entry) {
                             if (!is_array($entry)) { throw new \DomainException('Fila inválida.'); }
+                            if ($taxpayer && (int)($entry['contribuyente_id']??0)!==$navigationId) { throw new \DomainException('Solo puedes revisar la nómina de la persona seleccionada.'); }
                             $t=$this->taxpayers->findFor((int)($entry['contribuyente_id']??0),$owner);
                             $p=$this->incomes->profileFor((int)($entry['perfil_id']??0),$owner);
                             if (!$t || !$p || (int)$p['contribuyente_id']!==(int)$t['id'] || (string)$p['anio']!==$year || !AccesoRoles::edit($user,$t)) { throw new \DomainException('Una fila no corresponde a un contribuyente y año autorizados. Prepara su año en Ingresos.'); }

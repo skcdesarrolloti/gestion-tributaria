@@ -19,6 +19,12 @@ $nomValues=array_fill_keys(App\Services\NominaData::FIELDS,0);
 $nomValues=array_replace($nomValues,['salario'=>100000000,'comisiones'=>20000000,'devengado'=>120000000,'salud'=>4000000,'pension'=>4000000,'retencion'=>1000000,'deducido'=>9000000,'neto'=>111000000]);
 $nomRow=['contribuyente_id'=>$nomTax,'perfil_id'=>$nomProfile,'documento'=>'999111222','empleador_documento'=>'999888777','empleador'=>'Empresa ficticia',
     'inicio'=>'2025-01-01','fin'=>'2025-01-15','archivo'=>'prueba.xls','hoja'=>'Enero','archivo_sha'=>str_repeat('a',64),'valores'=>$nomValues];
+$nomConfig=json_decode($nomContextXpath->query('//script[@id="nomina-config"]')->item(0)->textContent,true);
+verify(count($nomConfig['targets'])===1 && $nomConfig['targets'][0]['id']===$nomTax,'Nómina: persona seleccionada limita los datos del lector a sus propias filas');
+$db->exec("INSERT INTO contribuyentes (funcionario_id,tipo,documento_tipo,documento_numero,nombre,fuentes) VALUES (100,'natural','CC','999111333','Otra persona ficticia','[]')");$nomOther=(int)$db->lastInsertId();
+[, $nomMissing]=request($client,$base,'nomina&anio=2025&contribuyente='.$nomOther);
+verify(str_contains($nomMissing,'Preparar 2025 de Otra persona ficticia') && str_contains($nomMissing,'Extractos bancarios'),'Nómina: falta de perfil anual ofrece preparación concreta y conserva acceso a extractos');
+verify(request($client,$base,'nomina&anio=2025&contribuyente='.$nomOther,['_csrf_token'=>token($nomMissing),'accion'=>'revisar','filas'=>json_encode([$nomRow])])[0]===422,'Nómina: servidor rechaza filas de otra persona aunque el Socio pueda consultar ambas');
 $nomPreview=static function(array $rs) use($client,$base,$nomPage): array { return request($client,$base,'nomina&anio=2025',['_csrf_token'=>token($nomPage),'accion'=>'revisar','filas'=>json_encode($rs)]); };
 $nomCommit=static function(string $html,bool $replace=false) use($client,$base): array {
     preg_match('/name="preview_token" value="([a-f0-9]+)"/',$html,$m);

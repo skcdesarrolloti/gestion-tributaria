@@ -3,6 +3,10 @@
 <a class="rounded-xl px-3 py-2 <?= $tab['active']?'bg-inverse-surface text-on-secondary':'bg-surface-container-low text-secondary' ?>" <?= $tab['active']?'aria-current="page"':'' ?> href="<?= e(url($config,$tab['route']).$tab['query']) ?>"><?= e($tab['label']) ?></a>
 <?php endforeach; ?>
 </nav>
+<?php if ($menuTaxpayer && in_array($menuRoute,['nomina','extractos'],true)): ?>
+<nav class="portal-container registro-section-tabs" aria-label="Cargas de ingresos">
+<?php foreach (['nomina'=>'Nómina Excel','extractos'=>'Extractos bancarios'] as $route=>$label): ?><a class="rounded-xl px-3 py-2 <?= $menuRoute===$route?'bg-inverse-surface text-on-secondary':'bg-surface-container-low text-secondary' ?>" <?= $menuRoute===$route?'aria-current="page"':'' ?> href="<?= e(url($config,$route).'&contribuyente='.$menuTaxpayer.'&anio='.$menuYear) ?>"><?= e($label) ?></a><?php endforeach; ?>
+</nav><?php endif; ?>
 <?php if (($menuRoute==='registro' && input($_GET,'componente')==='costos') || $menuRoute==='prestamos'): ?>
 <nav class="portal-container registro-section-tabs" aria-label="Controles de costos y gastos"><a class="rounded-xl px-3 py-2 <?= $menuRoute==='registro'?'bg-inverse-surface text-on-secondary':'bg-surface-container-low text-secondary' ?>" href="<?= e(url($config,'registro').'&componente=costos&contribuyente='.$menuTaxpayer.'&anio='.$menuYear) ?>">Gastos y 4×1000</a><a class="rounded-xl px-3 py-2 <?= $menuRoute==='prestamos'?'bg-inverse-surface text-on-secondary':'bg-surface-container-low text-secondary' ?>" <?= $menuRoute==='prestamos'?'aria-current="page"':'' ?> href="<?= e(url($config,'prestamos').'&contribuyente='.$menuTaxpayer.'&anio='.$menuYear) ?>">Control de préstamos</a></nav>
 <?php endif; ?>

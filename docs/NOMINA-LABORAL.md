@@ -7,6 +7,12 @@ PDF bancarios. Seleccionar 2025/2026, archivos XLS/XLSX, NIT del pagador,
 hojas y empleados. Revisar antes de confirmar. Se seleccionan todos los períodos
 disponibles del año; se puede limitar a enero. No se cambia el período de cada hoja.
 Seleccionar un solo empleador por carga para confirmar un NIT de pagador.
+Cuando la ruta incluye una persona, el lector y los enlaces muestran únicamente
+esa ficha. El servidor rechaza una vista previa o guardado de otra persona en ese
+contexto. Sin ficha seleccionada se conserva la importación de varias personas.
+Si falta el perfil anual se ofrece «Preparar año de [persona]» antes del archivo;
+no se presumen residencia ni régimen para habilitar filas. Nómina y Extractos
+conservan pestañas visibles entre sí con el mismo contribuyente y año.
 Tras leer el archivo, marcar las personas y elegir «Todos los períodos
 disponibles del año» permite seleccionar sus quincenas en conjunto. Se informa
 el número elegido; los meses sin datos no se completan ni se suponen cero.
