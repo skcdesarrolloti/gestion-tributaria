@@ -575,3 +575,11 @@ ofrecen clasificación. No se guardaron clasificaciones reales ni se importaron
 créditos comerciales. La selección automatizada de archivos sigue bloqueada por
 el permiso de la extensión: falta cargar el PDF personal manualmente para verificar
 el guardado real completo en Hostinger. Pruebas HTTP locales sí completaron la carga.
+
+29/10/2026 — Carga única bancaria: sintaxis, unitarias e integración completa en
+base aleatoria correctas. Se comprobó que Pensiones, Capital, Costos y Préstamos
+no presentan selectores bancarios y enlazan a la carga central. Una sola carga
+reconoce el crédito personal, lo muestra en préstamos, rechaza el PDF repetido
+y no crea un extracto de cuenta ni movimientos fiscales adicionales. Los controles
+de cuentas reutilizan los soportes existentes. No se adaptó todavía el formato
+de la cuenta de Caja Social: falta recibir ese PDF, distinto del crédito.

@@ -25,8 +25,8 @@ verify(str_contains($pensionOtherYear,'0 PDF guardados') && !str_contains($pensi
     'Pensiones: año vacío informa ausencia de soportes sin ocultar otro año');
 [, $pensionUpload]=request($client,$base,$pensionRoute.'&subir=1');
 $pensionDom=new DOMDocument();@$pensionDom->loadHTML($pensionUpload);$pensionXpath=new DOMXPath($pensionDom);
-verify($pensionXpath->query('//details[@id="subir-extracto" and @open]')->length===1 && str_contains($pensionUpload,'origen=pensiones'),
-    'Pensiones: Subir PDF abre el formulario con retorno a la misma sección');
+verify($pensionXpath->query('//input[@data-bank-files]')->length===0 && str_contains($pensionUpload,'Ir a extractos · carga única'),
+    'Pensiones: dirige a la carga central sin repetir un formulario bancario');
 verify($db->query('SELECT id,sha256,archivo,lectura FROM extractos_bancarios ORDER BY id')->fetchAll()===$bankSnapshot,
     'Pensiones: consultar no borra ni transforma documentos y lecturas guardadas');
 file_put_contents($bankPath,rutFixturePdf('11223344'));

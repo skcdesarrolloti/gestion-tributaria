@@ -1,10 +1,16 @@
 # Control de préstamos personales y libranza
 
-Registro de información → Costos y gastos → Control de préstamos. Conserva
+Consulta: Registro de información → Costos y gastos → Control de préstamos. Conserva
 persona y año. Este control admite personas naturales y extractos personales de
 consumo de Caja Social; rechaza crédito comercial y titular distinto. No importa
 ni traslada documentos de la empresa. El lector se verificó localmente contra el
 formato personal aportado; las pruebas de escritura usan PDF y personas ficticias.
+
+La carga está centralizada en «Extractos · carga única», junto a los PDF de
+cuentas. El selector reconoce el crédito, valida el titular y lo guarda solo en
+prestamos_documentos; no crea otra copia en extractos_bancarios. El formulario
+propio se retiró de Préstamos; el POST anterior queda compatible para sesiones
+antiguas. El control y la pantalla central comparten el soporte privado.
 
 El pago anterior del PDF se asigna a su fecha efectiva. Capital, intereses,
 seguro de vida, mora y otros cargos se separan y su suma debe conciliar. La cuota

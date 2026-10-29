@@ -1,6 +1,13 @@
 # Extractos por mes y cuenta
 
-Acceso: **Registro de información → Ingresos → Pensiones**. Elegir
+**Carga única:** Registro de información → **Extractos · carga única**. Es el
+único selector de PDF bancarios. Acepta cuentas y extractos de crédito personal
+de Caja Social reconocidos; los enruta al control correspondiente, sin duplicar
+el documento ni crear gastos fiscales. Pensiones, Capital, Costos y Préstamos
+solo consultan y ofrecen acceso a esta carga central. Colpensiones y nómina
+conservan sus cargas propias porque son soportes distintos del extracto bancario.
+
+Consulta: **Registro de información → Ingresos → Pensiones**. Elegir
 contribuyente y año muestra de inmediato los PDF guardados, el control de meses
 y los acumulados bancarios. Inicio también incluye ese acceso. La pestaña
 Pensiones de Ingresos presenta la misma información, antes de las casillas
@@ -20,8 +27,10 @@ con los rendimientos de capital. No cambia lecturas, movimientos o soportes.
 
 Desde cada mes se abre el detalle y el PDF dentro de Pensiones; la búsqueda
 conserva persona, año y sección. «Volver a los meses guardados» regresa al
-calendario. «Subir PDF» en un mes faltante abre la carga; después de guardar
-desde Pensiones se regresa al documento en esa misma sección. El lector, sus
+calendario. «Ir a extractos · carga única» abre la carga central; después se puede
+consultar el mismo soporte en cualquiera de sus secciones. Las rutas antiguas
+con origen conservan compatibilidad, pero ya no ofrecen formularios separados.
+El lector, sus
 permisos y las copias privadas son los mismos; no se duplican datos.
 
 La carga está incluida en Capital y Costos y gastos; admite banco y últimos

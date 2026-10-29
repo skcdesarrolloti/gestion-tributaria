@@ -11,6 +11,7 @@ final class RegistroNavegacion
     public static function menu(string $route,array $source,int $taxpayer,string $year): array
     {
         $active=$route==='prestamos' || ($route==='registro' && \input($source,'componente')==='costos')?'costos':'ingresos';
+        if ($route==='extractos') { $active='extractos'; }
         $context=['anio'=>$year]+($taxpayer>0?['contribuyente'=>$taxpayer]:[]);
         $items=['ingresos'=>['Ingresos','registro',['componente'=>'ingresos','cedula'=>'general']],
             'costos'=>['Costos y gastos','registro',['componente'=>'costos','cedula'=>'general']]];

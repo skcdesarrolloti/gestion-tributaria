@@ -41,5 +41,5 @@ $tableConcepts=$primary;$tableTitle=$title;require __DIR__.'/casillas.php';
 <?php endif; ?>
 <?php if ($pensionView && $taxpayer): ?></details><?php endif; ?>
 </main><?php if ($profile): ?><script src="<?= e(asset($config,'js/normas.js')) ?>" defer></script><?php endif; ?>
-<?php if (($pensionView || $bankMode) && $taxpayer): ?><script src="<?= e(asset($config,'js/pdf-carga.js').'?v='.filemtime(dirname(__DIR__,3).'/public/assets/js/pdf-carga.js')) ?>" defer></script><script src="<?= e(asset($config,'js/extractos.js').'?v='.filemtime(dirname(__DIR__,3).'/public/assets/js/extractos.js')) ?>" defer></script><?php endif; ?>
+<?php if ($pensionView && $profile): ?><script src="<?= e(asset($config,'js/pdf-carga.js').'?v='.filemtime(dirname(__DIR__,3).'/public/assets/js/pdf-carga.js')) ?>" defer></script><?php endif; ?>
 <?php if ($pensionView && $profile): ?><script src="<?= e(asset($config,'js/colpensiones.js').'?v='.filemtime(dirname(__DIR__,3).'/public/assets/js/colpensiones.js')) ?>" defer></script><?php endif; ?><?php require __DIR__.'/../partials/footer.php'; ?>

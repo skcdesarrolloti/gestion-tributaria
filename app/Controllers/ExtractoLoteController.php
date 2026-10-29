@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 namespace App\Controllers;
-use App\Models\{Contribuyente,ExtractoBancario};
-use App\Services\{AuthService,AccesoRoles,Csrf,ExtractoUpload,ExtractoData,PdfApi};
+use App\Models\{Contribuyente,ExtractoBancario,PrestamoPersonal};
+use App\Services\{AuthService,AccesoRoles,Csrf,ExtractoUpload,ExtractoData,PdfApi,CreditoCarga};
 
 /** Recibe cada PDF por separado para respetar el límite de carga del servidor. */
 final class ExtractoLoteController
 {
-    public function __construct(private AuthService $auth,private Contribuyente $taxpayers,private ExtractoBancario $model,private array $config) {}
+    public function __construct(private AuthService $auth,private Contribuyente $taxpayers,private ExtractoBancario $model,private array $config,private PrestamoPersonal $loans) {}
     public function upload(): void
     {
         $user=$this->auth->user();if (!$user) { PdfApi::send(['error'=>'La sesión venció. Inicia sesión y vuelve a cargar los archivos pendientes.'],401);return; }
@@ -19,6 +19,11 @@ final class ExtractoLoteController
         try {
             $year=\input($_GET,'anio');if (!in_array($year,['2025','2026'],true)) { throw new \InvalidArgumentException('Selecciona el año del extracto.'); }
             $file=$files->receive(PdfApi::file($_FILES,'extracto_pdf'),PdfApi::file($_FILES,'extracto_lectura'));
+            $credit=CreditoCarga::read($file,$files,$taxpayer,$year);
+            if ($credit) {
+                $id=$this->loans->save((int)$taxpayer['id'],$owner,$file,$credit);$file=null;
+                PdfApi::send(['guardado'=>true,'id'=>$id,'tipo'=>'credito','banco'=>$credit['banco'],'cuenta'=>substr($credit['credito'],-4),'mes'=>(int)substr($credit['pago'],5,2),'leido'=>true]);return;
+            }
             $reading=$file['lectura'];$posted=$_POST;
             if (isset($reading['inicio'],$reading['cuenta'])) {
                 $posted['banco']='BBVA';$posted['cuenta']=$reading['cuenta'];$posted['mes']=(string)(int)substr($reading['inicio'],5,2);
@@ -34,6 +39,7 @@ final class ExtractoLoteController
             $duplicate=false;
             if ($file) {
                 foreach ($this->model->listFor((int)$taxpayer['id'],$owner,(int)$year) as $existing) { if (hash_equals($existing['sha256'],$file['sha256'])) { $duplicate=true;break; } }
+                if (($file['lectura']['tipo_documento']??'')==='credito') { foreach ($this->loans->listFor((int)$taxpayer['id'],$owner) as $existing) { if (hash_equals($existing['sha256'],$file['sha256'])) { $duplicate=true;break; } } }
                 $files->discard($file);
             }
             PdfApi::send(['error'=>$duplicate?'Este PDF ya estaba guardado.':$e->getMessage(),'duplicado'=>$duplicate],409);

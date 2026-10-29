@@ -11,8 +11,7 @@
 ?>
 <section id="bancos" class="bg-surface-container-lowest border border-surface-container rounded-xl p-4 space-y-space-md">
 <h2 class="text-headline-md font-semibold"><?= $gmf?'4×1000 por banco':'Rendimientos financieros por banco' ?></h2>
-<p>Sube el extracto de cada banco y cuenta, mes a mes. El mismo PDF sirve para ingresos y gastos: no lo subas dos veces.</p>
-<?php require __DIR__.'/../extractos/upload.php'; ?>
+<?php require __DIR__.'/../extractos/access.php'; ?>
 <div data-bank-summary>
 <?php if (!$documents): ?><p>No hay extractos guardados de este año.</p><?php else: ?>
 <p><strong><?= $gmf?'4×1000 neto leído: ':'Rendimientos leídos: ' ?><?= $hasRead?e($money($gmf?$net:$total['rendimientos'])):'Pendiente de lectura' ?></strong><?php if ($bankSummary['pendientes']): ?> · <?= (int)$bankSummary['pendientes'] ?> PDF pendientes de lectura.<?php endif; ?></p>

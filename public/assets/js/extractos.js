@@ -46,14 +46,14 @@
                     for (const name of ['banco','cuenta','mes']) body.set(name,row.fields?row.fields[name].value:form.elements[name].value);
                     body.set('titular_confirmado',form.elements.titular_confirmado.checked?'1':'0');
                     const result=await request(form.dataset.batchUrl,body);row.done=true;row.decoded=null;saved++;
-                    row.message.textContent=row.file.name+' · Guardado · '+result.banco+' '+result.cuenta+' · mes '+result.mes+' · '+(result.leido?'leído':'pendiente de lectura');
+                    row.message.textContent=row.file.name+' · Guardado · '+result.banco+' '+result.cuenta+' · mes '+result.mes+' · '+(result.tipo==='credito'?'desglose disponible en Control de préstamos':(result.leido?'leído':'pendiente de lectura'));
                     if (row.fields) row.wrap.querySelector('.profile-grid').remove();
                 } catch (error) {
                     if (error.data?.duplicado) { row.done=true;row.decoded=null;duplicates++;row.message.textContent=row.file.name+' · Ya estaba guardado; no se duplicó.'; }
                     else { row.message.textContent=row.file.name+' · '+error.message;if (error.status===422 && /mes|banco|cuenta|período/i.test(error.message)) metadata(form,row);if ([401,403,419].includes(error.status)) break; }
                 }
             }
-            if (saved) await refresh(['#meses','[data-bank-summary]','[data-bank-count]']);
+            if (saved) await refresh(['#meses','[data-credit-documents]']);
             const pending=state.rows.filter(row=>!row.done).length;
             status.textContent='Este intento: '+saved+' guardados; '+duplicates+' ya existentes; '+pending+' pendientes. '+(pending?'Completa solo los datos que faltan debajo del PDF y pulsa otra vez «Subir seleccionados».':'Acumulados actualizados en esta misma página.');
         } catch (error) { status.textContent=error.message; }

@@ -3,8 +3,8 @@
 <?php require __DIR__.'/../partials/header.php'; ?>
 <main class="portal-container py-8 space-y-space-lg">
 <section class="bg-inverse-surface text-on-secondary rounded-2xl p-4">
-<h1 class="text-headline-lg font-semibold">Extractos bancarios por mes</h1>
-<p>Un soporte para consultar pensión recibida, rendimientos, 4×1000 y los demás movimientos de la cuenta.</p>
+<h1 class="text-headline-lg font-semibold">Extractos bancarios · carga única</h1>
+<p>Sube aquí los PDF de cuentas y créditos personales. Cada documento se guarda una sola vez y se consulta en sus secciones.</p>
 </section>
 <form method="get" class="scenario-settings-grid">
 <input type="hidden" name="route" value="extractos">
@@ -21,9 +21,11 @@
 <a class="text-secondary underline" href="<?= e(url($config,'registro').$extractQuery.'&componente=ingresos&cedula=pensiones') ?>">Ingresos · Pensiones</a>
 <a class="text-secondary underline" href="<?= e(url($config,'registro').$extractQuery.'&componente=ingresos&cedula=general&renta=capital') ?>">Ingresos · Capital</a>
 <a class="text-secondary underline" href="<?= e(url($config,'registro').$extractQuery.'&componente=costos&cedula=general&renta=capital') ?>">Costos y gastos</a>
+<?php if ($taxpayer['tipo']==='natural'): ?><a class="text-secondary underline" href="<?= e(url($config,'prestamos').$extractQuery) ?>">Control de préstamos</a><?php endif; ?>
 </nav>
 <?php if (input($_GET,'guardado')==='1'): ?><p role="status" class="bg-primary-container rounded-xl p-4">PDF conservado. Revisa abajo el estado de lectura, los totales bancarios y los movimientos. La clasificación fiscal no se ha confirmado.</p><?php endif; ?>
-<?php require __DIR__.'/upload.php';require __DIR__.'/months.php'; ?>
+<details><summary class="text-secondary underline">? · Qué se usa en cada sección</summary><p>Pensión recibida → Pensiones. Rendimientos → Capital. 4×1000 → Costos y gastos. Capital, intereses y seguros del crédito → Control de préstamos. Son consultas del mismo soporte, no nuevas cargas ni nuevos pagos.</p><p>Los formatos sin lectura y los movimientos de finalidad incierta quedan pendientes. Una consignación no se considera ingreso tuyo automáticamente: puede incluir salario ya registrado, transferencias o dinero de otra persona. Los importes no se duplican en casillas fiscales.</p></details>
+<?php require __DIR__.'/upload.php';require __DIR__.'/creditos.php';require __DIR__.'/months.php'; ?>
 <?php if ($selected): require __DIR__.'/detail.php'; endif; ?>
 <?php else: ?><p>Selecciona un contribuyente para subir y consultar únicamente sus extractos.</p><?php endif; ?>
 </main><script src="<?= e(asset($config,'js/pdf-carga.js').'?v='.filemtime(dirname(__DIR__,3).'/public/assets/js/pdf-carga.js')) ?>" defer></script><script src="<?= e(asset($config,'js/extractos.js').'?v='.filemtime(dirname(__DIR__,3).'/public/assets/js/extractos.js')) ?>" defer></script><?php require __DIR__.'/../partials/footer.php'; ?>

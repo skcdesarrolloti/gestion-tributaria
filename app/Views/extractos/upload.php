@@ -1,6 +1,6 @@
 <details id="subir-extracto" class="bg-surface-container-lowest border border-surface-container rounded-xl p-4" <?= !$documents||$errors||input($_GET,'subir')==='1'?'open':'' ?>>
 <summary class="text-headline-md font-semibold">Subir extracto bancario en PDF</summary>
-<p><?= e($taxpayer['nombre']) ?> · <?= e($year) ?>. Sube el PDF del banco; el mes se obtiene del período impreso en el documento.</p>
+<p><?= e($taxpayer['nombre']) ?> · <?= e($year) ?>. Cuentas y créditos personales en el mismo selector. No necesitas volver a subirlos en ingresos, costos ni préstamos.</p>
 <form method="post" enctype="multipart/form-data" class="space-y-space-md" data-extracto-form data-documento="<?= e($taxpayer['documento_numero']) ?>" data-worker="<?= e(asset($config,'js/extracto-worker.js')) ?>" data-batch-url="<?= e(url($config,'extractos/lote').$extractQuery) ?>" action="<?= e(url($config,'extractos').$extractQuery) ?>">
 <?php require __DIR__.'/../partials/csrf.php'; ?>
 <div class="scenario-settings-grid">

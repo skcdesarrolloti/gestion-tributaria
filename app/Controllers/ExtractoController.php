@@ -2,14 +2,14 @@
 declare(strict_types=1);
 namespace App\Controllers;
 use App\Core\View;
-use App\Models\{Contribuyente,ExtractoBancario};
-use App\Services\{AuthService,AccesoRoles,Csrf,ExtractoData,ExtractoUpload};
+use App\Models\{Contribuyente,ExtractoBancario,PrestamoPersonal};
+use App\Services\{AuthService,AccesoRoles,Csrf,ExtractoData,ExtractoUpload,CreditoCarga};
 
 final class ExtractoController
 {
     private ExtractoUpload $files;
     public function __construct(private AuthService $auth, private Contribuyente $taxpayers,
-        private ExtractoBancario $documents, private View $view, private array $config)
+        private ExtractoBancario $documents, private View $view, private array $config,private PrestamoPersonal $loans)
     { $this->files=new ExtractoUpload($config['storage_path']??dirname(__DIR__,2).'/storage'); }
 
     public function index(): void
@@ -32,7 +32,13 @@ final class ExtractoController
                 try {
                     $posted=$_POST;$automatic=\input($_POST,'mes')==='auto';
                     if ($automatic) { $posted['mes']='1'; }
-                    $data=ExtractoData::read($posted,$year);$file=$this->files->receive(\App\Services\PdfApi::file($_FILES,'extracto_pdf'),\App\Services\PdfApi::file($_FILES,'extracto_lectura'));
+                    $file=$this->files->receive(\App\Services\PdfApi::file($_FILES,'extracto_pdf'),\App\Services\PdfApi::file($_FILES,'extracto_lectura'));
+                    $credit=CreditoCarga::read($file,$this->files,$taxpayer,$year);
+                    if ($credit) {
+                        $this->loans->save($id,$owner,$file,$credit);$file=null;
+                        header('Location: '.\url($this->config,'extractos').'&contribuyente='.$id.'&anio='.$year.'&guardado=1#creditos-guardados',true,303);return;
+                    }
+                    $data=ExtractoData::read($posted,$year);
                     if ($automatic) {
                         if (!isset($file['lectura']['inicio'])) { throw new \InvalidArgumentException('No se pudo leer el período impreso en el PDF. No se exige firma digital. Si el documento abre y el período se ve, selecciona el mes manualmente para guardarlo pendiente de lectura.'); }
                         $data['mes']=(int)substr($file['lectura']['inicio'],5,2);
@@ -54,7 +60,8 @@ final class ExtractoController
         $documentId=filter_var(\input($_GET,'documento'),FILTER_VALIDATE_INT)?:0;
         foreach ($documents as $d) { if ((int)$d['id']===$documentId) { $selected=$d;break; } }
         if ($documentId && !$selected) { http_response_code(404);echo 'Extracto no encontrado en este contribuyente y año.';return; }
-        $this->view->render('extractos/index',compact('user','rows','taxpayer','year','documents','selected','errors','form'));
+        $credits=$taxpayer && $taxpayer['tipo']==='natural'?array_values(array_filter($this->loans->listFor($id,$owner),static fn($d)=>substr($d['fecha_pago'],0,4)===$year)):[];
+        $this->view->render('extractos/index',compact('user','rows','taxpayer','year','documents','selected','errors','form','credits'));
     }
 
     public function document(): void

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 $batchRoute='extractos/lote&contribuyente='.$readBankTax.'&anio=2025';
-[, $batchPage]=request($client,$base,'registro&contribuyente='.$readBankTax.'&anio=2025&componente=costos');
+[, $batchPage]=request($client,$base,'extractos&contribuyente='.$readBankTax.'&anio=2025');
 verify(str_contains($batchPage,'data-bank-files multiple') && str_contains($batchPage,'data-batch-url'),'Carga bancaria permite seleccionar varios PDF en el mismo panel');
 file_put_contents($bankPath,bankFixturePdf());
 $batchPost=['_csrf_token'=>token($batchPage),'mes'=>'auto','banco'=>'','cuenta'=>'','extracto_pdf'=>new CURLFile($bankPath,'application/pdf','banco-junio.pdf')];
