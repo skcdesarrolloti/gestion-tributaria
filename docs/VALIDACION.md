@@ -595,3 +595,5 @@ fiscales nuevos, rechazo de duplicados y períodos solapados. Lectura local del
 PDF real concilia cada saldo y el resumen completo; no se importó a producción
 ni a las pruebas. Ver docs/CAJA-SOCIAL-CUENTAS.md. La carga real en Hostinger
 queda pendiente de realizarse desde Ingresos con el archivo del responsable.
+Comprobación publicada: Ingresos muestra la entrada única; abre «Ingresos ·
+Extractos bancarios» con Ingresos activo y conserva los nueve PDF de BBVA.

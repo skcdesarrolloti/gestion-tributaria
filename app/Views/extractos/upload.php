@@ -8,7 +8,7 @@
 <label>Banco (si no se detecta) <input name="banco" value="<?= e($form['banco']) ?>" maxlength="80" class="w-full rounded-xl bg-surface-container-low p-3"></label>
 <label>Últimos cuatro dígitos (si no se detectan) <input name="cuenta" value="<?= e($form['cuenta']) ?>" pattern="[0-9]{4}" maxlength="4" inputmode="numeric" autocomplete="off" class="w-full rounded-xl bg-surface-container-low p-3"></label>
 </div>
-<label class="block">PDF de cada banco y mes · puedes seleccionar varios (hasta 50; 10 MB cada uno)<input type="file" name="extracto_pdf[]" data-bank-files multiple accept="application/pdf,.pdf" required class="block w-full"></label>
+<label class="block">PDF bancarios mensuales o trimestrales · puedes seleccionar varios (hasta 50; 10 MB cada uno)<input type="file" name="extracto_pdf[]" data-bank-files multiple accept="application/pdf,.pdf" required class="block w-full"></label>
 <label class="block"><input type="checkbox" data-pdf-unlock checked> Preparar lectura automática del PDF, con o sin contraseña</label>
 <label class="block"><input type="checkbox" data-pdf-custom> Usar otra contraseña del PDF (distinta al documento de esta ficha)</label>
 <label class="block">Contraseña del PDF (opcional si corresponde a tu documento)
