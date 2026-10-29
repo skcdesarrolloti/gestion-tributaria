@@ -569,3 +569,9 @@ en las pruebas. Fixtures ficticios verifican rechazo de empresa/otro titular,
 separación de pago y próxima cuota, duplicados, años, permisos, CSRF, clasificación
 concurrente y conservación de importes fiscales. Cruce real con Colpensiones aún
 pendiente de su comprobante. Ver docs/PRESTAMOS-PERSONALES.md.
+Verificación publicada: pantalla de préstamos con ficha personal y año, menú activo
+y presentación compartida; carga disponible y 27 movimientos del extracto BBVA
+ofrecen clasificación. No se guardaron clasificaciones reales ni se importaron
+créditos comerciales. La selección automatizada de archivos sigue bloqueada por
+el permiso de la extensión: falta cargar el PDF personal manualmente para verificar
+el guardado real completo en Hostinger. Pruebas HTTP locales sí completaron la carga.
