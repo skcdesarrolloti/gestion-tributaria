@@ -14,7 +14,8 @@
 <p>Sube el extracto de cada banco y cuenta, mes a mes. El mismo PDF sirve para ingresos y gastos: no lo subas dos veces.</p>
 <?php require __DIR__.'/../extractos/upload.php'; ?>
 <?php if (!$documents): ?><p>No hay extractos guardados de este año.</p><?php else: ?>
-<p><strong><?= $gmf?'4×1000 neto leído: ':'Rendimientos leídos: ' ?><?= $hasRead?e($money($gmf?$net:$total['rendimientos'])):'Pendiente de lectura' ?></strong> · <?= (int)$bankSummary['pendientes'] ?> PDF pendientes de lectura.</p>
+<p><strong><?= $gmf?'4×1000 neto leído: ':'Rendimientos leídos: ' ?><?= $hasRead?e($money($gmf?$net:$total['rendimientos'])):'Pendiente de lectura' ?></strong><?php if ($bankSummary['pendientes']): ?> · <?= (int)$bankSummary['pendientes'] ?> PDF pendientes de lectura.<?php endif; ?></p>
+<p class="text-secondary text-body-md">Es el control del banco. Las casillas fiscales siguen separadas para conciliar certificados y evitar duplicados.</p>
 <?php foreach ($bankSummary['cuentas'] as $account): $sum=0; ?>
 <details class="border border-surface-container rounded-xl p-3" <?= count($bankSummary['cuentas'])===1?'open':'' ?>>
 <summary class="font-semibold"><?= e($account['banco'].' · Cuenta '.$account['cuenta']) ?> · <?= count($account['meses']) ?>/12 meses con PDF</summary>

@@ -15,7 +15,11 @@ CSRF y no escriben ingresos. Bancos separa cuentas/meses, pendientes y reintegro
 la carga real vuelve a Capital o Costos y no duplica un soporte entre categorías.
 Se conservan permisos por ficha y separación de años. No se probaron con datos
 reales los lectores de bancos distintos al formato BBVA ya reconocido.
-Verificación de la publicación pendiente al preparar este cambio.
+Publicación fd23a41 comprobada con sesión autenticada: Capital y Costos muestran
+sus conceptos separados por banco/cuenta y nueve meses conservados; Análisis
+mantiene persona/año y muestra una estimación salarial provisional con aviso de
+pensión bruta/aportes pendientes. Se abrió la explicación de origen, UVT y
+tarifa anual. No se cargaron archivos ni se modificaron ingresos reales.
 
 ### Pantallas centradas en cada ingreso · 29/10/2026
 
