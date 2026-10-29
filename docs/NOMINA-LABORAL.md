@@ -1,7 +1,9 @@
 # Nómina laboral por año
 
 Registro de información → Ingresos → Trabajo → **Subir nómina**, o acceso directo
-desde el mismo menú. Seleccionar 2025/2026, archivos XLS/XLSX, NIT del pagador,
+desde Extractos bancarios mediante **Subir nómina Excel**, conservando persona
+y año. La nómina tiene su selector XLS/XLSX propio; no se carga en el selector de
+PDF bancarios. Seleccionar 2025/2026, archivos XLS/XLSX, NIT del pagador,
 hojas y empleados. Revisar antes de confirmar. Se seleccionan todos los períodos
 disponibles del año; se puede limitar a enero. No se cambia el período de cada hoja.
 Seleccionar un solo empleador por carga para confirmar un NIT de pagador.

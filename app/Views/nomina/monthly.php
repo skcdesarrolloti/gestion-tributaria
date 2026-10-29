@@ -2,7 +2,7 @@
 $retentionGroups=\App\Services\RetencionLaboral::groups($payroll);
 $retentionControl=\App\Services\RetencionResumen::controls($retentionGroups,$retentionData['meses']??[],(int)$profile['anio']); ?>
 <section id="nomina" class="bg-surface-container-lowest border border-surface-container rounded-xl p-4 space-y-space-md">
-<a class="inline-block rounded-xl bg-inverse-surface text-on-secondary px-4 py-2" href="<?= e(url($config,'nomina').'&anio='.$state['anio'].'&contribuyente='.$profile['contribuyente_id']) ?>">Subir nómina y revisar hojas</a>
+<a class="inline-block rounded-xl bg-inverse-surface text-on-secondary px-4 py-2" href="<?= e(url($config,'nomina').'&anio='.$state['anio'].'&contribuyente='.$profile['contribuyente_id']) ?>">Subir nómina Excel</a>
 <?php if (!$payroll): ?><p>Aún no hay nóminas importadas para esta persona y año. Puedes revisar un ejemplo sin guardarlo.</p><?php endif; ?>
 <?php require __DIR__.'/summary.php'; ?>
 <?php if ($payroll): require __DIR__.'/retenciones.php'; endif; ?>
