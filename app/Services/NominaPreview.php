@@ -6,7 +6,7 @@ namespace App\Services;
 final class NominaPreview
 {
     public const MONTHS=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
-    public const COLUMNS=['devengado'=>'32 · Bruto','salud'=>'Salud','pension'=>'Pensión',
+    public const COLUMNS=['salario'=>'Salario','sobresueldo'=>'Sobresueldo','comisiones'=>'Comisiones','devengado'=>'32 · Devengado','salud'=>'Salud','pension'=>'Pensión',
         'solidaridad'=>'Solidaridad','retencion'=>'132 · Retención','otros_descuentos'=>'Otros descuentos','neto'=>'Neto listado'];
 
     public static function groups(array $records): array

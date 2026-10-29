@@ -20,6 +20,10 @@ Las filas sin perfil anual preparado quedan deshabilitadas. Versiones distintas
 del mismo período siguen requiriendo elegir una sola; no se marcan ambas.
 
 La vista previa agrupa por persona y pagador, luego por mes en orden cronológico.
+La selección inicial ya muestra salario, sobresueldo, comisiones, otros devengados,
+devengado, salud, pensión/solidaridad, retención, otros descuentos y neto, con
+total de las quincenas marcadas. Para una persona no se repite su nombre por fila.
+Sobresueldo conserva el nombre del Excel; no se presume que sea comisión.
 Cada mes muestra sus quincenas y un subtotal de la selección, sin volver a sumar
 ese subtotal al importar. Salud, pensión y solidaridad aparecen separadas; origen,
 conceptos y comparación del neto se despliegan dentro de cada quincena. Nombre y

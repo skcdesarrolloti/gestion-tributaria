@@ -7,8 +7,15 @@
   const td=(tr,text)=>{const e=document.createElement('td');e.textContent=text;tr.append(e);return e;};
   const selection=document.querySelector('#nomina-seleccion'), people=document.querySelector('#nomina-personas');
   const periodsSelect=form.querySelector('[data-nomina-periodos]'), selectedStatus=document.querySelector('#nomina-seleccion-estado');
+  const totals=document.querySelector('#nomina-totales'), multiple=config.targets.length>1;
+  const amounts=v=>[v.salario,v.sobresueldo,v.comisiones,v.retroactivos+v.incapacidad+v.auxilio,v.devengado,v.salud,v.pension+v.solidaridad,v.retencion,v.otros_descuentos,v.neto];
   function selectionCount() {
-    selectedStatus.textContent=`${results.querySelectorAll('input:checked').length} quincenas seleccionadas. Los meses y quincenas que falten quedarán pendientes.`;
+    const chosen=[...results.querySelectorAll('input:checked')].map(c=>entries[Number(c.dataset.index)]);
+    selectedStatus.textContent=`${chosen.length} quincenas seleccionadas. Los meses y quincenas que falten quedarán pendientes.`;
+    totals.replaceChildren();if (!chosen.length) return;
+    const sum=Array(10).fill(0);for (const r of chosen) amounts(r.valores).forEach((v,i)=>sum[i]+=v);
+    const tr=document.createElement('tr'), label=document.createElement('th');label.colSpan=multiple?3:2;label.textContent='Total seleccionado';tr.append(label);
+    sum.forEach(v=>td(tr,money(v)));td(tr,'Sin guardar');totals.append(tr);
   }
   function selectPeriods() {
     const selected=new Set([...people.querySelectorAll('input:checked')].map(c=>Number(c.value)));
@@ -21,7 +28,7 @@
   people.addEventListener('change',selectPeriods);periodsSelect.addEventListener('change',selectPeriods);results.addEventListener('change',selectionCount);
   let reading=false;
   files.addEventListener('change',async()=>{
-    results.replaceChildren();people.replaceChildren();selection.hidden=true;entries.length=0;button.disabled=true;reading=true;const seenFiles=new Set(),seenRows=new Set(),periods=new Set();
+    results.replaceChildren();totals.replaceChildren();people.replaceChildren();selection.hidden=true;entries.length=0;button.disabled=true;reading=true;const seenFiles=new Set(),seenRows=new Set(),periods=new Set();
     let repeats=0, omitted=0;
     try {
       if (!files.files.length || files.files.length>6) throw Error('Selecciona entre uno y seis archivos XLS o XLSX.');
@@ -49,10 +56,10 @@
             const tr=document.createElement('tr'), check=document.createElement('input');check.type='checkbox';check.dataset.index=String(entries.length-1);
             check.checked=!conflict && r.month===1 && r.perfil_id>0;check.disabled=r.perfil_id===0;
             td(tr,'').append(check);check.setAttribute('aria-label',`${r.nombre}, ${r.inicio} a ${r.fin}`);
-            td(tr,r.nombre);td(tr,`${r.inicio} a ${r.fin}`);
-            const source=td(tr,''), detail=document.createElement('details'), summary=document.createElement('summary'), filename=document.createElement('p');
-            summary.textContent=`Hoja: ${name}`;filename.textContent=file.name;detail.append(summary,filename);source.append(detail);
-            td(tr,money(r.valores.devengado));td(tr,money(r.valores.neto));
+            if (multiple) td(tr,r.nombre);const source=td(tr,`${r.inicio} a ${r.fin}`);
+            const detail=document.createElement('details'), summary=document.createElement('summary'), filename=document.createElement('p');
+            summary.textContent='Ver origen y otros pagos';filename.textContent=`${file.name} · Hoja: ${name}. Retroactivos: ${money(r.valores.retroactivos)}; incapacidad: ${money(r.valores.incapacidad)}; auxilio: ${money(r.valores.auxilio)}. Pensión: ${money(r.valores.pension)}; solidaridad: ${money(r.valores.solidaridad)}.`;detail.append(summary,filename);source.append(detail);
+            amounts(r.valores).forEach(v=>td(tr,money(v)));
             td(tr,!r.perfil_id?'Prepara el año en Ingresos':conflict?'Otra versión: elige solo una':'Disponible');results.append(tr);
           }
         }
@@ -69,7 +76,7 @@
       selection.hidden=false;selectPeriods();
       status.textContent=`${entries.length} filas disponibles. ${repeats} archivos/filas repetidos omitidos. ${omitted} hojas sin coincidencia o de otro formato/año. Puedes seleccionar enero o todo lo disponible.`;
       button.disabled=false;
-    } catch(e) {status.textContent=e.message;results.replaceChildren();selection.hidden=true;entries.length=0;}
+    } catch(e) {status.textContent=e.message;results.replaceChildren();totals.replaceChildren();selection.hidden=true;entries.length=0;}
     finally {reading=false;}
   });
   form.addEventListener('submit',e=>{

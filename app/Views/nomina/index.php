@@ -22,7 +22,8 @@
 <label>Períodos <select data-nomina-periodos class="bg-surface-container-low rounded-xl p-2"><option value="todos">Todos los períodos disponibles del año</option><option value="enero">Solo enero</option></select></label>
 <p id="nomina-seleccion-estado" role="status" aria-live="polite"></p>
 </fieldset>
-<div class="renta-sheet-scroll" role="region" aria-label="Hojas y filas reconocidas" tabindex="0"><table class="renta-sheet-table"><thead><tr><th>Elegir</th><th>Contribuyente</th><th>Período</th><th>Origen</th><th>Devengado</th><th>Neto listado</th><th>Estado</th></tr></thead><tbody id="nomina-hojas"></tbody></table></div>
+<p>Revisa lo ganado y lo descontado en cada quincena. «Otros devengados» reúne retroactivos, incapacidad y auxilio; el origen y sus importes se pueden desplegar en el período.</p>
+<div class="renta-sheet-scroll" role="region" aria-label="Hojas y filas reconocidas" tabindex="0"><table class="renta-sheet-table"><thead><tr><th>Elegir</th><?php if (count($targets)>1): ?><th>Contribuyente</th><?php endif; ?><th>Quincena / origen</th><th>Salario</th><th>Sobresueldo</th><th>Comisiones</th><th>Otros devengados</th><th>Total devengado · 32</th><th>Salud</th><th>Pensión y solidaridad</th><th>Retención · 132</th><th>Otros descuentos</th><th>Neto</th><th>Estado</th></tr></thead><tbody id="nomina-hojas"></tbody><tfoot id="nomina-totales"></tfoot></table></div>
 <button data-preview disabled class="rounded-xl bg-inverse-surface text-on-secondary px-4 py-2">Revisar selección antes de guardar</button>
 <noscript><p>Activa JavaScript para leer el libro de nómina. No se puede importar sin revisar sus hojas.</p></noscript>
 </form></section>
