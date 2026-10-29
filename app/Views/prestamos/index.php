@@ -1,3 +1,5 @@
+<?php $title='Control de préstamos personales';require __DIR__.'/../partials/head.php'; ?>
+<body class="bg-background min-h-screen font-body-md text-on-surface antialiased">
 <?php require __DIR__.'/../partials/header.php';$contextRoute='prestamos';$money=static fn($v)=>$v===null?'—':\App\Services\ExtractoData::money($v); ?>
 <main class="portal-container py-8 space-y-space-lg"><h1 class="text-headline-lg font-semibold">Control de préstamos personales</h1>
 <?php require __DIR__.'/../registro/context.php'; ?>
