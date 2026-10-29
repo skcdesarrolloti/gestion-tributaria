@@ -23,6 +23,12 @@ aplicada. Ver [configuración y alcance](docs/PARAMETROS-ANUALES.md).
 meses y PDF bancarios guardados, sin pasar por el perfil anual. Ver
 [consulta y carga mensual](docs/EXTRACTOS-BANCARIOS.md).
 
+**Ingresos → Capital** muestra rendimientos por banco; **Costos y gastos**,
+el 4×1000 cobrado y reintegrado. Se reutilizan los mismos PDF. **Análisis y
+acciones** estima el impuesto de salarios/pensiones registrados, explica sus
+pasos y permite comparar ahorros condicionados sin modificar ingresos.
+Ver [alcance del resumen provisional](docs/IMPUESTO-AL-CORTE.md).
+
 En Beneficios tributarios, **Consultar artículos aquí** permite leer las normas
 dentro de cada ficha, sin abrir páginas adicionales. La colección DIAN muestra
 fecha y fuente de consulta. Ver [alcance del visor](docs/ARTICULOS-EN-FICHAS.md).

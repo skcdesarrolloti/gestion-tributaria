@@ -1,5 +1,6 @@
 <?php
 $incomeView=$state['componente']==='ingresos';
+$bankMode=!$incomeView?'gmf':(!$pensionView && (($profile['formulario']??'210')==='210'?$state['cedula']==='general' && $state['renta']==='capital':$state['seccion']==='financieros')?'rendimientos':'');
 $laborView=$incomeView && $profile && $profile['formulario']==='210' && $profile['tipo']==='natural' && $state['cedula']==='general' && $state['renta']==='trabajo';
 $title=$incomeView?($profile && $profile['formulario']==='110'
     ?\App\Services\RegistroNavegacion::SECCIONES_110[$state['seccion']]
@@ -12,7 +13,7 @@ require __DIR__.'/../partials/head.php'; ?>
 <section class="bg-inverse-surface text-on-secondary rounded-2xl p-4"><h1 class="text-headline-lg font-semibold"><?= e($title) ?></h1></section>
 <?php $contextRoute='registro';require __DIR__.'/context.php'; ?>
 <?php require __DIR__.'/ayuda-rentas.php'; ?>
-<?php if ($taxpayer): if ($pensionView) { require __DIR__.'/pensiones.php'; } elseif ($state['componente']==='costos') { require __DIR__.'/extractos.php'; } endif; ?>
+<?php if ($taxpayer): if ($pensionView) { require __DIR__.'/pensiones.php'; } elseif ($bankMode) { require __DIR__.'/bancos.php'; } endif; ?>
 <?php if ($pensionView && $taxpayer): ?><details><summary class="text-secondary underline">Casillas DIAN de pensiones · bruto, ajustes y condiciones del año</summary><p>Los extractos guardados se muestran arriba. El abono bancario es neto; la casilla 99 requiere la pensión bruta y sus descuentos verificados. Un valor $0 en esa casilla no borra ni representa la cantidad de PDF guardados.</p><?php endif; ?>
 <?php if ($taxpayer && !$profile): require __DIR__.'/configurar-anio.php'; endif; ?>
 <?php if ($profile): $contextQuery=\App\Services\RegistroNavegacion::query($state,(int)$taxpayer['id']); ?>
@@ -25,7 +26,7 @@ $primary=array_values(array_filter($concepts,static fn($c)=>$state['componente']
 $adjustments=array_values(array_filter($concepts,static fn($c)=>$state['componente']==='ingresos'&&$c['clase']==='reduccion'));
 $tableConcepts=$primary;$tableTitle=$title;require __DIR__.'/casillas.php';
 ?>
-<?php if ($adjustments): ?><details><summary class="text-secondary underline">Ajustes de estos ingresos · devoluciones e ingresos no constitutivos</summary><p>Se registran por separado con fundamento y soporte; no son ingresos adicionales ni costos y gastos.</p><?php $tableConcepts=$adjustments;$tableTitle='Ajustes de ingresos';require __DIR__.'/casillas.php'; ?></details><?php endif; ?>
+<?php if ($adjustments): ?><details><summary class="text-secondary underline"><?= $pensionView?'Salud y aportes obligatorios de la pensión · casilla 100':'Ajustes de estos ingresos · devoluciones e ingresos no constitutivos' ?></summary><p>Se registran por separado con fundamento y soporte; no son ingresos adicionales ni costos y gastos.</p><?php $tableConcepts=$adjustments;$tableTitle='Ajustes de ingresos';require __DIR__.'/casillas.php'; ?></details><?php endif; ?>
 <?php if ($laborView && $payroll): ?></details><?php endif; ?>
 <?php if (!$concepts): ?><p role="status">No hay casillas de captura disponibles para esta sección y las condiciones del año.</p><?php endif; ?>
 <details><summary class="text-secondary underline">? · Formulario y condiciones de <?= e($state['anio']) ?></summary>
@@ -38,4 +39,4 @@ $tableConcepts=$primary;$tableTitle=$title;require __DIR__.'/casillas.php';
 <details class="border border-surface-container rounded-xl p-4"><summary class="font-semibold">Consultar o corregir movimientos de esta sección (<?= count($movements) ?>)</summary><?php $registration=$state;require __DIR__.'/../ingresos/movements.php'; ?></details>
 <?php endif; ?>
 <?php if ($pensionView && $taxpayer): ?></details><?php endif; ?>
-</main><?php if ($profile): ?><script src="<?= e(asset($config,'js/normas.js')) ?>" defer></script><?php endif; ?><?php if ($pensionView && $taxpayer): ?><script src="<?= e(asset($config,'js/extractos.js').'?v='.filemtime(dirname(__DIR__,3).'/public/assets/js/extractos.js')) ?>" defer></script><?php endif; ?><?php require __DIR__.'/../partials/footer.php'; ?>
+</main><?php if ($profile): ?><script src="<?= e(asset($config,'js/normas.js')) ?>" defer></script><?php endif; ?><?php if (($pensionView || $bankMode) && $taxpayer): ?><script src="<?= e(asset($config,'js/extractos.js').'?v='.filemtime(dirname(__DIR__,3).'/public/assets/js/extractos.js')) ?>" defer></script><?php endif; ?><?php require __DIR__.'/../partials/footer.php'; ?>

@@ -8,6 +8,11 @@ Menú reorganizado el 22/10/2026 por instrucción del responsable:
 4. Registro de información: Ingresos / Costos y gastos, por contribuyente y año.
 5. Análisis y acciones: seguimiento anual, hoja de cálculos y escenarios.
 
+Actualización 29/10/2026: Capital muestra rendimientos bancarios y Costos muestra
+4×1000 por banco/cuenta/mes, reutilizando soportes. Análisis incorpora un resumen
+provisional de salario y pensión desde los movimientos, explicación del cálculo
+y comparaciones condicionales sin guardar aportes. Ver IMPUESTO-AL-CORTE.md.
+
 Inicio permanece como acceso general; Exógena es independiente y Mi perfil conserva
 el cambio de contraseña. Los apartados de trabajo se numeran de 1 a 4 desde
 Contribuyentes. No se elimina información ni se cambia la política Socio/Usuario.

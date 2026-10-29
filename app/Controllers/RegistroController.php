@@ -38,15 +38,24 @@ final class RegistroController
         $taxpayer=$id?$this->taxpayers->findFor($id,$owner):null;
         if (array_key_exists('contribuyente',$_GET) && !$taxpayer) { http_response_code(404);echo 'Contribuyente no encontrado.';return; }
         if (!$taxpayer && count($rows)===1) { $taxpayer=$rows[0]; }
+        $analysisSaving=0;$analysisErrors=[];
+        if ($template==='registro/analysis' && $_SERVER['REQUEST_METHOD']==='POST') {
+            if (!\App\Services\Csrf::valid(\input($_POST,'_csrf_token'))) { http_response_code(419);$analysisErrors[]='Formulario vencido. Recarga antes de simular.'; }
+            elseif (!$taxpayer) { http_response_code(422);$analysisErrors[]='Selecciona primero la persona y el año.'; }
+            elseif (!preg_match('/^(0|[1-9][0-9]{0,10})$/D',\input($_POST,'aporte_simulado'))) { http_response_code(422);$analysisErrors[]='Escribe el ahorro en pesos enteros, sin puntos ni comas.'; }
+            else { $analysisSaving=(int)\input($_POST,'aporte_simulado'); }
+        }
         $profile=null;$concepts=[];$movements=[];$totals=[];$preparation=null;$questions=null;$payroll=[];$retentionData=[];
         $pensionView=$template==='registro/index' && $state['componente']==='ingresos' && $state['cedula']==='pensiones';
-        $pensionDocuments=[];$pensionDocument=null;
+        $pensionDocuments=[];$pensionDocument=null;$bankDocuments=[];$bankDocument=null;$bankSummary=[];$annualReports=[];
         if ($taxpayer) {
-            if ($pensionView) {
-                $pensionDocuments=$this->bankDocuments->listFor((int)$taxpayer['id'],$owner,(int)$state['anio']);
+            $bankDocuments=$this->bankDocuments->listFor((int)$taxpayer['id'],$owner,(int)$state['anio']);
+            $bankSummary=\App\Services\BancoResumen::build($bankDocuments);
+            if ($template==='registro/index') {
                 $documentId=filter_var(\input($_GET,'documento'),FILTER_VALIDATE_INT,['options'=>['min_range'=>1]])?:0;
-                foreach ($pensionDocuments as $document) { if ((int)$document['id']===$documentId) { $pensionDocument=$document;break; } }
-                if (isset($_GET['documento']) && !$pensionDocument) { http_response_code(404);echo 'Extracto no encontrado en este contribuyente y año.';return; }
+                foreach ($bankDocuments as $document) { if ((int)$document['id']===$documentId) { $bankDocument=$document;break; } }
+                if (isset($_GET['documento']) && !$bankDocument) { http_response_code(404);echo 'Extracto no encontrado en este contribuyente y año.';return; }
+                if ($pensionView) { $pensionDocuments=$bankDocuments;$pensionDocument=$bankDocument; }
             }
             $blocks=$this->characterization->blocksFor((int)$taxpayer['id'],$owner,(int)$state['anio']);
             $retentionData=$blocks['retenciones_laborales']['datos']??[];
@@ -56,12 +65,18 @@ final class RegistroController
                 $all=$this->incomes->concepts($profile);$allMovements=$this->incomes->movements((int)$profile['id'],$owner);
                 $totals=IngresoSummary::build($all,$allMovements);
                 $payroll=$this->incomes->payroll((int)$profile['id'],$owner);
+                if ($template==='registro/analysis') {
+                    $annualReports['real']=\App\Services\RentaAcumulada::build($profile,$allMovements,$payroll,$bankSummary,false,$analysisSaving);
+                    if (array_filter($allMovements,static fn($m)=>$m['estado']==='proyectado' && in_array((int)$m['casilla'],[32,33,99,100],true))) {
+                        $annualReports['proyectado']=\App\Services\RentaAcumulada::build($profile,$allMovements,$payroll,$bankSummary,true,$analysisSaving);
+                    }
+                }
                 $concepts=RegistroNavegacion::concepts($all,$profile,$state);$ids=array_column($concepts,'id');
                 $movements=array_values(array_filter($allMovements,static fn($m)=>in_array($m['concepto_id'],$ids)));
             } else {
                 $preparation=\App\Services\PerfilAnualSugerencias::stored($this->characterization,$taxpayer,$owner,$state['anio']);
             }
         }
-        $this->view->render($template,compact('user','rows','taxpayer','profile','state','concepts','movements','totals','preparation','questions','payroll','retentionData','pensionView','pensionDocuments','pensionDocument'));
+        $this->view->render($template,compact('user','rows','taxpayer','profile','state','concepts','movements','totals','preparation','questions','payroll','retentionData','pensionView','pensionDocuments','pensionDocument','bankDocuments','bankDocument','bankSummary','annualReports','analysisSaving','analysisErrors'));
     }
 }

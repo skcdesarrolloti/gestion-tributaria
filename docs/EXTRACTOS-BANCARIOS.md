@@ -6,8 +6,12 @@ y los acumulados bancarios. Inicio también incluye ese acceso. La pestaña
 Pensiones de Ingresos presenta la misma información, antes de las casillas
 fiscales y las preguntas de otras fuentes, que quedan plegadas.
 
-La tabla existente incluye **Pensión acumulada (neta)** y **Rendimientos
-acumulados** junto al valor de cada mes. Suma cronológicamente solo lecturas
+La tabla de Pensiones incluye **Pensión acumulada (neta)** junto al valor de
+cada mes. **Ingresos → Capital** muestra los rendimientos por banco y cuenta;
+**Costos y gastos** muestra el 4×1000 cobrado, reintegrado y neto. Cada control
+reutiliza los mismos PDF y muestra los doce meses; no volver a subirlos en otra
+categoría. Después de cargar o buscar, se conserva el contexto de origen.
+La consulta bancaria general conserva todas las columnas. Se suman solo lecturas
 conciliadas de esa cuenta y año. Un mes sin PDF o sin lectura no aporta cero:
 su fila muestra «—» y el total disponible se identifica como parcial.
 La casilla 99 muestra «Bruto pendiente de registrar» mientras no exista captura
@@ -20,8 +24,13 @@ calendario. «Subir PDF» en un mes faltante abre la carga; después de guardar
 desde Pensiones se regresa al documento en esa misma sección. El lector, sus
 permisos y las copias privadas son los mismos; no se duplican datos.
 
-El acceso **Subir o consultar extractos bancarios** también permanece en los
-demás ingresos y en Costos y gastos.
+La carga está incluida en Capital y Costos y gastos; admite banco y últimos
+cuatro dígitos de cada cuenta. Cada banco necesita sus propios extractos.
+Los diseños sin lector se conservan pendientes con mes manual: no se consideran
+importes de cero ni se promete lectura automática universal. Se descartan
+duplicados por cuenta/mes y huella. Los reintegros reducen el GMF, sin contar
+dos veces un soporte. El 50% es referencia deducible con certificado y reglas
+aplicables, no un descuento directo del impuesto ni un costo automático de 60.
 No exige volver a crear el contribuyente ni preparar un perfil de renta para
 conservar el soporte. Permisos: Socio global; Usuario solo su ficha asignada.
 

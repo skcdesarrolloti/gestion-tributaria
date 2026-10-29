@@ -1,5 +1,10 @@
 # Migraciones automáticas
 
+029 añade únicamente la casilla 100 de pensiones al catálogo 210 existente
+(aportes obligatorios según comprobante). No cambia movimientos ni tablas.
+Permite registrar por mes salud y solidaridad pensional sin repetir aportes de
+nómina. Conservar la casilla y sus movimientos al revertir una pantalla.
+
 028 crea parametros_anuales: publicaciones por año/revisión, datos JSON, autor
 y fecha, con clave única compuesta. No precarga valores futuros ni cambia datos
 existentes. La aplicación conserva los valores iniciales 2025/2026 y cada nueva

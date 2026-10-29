@@ -4,6 +4,19 @@ Verificación local realizada el 13 de octubre de 2026 con PHP 8.2.12, MariaDB 1
 
 ## Resultado
 
+### Bancos separados y estimación al corte · 29/10/2026
+
+Sintaxis, unitarias e integración aislada correctas. Casilla 100 añadida mediante
+migración 029 y check; captura por HTTP comprobada junto con bruto 99. El resumen
+usa movimientos guardados y nómina solo para retenciones, sin convertir neto
+bancario en bruto. Se comprueban tarifa, pensiones simultáneas, origen desconocido,
+proyecciones separadas y límites de aportes hipotéticos. Las comparaciones exigen
+CSRF y no escriben ingresos. Bancos separa cuentas/meses, pendientes y reintegros;
+la carga real vuelve a Capital o Costos y no duplica un soporte entre categorías.
+Se conservan permisos por ficha y separación de años. No se probaron con datos
+reales los lectores de bancos distintos al formato BBVA ya reconocido.
+Verificación de la publicación pendiente al preparar este cambio.
+
 ### Pantallas centradas en cada ingreso · 29/10/2026
 
 Sintaxis, unitarias e integración aislada correctas. Se comprueban títulos y

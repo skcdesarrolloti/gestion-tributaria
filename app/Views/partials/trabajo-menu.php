@@ -16,4 +16,4 @@ $menuContext=$menuTaxpayer?'&'.http_build_query(['contribuyente'=>$menuTaxpayer,
 <a class="block px-3 py-2.5 text-secondary" href="<?= e(url($config,'registro').'&componente=ingresos'.$menuContext) ?>">Ingresos</a>
 <a class="block px-3 py-2.5 text-secondary" href="<?= e(url($config,'registro').'&componente=costos'.$menuContext) ?>">Costos y gastos</a>
 </div></details>
-<a <?= $menuLink('analisis') ?> href="<?= e(url($config,'analisis')) ?>">Análisis y acciones</a>
+<a <?= $menuLink('analisis') ?> href="<?= e(url($config,'analisis').$menuContext) ?>">Análisis y acciones</a>

@@ -40,9 +40,9 @@ final class ExtractoController
                     ExtractoData::match($file['lectura'],$data,$taxpayer);
                     $file['lectura']['titular_confirmado']=$data['titular_confirmado'];
                     $documentId=$this->documents->saveFor($id,$owner,$data,$file);
-                    $pensionOrigin=\input($_GET,'origen')==='pensiones';
-                    $destination=\url($this->config,$pensionOrigin?'registro':'extractos').'&contribuyente='.$id.'&anio='.$year;
-                    if ($pensionOrigin) { $destination.='&componente=ingresos&cedula=pensiones'; }
+                    $origin=\input($_GET,'origen');$inRegistration=in_array($origin,['pensiones','capital','costos'],true);
+                    $destination=\url($this->config,$inRegistration?'registro':'extractos').'&contribuyente='.$id.'&anio='.$year;
+                    if ($inRegistration) { $destination.='&componente='.($origin==='costos'?'costos':'ingresos').'&cedula='.($origin==='pensiones'?'pensiones':'general').'&renta=capital&seccion=financieros'; }
                     header('Location: '.$destination.'&documento='.$documentId.'&guardado=1#detalle',true,303);return;
                 } catch (\InvalidArgumentException $e) { http_response_code(422);$errors[]=$e->getMessage(); }
                 catch (\DomainException $e) { http_response_code(409);$errors[]=$e->getMessage(); }

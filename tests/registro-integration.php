@@ -52,3 +52,4 @@ require __DIR__.'/perfil-anual-sugerencias-integration.php';
 require __DIR__.'/ingreso-preguntas-integration.php';
 require __DIR__.'/nomina-integration.php';
 require __DIR__.'/retenciones-integration.php';
+require __DIR__.'/bancos-renta-integration.php';

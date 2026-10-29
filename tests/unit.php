@@ -61,4 +61,5 @@ require __DIR__ . '/perfil-alcance-unit.php';
 require __DIR__ . '/rut-unit.php';
 require __DIR__ . '/rut-multi-unit.php';
 require __DIR__.'/parametros-unit.php';
+require __DIR__.'/renta-acumulada-unit.php';
 echo "Pruebas de seguridad y contribuyentes correctas.\n";

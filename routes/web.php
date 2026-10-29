@@ -14,6 +14,7 @@ $router->add('GET', 'nomina', [$nominaController, 'index']);
 $router->add('POST', 'nomina', [$nominaController, 'index']);
 $router->add('POST', 'registro/fuentes', [$registroController, 'sources']);
 $router->add('GET', 'analisis', [$registroController, 'analysis']);
+$router->add('POST', 'analisis', [$registroController, 'analysis']);
 $router->add('GET', 'perfil', [$cuentaController, 'profile']);
 $router->add('POST', 'perfil', [$cuentaController, 'profile']);
 $router->add('GET', 'usuarios/crear', [$cuentaController, 'create']);
