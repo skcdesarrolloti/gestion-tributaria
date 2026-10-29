@@ -1,4 +1,4 @@
-<details id="fuentes" class="bg-surface-container-lowest border border-surface-container rounded-xl p-4 space-y-space-md" <?= $questions['pending']?'open':'' ?>>
+<details id="fuentes" class="bg-surface-container-lowest border border-surface-container rounded-xl p-4 space-y-space-md" <?= input($_GET,'fuentes_guardadas')==='1'?'open':'' ?>>
 <summary class="text-headline-md font-semibold">Fuentes de ingresos de <?= e($state['anio']) ?> · <?= e((string)$questions['pending']) ?> por confirmar</summary>
 <p>El RUT clasifica tus actividades; aquí confirmas qué ingresos hubo o esperas tener en este año. Se recuperan las respuestas anuales guardadas. Un espacio vacío significa pendiente, nunca «No».</p>
 <?php if (input($_GET,'fuentes_guardadas')==='1'): ?><p role="status" class="bg-primary-container rounded-xl p-3">Respuestas del año guardadas. Los importes y las condiciones fiscales ya guardadas se conservan; revisa su coherencia si cambiaste una fuente.</p><?php endif; ?>

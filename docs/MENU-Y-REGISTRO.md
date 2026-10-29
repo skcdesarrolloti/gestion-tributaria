@@ -14,6 +14,22 @@ Contribuyentes. No se elimina información ni se cambia la política Socio/Usuar
 
 ## Registro de información
 
+Desde el 29/10/2026, cada pantalla se titula con el ingreso seleccionado y
+muestra solo su captura y acumulados. El cuestionario de fuentes del año se
+consulta una sola vez en **Análisis y acciones**, cerrado por defecto. Guarda
+las mismas respuestas por persona/año, con CSRF, permisos y control de revisión;
+al guardar regresa a ese panel. No se borran respuestas al retirarlo de Registro.
+
+En Trabajo, con nómina importada, la captura manual adicional queda plegada
+para evitar registrar dos veces lo mismo. La retención sigue en el resumen
+mensual y su explicación debajo del mes. El ejemplo ficticio solo aparece si
+no hay nómina real. Las condiciones fiscales y ayudas quedan desplegables.
+En Pensiones, la tabla principal conserva meses, estado, pensión neta y acumulado;
+los rendimientos y el GMF permanecen en el detalle del extracto. La consulta
+bancaria general conserva todas sus columnas y no se alteran lecturas ni importes.
+Esta simplificación no agrega fórmulas, beneficios ni escenarios nuevos: el
+impacto anual y las decisiones antes del cierre se revisan en Análisis y acciones.
+
 Registro tiene solo dos categorías: **Ingresos** y **Costos y gastos**, tanto
 en el desplegable como en las pestañas persistentes. Dentro de Ingresos se
 reutilizan las cédulas del perfil 210: General, Pensiones y Dividendos, con

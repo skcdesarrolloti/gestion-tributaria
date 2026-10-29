@@ -64,7 +64,7 @@ verify($nomDenied,'Nómina: bloquea edición aislada de un movimiento derivado')
 $nomDenied=false;try { $nomIncome->saveMovement($nomManual,$nomProfile,100,null); } catch (DomainException) { $nomDenied=true; }
 verify($nomDenied,'Nómina: bloquea duplicación manual del mismo mes');
 [$s,$nomRegister]=request($client,$base,'registro&contribuyente='.$nomTax.'&anio=2025');
-verify($s===200 && str_contains($nomRegister,'Ingresos laborales · mes a mes') && str_contains($nomRegister,'Retención por renta') && str_contains($nomRegister,'Corregir desde nómina'),'Nómina: registro muestra meses, retención, casillas y origen corregible');
+verify($s===200 && str_contains($nomRegister,'Resumen mensual y acumulado de nómina') && str_contains($nomRegister,'Retención por renta') && str_contains($nomRegister,'Corregir desde nómina'),'Nómina: registro muestra meses, retención, casillas y origen corregible');
 $nomUser=curl_init();curl_setopt($nomUser,CURLOPT_COOKIEFILE,'');
 try {
     [, $nomLogin]=request($nomUser,$base,'login');request($nomUser,$base,'login',['_csrf_token'=>token($nomLogin),'username'=>'hash-user','password'=>'Otra-clave-segura']);

@@ -25,7 +25,7 @@ final class RegistroController
             if (!is_array($posted) || $revision===false) { throw new \InvalidArgumentException('Revisa el formato de las respuestas.'); }
             $record=\App\Services\IngresoPreguntas::merge($blocks['ingresos']['datos']??[],$taxpayer['tipo'],\input($_POST,'grupo'),$posted);
             if (!$this->characterization->saveFor($id,$owner,(int)$state['anio'],'ingresos',$record,$revision)) { http_response_code(409);echo 'Las respuestas cambiaron en otra ventana. Recarga para conservar los cambios.';return; }
-            header('Location: '.\url($this->config,'registro').RegistroNavegacion::query($state,$id).'&fuentes_guardadas=1#fuentes',true,303);
+            header('Location: '.\url($this->config,'analisis').RegistroNavegacion::query($state,$id).'&fuentes_guardadas=1#fuentes',true,303);
         } catch (\InvalidArgumentException $e) { http_response_code(422);echo \e($e->getMessage()); }
     }
     private function show(string $template): void

@@ -8,6 +8,9 @@ verify($s===200 && str_contains($pensionHtml,'1 PDF guardado · 1 mes con soport
 $pensionDom=new DOMDocument();@$pensionDom->loadHTML($pensionHtml);$pensionXpath=new DOMXPath($pensionDom);
 verify($pensionXpath->query('//*[@aria-label="Pensiones y extractos guardados" and not(ancestor::details)]')->length===1,
     'Pensiones: los datos bancarios aparecen antes de desplegar casillas o preguntas');
+verify(!str_contains($pensionHtml,'id="fuentes"') && !str_contains($pensionHtml,'Rendimientos acumulados')
+    && !str_contains($pensionHtml,'4×1000 neto de reintegros') && str_contains($pensionHtml,'Pensión acumulada (neta)'),
+    'Pensiones centra su tabla en el ingreso pensional sin cuestionarios generales ni columnas de otros ingresos');
 verify((bool)preg_match('/href="[^"]*cedula=pensiones[^"]*documento='.$readBankId.'#detalle"/',$pensionHtml),
     'Pensiones: abrir un mes mantiene la consulta dentro de Pensiones');
 [$s,$pensionDetail]=request($client,$base,$pensionRoute.'&documento='.$readBankId.'&buscar=COMERCIO');

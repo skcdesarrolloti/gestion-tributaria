@@ -4,6 +4,17 @@ Verificación local realizada el 13 de octubre de 2026 con PHP 8.2.12, MariaDB 1
 
 ## Resultado
 
+### Pantallas centradas en cada ingreso · 29/10/2026
+
+Sintaxis, unitarias e integración aislada correctas. Se comprueban títulos y
+captura propios de cada ingreso, ausencia del cuestionario general en Trabajo,
+Pensiones y Dividendos, y revisión anual cerrada en Análisis. El guardado anual
+conserva CSRF, revisión y respuestas previas; regresa a Análisis con persona/año.
+Pensiones mantiene sus PDF, lectura, consulta y acumulado neto con una tabla de
+cinco columnas; la consulta bancaria general conserva sus columnas originales.
+No se cambian cálculos fiscales ni se guardan datos reales en estas pruebas.
+Verificación de la publicación pendiente al preparar este cambio.
+
 ### Acumulados bancarios por mes y ayuda de rentas · 29/10/2026
 
 Unitarias: acumulación cronológica de pensión neta y rendimientos, documentos

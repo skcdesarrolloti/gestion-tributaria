@@ -23,8 +23,9 @@ verify($incomeHierarchyXpath->query('//nav[@aria-label="Orientación y regreso"]
 [, $generalHierarchy]=request($client,$base,'registro&contribuyente='.$taxpayerId.'&anio=2025&componente=ingresos&cedula=general');
 $incomeHierarchyDom=new DOMDocument();@$incomeHierarchyDom->loadHTML($generalHierarchy);$incomeHierarchyXpath=new DOMXPath($incomeHierarchyDom);
 verify($incomeHierarchyXpath->query('//nav[@aria-label="Orientación y regreso"]//nav[@aria-label="Rentas de la cédula general"]')->length===1
-    && strpos($generalHierarchy,'aria-label="Cédulas del formulario 210"')<strpos($generalHierarchy,'id="fuentes"'),
-    'Ingresos: rentas de la cédula general disponibles antes de las preguntas y del contenido');
+    && strpos($generalHierarchy,'aria-label="Cédulas del formulario 210"')<strpos($generalHierarchy,'<main')
+    && !str_contains($generalHierarchy,'id="fuentes"'),
+    'Ingresos: rentas disponibles antes del contenido sin repetir preguntas anuales');
 $pensionMovement='ingresos/movimiento&id='.$profileId.'&origen=registro&anio=2025&cedula=pensiones';
 [$s,$pensionForm]=request($client,$base,$pensionMovement);
 verify($s===200 && str_contains($pensionForm,'value="'.$codeId('210',99).'"') && !str_contains($pensionForm,'value="'.$codeId('210',58).'"'),'El formulario de pensiones limita las opciones a su sección');
@@ -37,6 +38,9 @@ verify(!str_contains(request($client,$base,str_replace('anio=2025','anio=2026',$
 $dividendRoute=str_replace('cedula=pensiones','cedula=dividendos',$pensionRoute);
 [$s,$dividendHtml]=request($client,$base,$dividendRoute);
 verify($s===200 && str_contains($dividendHtml,'104 · Dividendos') && str_contains($dividendHtml,'107 · 1a.') && str_contains($dividendHtml,'108 · 2a.') && str_contains($dividendHtml,'109 · Dividendos') && !str_contains($dividendHtml,'99 · Ingresos'),'Dividendos separa utilidades anteriores, subcédulas y exterior');
+verify(str_contains($dividendHtml,'<h1 class="text-headline-lg font-semibold">Dividendos y participaciones</h1>')
+    && !str_contains($dividendHtml,'id="fuentes"') && !str_contains($dividendHtml,'respuestas[salarios]'),
+    'Dividendos muestra su título y captura sin cuestionarios laborales ni pensionales');
 verify(str_contains(request($client,$base,str_replace('cedula=pensiones','cedula=ganancias',$pensionRoute))[1],'112 · Ingresos por ganancias ocasionales'),'Ganancias ocasionales se captura en su sección independiente');
 $legalEntity=$db->query("SELECT p.*,c.nombre FROM perfiles_renta p JOIN contribuyentes c ON c.id=p.contribuyente_id WHERE p.tipo='juridica' AND p.residencia='residente' LIMIT 1")->fetch();
 $entityDividend='registro&contribuyente='.$legalEntity['contribuyente_id'].'&anio='.$legalEntity['anio'].'&seccion=dividendos';

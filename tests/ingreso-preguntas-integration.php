@@ -1,16 +1,22 @@
 <?php
 declare(strict_types=1);
-$questionsRoute='registro&contribuyente='.$preparationTaxpayer.'&anio=2026';
+$incomeQuestionRoute='registro&contribuyente='.$preparationTaxpayer.'&anio=2026';
+$questionsRoute='analisis&contribuyente='.$preparationTaxpayer.'&anio=2026';
+[$s,$focusedIncomeHtml]=request($client,$base,$incomeQuestionRoute);
+verify($s===200 && !str_contains($focusedIncomeHtml,'id="fuentes"') && !str_contains($focusedIncomeHtml,'respuestas[pensiones]'),
+    'Laborales no repite preguntas de otras fuentes del año');
 [$s,$questionsHtml]=request($client,$base,$questionsRoute);
-verify($s===200 && str_contains($questionsHtml,'13 por confirmar') && str_contains($questionsHtml,'Pendiente por confirmar'),'Registro pregunta fuentes desconocidas por grupos');
+verify($s===200 && str_contains($questionsHtml,'13 por confirmar') && str_contains($questionsHtml,'Pendiente por confirmar'),'Análisis conserva revisión anual de fuentes por grupos');
+$questionDom=new DOMDocument();@$questionDom->loadHTML($questionsHtml);$questionXpath=new DOMXPath($questionDom);
+verify($questionXpath->query('//details[@id="fuentes" and not(@open)]')->length===1,'Revisión anual cerrada por defecto aunque haya fuentes pendientes');
 $saveQuestions='registro/fuentes&contribuyente='.$preparationTaxpayer.'&anio=2026';
 $activityPost=['_csrf_token'=>token($questionsHtml),'revision'=>'0','grupo'=>'actividad','respuestas'=>['salarios'=>'si','honorarios'=>'no','pensiones'=>'si','negocios'=>'no']];
 verify(request($client,$base,$saveQuestions,array_replace($activityPost,['_csrf_token'=>'']))[0]===419,'Respuestas anuales exigen CSRF');
 [$s,,$questionBack]=request($client,$base,$saveQuestions,$activityPost);
-verify($s===303 && str_contains($questionBack,'anio=2026') && str_contains($questionBack,'#fuentes'),'Guarda fuentes y regresa al mismo contribuyente y año');
+verify($s===303 && str_contains($questionBack,'route=analisis') && str_contains($questionBack,'anio=2026') && str_contains($questionBack,'#fuentes'),'Guarda fuentes y regresa a Análisis del mismo contribuyente y año');
 verify(request($client,$base,$saveQuestions,$activityPost)[0]===409,'No pierde respuestas al guardar desde una revisión antigua');
 [$s,$savedQuestionHtml]=request($client,$base,$questionsRoute);
-verify($s===200 && str_contains($savedQuestionHtml,'9 por confirmar') && str_contains($savedQuestionHtml,'value="no_aplica" selected'),'Pregunta solo lo pendiente y usa la ausencia confirmada de honorarios');
+verify($s===200 && str_contains($savedQuestionHtml,'9 por confirmar') && str_contains(request($client,$base,$incomeQuestionRoute)[1],'value="no_aplica" selected'),'Conserva pendientes anuales y usa la ausencia confirmada de honorarios al preparar el registro');
 $capitalPost=['_csrf_token'=>token($savedQuestionHtml),'revision'=>'1','grupo'=>'capital','respuestas'=>['arriendos'=>'si','rendimientos'=>'no','dividendos'=>'si']];
 verify(request($client,$base,$saveQuestions,$capitalPost)[0]===303,'Guarda capital sin borrar actividad');
 $savedAnswers=$characterization->blocksFor($preparationTaxpayer,$owner,2026)['ingresos']['datos']['campos'];

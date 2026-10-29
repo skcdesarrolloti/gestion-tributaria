@@ -20,7 +20,7 @@ $incomeUrl=html_entity_decode($incomeMenu[1]??'',ENT_QUOTES,'UTF-8');
 parse_str((string)parse_url($incomeUrl,PHP_URL_QUERY),$incomeQuery);
 verify($s===200 && ($incomeQuery['route']??'')==='registro' && (int)($incomeQuery['contribuyente']??0)===$taxpayerId && ($incomeQuery['anio']??'')==='2025','Ingresos desde RUT conserva contribuyente y año y abre Registro');
 [$s,$fromMenu]=request($client,$base,substr((string)parse_url($incomeUrl,PHP_URL_QUERY),6));
-verify($s===200 && str_contains($fromMenu,'3 · Registro de información') && !str_contains($fromMenu,'Completar campos faltantes del RUT'),'El enlace real del menú abre captura sin desviar al perfil del RUT');
+verify($s===200 && str_contains($fromMenu,'<h1 class="text-headline-lg font-semibold">Ingresos laborales</h1>') && !str_contains($fromMenu,'Completar campos faltantes del RUT'),'El enlace real del menú abre el ingreso elegido sin desviar al perfil del RUT');
 verify(!str_contains(request($client,$base,str_replace('anio=2025','anio=2026',$registrationRoute))[1],'Movimiento corregido'),'Cambiar año no muestra movimientos del otro perfil');
 verify(!str_contains(request($client,$base,str_replace('cedula=general','cedula=pensiones',$registrationRoute))[1],'60 · Costos'),'Pensiones no recibe costos de capital');
 verify(request($client,$base,'registro&anio=2027')[0]===422 && request($client,$base,'registro&componente=desconocido')[0]===422,'Registro valida año y componente');
