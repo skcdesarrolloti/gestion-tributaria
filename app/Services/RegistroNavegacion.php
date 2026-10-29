@@ -10,7 +10,7 @@ final class RegistroNavegacion
     private const BLOCKS=['trabajo'=>'Trabajo','servicios'=>'Servicios personales con costos','capital'=>'Capital','no_laborales'=>'No laborales'];
     public static function menu(string $route,array $source,int $taxpayer,string $year): array
     {
-        $active=$route==='registro' && \input($source,'componente')==='costos'?'costos':'ingresos';
+        $active=$route==='prestamos' || ($route==='registro' && \input($source,'componente')==='costos')?'costos':'ingresos';
         $context=['anio'=>$year]+($taxpayer>0?['contribuyente'=>$taxpayer]:[]);
         $items=['ingresos'=>['Ingresos','registro',['componente'=>'ingresos','cedula'=>'general']],
             'costos'=>['Costos y gastos','registro',['componente'=>'costos','cedula'=>'general']]];

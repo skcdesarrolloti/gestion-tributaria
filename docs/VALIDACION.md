@@ -562,3 +562,10 @@ correcciones y descarga privada. No valida todavía un comprobante real de
 Colpensiones. Inspección visual local confirmó el panel y el control mensual;
 la selección automática de archivos del navegador quedó bloqueada por el permiso
 de la extensión. La subida HTTP sí fue probada. No modificar permisos para probar.
+
+29/10/2026 — Préstamo personal: sintaxis, unitarias e integración completa en base
+aleatoria correctas. Lectura local del PDF real de consumo validada sin importarlo
+en las pruebas. Fixtures ficticios verifican rechazo de empresa/otro titular,
+separación de pago y próxima cuota, duplicados, años, permisos, CSRF, clasificación
+concurrente y conservación de importes fiscales. Cruce real con Colpensiones aún
+pendiente de su comprobante. Ver docs/PRESTAMOS-PERSONALES.md.

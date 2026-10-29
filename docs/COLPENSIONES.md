@@ -5,6 +5,9 @@ En Registro de información → Ingresos → Pensiones, escoger persona y año.
 mes, pensión bruta y salud. Se intenta abrir con el documento de la ficha o con
 la contraseña indicada, exclusivamente en el navegador. No se almacena la clave.
 La revisión del titular y los importes es obligatoria antes de confirmar.
+«Libranza y neto del comprobante» permite revisar esos importes cuando aparezcan
+en el PDF. No se suman a salud ni se deducen nuevamente del bruto; se conservan
+para el cruce en Control de préstamos. Si faltan, el cruce permanece pendiente.
 
 Al confirmar se guardan juntos los movimientos reales 99 (bruto) y 100 (salud),
 se actualizan el control mensual, los acumulados y una estimación parcial del

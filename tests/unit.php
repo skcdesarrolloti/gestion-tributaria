@@ -63,4 +63,5 @@ require __DIR__ . '/rut-multi-unit.php';
 require __DIR__.'/parametros-unit.php';
 require __DIR__.'/renta-acumulada-unit.php';
 require __DIR__.'/colpensiones-unit.php';
+require __DIR__.'/prestamos-unit.php';
 echo "Pruebas de seguridad y contribuyentes correctas.\n";

@@ -33,7 +33,12 @@
             const gross=input('Pensión bruta · casilla 99 (COP)','text',row.bruto==null?'':(row.bruto/100).toFixed(2).replace('.',','));
             const health=input('Salud obligatoria · casilla 100 (COP)','text',row.salud==null?'':(row.salud/100).toFixed(2).replace('.',','));
             gross.field.inputMode='decimal';health.field.inputMode='decimal';grid.append(monthLabel,gross.wrap,health.wrap);form.append(grid);
-            fields.push({month,gross:gross.field,health:health.field});
+            const extra=node('details'),extraGrid=node('div',undefined,'profile-grid');extra.append(node('summary','Libranza y neto del comprobante · para cruzar con el crédito y el banco','text-secondary underline'));
+            const optional={};for (const [key,label] of [['libranza','Libranza descontada (COP)'],['neto','Neto a consignar (COP)']]) {
+                const f=input(label,'text',row[key]==null?'':(row[key]/100).toFixed(2).replace('.',','));f.field.required=false;f.field.inputMode='decimal';optional[key]=f.field;extraGrid.append(f.wrap);
+            }
+            extra.append(extraGrid,node('p','Completa solo lo que informe Colpensiones. Vacío queda pendiente; la libranza no se suma a salud ni reduce otra vez la pensión bruta.'));form.append(extra);
+            fields.push({month,gross:gross.field,health:health.field,...optional});
         }
         const review=node('label',undefined,'block'),check=node('input');check.type='checkbox';check.required=true;
         review.append(check,document.createTextNode(' Revisé el titular, los meses y los valores en este comprobante.'));
@@ -47,7 +52,7 @@
             try {
                 const body=new FormData();body.set('_csrf_token',upload.elements._csrf_token.value);body.set('accion','guardar');
                 body.set('comprobante',String(data.id));body.set('confirmado',check.checked?'1':'0');body.set('reemplazar',replacement.checked?'1':'0');
-                body.set('filas',JSON.stringify(fields.map(f=>({mes:f.month.value,bruto:f.gross.value,salud:f.health.value}))));body.set('versiones',JSON.stringify(versions));
+                body.set('filas',JSON.stringify(fields.map(f=>({mes:f.month.value,bruto:f.gross.value,salud:f.health.value,libranza:f.libranza.value,neto:f.neto.value}))));body.set('versiones',JSON.stringify(versions));
                 const saved=await request(root.dataset.api,body);
                 const previous=preview.querySelector('[data-pension-result]');if (previous) previous.remove();preview.prepend(resultPanel(saved.impuesto));
                 await refresh(['#meses','[data-colpensiones-list]','[data-casillas-section]','[data-registro-movimientos]']);

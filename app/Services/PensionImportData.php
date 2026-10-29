@@ -28,7 +28,10 @@ final class PensionImportData
             if ($period>date('Y-m')) { throw new \DomainException('Un comprobante real no puede pertenecer a un mes futuro.'); }
             $gross=self::cents(\input($row,'bruto'));$health=self::cents(\input($row,'salud'));
             if ($gross<=0 || $health>$gross) { throw new \DomainException('La pensión bruta debe ser positiva y la salud no puede superarla.'); }
-            $rows[]=['mes'=>$month,'periodo'=>$period,'bruto'=>$gross,'salud'=>$health];
+            $item=['mes'=>$month,'periodo'=>$period,'bruto'=>$gross,'salud'=>$health];
+            foreach (['libranza','neto'] as $key) { if (\input($row,$key)!=='') { $item[$key]=self::cents(\input($row,$key));if ($item[$key]>$gross) { throw new \DomainException('La libranza y el neto no pueden superar la pensión bruta. Revisa el comprobante.'); } } }
+            if (isset($item['libranza'],$item['neto']) && $health+$item['libranza']+$item['neto']>$gross+1) { throw new \DomainException('Bruto, salud, libranza y neto no concilian. Revisa los importes del comprobante.'); }
+            $rows[]=$item;
         }
         $detected=array_column($reading['registros']??[],'periodo');
         if (!$detected && count($rows)!==1) { throw new \DomainException('Un comprobante sin períodos mensuales legibles solo se asocia a un mes tras revisarlo; no se reparte en varios meses.'); }

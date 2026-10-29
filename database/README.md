@@ -1,5 +1,10 @@
 # Migraciones automáticas
 
+032 crea prestamos_documentos para extractos personales de crédito, sin alterar
+ingresos, nóminas ni bancos existentes. Respaldar la tabla y sus PDF privados.
+Clasificaciones de movimientos usan el bloque anual existente con revisión;
+no se ejecutan cambios de esquema fuera del Migrator. Ver PRESTAMOS-PERSONALES.md.
+
 029 añade únicamente la casilla 100 de pensiones al catálogo 210 existente
 (aportes obligatorios según comprobante). No cambia movimientos ni tablas.
 Permite registrar por mes salud y solidaridad pensional sin repetir aportes de

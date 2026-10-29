@@ -40,7 +40,9 @@ final class ColpensionesReader
             if ($solidarity!==null && $solidarity>0) { $special=true; }
             $key=$period['desde'];
             if (isset($records[$key])) { throw new \DomainException('Se detectó más de un bloque del mismo mes. Revisa los comprobantes por separado para evitar duplicados.'); }
-            $records[$key]=['periodo'=>$key,'bruto'=>$gross,'salud'=>$health,'especial'=>$special];
+            $records[$key]=['periodo'=>$key,'bruto'=>$gross,'salud'=>$health,'especial'=>$special,
+                'libranza'=>self::amount($p,'(?:TOTAL\s+LIBRANZAS?|DESCUENTO(?:\s+DE)?\s+LIBRANZA|LIBRANZA)'),
+                'neto'=>self::amount($p,'(?:NETO\s+A\s+PAGAR|TOTAL\s+NETO|NETO)')];
         }
         if ($blocked || (!$records && preg_match('/ANUAL|A[ÑN]O\s+GRAVABLE/u',$text))) { return ['estado'=>'pendiente','anual_sin_desglose'=>true,'motivo'=>'El documento abarca varios meses sin un desglose mensual inequívoco. Sube comprobantes mensuales; no se divide el total anual.','registros'=>[]]; }
         $particular=(bool)preg_match('/RETROACTIV|AJUSTE|REINTEGRO|INDEMNIZACION/',$text);

@@ -5,7 +5,7 @@ $menuActive=match (true) {
     $menuRoute==='accesos' || str_starts_with($menuRoute,'usuarios/')=>'accesos',
     str_starts_with($menuRoute,'contribuyentes') || $menuRoute==='planeacion/datos'=>'contribuyentes',
     str_starts_with($menuRoute,'beneficios') || $menuRoute==='seguridad-social'=>'beneficios',
-    in_array($menuRoute,['registro','registro/fuentes','nomina','retenciones','extractos'],true) || str_starts_with($menuRoute,'ingresos/') || $menuRoute==='ingresos'=>'registro',
+    in_array($menuRoute,['registro','registro/fuentes','nomina','retenciones','extractos','prestamos'],true) || str_starts_with($menuRoute,'ingresos/') || $menuRoute==='ingresos'=>'registro',
     $menuRoute==='analisis' || $menuRoute==='simulador' || str_starts_with($menuRoute,'renta')=>'analisis',
     str_starts_with($menuRoute,'exogena')=>'exogena',
     $menuRoute==='perfil'=>'perfil',$menuRoute==='configuracion'=>'configuracion',default=>'',
