@@ -13,7 +13,12 @@ conserva CSRF, revisión y respuestas previas; regresa a Análisis con persona/a
 Pensiones mantiene sus PDF, lectura, consulta y acumulado neto con una tabla de
 cinco columnas; la consulta bancaria general conserva sus columnas originales.
 No se cambian cálculos fiscales ni se guardan datos reales en estas pruebas.
-Verificación de la publicación pendiente al preparar este cambio.
+Publicación 3d14d16 comprobada con sesión autenticada: Dividendos sin cuestionario
+general, Pensiones con nueve PDF y neto acumulado de $35.643.690 hasta septiembre,
+y Laborales con comparación de retención y ayudas plegadas en el mismo resumen.
+La revisión anual mantiene nueve respuestas pendientes y está cerrada en Análisis.
+Se comprobó visualmente la tabla con sus encabezados y las pestañas persistentes.
+No se guardaron respuestas ni importes reales durante la comprobación.
 
 ### Acumulados bancarios por mes y ayuda de rentas · 29/10/2026
 
