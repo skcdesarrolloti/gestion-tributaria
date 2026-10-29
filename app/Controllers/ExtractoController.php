@@ -32,7 +32,7 @@ final class ExtractoController
                 try {
                     $posted=$_POST;$automatic=\input($_POST,'mes')==='auto';
                     if ($automatic) { $posted['mes']='1'; }
-                    $data=ExtractoData::read($posted,$year);$file=$this->files->receive($_FILES['extracto_pdf']??[],$_FILES['extracto_lectura']??[]);
+                    $data=ExtractoData::read($posted,$year);$file=$this->files->receive(\App\Services\PdfApi::file($_FILES,'extracto_pdf'),\App\Services\PdfApi::file($_FILES,'extracto_lectura'));
                     if ($automatic) {
                         if (!isset($file['lectura']['inicio'])) { throw new \InvalidArgumentException('No se pudo leer el período impreso en el PDF. No se exige firma digital. Si el documento abre y el período se ve, selecciona el mes manualmente para guardarlo pendiente de lectura.'); }
                         $data['mes']=(int)substr($file['lectura']['inicio'],5,2);

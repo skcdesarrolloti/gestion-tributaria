@@ -126,3 +126,8 @@ el mismo perfil. La importación usa una transacción para documento y bloques;
 verifica propietario, identidad y revisión antes de guardar. No altera datos ni
 configuración centrales. Conservar los PDF de `storage/rut-importaciones` junto
 con los respaldos privados de la base; nunca incluirlos en Git.
+
+030 crea comprobantes_pension con PDF privado y lectura por perfil anual.
+031 crea mesadas_pension: una versión vigente por perfil/mes, historial de
+correcciones y referencias a movimientos 99/100. No transforma importes bancarios
+netos en pensión bruta. Ver docs/COLPENSIONES.md; conservar originales y versiones.

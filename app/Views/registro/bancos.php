@@ -13,6 +13,7 @@
 <h2 class="text-headline-md font-semibold"><?= $gmf?'4×1000 por banco':'Rendimientos financieros por banco' ?></h2>
 <p>Sube el extracto de cada banco y cuenta, mes a mes. El mismo PDF sirve para ingresos y gastos: no lo subas dos veces.</p>
 <?php require __DIR__.'/../extractos/upload.php'; ?>
+<div data-bank-summary>
 <?php if (!$documents): ?><p>No hay extractos guardados de este año.</p><?php else: ?>
 <p><strong><?= $gmf?'4×1000 neto leído: ':'Rendimientos leídos: ' ?><?= $hasRead?e($money($gmf?$net:$total['rendimientos'])):'Pendiente de lectura' ?></strong><?php if ($bankSummary['pendientes']): ?> · <?= (int)$bankSummary['pendientes'] ?> PDF pendientes de lectura.<?php endif; ?></p>
 <p class="text-secondary text-body-md">Es el control del banco. Las casillas fiscales siguen separadas para conciliar certificados y evitar duplicados.</p>
@@ -31,6 +32,6 @@
 <?php if ($gmf): ?><p>4×1000 neto = cobros menos reintegros. El 50% del valor efectivamente pagado puede ser deducible con certificación bancaria, sujeto a las reglas de tu declaración. No reduce el impuesto peso por peso ni se copia automáticamente como costo de arrendamientos.</p><p>Referencia de planeación, antes de límites: <?= e($money(intdiv(max(0,$net),2))) ?>. Se revisa su posible impacto en Análisis y acciones. Fundamento: ET 115 y 336.</p>
 <?php else: ?><p>Se suman solo intereses y rendimientos identificados, no todas las consignaciones ni la devolución del capital invertido. Este control bancario no se vuelve a sumar automáticamente a la casilla 58/48: contrástalo con el certificado tributario y tus registros para evitar duplicados.</p><?php endif; ?>
 <p>Los valores provienen de los PDF conciliados. «—» es falta de información, no cero. La lectura automática reconoce el formato BBVA disponible; para otros diseños el PDF se conserva pendiente y su importe no se inventa. Puedes elegir el mes manualmente.</p>
-</details>
+</details></div>
 <?php if ($selected): require __DIR__.'/../extractos/detail.php'; endif; ?>
 </section><?php })(); ?>

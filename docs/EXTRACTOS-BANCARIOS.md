@@ -120,3 +120,15 @@ las suites generales. Usar exclusivamente PDF sintéticos y base aleatoria.
 `node tests/extractos-pdf-unit.cjs` comprueba apertura AES-256, rechazo de clave
 incorrecta y lectura conciliada de las dos páginas. Node solo se usa para probar;
 Hostinger sirve los archivos estáticos del motor, con licencia y versión fijada.
+
+## Carga de varios bancos en un mismo lote (29/10/2026)
+
+El selector admite hasta 50 PDF y 100 MB por selección (10 MB por archivo).
+Cada archivo se envía por separado, muestra su resultado y se puede reintentar
+sin repetir los guardados. BBVA reconocido obtiene banco/cuenta/mes de su texto;
+para otros formatos se solicita ese dato por archivo y se conserva pendiente
+sin inventar importes. No se promete extracción automática de todos los bancos.
+La clave se usa únicamente en el navegador. Un mismo archivo ya guardado no se
+suma de nuevo; un PDF diferente de la misma cuenta/mes exige revisar el conflicto.
+Rendimientos siguen en Capital y GMF neto en Costos, separados por banco/cuenta.
+El comprobante del pagador y su bruto/salud se describen en COLPENSIONES.md.

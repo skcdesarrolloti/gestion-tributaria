@@ -1,0 +1,20 @@
+<?php
+declare(strict_types=1);
+$batchRoute='extractos/lote&contribuyente='.$readBankTax.'&anio=2025';
+[, $batchPage]=request($client,$base,'registro&contribuyente='.$readBankTax.'&anio=2025&componente=costos');
+verify(str_contains($batchPage,'data-bank-files multiple') && str_contains($batchPage,'data-batch-url'),'Carga bancaria permite seleccionar varios PDF en el mismo panel');
+file_put_contents($bankPath,bankFixturePdf());
+$batchPost=['_csrf_token'=>token($batchPage),'mes'=>'auto','banco'=>'','cuenta'=>'','extracto_pdf'=>new CURLFile($bankPath,'application/pdf','banco-junio.pdf')];
+verify(rutRequest($client,$base,$batchRoute,array_replace($batchPost,['_csrf_token'=>'']))[0]===419,'Carga múltiple exige CSRF en cada archivo');
+[$s,$batchDup]=rutRequest($client,$base,$batchRoute,$batchPost);
+verify($s===409 && json_decode($batchDup,true)['duplicado']===true,'Archivo ya guardado se identifica como duplicado y no se vuelve a sumar');
+file_put_contents($bankPath,bankFixturePdf('ANU. COM DECRETO'));
+[$s,$batchConflict]=rutRequest($client,$base,$batchRoute,$batchPost);
+verify($s===409 && json_decode($batchConflict,true)['duplicado']===false,'PDF distinto del mismo período es conflicto revisable, no se descarta como archivo duplicado');
+file_put_contents($bankPath,str_replace(['01-06-2025','30-06-2025','15-06-2025'],['01-07-2025','31-07-2025','15-07-2025'],bankFixturePdf()));
+[$s,$batchNew]=rutRequest($client,$base,$batchRoute,$batchPost);$batchNew=json_decode($batchNew,true);
+verify($s===200 && $batchNew['banco']==='BBVA' && $batchNew['cuenta']==='1234' && $batchNew['mes']===7,'Lote detecta banco, cuenta y mes por cada PDF, sin metadatos comunes obligatorios');
+file_put_contents($bankPath,rutFixturePdf('77880099'));
+verify(rutRequest($client,$base,$batchRoute,$batchPost)[0]===422,'Un formato no reconocido pide metadatos antes de conservarlo');
+[$s,$batchPending]=rutRequest($client,$base,$batchRoute,array_replace($batchPost,['mes'=>'8','banco'=>'Banco ficticio','cuenta'=>'8877']));
+verify($s===200 && json_decode($batchPending,true)['leido']===false,'Se admite otro banco con mes manual, pendiente de lectura y sin inventar importes');

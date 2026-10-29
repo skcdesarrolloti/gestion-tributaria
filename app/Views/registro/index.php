@@ -13,11 +13,12 @@ require __DIR__.'/../partials/head.php'; ?>
 <section class="bg-inverse-surface text-on-secondary rounded-2xl p-4"><h1 class="text-headline-lg font-semibold"><?= e($title) ?></h1></section>
 <?php $contextRoute='registro';require __DIR__.'/context.php'; ?>
 <?php require __DIR__.'/ayuda-rentas.php'; ?>
+<?php if ($pensionView && $taxpayer): require __DIR__.'/colpensiones.php';require __DIR__.'/pension-meses.php'; endif; ?>
 <?php if ($taxpayer): if ($pensionView) { require __DIR__.'/pensiones.php'; } elseif ($bankMode) { require __DIR__.'/bancos.php'; } endif; ?>
 <?php if ($pensionView && $taxpayer): ?><details><summary class="text-secondary underline">Casillas DIAN de pensiones · bruto, ajustes y condiciones del año</summary><p>Los extractos guardados se muestran arriba. El abono bancario es neto; la casilla 99 requiere la pensión bruta y sus descuentos verificados. Un valor $0 en esa casilla no borra ni representa la cantidad de PDF guardados.</p><?php endif; ?>
 <?php if ($taxpayer && !$profile): require __DIR__.'/configurar-anio.php'; endif; ?>
 <?php if ($profile): $contextQuery=\App\Services\RegistroNavegacion::query($state,(int)$taxpayer['id']); ?>
-<section class="bg-surface-container-lowest border border-surface-container rounded-xl p-4 space-y-space-md">
+<section data-casillas-section class="bg-surface-container-lowest border border-surface-container rounded-xl p-4 space-y-space-md">
 <?php if ($state['componente']==='costos'): require __DIR__.'/tabs.php'; endif; ?>
 <?php if ($laborView): require __DIR__.'/../nomina/monthly.php'; endif; ?>
 <?php if ($laborView && $payroll): ?><details><summary class="text-secondary underline">Registrar otro pago laboral o una proyección</summary><p>La nómina ya está sumada arriba. Usa estas casillas solo para pagos adicionales; no vuelvas a registrar lo importado.</p><?php endif; ?>
@@ -36,7 +37,9 @@ $tableConcepts=$primary;$tableTitle=$title;require __DIR__.'/casillas.php';
 <p>La captura acumula valores con soporte; las exenciones, tarifas y el impuesto final se revisan en Análisis y acciones. No se presenta una declaración a la DIAN desde esta pantalla.</p>
 <p>Régimen: <?= e($profile['regimen']) ?>. Tratamiento de servicios: <?= e($profile['servicios']) ?>.</p><a class="text-secondary underline" href="<?= e(url($config,'ingresos/perfil').'&id='.$profile['id']) ?>">Consultar condiciones del año</a></details>
 </section>
-<details class="border border-surface-container rounded-xl p-4"><summary class="font-semibold">Consultar o corregir movimientos de esta sección (<?= count($movements) ?>)</summary><?php $registration=$state;require __DIR__.'/../ingresos/movements.php'; ?></details>
+<details data-registro-movimientos class="border border-surface-container rounded-xl p-4"><summary class="font-semibold">Consultar o corregir movimientos de esta sección (<?= count($movements) ?>)</summary><?php $registration=$state;require __DIR__.'/../ingresos/movements.php'; ?></details>
 <?php endif; ?>
 <?php if ($pensionView && $taxpayer): ?></details><?php endif; ?>
-</main><?php if ($profile): ?><script src="<?= e(asset($config,'js/normas.js')) ?>" defer></script><?php endif; ?><?php if (($pensionView || $bankMode) && $taxpayer): ?><script src="<?= e(asset($config,'js/extractos.js').'?v='.filemtime(dirname(__DIR__,3).'/public/assets/js/extractos.js')) ?>" defer></script><?php endif; ?><?php require __DIR__.'/../partials/footer.php'; ?>
+</main><?php if ($profile): ?><script src="<?= e(asset($config,'js/normas.js')) ?>" defer></script><?php endif; ?>
+<?php if (($pensionView || $bankMode) && $taxpayer): ?><script src="<?= e(asset($config,'js/pdf-carga.js').'?v='.filemtime(dirname(__DIR__,3).'/public/assets/js/pdf-carga.js')) ?>" defer></script><script src="<?= e(asset($config,'js/extractos.js').'?v='.filemtime(dirname(__DIR__,3).'/public/assets/js/extractos.js')) ?>" defer></script><?php endif; ?>
+<?php if ($pensionView && $profile): ?><script src="<?= e(asset($config,'js/colpensiones.js').'?v='.filemtime(dirname(__DIR__,3).'/public/assets/js/colpensiones.js')) ?>" defer></script><?php endif; ?><?php require __DIR__.'/../partials/footer.php'; ?>

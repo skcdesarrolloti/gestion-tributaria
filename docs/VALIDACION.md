@@ -554,3 +554,11 @@ pendiente de verificación. El módulo inicial de contribuyentes se describe en
 `docs/CONTRIBUYENTES.md`. Las pruebas locales no confirman el funcionamiento en Hostinger.
 
 `npm audit` reportó 7 avisos en dependencias de desarrollo de Tailwind 3.4.17 (2 moderados y 5 altos). Se conserva la versión del tema de referencia; no se hizo una migración mayor de estilos. Estas dependencias se usan solo para compilar CSS localmente y no se suben al hosting. Revisar los avisos antes de ampliar esa cadena de compilación; no procesar fuentes de terceros no confiables con ella.
+
+29/10/2026 — Colpensiones y lotes de bancos: integración HTTP en base aleatoria
+verifica migraciones, CSRF, alcance por usuario, subida/lectura de PDF ficticio,
+confirmación conjunta 99/100, cálculo devuelto, duplicados, conflictos, versiones,
+correcciones y descarga privada. No valida todavía un comprobante real de
+Colpensiones. Inspección visual local confirmó el panel y el control mensual;
+la selección automática de archivos del navegador quedó bloqueada por el permiso
+de la extensión. La subida HTTP sí fue probada. No modificar permisos para probar.

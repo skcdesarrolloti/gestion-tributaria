@@ -5,7 +5,7 @@ namespace App\Services;
 /** Escenario al corte, sin convertir abonos bancarios netos en pensión bruta. */
 final class RentaAcumulada
 {
-    public static function build(array $profile,array $movements,array $payroll,array $banks,bool $projected=false,int $saving=0): array
+    public static function build(array $profile,array $movements,array $payroll,array $banks,bool $projected=false,int $saving=0,array $receipts=[]): array
     {
         if ($profile['tipo']!=='natural' || $profile['residencia']!=='residente' || $profile['regimen']!=='ordinario') {
             return ['estado'=>'pendiente','errores'=>['Este resumen corresponde a personas naturales residentes en régimen ordinario. Las sociedades y otros regímenes requieren su cálculo propio.']];
@@ -13,7 +13,7 @@ final class RentaAcumulada
         $raw=SimuladorFields::read(array_fill_keys(SimuladorFields::numeric(),'0'));
         $raw=array_replace($raw,['ceros_confirmados'=>'1','elegibilidad'=>'1','pensionado'=>'si',
             'servicios'=>'no_aplica','declaraciones'=>'3','metodo_anticipo'=>'actual']);
-        $gross=0;$contributions=0;$pension=0;$health=0;$cut='';$foreign=false;$other=0;
+        $gross=0;$contributions=0;$pension=0;$health=0;$cut='';$foreign=false;$other=0;$verified=[];$receiptIds=array_column($receipts,'ingreso_id');
         foreach ($movements as $movement) {
             if ($movement['estado']!=='real' && !$projected) { continue; }
             $code=(int)$movement['casilla'];$value=(int)$movement['valor_cop'];
@@ -23,6 +23,7 @@ final class RentaAcumulada
             elseif ($code===33) { $contributions+=$value; }
             elseif ($code===99) {
                 $pension+=$value;$raw['pension_'.$month]=(string)((int)$raw['pension_'.$month]+$value);
+                $verified[$month]=($verified[$month]??true) && in_array($movement['id']??null,$receiptIds);
                 if (!in_array(mb_strtolower(trim($movement['pais'])),['colombia','co','col'],true)) { $foreign=true; }
             } else { $health+=$value;$raw['salud_pension_'.$month]=(string)((int)$raw['salud_pension_'.$month]+$value); }
         }
@@ -35,7 +36,10 @@ final class RentaAcumulada
         $pending=[];
         if ($banks['pendientes']>0) { $pending[]='Hay extractos pendientes de lectura. Sus importes no se presumen cero ni están incorporados en esta estimación.'; }
         if ($banks['totales']['pension']>0 && $pension===0) { $pending[]='Falta la pensión bruta y la salud del comprobante del pagador: el neto bancario no permite completar el impuesto de pensión.'; }
-        if ($pension>0 && $health===0) { $pending[]='Confirma la salud descontada de la pensión. En este escenario se ha usado 0; corrígelo si hubo aportes.'; }
+        $healthPending=[];foreach (range(1,12) as $month) {
+            if ((int)$raw['pension_'.$month]>0 && (int)$raw['salud_pension_'.$month]===0 && !($verified[$month]??false)) { $healthPending[]=ExtractoData::MONTHS[$month]; }
+        }
+        if ($healthPending) { $pending[]='Confirma salud de pensión en '.implode(', ',$healthPending).'. El escenario usa 0 donde falta su comprobante.'; }
         if ($pension>0) { $pending[]='La exención pensional simulada supone reconocimiento conforme a la Ley 100. Confirma el derecho y todas las mesadas del mes, incluidas otras pensiones.'; }
         $missingMonths=[];
         foreach ($banks['cuentas'] as $account) {
@@ -57,6 +61,7 @@ final class RentaAcumulada
         $withSaving=$raw;$withSaving['b_fpv']=(string)$saving;$withSaving['base_aportes']=(string)$gross;
         $savingResult=RentaSimulador::calculate($withSaving,$profile);
         return $result+['bruto_laboral'=>$gross,'aportes'=>$contributions,'corte'=>$cut,'pendientes'=>$pending,
+            'salud_pension_pendiente'=>(bool)$healthPending,
             'meses_pension_pendientes'=>array_values($missingMonths),
             'neto_bancario_pension'=>$banks['totales']['pension'],'otros_ingresos'=>$other,
             'por_cubrir'=>max(0,$result['impuesto_neto']-$result['retenciones']),

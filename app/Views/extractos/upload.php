@@ -1,14 +1,14 @@
 <details id="subir-extracto" class="bg-surface-container-lowest border border-surface-container rounded-xl p-4" <?= !$documents||$errors||input($_GET,'subir')==='1'?'open':'' ?>>
 <summary class="text-headline-md font-semibold">Subir extracto bancario en PDF</summary>
 <p><?= e($taxpayer['nombre']) ?> · <?= e($year) ?>. Sube el PDF del banco; el mes se obtiene del período impreso en el documento.</p>
-<form method="post" enctype="multipart/form-data" class="space-y-space-md" data-extracto-form data-documento="<?= e($taxpayer['documento_numero']) ?>" data-worker="<?= e(asset($config,'js/extracto-worker.js')) ?>" action="<?= e(url($config,'extractos').$extractQuery) ?>">
+<form method="post" enctype="multipart/form-data" class="space-y-space-md" data-extracto-form data-documento="<?= e($taxpayer['documento_numero']) ?>" data-worker="<?= e(asset($config,'js/extracto-worker.js')) ?>" data-batch-url="<?= e(url($config,'extractos/lote').$extractQuery) ?>" action="<?= e(url($config,'extractos').$extractQuery) ?>">
 <?php require __DIR__.'/../partials/csrf.php'; ?>
 <div class="scenario-settings-grid">
 <label>Mes del extracto <select name="mes" required class="w-full rounded-xl bg-surface-container-low p-3"><option value="auto" <?= $form['mes']==='auto'?'selected':'' ?>>Detectar mes desde el PDF</option><?php foreach (\App\Services\ExtractoData::MONTHS as $n=>$month): ?><option value="<?= $n ?>" <?= (int)$form['mes']===$n?'selected':'' ?>><?= e($month) ?></option><?php endforeach; ?></select></label>
-<label>Banco <input name="banco" value="<?= e($form['banco']) ?>" required maxlength="80" class="w-full rounded-xl bg-surface-container-low p-3"></label>
-<label>Últimos cuatro dígitos de la cuenta <input name="cuenta" value="<?= e($form['cuenta']) ?>" required pattern="[0-9]{4}" maxlength="4" inputmode="numeric" autocomplete="off" class="w-full rounded-xl bg-surface-container-low p-3"></label>
+<label>Banco (si no se detecta) <input name="banco" value="<?= e($form['banco']) ?>" maxlength="80" class="w-full rounded-xl bg-surface-container-low p-3"></label>
+<label>Últimos cuatro dígitos (si no se detectan) <input name="cuenta" value="<?= e($form['cuenta']) ?>" pattern="[0-9]{4}" maxlength="4" inputmode="numeric" autocomplete="off" class="w-full rounded-xl bg-surface-container-low p-3"></label>
 </div>
-<label class="block">PDF completo del mes · máximo 10 MB <input type="file" name="extracto_pdf" accept="application/pdf,.pdf" required class="block w-full"></label>
+<label class="block">PDF de cada banco y mes · puedes seleccionar varios (hasta 50; 10 MB cada uno)<input type="file" name="extracto_pdf[]" data-bank-files multiple accept="application/pdf,.pdf" required class="block w-full"></label>
 <label class="block"><input type="checkbox" data-pdf-unlock checked> Preparar lectura automática del PDF, con o sin contraseña</label>
 <label class="block"><input type="checkbox" data-pdf-custom> Usar otra contraseña del PDF (distinta al documento de esta ficha)</label>
 <label class="block">Contraseña del PDF (opcional si corresponde a tu documento)
@@ -25,5 +25,6 @@
 <p>Una consignación de pensión puede ser neta de descuentos: no reemplaza el comprobante del pagador para identificar pensión bruta, salud y retenciones. Las transferencias entre cuentas propias, préstamos y devoluciones requieren clasificación; no se suman automáticamente como ingresos.</p>
 <p>El 4×1000 y sus reintegros se muestran separados. No todo gasto pagado desde el banco es deducible: cada partida necesita su clasificación y soporte. Los acumulados bancarios aún no se suman a casillas DIAN, para evitar repetir la nómina o registrar una pensión neta como bruta.</p>
 </details>
-<button type="submit" class="rounded-xl bg-inverse-surface text-on-secondary px-4 py-2">Guardar extracto del mes</button>
+<button type="submit" class="rounded-xl bg-inverse-surface text-on-secondary px-4 py-2">Subir seleccionados</button>
+<ul data-bank-results class="space-y-space-sm" aria-live="polite"></ul>
 </form></details>

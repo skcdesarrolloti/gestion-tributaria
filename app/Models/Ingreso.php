@@ -63,7 +63,8 @@ final class Ingreso
 
     public function movements(int $profile, int $owner): array
     {
-        return $this->query('SELECT m.*, k.casilla, k.nombre, (SELECT n.id FROM nominas_laborales n WHERE n.ingreso_id=m.id OR n.aporte_id=m.id LIMIT 1) AS nomina_id FROM movimientos_ingresos m
+        return $this->query('SELECT m.*, k.casilla, k.nombre, (SELECT n.id FROM nominas_laborales n WHERE n.ingreso_id=m.id OR n.aporte_id=m.id LIMIT 1) AS nomina_id,
+            (SELECT s.comprobante_id FROM mesadas_pension s WHERE s.vigente=1 AND (s.ingreso_id=m.id OR s.aporte_id=m.id) LIMIT 1) AS comprobante_id FROM movimientos_ingresos m
             JOIN perfiles_renta p ON p.id=m.perfil_id JOIN contribuyentes c ON c.id=p.contribuyente_id
             JOIN conceptos_ingresos k ON k.id=m.concepto_id WHERE p.id=? AND '.\App\Services\AccesoSql::condition('c',false).' ORDER BY m.fecha,m.id',
             [$profile,$owner])->fetchAll();
@@ -78,6 +79,9 @@ final class Ingreso
         try {
             $current=$this->lockedProfile($profile,$owner);
             if (!$current) { throw new \DomainException('Perfil no encontrado.'); }
+            if ($id && $this->query('SELECT id FROM mesadas_pension WHERE vigente=1 AND (ingreso_id=? OR aporte_id=?)',[$id,$id])->fetchColumn()) {
+                throw new \DomainException('Este dato procede de un comprobante. Corrígelo dentro de Pensiones para mantener el bruto y la salud conciliados.');
+            }
             if ($id && $this->query('SELECT id FROM nominas_laborales WHERE ingreso_id=? OR aporte_id=?',[$id,$id])->fetchColumn()) {
                 throw new \DomainException('Este movimiento procede de nómina. Corrige su archivo desde Subir nómina para mantener la conciliación.');
             }
@@ -90,6 +94,10 @@ final class Ingreso
             if (in_array((int)$concept['casilla'],[32,33],true) && $record['estado']==='real'
                 && $this->query('SELECT id FROM nominas_laborales WHERE perfil_id=? AND inicio>=? AND inicio<? LIMIT 1',[$profile,$monthStart,$nextMonth])->fetchColumn()) {
                 throw new \DomainException('Este mes tiene nómina importada. No dupliques sus importes con captura manual: corrige o completa las quincenas desde Subir nómina.');
+            }
+            if (in_array((int)$concept['casilla'],[99,100],true) && $record['estado']==='real'
+                && $this->query('SELECT id FROM mesadas_pension WHERE perfil_id=? AND mes=? AND vigente=1',[$profile,(int)substr($record['fecha'],5,2)])->fetchColumn()) {
+                throw new \DomainException('Este mes ya tiene un comprobante importado. Corrígelo en Pensiones; no repitas sus importes manualmente.');
             }
             $this->writeMovement($record,$profile,$owner,$id);
             $db->commit();

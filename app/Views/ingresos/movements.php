@@ -9,7 +9,7 @@
             <p class="text-body-md text-secondary">Soporte: <?= e($movement['soporte']?:'Pendiente (proyección)') ?></p>
             <?php if ($movement['justificacion']!==''): ?><p class="text-body-md text-secondary">Justificación: <?= e($movement['justificacion']) ?></p><?php endif; ?>
             <?php if ($movement['conversion']!==''): ?><p class="text-body-md text-secondary">Conversión: <?= e($movement['conversion']) ?></p><?php endif; ?>
-            <?php if (!empty($movement['nomina_id'])): ?><a class="text-secondary underline" href="<?= e(url($config,'nomina').'&anio='.$profile['anio']) ?>">Corregir desde nómina</a><?php else: ?>
+            <?php if (!empty($movement['comprobante_id'])): ?><a class="text-secondary underline" href="<?= e(url($config,'registro').'&contribuyente='.$profile['contribuyente_id'].'&anio='.$profile['anio'].'&componente=ingresos&cedula=pensiones#colpensiones') ?>">Corregir desde el comprobante</a><?php elseif (!empty($movement['nomina_id'])): ?><a class="text-secondary underline" href="<?= e(url($config,'nomina').'&anio='.$profile['anio']) ?>">Corregir desde nómina</a><?php else: ?>
             <a class="text-secondary underline" href="<?= e(url($config,'ingresos/movimiento').'&id='.$profile['id'].'&movimiento='.$movement['id'].(isset($registration)?'&origen=registro'.\App\Services\RegistroNavegacion::query($registration,(int)$profile['contribuyente_id']):'')) ?>">Editar movimiento</a><?php endif; ?>
         </article>
     <?php endforeach; ?>

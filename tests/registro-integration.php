@@ -53,3 +53,5 @@ require __DIR__.'/ingreso-preguntas-integration.php';
 require __DIR__.'/nomina-integration.php';
 require __DIR__.'/retenciones-integration.php';
 require __DIR__.'/bancos-renta-integration.php';
+require __DIR__.'/colpensiones-integration.php';
+require __DIR__.'/extractos-lote-integration.php';

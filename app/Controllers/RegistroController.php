@@ -2,12 +2,12 @@
 declare(strict_types=1);
 namespace App\Controllers;
 use App\Core\View;
-use App\Models\{Contribuyente,Ingreso,Caracterizacion,ExtractoBancario};
+use App\Models\{Contribuyente,Ingreso,Caracterizacion,ExtractoBancario,ComprobantePension};
 use App\Services\{AuthService,RegistroNavegacion,IngresoSummary};
 
 final class RegistroController
 {
-    public function __construct(private AuthService $auth,private Contribuyente $taxpayers,private Ingreso $incomes,private View $view,private array $config,private Caracterizacion $characterization,private ExtractoBancario $bankDocuments) {}
+    public function __construct(private AuthService $auth,private Contribuyente $taxpayers,private Ingreso $incomes,private View $view,private array $config,private Caracterizacion $characterization,private ExtractoBancario $bankDocuments,private ComprobantePension $receipts) {}
     public function index(): void { $this->show('registro/index'); }
     public function analysis(): void { $this->show('registro/analysis'); }
     public function sources(): void
@@ -47,7 +47,7 @@ final class RegistroController
         }
         $profile=null;$concepts=[];$movements=[];$totals=[];$preparation=null;$questions=null;$payroll=[];$retentionData=[];
         $pensionView=$template==='registro/index' && $state['componente']==='ingresos' && $state['cedula']==='pensiones';
-        $pensionDocuments=[];$pensionDocument=null;$bankDocuments=[];$bankDocument=null;$bankSummary=[];$annualReports=[];
+        $pensionDocuments=[];$pensionDocument=null;$bankDocuments=[];$bankDocument=null;$bankSummary=[];$annualReports=[];$pensionReceipts=[];$pensionRows=[];
         if ($taxpayer) {
             $bankDocuments=$this->bankDocuments->listFor((int)$taxpayer['id'],$owner,(int)$state['anio']);
             $bankSummary=\App\Services\BancoResumen::build($bankDocuments);
@@ -65,10 +65,11 @@ final class RegistroController
                 $all=$this->incomes->concepts($profile);$allMovements=$this->incomes->movements((int)$profile['id'],$owner);
                 $totals=IngresoSummary::build($all,$allMovements);
                 $payroll=$this->incomes->payroll((int)$profile['id'],$owner);
+                $pensionReceipts=$this->receipts->documents((int)$profile['id'],$owner);$pensionRows=$this->receipts->rows((int)$profile['id'],$owner);
                 if ($template==='registro/analysis') {
-                    $annualReports['real']=\App\Services\RentaAcumulada::build($profile,$allMovements,$payroll,$bankSummary,false,$analysisSaving);
+                    $annualReports['real']=\App\Services\RentaAcumulada::build($profile,$allMovements,$payroll,$bankSummary,false,$analysisSaving,$pensionRows);
                     if (array_filter($allMovements,static fn($m)=>$m['estado']==='proyectado' && in_array((int)$m['casilla'],[32,33,99,100],true))) {
-                        $annualReports['proyectado']=\App\Services\RentaAcumulada::build($profile,$allMovements,$payroll,$bankSummary,true,$analysisSaving);
+                        $annualReports['proyectado']=\App\Services\RentaAcumulada::build($profile,$allMovements,$payroll,$bankSummary,true,$analysisSaving,$pensionRows);
                     }
                 }
                 $concepts=RegistroNavegacion::concepts($all,$profile,$state);$ids=array_column($concepts,'id');
@@ -77,6 +78,6 @@ final class RegistroController
                 $preparation=\App\Services\PerfilAnualSugerencias::stored($this->characterization,$taxpayer,$owner,$state['anio']);
             }
         }
-        $this->view->render($template,compact('user','rows','taxpayer','profile','state','concepts','movements','totals','preparation','questions','payroll','retentionData','pensionView','pensionDocuments','pensionDocument','bankDocuments','bankDocument','bankSummary','annualReports','analysisSaving','analysisErrors'));
+        $this->view->render($template,compact('user','rows','taxpayer','profile','state','concepts','movements','totals','preparation','questions','payroll','retentionData','pensionView','pensionDocuments','pensionDocument','bankDocuments','bankDocument','bankSummary','annualReports','analysisSaving','analysisErrors','pensionReceipts','pensionRows'));
     }
 }

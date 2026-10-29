@@ -26,4 +26,4 @@
 <?php require __DIR__.'/upload.php';require __DIR__.'/months.php'; ?>
 <?php if ($selected): require __DIR__.'/detail.php'; endif; ?>
 <?php else: ?><p>Selecciona un contribuyente para subir y consultar únicamente sus extractos.</p><?php endif; ?>
-</main><script src="<?= e(asset($config,'js/extractos.js').'?v='.filemtime(dirname(__DIR__,3).'/public/assets/js/extractos.js')) ?>" defer></script><?php require __DIR__.'/../partials/footer.php'; ?>
+</main><script src="<?= e(asset($config,'js/pdf-carga.js').'?v='.filemtime(dirname(__DIR__,3).'/public/assets/js/pdf-carga.js')) ?>" defer></script><script src="<?= e(asset($config,'js/extractos.js').'?v='.filemtime(dirname(__DIR__,3).'/public/assets/js/extractos.js')) ?>" defer></script><?php require __DIR__.'/../partials/footer.php'; ?>
