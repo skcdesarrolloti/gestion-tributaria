@@ -12,6 +12,13 @@ ayuda visible en Capital, bruto de pensión pendiente antes de capturarlo y valo
 registrado después. Las consultas no trasladan el neto a 99 ni cambian datos.
 La clasificación se contrastó con el instructivo oficial DIAN 210, casillas
 58, 74 y 99, publicado en 2026. No se añaden campos ni reglas de costos.
+Sintaxis, unitarias e integración aislada correctas. Se comprobó además el
+enlace real «Registrar valor · 58»: conserva persona, año y Capital tras mover
+las pestañas; el contexto se calcula ahora en la vista que lo utiliza.
+Publicación 4d5cd3d comprobada con sesión autenticada mediante el contenido de
+la página: acumulados de enero, febrero y septiembre, rendimientos separados y
+ayuda visible en Capital. La captura de Chrome no estuvo disponible; no se
+reutilizan imágenes anteriores como prueba de esta presentación.
 
 ### Jerarquía de Ingresos · 28/10/2026
 

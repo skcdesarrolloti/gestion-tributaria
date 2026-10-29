@@ -8,7 +8,7 @@
 <?php if ($taxpayer): if ($pensionView) { require __DIR__.'/pensiones.php'; } elseif ($state['componente']==='costos') { require __DIR__.'/extractos.php'; } endif; ?>
 <?php if ($pensionView && $taxpayer): ?><details><summary class="text-secondary underline">Casillas DIAN de pensiones · bruto, ajustes y condiciones del año</summary><p>Los extractos guardados se muestran arriba. El abono bancario es neto; la casilla 99 requiere la pensión bruta y sus descuentos verificados. Un valor $0 en esa casilla no borra ni representa la cantidad de PDF guardados.</p><?php endif; ?>
 <?php if ($taxpayer): if ($state['componente']==='ingresos' && !$pensionView) { require __DIR__.'/preguntas.php'; } if (!$profile) { require __DIR__.'/configurar-anio.php'; } endif; ?>
-<?php if ($profile): ?>
+<?php if ($profile): $contextQuery=\App\Services\RegistroNavegacion::query($state,(int)$taxpayer['id']); ?>
 <section class="bg-surface-container-lowest border border-surface-container rounded-xl p-4 space-y-space-md">
 <h2 class="text-headline-md font-semibold"><?= e($profile['nombre'].' · Año gravable '.$profile['anio']) ?></h2>
 <p><?= e($profile['tipo']==='juridica'?'Persona jurídica':($profile['tipo']==='sucesion'?'Sucesión ilíquida':'Persona natural')) ?> · Formulario <?= e($profile['formulario']) ?> · <?= e($profile['residencia']==='residente'?'Condición fiscal nacional / residente':'No residente') ?></p>

@@ -8,6 +8,13 @@ verify(str_contains($pensionHtml,'Bruto pendiente de registrar'),'Pensiones: sin
 verify(str_contains($capitalHelp,'El alquiler de un inmueble propio se registra en Capital, casilla 58.')
     && str_contains($capitalHelp,'$20.000.000 invertidos no es un nuevo ingreso'),
     'Capital explica arrendamientos e intereses sin convertir la devolución del capital invertido en ingreso');
+$capitalLinkDom=new DOMDocument();@$capitalLinkDom->loadHTML($capitalHelp);$capitalLinkXpath=new DOMXPath($capitalLinkDom);
+$capitalLink=$capitalLinkXpath->query('//a[normalize-space(.)="Registrar valor · 58"]')->item(0)->getAttribute('href');
+parse_str((string)parse_url($capitalLink,PHP_URL_QUERY),$capitalLinkQuery);
+verify(($capitalLinkQuery['anio']??'')==='2025' && ($capitalLinkQuery['renta']??'')==='capital'
+    && (int)($capitalLinkQuery['contribuyente']??0)===$taxpayerId
+    && request($client,$base,substr((string)parse_url($capitalLink,PHP_URL_QUERY),6))[0]===200,
+    'Registrar valor desde el enlace real conserva año, persona y Capital después de mover las pestañas');
 $incomeHierarchyDom=new DOMDocument();@$incomeHierarchyDom->loadHTML($pensionHtml);$incomeHierarchyXpath=new DOMXPath($incomeHierarchyDom);
 verify($incomeHierarchyXpath->query('//nav[@aria-label="Orientación y regreso"]//nav[@aria-label="Cédulas del formulario 210"]//a[@aria-current="page" and normalize-space(.)="Pensiones"]')->length===1
     && $incomeHierarchyXpath->query('//nav[@aria-label="Secciones de Registro de información"]//a')->length===2
