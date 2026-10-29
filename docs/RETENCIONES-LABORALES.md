@@ -5,8 +5,8 @@
 En Ingresos → Trabajo, la misma fila mensual muestra OK (solo con revisión
 vigente), diferencia en pesos o pendiente. Mientras falta confirmar el método,
 se muestra la diferencia **provisional P1** con los supuestos ya autorizados.
-«Explicar retención · [mes]» abre debajo de la fila, a todo el ancho, el descuento,
-el cálculo, su diferencia, la base, UVT y operación del tramo, sin navegar.
+La fila muestra retención descontada, calculada y diferencia de más/de menos.
+No se repite una explicación debajo de cada mes.
 Los pagadores se mantienen separados y los meses incompletos no se calculan.
 Una sola consulta plegada ofrece la tabla DIAN del año en esa misma página.
 El acumulado P1 sigue siendo provisional y compara exactamente los mismos meses.
