@@ -583,3 +583,7 @@ reconoce el crédito personal, lo muestra en préstamos, rechaza el PDF repetido
 y no crea un extracto de cuenta ni movimientos fiscales adicionales. Los controles
 de cuentas reutilizan los soportes existentes. No se adaptó todavía el formato
 de la cuenta de Caja Social: falta recibir ese PDF, distinto del crédito.
+Verificación en Hostinger: Costos y Pensiones sin selector bancario; Préstamos
+sin selector de archivo; los tres enlazan a la pantalla central, que tiene un solo
+selector bancario. Los nueve PDF de BBVA siguen visibles en Pensiones. No se
+subieron documentos reales ni se modificaron importes durante esta verificación.
