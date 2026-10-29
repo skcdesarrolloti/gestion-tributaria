@@ -29,6 +29,11 @@ final class ExtractoPdfReader
                 && (str_contains($normal,'CREDITO DE CONSUMO') || str_contains($normal,'CREDITO COMERCIAL'))) {
                 return ['tipo_documento'=>'credito','estado'=>'pendiente','motivo'=>'Extracto de crédito: se revisará el titular y el pago anterior antes de guardarlo en Control de préstamos.'];
             }
+            if (str_contains($normal,'CUENTA DE AHORROS') && (str_contains($normal,'BANCO CAJA SOCIAL') || str_contains($normal,'BANCOCAJASOCIAL'))) {
+                $metadata=ExtractoCajaSocial::metadata($text,$sheets);
+                try { return ExtractoCajaSocial::parse($text,$sheets); }
+                catch (\InvalidArgumentException) { return $metadata+['estado'=>'pendiente','motivo'=>'Se reconocieron la cuenta y el período, pero el detalle no concilia. No se sumaron importes parciales.']; }
+            }
             $metadata=ExtractoBbva::metadata($text,$sheets);
             try { return ExtractoBbva::parse($text,$sheets); }
             catch (\InvalidArgumentException) {

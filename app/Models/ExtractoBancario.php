@@ -32,6 +32,13 @@ final class ExtractoBancario
             $q=$db->prepare('SELECT id FROM extractos_bancarios WHERE contribuyente_id=? AND (sha256=? OR (anio=? AND mes=? AND banco=? AND cuenta=?))');
             $q->execute([$taxpayer,$file['sha256'],$data['anio'],$data['mes'],$data['banco'],$data['cuenta']]);
             if ($q->fetch()) { throw new \DomainException('Este PDF o un extracto de esa cuenta y mes ya está guardado. Consúltalo abajo; no se ha duplicado.'); }
+            $start=$file['lectura']['inicio']??sprintf('%04d-%02d-01',$data['anio'],$data['mes']);
+            $end=$file['lectura']['fin']??(new \DateTimeImmutable($start))->format('Y-m-t');
+            foreach ($this->listFor($taxpayer,$owner,(int)$data['anio']) as $old) {
+                if ($old['banco']!==$data['banco'] || $old['cuenta']!==$data['cuenta']) { continue; }
+                $reading=\App\Services\ExtractoData::reading($old);$a=$reading['inicio']??sprintf('%04d-%02d-01',$old['anio'],$old['mes']);$b=$reading['fin']??(new \DateTimeImmutable($a))->format('Y-m-t');
+                if ($start<=$b && $end>=$a) { throw new \DomainException('Ese período de la cuenta ya está cubierto por otro PDF. No se duplican meses entre extractos mensuales y trimestrales.'); }
+            }
             $q=$db->prepare('INSERT INTO extractos_bancarios (contribuyente_id,anio,mes,banco,cuenta,titulo,archivo,sha256,bytes,actor_id,lectura) VALUES (?,?,?,?,?,?,?,?,?,?,?)');
             $q->execute([$taxpayer,$data['anio'],$data['mes'],$data['banco'],$data['cuenta'],$file['titulo'],$file['archivo'],$file['sha256'],$file['bytes'],$owner,
                 json_encode($file['lectura']??null,JSON_THROW_ON_ERROR|JSON_UNESCAPED_UNICODE)]);

@@ -12,7 +12,7 @@ final class PensionResumen
             $month=(int)substr($m['fecha'],5,2);$field=(int)$m['casilla']===99?'bruto':'salud';
             $months[$month][$field]=($months[$month][$field]??0)+(int)$m['valor_cop'];
         }
-        foreach ($documents as $doc) {
+        foreach (ExtractoData::monthlyDocuments($documents) as $doc) {
             $month=(int)$doc['mes'];$reading=ExtractoData::reading($doc);
             $months[$month]['bancos'][]=['id'=>(int)$doc['id'],'label'=>$doc['banco'].' '.$doc['cuenta']];
             if (($reading['estado']??'')==='leido') { $months[$month]['neto']=($months[$month]['neto']??0)+$reading['totales']['pension']; }

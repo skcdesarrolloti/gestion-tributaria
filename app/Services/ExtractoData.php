@@ -11,6 +11,7 @@ final class ExtractoData
     {
         $month=filter_var(\input($source,'mes'),FILTER_VALIDATE_INT);
         $bank=preg_replace('/\s+/u',' ',trim(\input($source,'banco')));
+        if (in_array(PrestamoCajaSocial::normal($bank),['CAJA SOCIAL','BANCO CAJA SOCIAL','BANCOCAJASOCIAL'],true)) { $bank='BANCO CAJA SOCIAL'; }
         $account=trim(\input($source,'cuenta'));
         if (!in_array($year,['2025','2026'],true) || !$month || !isset(self::MONTHS[$month])) {
             throw new \InvalidArgumentException('Selecciona el año y el mes que cubre el extracto, no la fecha de descarga.');
@@ -25,7 +26,7 @@ final class ExtractoData
     public static function calendar(array $documents, string $bank, string $account): array
     {
         $months=array_fill(1,12,[]);
-        foreach ($documents as $d) {
+        foreach (self::monthlyDocuments($documents) as $d) {
             if ($d['banco']===$bank && $d['cuenta']===$account) { $months[(int)$d['mes']][]=$d; }
         }
         return $months;
@@ -34,7 +35,22 @@ final class ExtractoData
     public static function reading(array $document): array
     {
         $value=json_decode($document['lectura']??'null',true);
-        return is_array($value)?$value:['estado'=>'pendiente','motivo'=>'Documento pendiente de lectura.'];
+        if (!is_array($value)) { return ['estado'=>'pendiente','motivo'=>'Documento pendiente de lectura.']; }
+        if (isset($document['_mes_consulta'],$value['meses'][$document['_mes_consulta']])) {
+            $month=(int)$document['_mes_consulta'];$value=array_replace($value,$value['meses'][$month]);
+            $value['movimientos']=array_values(array_filter($value['movimientos'],static fn($r)=>(int)substr($r['fecha'],5,2)===$month));
+        }
+        return $value;
+    }
+
+    /** Vistas mensuales del mismo ID/PDF; no se insertan copias en la base. */
+    public static function monthlyDocuments(array $documents): array
+    {
+        $rows=[];foreach ($documents as $doc) {
+            if (isset($doc['_mes_consulta'])) { $rows[]=$doc;continue; }
+            $reading=self::reading($doc);$months=$reading['meses_cubiertos']??[(int)$doc['mes']];
+            foreach ($months as $month) { if (isset(self::MONTHS[(int)$month])) { $copy=$doc;$copy['mes']=(int)$month;$copy['_mes_consulta']=(int)$month;$rows[]=$copy; } }
+        }return $rows;
     }
 
     public static function money(int $cents): string { return '$'.number_format($cents/100,2,',','.'); }
@@ -43,7 +59,7 @@ final class ExtractoData
     {
         if (!isset($reading['inicio'],$reading['cuenta'],$reading['titular'])) { return; }
         if (substr($reading['inicio'],0,4)!==(string)$data['anio'] || (int)substr($reading['inicio'],5,2)!==$data['mes']
-            || $reading['cuenta']!==$data['cuenta'] || $data['banco']!=='BBVA') {
+            || $reading['cuenta']!==$data['cuenta'] || $data['banco']!==($reading['banco']??'BBVA')) {
             throw new \InvalidArgumentException('El PDF leído no coincide con el año, mes, banco o cuenta elegidos. Revisa el período impreso en el documento.');
         }
         $normalize=static fn($s)=>preg_replace('/[^A-Z0-9]+/',' ',strtoupper(iconv('UTF-8','ASCII//TRANSLIT',$s)?:$s));

@@ -12,6 +12,7 @@ require __DIR__.'/../partials/head.php'; ?>
 <main class="portal-container py-8 space-y-space-lg">
 <section class="bg-inverse-surface text-on-secondary rounded-2xl p-4"><h1 class="text-headline-lg font-semibold"><?= e($title) ?></h1></section>
 <?php $contextRoute='registro';require __DIR__.'/context.php'; ?>
+<?php if ($incomeView && $taxpayer): ?><p><a class="inline-block rounded-xl bg-inverse-surface text-on-secondary px-4 py-2" href="<?= e(url($config,'extractos').'&contribuyente='.$taxpayer['id'].'&anio='.$state['anio']) ?>">Subir extractos bancarios · carga única</a></p><?php endif; ?>
 <?php require __DIR__.'/ayuda-rentas.php'; ?>
 <?php if ($pensionView && $taxpayer): require __DIR__.'/colpensiones.php';require __DIR__.'/pension-meses.php'; endif; ?>
 <?php if ($taxpayer): if ($pensionView) { require __DIR__.'/pensiones.php'; } elseif ($bankMode) { require __DIR__.'/bancos.php'; } endif; ?>

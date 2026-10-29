@@ -15,6 +15,6 @@ $menuContext=$menuTaxpayer?'&'.http_build_query(['contribuyente'=>$menuTaxpayer,
 <p>Selecciona contribuyente y año 2025 o 2026 dentro del registro.</p>
 <a class="block px-3 py-2.5 text-secondary" href="<?= e(url($config,'registro').'&componente=ingresos'.$menuContext) ?>">Ingresos</a>
 <a class="block px-3 py-2.5 text-secondary" href="<?= e(url($config,'registro').'&componente=costos'.$menuContext) ?>">Costos y gastos</a>
-<a class="block px-3 py-2.5 text-secondary" href="<?= e(url($config,'extractos').$menuContext) ?>">Extractos · carga única</a>
+<a class="block px-3 py-2.5 text-secondary" href="<?= e(url($config,'extractos').$menuContext) ?>">Ingresos · Subir extractos bancarios</a>
 </div></details>
 <a <?= $menuLink('analisis') ?> href="<?= e(url($config,'analisis').$menuContext) ?>">Análisis y acciones</a>

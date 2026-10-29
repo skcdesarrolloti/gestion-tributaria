@@ -26,7 +26,7 @@ final class ExtractoLoteController
             }
             $reading=$file['lectura'];$posted=$_POST;
             if (isset($reading['inicio'],$reading['cuenta'])) {
-                $posted['banco']='BBVA';$posted['cuenta']=$reading['cuenta'];$posted['mes']=(string)(int)substr($reading['inicio'],5,2);
+                $posted['banco']=$reading['banco']??'BBVA';$posted['cuenta']=$reading['cuenta'];$posted['mes']=(string)(int)substr($reading['inicio'],5,2);
             } elseif (\input($posted,'mes','auto')==='auto') {
                 throw new \InvalidArgumentException('No se detectó el período. Indica el mes, el banco y la cuenta de este PDF para conservarlo pendiente de lectura.');
             }
@@ -34,7 +34,7 @@ final class ExtractoLoteController
             $file['lectura']['titular_confirmado']=\input($_POST,'titular_confirmado')==='1';
             $id=$this->model->saveFor((int)$taxpayer['id'],$owner,$data,$file);$file=null;
             PdfApi::send(['guardado'=>true,'id'=>$id,'banco'=>$data['banco'],'cuenta'=>$data['cuenta'],'mes'=>$data['mes'],
-                'leido'=>($reading['estado']??'')==='leido']);
+                'meses'=>$reading['meses_cubiertos']??[$data['mes']],'leido'=>($reading['estado']??'')==='leido']);
         } catch (\DomainException $e) {
             $duplicate=false;
             if ($file) {

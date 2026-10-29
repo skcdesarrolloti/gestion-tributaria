@@ -1,6 +1,7 @@
 <?php require __DIR__.'/movements.php'; ?>
 <section id="documento" class="bg-surface-container-lowest border border-surface-container rounded-xl p-4">
-<h2 class="text-headline-md font-semibold"><?= e($selected['banco'].' · Cuenta terminada en '.$selected['cuenta'].' · '.\App\Services\ExtractoData::MONTHS[(int)$selected['mes']].' '.$year) ?></h2>
+<?php $documentReading=\App\Services\ExtractoData::reading($selected);$documentPeriod=count($documentReading['meses_cubiertos']??[])>1?$documentReading['inicio'].' a '.$documentReading['fin']:\App\Services\ExtractoData::MONTHS[(int)$selected['mes']].' '.$year; ?>
+<h2 class="text-headline-md font-semibold"><?= e($selected['banco'].' · Cuenta terminada en '.$selected['cuenta'].' · '.$documentPeriod) ?></h2>
 <p><?= e($selected['titulo']) ?> · Cargado <?= e($selected['created_at']) ?></p>
 <?php $review=\App\Services\ExtractoData::reading($selected)['titular_confirmado']??null; ?>
 <p><?= $review===true?'Revisión visual del titular, año y cuenta: confirmada al subir.':($review===false?'Tu revisión visual del titular, año y cuenta está pendiente. Puedes consultar el PDF abajo.':'') ?></p>

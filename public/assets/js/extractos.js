@@ -46,7 +46,8 @@
                     for (const name of ['banco','cuenta','mes']) body.set(name,row.fields?row.fields[name].value:form.elements[name].value);
                     body.set('titular_confirmado',form.elements.titular_confirmado.checked?'1':'0');
                     const result=await request(form.dataset.batchUrl,body);row.done=true;row.decoded=null;saved++;
-                    row.message.textContent=row.file.name+' · Guardado · '+result.banco+' '+result.cuenta+' · mes '+result.mes+' · '+(result.tipo==='credito'?'desglose disponible en Control de préstamos':(result.leido?'leído':'pendiente de lectura'));
+                    const period=result.meses?.length>1?'meses '+result.meses.join(', '):'mes '+result.mes;
+                    row.message.textContent=row.file.name+' · Guardado · '+result.banco+' '+result.cuenta+' · '+period+' · '+(result.tipo==='credito'?'desglose disponible en Control de préstamos':(result.leido?'leído':'pendiente de lectura'));
                     if (row.fields) row.wrap.querySelector('.profile-grid').remove();
                 } catch (error) {
                     if (error.data?.duplicado) { row.done=true;row.decoded=null;duplicates++;row.message.textContent=row.file.name+' · Ya estaba guardado; no se duplicó.'; }

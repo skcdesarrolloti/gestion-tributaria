@@ -1,11 +1,14 @@
 # Extractos por mes y cuenta
 
-**Carga única:** Registro de información → **Extractos · carga única**. Es el
+**Carga única:** Registro de información → **Ingresos → Subir extractos bancarios**. Es el
 único selector de PDF bancarios. Acepta cuentas y extractos de crédito personal
 de Caja Social reconocidos; los enruta al control correspondiente, sin duplicar
 el documento ni crear gastos fiscales. Pensiones, Capital, Costos y Préstamos
 solo consultan y ofrecen acceso a esta carga central. Colpensiones y nómina
 conservan sus cargas propias porque son soportes distintos del extracto bancario.
+Caja Social Cuentamiga mensual/trimestral se consulta mes por mes desde un solo
+PDF y registro. No se prorratean totales; se agrupa por fecha real de operación.
+Ver CAJA-SOCIAL-CUENTAS.md para conciliación y límites del reconocimiento.
 
 Consulta: **Registro de información → Ingresos → Pensiones**. Elegir
 contribuyente y año muestra de inmediato los PDF guardados, el control de meses
@@ -33,7 +36,7 @@ con origen conservan compatibilidad, pero ya no ofrecen formularios separados.
 El lector, sus
 permisos y las copias privadas son los mismos; no se duplican datos.
 
-La carga está incluida en Capital y Costos y gastos; admite banco y últimos
+Capital y Costos y gastos consultan la carga única de Ingresos; admite banco y últimos
 cuatro dígitos de cada cuenta. Cada banco necesita sus propios extractos.
 Los diseños sin lector se conservan pendientes con mes manual: no se consideran
 importes de cero ni se promete lectura automática universal. Se descartan
@@ -84,9 +87,9 @@ mensual BBVA Colombia reconocido lee todas las páginas y compara cada saldo,
 el saldo final y los totales con el resumen. Se verificó el diseño con copias
 legibles disponibles, sin copiarlas a Git ni a la base de pruebas. Usa enteros
 de centavos para conciliar sin errores de coma flotante. Los ejemplos de prueba
-versionados son sintéticos. El formato admitido por ahora es un PDF
-mensual por cuenta; extractos trimestrales, cuentas de un mismo banco con igual
-terminación y sustituciones de documentos requieren ampliar esa identificación.
+versionados son sintéticos. Se admiten BBVA mensual y Caja Social Cuentamiga
+mensual/trimestral reconocido. Cuentas de un mismo banco con igual terminación
+y sustituciones de documentos requieren ampliar esa identificación.
 
 El extracto será soporte común para abonos de pensión, rendimientos, GMF y otros
 movimientos. No todo abono es ingreso ni todo débito es deducible. Conciliar la
@@ -134,7 +137,8 @@ Hostinger sirve los archivos estáticos del motor, con licencia y versión fijad
 
 El selector admite hasta 50 PDF y 100 MB por selección (10 MB por archivo).
 Cada archivo se envía por separado, muestra su resultado y se puede reintentar
-sin repetir los guardados. BBVA reconocido obtiene banco/cuenta/mes de su texto;
+sin repetir los guardados. BBVA y Caja Social reconocidos obtienen banco,
+cuenta y período de su texto;
 para otros formatos se solicita ese dato por archivo y se conserva pendiente
 sin inventar importes. No se promete extracción automática de todos los bancos.
 La clave se usa únicamente en el navegador. Un mismo archivo ya guardado no se

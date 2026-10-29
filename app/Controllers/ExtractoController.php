@@ -38,6 +38,7 @@ final class ExtractoController
                         $this->loans->save($id,$owner,$file,$credit);$file=null;
                         header('Location: '.\url($this->config,'extractos').'&contribuyente='.$id.'&anio='.$year.'&guardado=1#creditos-guardados',true,303);return;
                     }
+                    if ($automatic && isset($file['lectura']['inicio'],$file['lectura']['cuenta'])) { if (\input($posted,'banco')==='') { $posted['banco']=$file['lectura']['banco']??'BBVA'; }if (\input($posted,'cuenta')==='') { $posted['cuenta']=$file['lectura']['cuenta']; } }
                     $data=ExtractoData::read($posted,$year);
                     if ($automatic) {
                         if (!isset($file['lectura']['inicio'])) { throw new \InvalidArgumentException('No se pudo leer el período impreso en el PDF. No se exige firma digital. Si el documento abre y el período se ve, selecciona el mes manualmente para guardarlo pendiente de lectura.'); }

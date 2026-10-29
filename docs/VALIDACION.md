@@ -587,3 +587,11 @@ Verificación en Hostinger: Costos y Pensiones sin selector bancario; Préstamos
 sin selector de archivo; los tres enlazan a la pantalla central, que tiene un solo
 selector bancario. Los nueve PDF de BBVA siguen visibles en Pensiones. No se
 subieron documentos reales ni se modificaron importes durante esta verificación.
+
+29/10/2026 — Caja Social Cuentamiga trimestral: sintaxis, unitarias e integración
+HTTP completa correctas en base aislada. Fixture ficticio verifica una carga,
+tres meses con valores por fecha, consulta mensual, ausencia de movimientos
+fiscales nuevos, rechazo de duplicados y períodos solapados. Lectura local del
+PDF real concilia cada saldo y el resumen completo; no se importó a producción
+ni a las pruebas. Ver docs/CAJA-SOCIAL-CUENTAS.md. La carga real en Hostinger
+queda pendiente de realizarse desde Ingresos con el archivo del responsable.

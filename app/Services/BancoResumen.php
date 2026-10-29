@@ -7,8 +7,8 @@ final class BancoResumen
 {
     public static function build(array $documents): array
     {
-        $accounts=[];$total=['rendimientos'=>0,'gmf'=>0,'gmf_reintegro'=>0,'pension'=>0];$pending=0;
-        foreach ($documents as $document) {
+        $accounts=[];$total=['rendimientos'=>0,'gmf'=>0,'gmf_reintegro'=>0,'pension'=>0];$pending=0;$pendingIds=[];
+        foreach (ExtractoData::monthlyDocuments($documents) as $document) {
             $key=$document['banco'].'|'.$document['cuenta'];
             $accounts[$key]??=['banco'=>$document['banco'],'cuenta'=>$document['cuenta'],'meses'=>[],
                 'totales'=>array_fill_keys(array_keys($total),0),'leidos'=>0];
@@ -24,7 +24,7 @@ final class BancoResumen
                 }
             }
             $accounts[$key]['meses'][$month]=['documento'=>(int)$document['id'],'leido'=>$ok,'valores'=>$ok?$values:[]];
-            if (!$ok) { $pending++;continue; }
+            if (!$ok) { if (!isset($pendingIds[$document['id']])) { $pending++;$pendingIds[$document['id']]=true; }continue; }
             $accounts[$key]['leidos']++;
             foreach ($total as $field=>$unused) { $accounts[$key]['totales'][$field]+=$values[$field];$total[$field]+=$values[$field]; }
         }

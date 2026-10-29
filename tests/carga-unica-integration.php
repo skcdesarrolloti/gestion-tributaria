@@ -6,7 +6,7 @@ verify($singleXpath->query('//input[@data-bank-files]')->length===1 && str_conta
 foreach (['registro&contribuyente='.$colTax.'&anio=2025&componente=costos','registro&contribuyente='.$colTax.'&anio=2025&componente=ingresos&cedula=pensiones',
     'registro&contribuyente='.$colTax.'&anio=2025&componente=ingresos&cedula=general&renta=capital','prestamos&contribuyente='.$colTax.'&anio=2025'] as $singleRoute) {
     [, $singleHtml]=request($client,$base,$singleRoute);
-    verify(!str_contains($singleHtml,'data-bank-files') && !str_contains($singleHtml,'data-loan-upload') && str_contains($singleHtml,'Ir a extractos · carga única'),'Ingresos, costos y préstamos consultan la carga central sin pedir otro PDF bancario');
+    verify(!str_contains($singleHtml,'data-bank-files') && !str_contains($singleHtml,'data-loan-upload') && (str_contains($singleHtml,'Ir a extractos · carga única') || str_contains($singleHtml,'Subir extractos bancarios · carga única')),'Ingresos, costos y préstamos consultan la carga central sin pedir otro PDF bancario');
 }
 $singleLoanPath=$temp.'/credito-carga-unica.pdf';file_put_contents($singleLoanPath,str_replace(['5555550001','2025/04/09','2025/04/20','2025/05/10'],['5555550002','2025/05/09','2025/05/20','2025/06/10'],loanFixturePdf()));
 $singleLoanPost=['_csrf_token'=>token($singlePage),'extracto_pdf'=>new CURLFile($singleLoanPath,'application/pdf','credito-ficticio-central.pdf'),'mes'=>'auto','banco'=>'','cuenta'=>''];

@@ -13,7 +13,7 @@ final class PrestamoCruce
             $months[$m]['documentos'][]=$doc;
         }
         foreach ($pensions as $p) { $m=(int)$p['mes'];$months[$m]['neto']=$p['datos']['neto']??null;$months[$m]['libranza']=$p['datos']['libranza']??null; }
-        foreach ($banks as $doc) { $d=ExtractoData::reading($doc);if (($d['estado']??'')==='leido') { $m=(int)$doc['mes'];$months[$m]['banco']=($months[$m]['banco']??0)+$d['totales']['pension']; } }
+        foreach (ExtractoData::monthlyDocuments($banks) as $doc) { $d=ExtractoData::reading($doc);if (($d['estado']??'')==='leido') { $m=(int)$doc['mes'];$months[$m]['banco']=($months[$m]['banco']??0)+$d['totales']['pension']; } }
         return $months;
     }
 }

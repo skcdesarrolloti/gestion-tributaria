@@ -7,6 +7,7 @@
 <?php if (!$documents): ?><p>Aún no hay extractos de este año. Al guardar el primero verás enero a diciembre para esa cuenta.</p><?php endif; ?>
 <?php $accounts=[];foreach ($documents as $d) { $accounts[$d['banco'].'|'.$d['cuenta']]=[$d['banco'],$d['cuenta']]; } ?>
 <?php foreach ($accounts as [$bank,$account]): $calendar=ExtractoData::calendar($documents,$bank,$account);$received=count(array_filter($calendar));$sum=['pension'=>0,'rendimientos'=>0,'gmf'=>0,'gmf_reintegro'=>0];$read=0; ?>
+<?php if ($bank==='BANCO CAJA SOCIAL'): require __DIR__.'/caja-months.php';continue;endif; ?>
 <details <?= count($accounts)===1?'open':'' ?>>
 <summary class="font-semibold"><?= e($bank.' · Cuenta terminada en '.$account) ?> · <?= $received ?>/12 meses con PDF</summary>
 <div class="renta-sheet-scroll" role="region" aria-label="Meses de extractos de <?= e($bank.' '.$account) ?>" tabindex="0"><table class="renta-sheet-table">

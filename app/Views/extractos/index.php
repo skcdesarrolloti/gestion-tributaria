@@ -3,8 +3,8 @@
 <?php require __DIR__.'/../partials/header.php'; ?>
 <main class="portal-container py-8 space-y-space-lg">
 <section class="bg-inverse-surface text-on-secondary rounded-2xl p-4">
-<h1 class="text-headline-lg font-semibold">Extractos bancarios · carga única</h1>
-<p>Sube aquí los PDF de cuentas y créditos personales. Cada documento se guarda una sola vez y se consulta en sus secciones.</p>
+<h1 class="text-headline-lg font-semibold">Ingresos · Extractos bancarios</h1>
+<p>Sube aquí tus cuentas y créditos personales en una carga única. Los PDF trimestrales se consultan mes a mes y los mismos soportes sirven para ingresos, costos y préstamos.</p>
 </section>
 <form method="get" class="scenario-settings-grid">
 <input type="hidden" name="route" value="extractos">
