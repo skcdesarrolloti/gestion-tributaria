@@ -3,6 +3,11 @@ declare(strict_types=1);
 $pensionRoute='registro&contribuyente='.$taxpayerId.'&anio=2025&cedula=pensiones';
 [$s,$pensionHtml]=request($client,$base,$pensionRoute);
 verify($s===200 && str_contains($pensionHtml,'99 · Ingresos brutos por rentas de pensiones') && !str_contains($pensionHtml,'58 · Ingresos brutos'),'Pensiones muestra sus ingresos y no los de capital');
+verify(str_contains($pensionHtml,'Bruto pendiente de registrar'),'Pensiones: sin captura bruta no presenta cero como un ingreso bruto conocido');
+[, $capitalHelp]=request($client,$base,'registro&contribuyente='.$taxpayerId.'&anio=2025&componente=ingresos&cedula=general&renta=capital');
+verify(str_contains($capitalHelp,'El alquiler de un inmueble propio se registra en Capital, casilla 58.')
+    && str_contains($capitalHelp,'$20.000.000 invertidos no es un nuevo ingreso'),
+    'Capital explica arrendamientos e intereses sin convertir la devolución del capital invertido en ingreso');
 $incomeHierarchyDom=new DOMDocument();@$incomeHierarchyDom->loadHTML($pensionHtml);$incomeHierarchyXpath=new DOMXPath($incomeHierarchyDom);
 verify($incomeHierarchyXpath->query('//nav[@aria-label="Orientación y regreso"]//nav[@aria-label="Cédulas del formulario 210"]//a[@aria-current="page" and normalize-space(.)="Pensiones"]')->length===1
     && $incomeHierarchyXpath->query('//nav[@aria-label="Secciones de Registro de información"]//a')->length===2
@@ -20,6 +25,7 @@ $pensionData=array_replace($movement,['_csrf_token'=>token($pensionForm),'concep
 verify(request($client,$base,$pensionMovement,array_replace($pensionData,['concepto_id'=>$codeId('210',58)]))[0]===422,'POST no permite trasladar el registro a otra cédula');
 [$s,,$pensionBack]=request($client,$base,$pensionMovement,$pensionData);
 verify($s===303 && str_contains($pensionBack,'cedula=pensiones') && str_contains(request($client,$base,$pensionRoute)[1],'Mesada sintética'),'Guarda pensión y regresa al mismo año y cédula');
+verify(!str_contains(request($client,$base,$pensionRoute)[1],'Bruto pendiente de registrar'),'Pensiones: captura real sustituye el pendiente sin usar el neto bancario');
 verify(!str_contains(request($client,$base,str_replace('anio=2025','anio=2026',$pensionRoute))[1],'Mesada sintética'),'Pensión 2025 no aparece en 2026');
 $dividendRoute=str_replace('cedula=pensiones','cedula=dividendos',$pensionRoute);
 [$s,$dividendHtml]=request($client,$base,$dividendRoute);

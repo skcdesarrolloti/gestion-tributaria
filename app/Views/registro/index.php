@@ -4,6 +4,7 @@
 <main class="portal-container py-8 space-y-space-lg">
 <section class="bg-inverse-surface text-on-secondary rounded-2xl p-4"><p>3 · Registro de información</p><h1 class="text-headline-lg font-semibold"><?= e($title) ?></h1><p><?= $pensionView?'Selecciona la persona y el año. Aquí encuentras los meses guardados, sus movimientos y el PDF.':'Contribuyente → año gravable → sección → registrar valores.' ?></p></section>
 <?php $contextRoute='registro';require __DIR__.'/context.php'; ?>
+<?php require __DIR__.'/ayuda-rentas.php'; ?>
 <?php if ($taxpayer): if ($pensionView) { require __DIR__.'/pensiones.php'; } elseif ($state['componente']==='costos') { require __DIR__.'/extractos.php'; } endif; ?>
 <?php if ($pensionView && $taxpayer): ?><details><summary class="text-secondary underline">Casillas DIAN de pensiones · bruto, ajustes y condiciones del año</summary><p>Los extractos guardados se muestran arriba. El abono bancario es neto; la casilla 99 requiere la pensión bruta y sus descuentos verificados. Un valor $0 en esa casilla no borra ni representa la cantidad de PDF guardados.</p><?php endif; ?>
 <?php if ($taxpayer): if ($state['componente']==='ingresos' && !$pensionView) { require __DIR__.'/preguntas.php'; } if (!$profile) { require __DIR__.'/configurar-anio.php'; } endif; ?>

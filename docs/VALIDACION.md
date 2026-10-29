@@ -4,6 +4,15 @@ Verificación local realizada el 13 de octubre de 2026 con PHP 8.2.12, MariaDB 1
 
 ## Resultado
 
+### Acumulados bancarios por mes y ayuda de rentas · 29/10/2026
+
+Unitarias: acumulación cronológica de pensión neta y rendimientos, documentos
+desordenados, lectura pendiente excluida y separación entre cuentas. Integración:
+ayuda visible en Capital, bruto de pensión pendiente antes de capturarlo y valor
+registrado después. Las consultas no trasladan el neto a 99 ni cambian datos.
+La clasificación se contrastó con el instructivo oficial DIAN 210, casillas
+58, 74 y 99, publicado en 2026. No se añaden campos ni reglas de costos.
+
 ### Jerarquía de Ingresos · 28/10/2026
 
 Sintaxis, unitarias e integración aislada correctas. Registro queda dividido

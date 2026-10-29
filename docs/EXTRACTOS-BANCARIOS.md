@@ -6,6 +6,14 @@ y los acumulados bancarios. Inicio también incluye ese acceso. La pestaña
 Pensiones de Ingresos presenta la misma información, antes de las casillas
 fiscales y las preguntas de otras fuentes, que quedan plegadas.
 
+La tabla existente incluye **Pensión acumulada (neta)** y **Rendimientos
+acumulados** junto al valor de cada mes. Suma cronológicamente solo lecturas
+conciliadas de esa cuenta y año. Un mes sin PDF o sin lectura no aporta cero:
+su fila muestra «—» y el total disponible se identifica como parcial.
+La casilla 99 muestra «Bruto pendiente de registrar» mientras no exista captura
+real de pensión bruta. El neto bancario no se transforma en bruto ni se mezcla
+con los rendimientos de capital. No cambia lecturas, movimientos o soportes.
+
 Desde cada mes se abre el detalle y el PDF dentro de Pensiones; la búsqueda
 conserva persona, año y sección. «Volver a los meses guardados» regresa al
 calendario. «Subir PDF» en un mes faltante abre la carga; después de guardar

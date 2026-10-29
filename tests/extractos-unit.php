@@ -34,6 +34,21 @@ foreach ([['mes'=>'13'],['mes'=>'0'],['cuenta'=>'123456'],['banco'=>'']] as $bad
 }
 $bankCalendar=ExtractoData::calendar([['mes'=>6,'banco'=>'BANCO FICTICIO','cuenta'=>'0012'],['mes'=>7,'banco'=>'OTRO','cuenta'=>'0012']],'BANCO FICTICIO','0012');
 check(count($bankCalendar)===12 && count($bankCalendar[6])===1 && !$bankCalendar[7],'Extractos muestra doce meses y separa bancos aunque coincidan últimos dígitos.');
+(static function(): void {
+    $config=['base_path'=>'/public'];$year='2025';$extractQuery='&anio=2025';
+    $record=static fn($id,$month,$account,$state,$pension,$interest)=>['id'=>$id,'mes'=>$month,'banco'=>'BANCO FICTICIO','cuenta'=>$account,
+        'lectura'=>json_encode(['estado'=>$state,'paginas'=>1,'totales'=>['pension'=>$pension,'rendimientos'=>$interest,'gmf'=>0,'gmf_reintegro'=>0]])];
+    $documents=[$record(3,3,'1111','leido',300000,3000),$record(1,1,'1111','leido',100000,1000),
+        $record(2,2,'1111','pendiente',800000,8000),$record(4,1,'2222','leido',900000,9000)];
+    ob_start();require dirname(__DIR__).'/app/Views/extractos/months.php';$html=ob_get_clean();
+    $dom=new DOMDocument();@$dom->loadHTML('<?xml encoding="UTF-8">'.$html);$xpath=new DOMXPath($dom);
+    $rows='//details[contains(summary,"1111")]//tbody/tr';
+    check(trim($xpath->query($rows.'[th="Marzo"]/td[3]')->item(0)->textContent)==='$4.000,00'
+        && trim($xpath->query($rows.'[th="Marzo"]/td[5]')->item(0)->textContent)==='$40,00',
+        'Extractos acumula cronológicamente pensión y rendimientos sin sumar lecturas pendientes ni otra cuenta.');
+    check(trim($xpath->query($rows.'[th="Febrero"]/td[3]')->item(0)->textContent)==='—',
+        'Mes pendiente no presenta un acumulado como si su ingreso fuera cero.');
+})();
 $bankFile=tempnam(sys_get_temp_dir(),'bank-unit-');
 try {
     file_put_contents($bankFile,str_replace('(1.00)','(2.00)',bankFixturePdf()));

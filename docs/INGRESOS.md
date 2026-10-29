@@ -1,5 +1,20 @@
 # Ingresos: primera etapa operativa
 
+## Capital y No laborales · ayuda visible · 29/10/2026
+
+En el formulario 210, Capital incluye arrendamientos, intereses, rendimientos,
+regalías y explotación de propiedad intelectual (casilla 58). No laborales
+recoge ingresos sin clasificación expresa en otra renta, como los de actividades
+comerciales según su naturaleza (casilla 74). «No salarial» no equivale a
+«No laboral». La ayuda aparece en esas dos pestañas, antes de las preguntas,
+con ejemplos plegables; no abre otro flujo ni reclasifica movimientos guardados.
+
+El dinero invertido y su devolución no son el rendimiento de un CDT. El neto
+consignado de una pensión tampoco equivale necesariamente a su bruto para 99.
+Las sociedades y demás usuarios del 110 conservan sus secciones propias.
+Fuente revisada el 29/10/2026: [instructivo oficial DIAN 210 publicado en 2026,
+secciones Capital y No laborales, y casilla 99](https://www.dian.gov.co/atencionciudadano/formulariosinstructivos/Formularios/2026/Formulario_210_2026.pdf).
+
 ## Nómina laboral · 26/10/2026
 
 Registro → Ingresos → Trabajo muestra tabla mensual y acceso a Subir nómina.
