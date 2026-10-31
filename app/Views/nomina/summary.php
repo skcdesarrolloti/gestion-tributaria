@@ -1,11 +1,11 @@
 <?php if ($payroll): ?>
 <h3 class="font-semibold">Resumen mensual y acumulado de nómina</h3>
-<p>Revisa «Devengado del mes» y «Devengado acumulado». Los descuentos reducen el neto recibido; no todos reducen la renta.</p>
+<p>El sobresueldo se muestra separado y ya está incluido en el devengado; no se suma otra vez. Acumulado de sobresueldo: <strong>$<?= e(number_format(array_sum(array_column($payMonths,'sobresueldo'))/100,2,',','.')) ?></strong>.</p>
 <div class="renta-sheet-scroll" role="region" aria-label="Resumen mensual y acumulado de nómina" tabindex="0">
-<table class="renta-sheet-table"><thead><tr><th>Mes</th><th>Quincenas</th><th>Devengado del mes · 32</th><th>Aportes del mes · 33</th><th>Retención del mes · 132</th><th>Neto del mes</th><th>Devengado acumulado</th><th>Retención calculada</th><th>Control retención</th></tr></thead><tbody>
+<table class="renta-sheet-table"><thead><tr><th>Mes</th><th>Quincenas</th><th>Sobresueldo incluido</th><th>Devengado del mes · 32</th><th>Aportes del mes · 33</th><th>Retención del mes · 132</th><th>Neto del mes</th><th>Devengado acumulado</th><th>Retención calculada</th><th>Control retención</th></tr></thead><tbody>
 <?php $running=0;$retention=0;foreach ($payMonths as $i=>$m): if (!$m) { continue; }$running+=$m['devengado'];$retention+=$m['retencion']; ?>
 <tr><th scope="row"><?= e(\App\Services\NominaPreview::MONTHS[$i-1]) ?></th><td><?= e($m['registros']) ?></td>
-<?php $monthChecks=$retentionControl['meses'][$i]??[];foreach ([$m['devengado'],$m['aportes'],$m['retencion'],$m['neto'],$running] as $value): ?><td>$<?= e(number_format($value/100,2,',','.')) ?></td><?php endforeach; ?><td><?php foreach ($monthChecks as $check): ?><p><?php if (count($monthChecks)>1): ?><?= e($check['grupo']['empleador']) ?>: <?php endif; ?><?= isset($check['resultado']['esperada'])?'$'.e(number_format($check['resultado']['esperada']/100,2,',','.')):'Pendiente' ?></p><?php endforeach; ?></td><td><?php require __DIR__.'/control-retencion.php'; ?></td></tr>
+<?php $monthChecks=$retentionControl['meses'][$i]??[];foreach ([$m['sobresueldo'],$m['devengado'],$m['aportes'],$m['retencion'],$m['neto'],$running] as $value): ?><td>$<?= e(number_format($value/100,2,',','.')) ?></td><?php endforeach; ?><td><?php foreach ($monthChecks as $check): ?><p><?php if (count($monthChecks)>1): ?><?= e($check['grupo']['empleador']) ?>: <?php endif; ?><?= isset($check['resultado']['esperada'])?'$'.e(number_format($check['resultado']['esperada']/100,2,',','.')):'Pendiente' ?></p><?php endforeach; ?></td><td><?php require __DIR__.'/control-retencion.php'; ?></td></tr>
 <?php endforeach; ?></tbody></table></div>
 <p>Solo aparecen meses con nómina importada. Una quincena no equivale a un mes completo. Sin revisión confirmada, la retención calculada es provisional P1; la diferencia no confirma un error del empleador.</p>
 <h3 class="font-semibold">Casillas DIAN · acumulado real del año</h3>

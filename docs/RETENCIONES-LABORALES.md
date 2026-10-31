@@ -7,6 +7,19 @@ vigente), diferencia en pesos o pendiente. Mientras falta confirmar el método,
 se muestra la diferencia **provisional P1** con los supuestos ya autorizados.
 La fila muestra retención descontada, calculada y diferencia de más/de menos.
 No se repite una explicación debajo de cada mes.
+El mismo resumen para todos los contribuyentes separa el sobresueldo mensual
+y su acumulado, sin añadirlo otra vez al devengado ni tratarlo como deducción.
+El control identifica retroactivos, mes previo sin resolver o mes incompleto.
+La única explicación plegada de la tabla DIAN conserva supuestos P1 y señala
+los retroactivos concretos pendientes (Oficio DIAN 27396 de 2019). No se elimina
+la restricción de cálculo ni se certifican diferencias sin soporte.
+Excepción provisional acotada: si dos quincenas muestran un aumento exactamente
+compatible con reajuste desde enero, y el retroactivo coincide con todas las
+diferencias anteriores, RetencionRetroactivo comprueba que los meses reajustados
+y el mes del pago conservan P1 cero, sin topes agotados ni aportes inventados.
+Solo en ese caso continúa la simulación ordinaria. El pago, nómina y casillas
+permanecen en el mes real. No sustituye soporte ni confirma el procedimiento del
+empleador. Un descuadre, rango positivo, hueco o límite consumido deja pendiente.
 Los pagadores se mantienen separados y los meses incompletos no se calculan.
 Una sola consulta plegada ofrece la tabla DIAN del año en esa misma página.
 El acumulado P1 sigue siendo provisional y compara exactamente los mismos meses.
@@ -40,7 +53,8 @@ procedimiento 1, pagos ordinarios, redondeo al peso y sin dependientes, vivienda
 prepagada, AFC ni aportes voluntarios. Supone ausencia de otros pagos que consuman
 cupos. Reutiliza RetencionEjemplo/RetencionLaboral y arrastra el beneficio aplicado
 entre meses consecutivos desde enero. No reinicia ni divide topes anuales.
-Retroactivos, meses incompletos o huecos excluyen ese mes y los posteriores.
+Retroactivos sin excepción de P1 cero comprobada, meses incompletos o huecos
+excluyen ese mes y los posteriores.
 El acumulado compara descuentos y simulación de exactamente los mismos meses;
 los excluidos conservan visible su descuento real, fuera de ese subtotal.
 No genera OK, casillas DIAN, pagos ni cambios de procedimiento. La tabla se
