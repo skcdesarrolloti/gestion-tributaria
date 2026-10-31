@@ -58,3 +58,4 @@ require __DIR__.'/extractos-lote-integration.php';
 require __DIR__.'/prestamos-integration.php';
 require __DIR__.'/carga-unica-integration.php';
 require __DIR__.'/caja-social-integration.php';
+require __DIR__.'/bancolombia-integration.php';

@@ -9,6 +9,10 @@ conservan sus cargas propias porque son soportes distintos del extracto bancario
 Caja Social Cuentamiga mensual/trimestral se consulta mes por mes desde un solo
 PDF y registro. No se prorratean totales; se agrupa por fecha real de operación.
 Ver CAJA-SOCIAL-CUENTAS.md para conciliación y límites del reconocimiento.
+Bancolombia Ahorros mensual/trimestral también usa este control por fechas.
+La fecha inicial puede ser el saldo del cierre anterior; no marca ese mes como
+recibido. Ver BANCOLOMBIA-EXTRACTOS.md. Pensión bancaria neta, rendimientos y GMF
+se consultan por separado en sus secciones, desde el mismo PDF.
 
 Consulta: **Registro de información → Ingresos → Pensiones**. Elegir
 contribuyente y año muestra de inmediato los PDF guardados, el control de meses

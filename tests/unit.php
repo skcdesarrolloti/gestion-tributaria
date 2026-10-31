@@ -66,4 +66,5 @@ require __DIR__.'/renta-acumulada-unit.php';
 require __DIR__.'/colpensiones-unit.php';
 require __DIR__.'/prestamos-unit.php';
 require __DIR__.'/caja-social-unit.php';
+require __DIR__.'/bancolombia-unit.php';
 echo "Pruebas de seguridad y contribuyentes correctas.\n";

@@ -25,6 +25,11 @@ final class ExtractoPdfReader
                 $sheets[]=$cells;
             }
             $normal=PrestamoCajaSocial::normal($text);
+            if (str_contains($normal,'BANCOLOMBIA') && str_contains($normal,'ESTADO DE CUENTA') && str_contains($normal,'CUENTA DE AHORROS')) {
+                $metadata=ExtractoBancolombia::metadata($text,$sheets);
+                try { return ExtractoBancolombia::parse($text,$sheets); }
+                catch (\InvalidArgumentException) { return $metadata+['estado'=>'pendiente','motivo'=>'Se reconocieron la cuenta y el período de Bancolombia, pero el detalle no concilia. No se sumaron importes parciales.']; }
+            }
             if ((str_contains($normal,'BANCO CAJA SOCIAL') || str_contains($normal,'BANCOCAJASOCIAL'))
                 && (str_contains($normal,'CREDITO DE CONSUMO') || str_contains($normal,'CREDITO COMERCIAL'))) {
                 return ['tipo_documento'=>'credito','estado'=>'pendiente','motivo'=>'Extracto de crédito: se revisará el titular y el pago anterior antes de guardarlo en Control de préstamos.'];

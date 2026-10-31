@@ -597,3 +597,11 @@ ni a las pruebas. Ver docs/CAJA-SOCIAL-CUENTAS.md. La carga real en Hostinger
 queda pendiente de realizarse desde Ingresos con el archivo del responsable.
 Comprobación publicada: Ingresos muestra la entrada única; abre «Ingresos ·
 Extractos bancarios» con Ingresos activo y conserva los nueve PDF de BBVA.
+
+31/10/2026 — Bancolombia Ahorros: unitarias, sintaxis e integración HTTP completa
+correctas en base aislada. Fixture sintético valida un PDF con tres meses,
+saldo anterior al cierre, lectura de dos páginas, neto de pensión, rendimientos,
+GMF/CXC, detalle mensual, duplicados y solapamientos sin nuevas capturas fiscales.
+Los dos PDF reales se conciliaron localmente por cada saldo y resumen; aún no
+se han cargado en producción. No se incluyen archivos ni datos reales en Git.
+Ver docs/BANCOLOMBIA-EXTRACTOS.md.

@@ -52,7 +52,8 @@ final class ExtractoCajaSocial
             }
         }
         if (!$rows || count($rows)>1500) { throw new \InvalidArgumentException('Detalle fuera de alcance.'); }
-        return self::reconcile($meta,$summary,$rows);
+        foreach ($rows as &$row) { $row['categoria']=self::category($row); }unset($row);
+        return ExtractoPeriodo::reconcile($meta,$summary,$rows,'cajasocial-cuentamiga-v1');
     }
     private static function summary(array $cells): array
     {
@@ -70,21 +71,5 @@ final class ExtractoCajaSocial
         }
         if (preg_match('/(?:4\s*[X*]\s*1[.,]?000|4\s*POR\s*MIL|GRAVAMEN MOVIMIENTO)/',$t)) { return 'gmf'; }
         return 'otros_debitos';
-    }
-    private static function reconcile(array $meta,array $summary,array $rows): array
-    {
-        $keys=['pension','rendimientos','gmf','gmf_reintegro','retenciones','iva','otros_abonos','otros_debitos'];$totals=array_fill_keys($keys,0);$monthly=[];$balance=$summary['inicial'];$credits=0;$debits=0;$lastDate='';
-        foreach ($meta['meses_cubiertos'] as $month) { $monthly[$month]=['totales'=>array_fill_keys($keys,0),'resumen'=>['inicial'=>null,'final'=>null,'abonos'=>0,'cargos'=>0,'intereses'=>0,'gmf'=>0,'iva'=>0,'retenciones'=>0]]; }
-        foreach ($rows as &$r) {
-            if ($r['fecha']<$lastDate) { throw new \InvalidArgumentException('Movimientos desordenados.'); }$lastDate=$r['fecha'];$m=(int)substr($r['fecha'],5,2);$v=&$monthly[$m];
-            $v['resumen']['inicial']??=$balance;$balance+=$r['abono']-$r['cargo'];
-            if ($balance!==$r['saldo']) { throw new \InvalidArgumentException('El saldo de una operación no concilia.'); }
-            $r['categoria']=self::category($r);$amount=$r['abono']+$r['cargo'];$totals[$r['categoria']]+=$amount;$v['totales'][$r['categoria']]+=$amount;
-            $credits+=$r['abono'];$debits+=$r['cargo'];$v['resumen']['abonos']+=$r['abono'];$v['resumen']['cargos']+=$r['cargo'];$v['resumen']['final']=$balance;
-        }unset($r,$v);
-        if ($balance!==$summary['final'] || $credits!==$summary['abonos'] || $debits!==$summary['cargos'] || $totals['rendimientos']!==$summary['intereses']) { throw new \InvalidArgumentException('El trimestre no concilia con el resumen.'); }
-        $carry=$summary['inicial'];foreach ($monthly as &$month) { $month['resumen']['inicial']??=$carry;$month['resumen']['final']??=$carry;$carry=$month['resumen']['final'];foreach (['intereses'=>'rendimientos','gmf'=>'gmf'] as $key=>$field) { $month['resumen'][$key]=$month['totales'][$field]; } }unset($month);
-        $summary+=['gmf'=>$totals['gmf'],'iva'=>0,'retenciones'=>0];
-        return $meta+['estado'=>'leido','version'=>'cajasocial-cuentamiga-v1','resumen'=>$summary,'totales'=>$totals,'movimientos'=>$rows,'meses'=>$monthly];
     }
 }
